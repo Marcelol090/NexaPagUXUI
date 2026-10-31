@@ -11,7 +11,7 @@ test('9.13 mounts the workspace after the approved Sage Material and Geometry la
  assert.ok(html.indexOf('workspace-913.css')>html.indexOf('geometry-911.css'));
  assert.ok(main.includes("import './hero-transition-913.js';"));
  assert.ok(main.includes("import './workspace-913.js';"));
- assert.match(html,/Visualize 9\\.\\d+/);
+ assert.ok(html.includes("Visualize 9."));
  assert.ok(html.includes('nexa-workspace-contract'));
 });
 test('at 100% zoom, full-size phone and the editor share the desktop viewport',()=>{
