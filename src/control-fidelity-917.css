@@ -1,0 +1,115 @@
+/* NexaPag Visualize 9.17
+ * Optical-control fidelity: all Pigmentos and Vidro controls now have a
+ * demonstrable connection to the SAME atmospheric source behind the cards.
+ * No independent per-card shader; no new garish palette or colored glyphs.
+ * Raphael Salaja: a single clear focal response to each control.
+ */
+
+/* Ambient light is shared by the entire phone. The old material layer
+ * accidentally ignored --glass-glow and --pigment-interlock, because its
+ * independent Sage Glass overrides replaced those variables. */
+.phone:not(.no-shader) .ambient::before{
+ opacity:var(--ux-ambient-sage,.42)!important;
+ background:
+  radial-gradient(ellipse 71% 71% at 37% 32%,
+    var(--ux-ambient-mix,#D5E6A8) 0%,
+    rgba(168,217,94,.18) 43%,transparent 77%)!important;
+ filter:blur(var(--pigment-diffusion,21px)) saturate(.80)!important;
+}
+.phone:not(.no-shader) .ambient::after{
+ opacity:var(--ux-ambient-sky,.27)!important;
+ background:
+  radial-gradient(ellipse 75% 73% at 58% 52%,
+    var(--ux-ambient-secondary,#5FA9D8) 0%,
+    rgba(13,99,114,.16) 44%,transparent 79%)!important;
+ filter:blur(var(--pigment-diffusion,21px)) saturate(.86)!important;
+}
+.phone:not(.no-shader) .mist{
+ opacity:var(--ux-mist-opacity,.48)!important;
+ background:
+  radial-gradient(ellipse 62% 35% at 75% 22%,var(--ux-mist-sage,rgba(168,217,94,.12)),transparent 77%),
+  radial-gradient(ellipse 71% 51% at 22% 73%,var(--ux-mist-sky,rgba(95,169,216,.13)),transparent 80%)!important;
+}
+.phone.no-shader .ambient::before,.phone.no-shader .ambient::after{
+ display:none!important;
+}
+.phone.no-shader .mist{display:none!important}
+
+/* The source light remains under the film. Visible but restrained angular rim
+ * feedback makes the rim slider meaningful even against dark materials. */
+.phone:not(.no-optics) .glass-site>:is(.panel,.metric){
+ border-color:rgba(229,245,235,var(--ux-rim-alpha,.18))!important;
+ box-shadow:
+  0 16px 32px -18px rgba(0,5,8,.65),
+  0 3px 9px rgba(2,12,14,.20),
+  inset 0 1px 0 rgba(255,255,255,var(--ux-rim-highlight,.16)),
+  inset 0 -1px 0 rgba(0,7,11,.16)!important;
+}
+.phone:not(.no-optics) .glass-site>.panel.fiduciary-hero{
+ border-color:rgba(233,251,237,var(--ux-rim-alpha,.18))!important;
+ box-shadow:
+  0 20px 38px -20px rgba(0,9,11,.67),
+  inset 0 1px 0 rgba(255,255,255,var(--ux-rim-highlight,.16))!important;
+}
+.phone:not(.no-optics) .glass-site>:is(.panel,.metric)::after{
+ opacity:var(--glass-rim-strength,.58)!important;
+}
+/* Opacity and softness of a glass lens are controlled by the existing
+ * background --glass-film and --glass-blur on .glass-site descendants. */
+.phone:not(.no-optics) .glass-site>:is(.panel,.metric){
+ -webkit-backdrop-filter:blur(var(--glass-blur,21px)) saturate(.91) brightness(.99)!important;
+ backdrop-filter:blur(var(--glass-blur,21px)) saturate(.91) brightness(.99)!important;
+}
+/* No optics must actually disable the lens even when older CSS rules apply. */
+.phone.no-optics .glass-site>:is(.panel,.metric){
+ -webkit-backdrop-filter:none!important;
+ backdrop-filter:none!important;
+ background:rgba(12,31,32,.94)!important;
+ border-color:rgba(223,240,231,.10)!important;
+ box-shadow:0 10px 25px -20px rgba(0,6,9,.65)!important;
+}
+.phone.no-optics .glass-site>:is(.panel,.metric)::after{
+ opacity:0!important;
+}
+/* Text/financial semantics and glyph ink are never recolored by controls. */
+
+/* Physics controls stay with the existing Motion tab, not in another modal. */
+.workspace-inspector .motion-physics{
+ margin-top:18px;padding-top:15px;
+ border-top:1px solid rgba(216,243,225,.11);
+}
+.workspace-inspector .motion-physics h4{
+ margin:0 0 7px;font-size:13px;color:#F0F7EF;font-weight:720;
+}
+.workspace-inspector .motion-physics p{
+ font-size:11px;line-height:1.55;color:#A6C4B5;margin:0 0 12px;
+}
+.workspace-inspector .motion-physics-row{
+ display:block;padding:10px 0 8px;
+ border-top:1px solid rgba(214,237,224,.065);
+}
+.workspace-inspector .motion-physics-row span{
+ display:flex;justify-content:space-between;gap:10px;align-items:center;
+ color:#CFDED4;font-size:12px;
+}
+.workspace-inspector .motion-physics-row output{
+ color:#DFEAC9;font-variant-numeric:tabular-nums;font-weight:700;
+}
+.workspace-inspector .motion-physics-row input[type=range]{
+ width:100%;min-height:26px;margin-top:8px;accent-color:#B4D78B;cursor:pointer;
+}
+.workspace-inspector .motion-physics-actions{
+ display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;
+}
+.workspace-inspector .motion-physics-actions button{
+ min-height:39px;border-radius:11px;padding:8px 9px;font-size:11px;font-weight:680;
+ border:1px solid rgba(216,243,221,.22);
+ background:rgba(31,86,69,.40);color:#E9F6E9;
+}
+.workspace-inspector .motion-physics-actions button:first-child{
+ background:linear-gradient(140deg,#D5E6A8,#A8D95E);
+ color:#122820;border-color:rgba(245,255,236,.38);
+}
+@media(prefers-reduced-motion:reduce){
+ .workspace-inspector .motion-physics-row input{scroll-behavior:auto}
+}

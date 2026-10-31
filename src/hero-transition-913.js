@@ -20,7 +20,7 @@ function settle(hero){
 }
 function replay(){
  const hero=mounted;
- if(!hero||!hero.isConnected||reduced.matches||document.hidden)return false;
+ if(!hero||!hero.isConnected||reduced.matches||document.hidden||document.getElementById('phone')?.classList.contains('no-motion'))return false;
  if(!hero.querySelector('.hero-head')?.textContent.includes('Saídas líquidas'))return false;
  cancelTimers();settle(hero);
  if(!hero.querySelector('.liquid-intro-light')){
