@@ -1,0 +1,87 @@
+/* NexaPag 9.05 · pigment fidelity patch.
+ * Scope: only optical material, category pigments and sphere, not layout/data.
+ * Preserve Dark Matte Forest tokens, charts, navigation and financial semantics.
+ */
+/* A neutral matte plate reveals the existing backdrop. Colored light must
+   exist UNDER the lens and must never flood typography or chart surfaces. */
+.glass-site .glass-scene{filter:saturate(.72);opacity:calc(var(--glass-glow) * .64)}
+.glass-site[data-optic="hero"] .glass-scene{opacity:calc(var(--glass-glow) * .53)}
+.glass-site[data-optic="metric"] .glass-scene{opacity:calc(var(--glass-glow) * .37)}
+.glass-site[data-optic="category"] .glass-scene{opacity:calc(var(--glass-glow) * .45)}
+.glass-site > :is(.panel,.metric){
+ background:linear-gradient(152deg,rgba(246,255,249,.028),transparent 39%,rgba(5,18,21,.14)),rgba(14,28,29,var(--glass-film))!important;
+ -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(78%) brightness(.89);
+ backdrop-filter:blur(var(--glass-blur)) saturate(78%) brightness(.89);
+ border-color:rgba(213,241,229,.15)!important;
+ box-shadow:0 17px 35px -13px rgba(0,6,9,.50),0 3px 9px rgba(1,9,12,.19),inset 0 1px 0 rgba(250,255,251,.070),inset 0 -1px 0 rgba(0,6,9,.23)!important;
+}
+.glass-site > :is(.panel.hero,.panel.goal){
+ background:linear-gradient(145deg,rgba(235,252,245,.034),transparent 42%,rgba(3,14,18,.15)),rgba(14,28,29,var(--glass-film))!important;
+}
+/* The rim's reflected light is direction-sensitive, not a white rectangle. */
+.glass-site > :is(.panel,.metric)::after{
+ opacity:calc(var(--glass-rim-strength) * .75);
+ background:radial-gradient(ellipse 74% 76% at -10% -13%,rgba(249,255,251,.43),transparent 70%),
+ radial-gradient(ellipse 63% 71% at 109% 112%,rgba(172,202,186,.14),transparent 80%),
+ linear-gradient(137deg,rgba(246,255,250,.20),rgba(232,251,244,.016) 40%,rgba(225,245,235,.07));
+}
+/* The high-importance balance remains neutrally surfaced. */
+.fiduciary-hero::before{opacity:.46}
+.fiduciary-hero::after{opacity:.13}
+/* Small metric cards communicate meaning through value and the icon well. */
+.glass-site .metric .small-icon{
+ background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.08),transparent 58%),rgba(15,34,33,.73);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+.glass-site .metric-income .small-icon{background:linear-gradient(150deg,rgba(85,180,120,.27),rgba(12,35,28,.78));border-color:rgba(125,213,163,.28)}
+.glass-site .metric-refund .small-icon{background:linear-gradient(150deg,rgba(207,169,98,.29),rgba(40,32,24,.79));border-color:rgba(230,195,123,.26)}
+/* Boards KEEP one independent chromatic backdrop each. The hue is stronger
+   near its SVG well and fades through a neutral translucent acrylic film. */
+.quick-board{
+ background:radial-gradient(ellipse 105% 100% at -7% -5%,rgba(var(--tone-rgb),.23),transparent 74%),
+ linear-gradient(153deg,rgba(27,43,43,.55),rgba(12,27,29,.86))!important;
+ border-color:rgba(var(--tone-rgb),.33)!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.072),0 11px 23px -14px rgba(0,4,8,.53)!important;
+}
+.quick-board::before{background:radial-gradient(ellipse 75% 83% at 10% 0%,rgba(var(--tone-rgb),.14),transparent 83%)!important}
+.quick-board::after{background:linear-gradient(140deg,rgba(255,255,255,.036),transparent 42%)!important}
+.quick-board .quick-icon{
+ background:radial-gradient(ellipse 80% 60% at 21% 11%,rgba(255,255,255,.15),transparent 76%),
+ linear-gradient(146deg,rgba(var(--tone-rgb),.54),rgba(var(--tone-rgb),.19) 61%,rgba(10,27,28,.62));
+ border:1px solid rgba(var(--tone-rgb),.46);
+ box-shadow:inset 0 1px 0 rgba(251,255,252,.14),inset 0 -5px 10px rgba(0,8,12,.12),0 7px 16px -12px rgba(0,0,0,.43);
+}
+.category-board{
+ background:radial-gradient(ellipse 108% 91% at -7% -9%,rgba(var(--tone-rgb),.26),transparent 77%),
+ linear-gradient(150deg,rgba(26,43,41,.56),rgba(12,25,27,.82))!important;
+ border-color:rgba(var(--tone-rgb),.35)!important;
+}
+.category-board::before{background:radial-gradient(ellipse 74% 75% at 9% 9%,rgba(var(--tone-rgb),.13),transparent 84%)!important}
+.category-board .cat-symbol,.category-detail .cat-symbol{
+ background:radial-gradient(ellipse 72% 62% at 25% 12%,rgba(255,255,255,.14),transparent 76%),linear-gradient(145deg,rgba(var(--tone-rgb),.53),rgba(var(--tone-rgb),.18) 63%,rgba(13,26,29,.50));
+ border-color:rgba(var(--tone-rgb),.48);
+}
+.category-board.selected{background:radial-gradient(ellipse 110% 83% at 0% 0%,rgba(var(--tone-rgb),.32),transparent 82%),linear-gradient(145deg,rgba(25,43,40,.60),rgba(9,24,25,.81))!important}
+/* Shell is optical. No iridescent rings across the fluid or white wash.
+   Keep the outer glass separated from its content's animated waves. */
+.material-orb,.orb-specimen{
+ background:radial-gradient(circle at 28% 19%,rgba(224,248,239,.22),rgba(85,137,135,.09) 27%,rgba(8,26,32,.29) 72%,rgba(5,17,24,.54));
+ border:1px solid rgba(234,255,247,.28);
+ box-shadow:inset 2px 3px 8px rgba(246,255,250,.13),inset -5px -11px 19px rgba(1,13,18,.22),0 18px 36px rgba(0,4,8,.26);
+}
+.orb-lens,.orb-detail-lens{
+ background:radial-gradient(ellipse 43% 20% at 32% 14%,rgba(250,255,254,.40),transparent 92%),
+ radial-gradient(circle at 52% 50%,transparent 58%,rgba(4,15,22,.14) 94%),
+ radial-gradient(ellipse at 84% 21%,rgba(171,218,224,calc(var(--orb-iridescence)*.13)),transparent 36%),
+ linear-gradient(135deg,rgba(237,255,249,.065),transparent 42%,rgba(8,24,29,.09) 74%);
+ box-shadow:inset 0 1px 2px rgba(255,255,255,.25),inset -8px -12px 17px rgba(4,12,18,.17);
+}
+.orb-lens::before,.orb-detail-lens::before{opacity:calc(var(--orb-iridescence) * .43)}
+.orb-lens::after,.orb-detail-lens::after{background:radial-gradient(ellipse 40% 11% at 45% 97%,rgba(230,255,251,.14),transparent 87%)}
+.orb-specimen::before{background:radial-gradient(ellipse at 32% 17%,rgba(252,255,253,.36),transparent 26%);border:1px solid rgba(237,255,251,.14)}
+.orb-specimen::after,.material-orb::after{opacity:.56;filter:blur(5px)}
+.orb-detail-lens::after{filter:blur(2px)}
+@media(prefers-reduced-transparency:reduce),(forced-colors:active){
+ .quick-board,.category-board{background:rgba(18,34,31,.96)!important}
+ .glass-site > :is(.panel,.metric){backdrop-filter:none;-webkit-backdrop-filter:none}
+}
