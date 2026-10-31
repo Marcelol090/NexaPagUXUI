@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <meta name="theme-color" content="#0b1718">
+ <meta name="description" content="NexaPag Materials 9.06: estudo de pigmentação, hierarquia e física do vidro baseado no design atual.">
+ <title>NexaPag · Material Studies 9.06</title>
+ <link rel="stylesheet" href="./src/materials.css">
+</head>
+<body>
+ <main class="workbench">
+  <header class="top">
+   <a class="wordmark" href="/" aria-label="Voltar ao Visualize NexaPag"><span class="brandmark">N</span><span><b>NexaPag</b><small>Material studies / 9.06</small></span></a>
+   <div class="top-right"><span class="release">DESIGN REVIEW · LOCAL DATA</span><a href="/" class="secondary-link">Abrir aplicativo <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a></div>
+  </header>
+  <section class="intro">
+   <div><p class="eyebrow">Uma linguagem visual. Funções distintas.</p><h1>Materiais que sustentam<br><em>a informação.</em></h1><p>Glassmorphism aplicado com disciplina: matéria neutra, pigmento onde existe significado, gradientes tonais e conteúdo sempre nítido.</p></div>
+   <div class="intro-meta"><span class="dot"></span><span>Acabamento cromático<br>para aprovação de design</span></div>
+  </section>
+  <div class="main-grid">
+   <aside class="inspector surface">
+    <div class="section-label">CALIBRAÇÃO AO VIVO <span>01 / 04</span></div>
+    <h2>Direção de material</h2>
+    <p class="sub">Compare como a cor altera a leitura. O modo equilibrado é o padrão proposto para o NexaPag.</p>
+    <div class="segment" role="group" aria-label="Perfil cromático">
+      <button data-profile="quiet">Discreto</button><button data-profile="balanced" class="active">Equilibrado</button><button data-profile="rich">Expressivo</button>
+    </div>
+    <label class="sliderlabel" for="pigment"><span>Pigmentação do board</span><output id="pigmentValue">52%</output></label>
+    <input id="pigment" type="range" min="15" max="100" value="52">
+    <p class="helper">Afeta somente os campos de cor dos boards. Os números permanecem neutros.</p>
+    <label class="sliderlabel" for="glass"><span>Densidade do acrílico</span><output id="glassValue">86%</output></label>
+    <input id="glass" type="range" min="65" max="96" value="86">
+    <p class="helper">O vidro mantém o filtro óptico enquanto o fundo aparece de forma contida.</p>
+    <div class="rule"></div>
+    <div class="section-label">MAPA CROMÁTICO</div>
+    <div class="swatches">
+      <div><span style="--swatch:#B56E76"></span>Marketplace <small>velvet</small></div>
+      <div><span style="--swatch:#91657B"></span>Casa <small>vinho</small></div>
+      <div><span style="--swatch:#BE9868"></span>Alimentação <small>âmbar</small></div>
+      <div><span style="--swatch:#66A39D"></span>Transporte <small>teal</small></div>
+      <div><span style="--swatch:#BA7796"></span>Moda <small>rosa</small></div>
+      <div><span style="--swatch:#829E8A"></span>Outros <small>sálvia</small></div>
+    </div>
+    <div class="rule"></div>
+    <p class="note"><b>Contrato:</b> cores semânticas ficam nos estados financeiros. Não usamos gradiente multicolorido para decorar a superfície de um card.</p>
+   </aside>
+   <section class="studies">
+    <div class="section-label">COMPONENTES DO APLICATIVO <span>02 / 04</span></div>
+    <div class="cards-grid">
+     <article class="balance surface">
+      <div class="eyebrow">01 · CARD PRINCIPAL</div>
+      <div class="balance-head"><span>Saídas líquidas</span><span class="date">Outubro 2026</span></div>
+      <div class="amount">R$ 3.468,20</div>
+      <div class="balance-sub">R$ 3.818,10 em compras · R$ 349,90 em estornos</div>
+      <svg class="chart" viewBox="0 0 550 120" preserveAspectRatio="none" role="img" aria-label="Linha demonstrativa de movimentação financeira em verde petróleo"><defs><linearGradient id="cFill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#7ebba9" stop-opacity=".17"/><stop offset="1" stop-color="#7ebba9" stop-opacity="0"/></linearGradient><linearGradient id="cLine" x1="0" y1="0" x2="1"><stop stop-color="#547b79"/><stop offset=".6" stop-color="#8bc4ae"/><stop offset="1" stop-color="#c4e4d4"/></linearGradient></defs><path d="M0 90C40 77 66 92 91 68S145 46 169 70 217 35 254 47 288 83 325 54 376 61 409 38 457 59 483 29 529 41 550 11L550 120L0 120Z" fill="url(#cFill)"/><path d="M0 90C40 77 66 92 91 68S145 46 169 70 217 35 254 47 288 83 325 54 376 61 409 38 457 59 483 29 529 41 550 11" fill="none" stroke="url(#cLine)" stroke-width="3.2" stroke-linecap="round"/></svg>
+      <div class="balance-footer"><span><i class="status out"></i>Saídas</span><span><i class="status in"></i>Recebimentos</span><span class="muted">Fluxo demonstrativo</span></div>
+     </article>
+     <div class="small-grid">
+      <article class="metric surface"><span class="small-icon income"><svg viewBox="0 0 24 24"><path d="M12 4v16m-6-6 6 6 6-6"/></svg></span><div><span>Recebimentos</span><strong>R$ 1.950,00</strong><small>Entradas confirmadas</small></div></article>
+      <article class="metric surface"><span class="small-icon refund"><svg viewBox="0 0 24 24"><path d="M7 8 3 12l4 4M3 12h11a6 6 0 1 1 0 12"/></svg></span><div><span>Estornos</span><strong>R$ 349,90</strong><small>Valores devolvidos</small></div></article>
+     </div>
+     <article class="board-study surface">
+      <div class="eyebrow">02 · BOARDS COM IDENTIDADE</div>
+      <div class="board-topline"><h3>Gastos por categoria</h3><span>Toque para selecionar</span></div>
+      <div class="board-grid" id="boards"></div>
+      <div class="board-detail" id="boardDetail" aria-live="polite"></div>
+     </article>
+     <article class="activity surface">
+      <div class="eyebrow">03 · PRECISÃO EM LISTAS</div>
+      <h3>Movimentações recentes</h3>
+      <div class="transaction"><span class="txicon"><svg viewBox="0 0 24 24"><path d="M5 7h14v13H5zM9 7V4h6v3"/></svg></span><div><strong>Compra no marketplace</strong><small>Hoje · Nubank ·4821</small></div><b class="out-t">− R$ 189,90</b></div>
+      <div class="transaction"><span class="txicon"><svg viewBox="0 0 24 24"><path d="M12 4v16m-6-6 6 6 6-6"/></svg></span><div><strong>Transferência recebida</strong><small>Ontem · PIX</small></div><b class="in-t">+ R$ 450,00</b></div>
+      <div class="transaction"><span class="txicon"><svg viewBox="0 0 24 24"><path d="M7 8 3 12l4 4M3 12h11"/></svg></span><div><strong>Estorno de compra</strong><small>27 out · Itaú ·7310</small></div><b class="refund-t">+ R$ 89,90</b></div>
+     </article>
+    </div>
+   </section>
+   <section class="orb-study surface">
+     <div class="section-label">ESFERA ÓPTICA <span>03 / 04</span></div>
+     <h2>Vidro é a lente.<br><em>Líquido é a matéria.</em></h2>
+     <p>A casca filtra a luz do ambiente. Cada pigmento ocupa uma camada financeira proporcional, com interface própria. Arraste para gerar inércia.</p>
+     <div class="orb-stage"><div class="specimen" id="specimen" role="button" tabindex="0" aria-label="Agitar o líquido empilhado"><canvas id="sphere" width="400" height="400"></canvas><div class="sphere-lens"></div></div></div>
+     <div class="orb-actions"><button id="stir" class="action-primary">Agitar líquido</button><button id="settle">Repouso</button></div>
+     <p class="footnote">Demonstração com volume de 76% apenas para avaliar os materiais. Indicador financeiro original: 22,5%.</p>
+     <a href="/" class="app-link">Voltar ao Visualize completo <span>→</span></a>
+   </section>
+  </div>
+  <footer>9.06 · Design experimental, sem dados bancários reais · Android principal intocado</footer>
+ </main>
+ <script type="module" src="./src/materials.js"></script>
+</body>
+</html>
