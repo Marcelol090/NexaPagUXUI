@@ -62,7 +62,7 @@ test('changing acrylic film updates every material alpha rather than hardcoded 6
  const high=['--live-glass-panel','--live-glass-hero','--live-glass-metric','--live-glass-board','--live-glass-nav']
   .map(key=>Number(s.vars.get(key)));
  for(let i=0;i<low.length;i++){
-  assert.ok(Number.isFinite(low[i])&&high[i]>low[i]+.3,\`alpha[$\{i}] $\{low[i]} -> $\{high[i]}\`);
+  assert.ok(Number.isFinite(low[i])&&high[i]>low[i]+.3,'surface '+i+': '+low[i]+' -> '+high[i]);
  }
  assert.equal(s.phone['data-live-glass'],'');
 });
