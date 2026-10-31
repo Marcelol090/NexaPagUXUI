@@ -129,6 +129,19 @@ document.getElementById('geoLoad')?.addEventListener('click',()=>{
   writeStatus('Geometria salva restaurada');
  }catch{writeStatus('Não foi possível carregar os ajustes')}
 });
+const mobileToggle=document.getElementById('geoMobileToggle');
+mobileToggle?.addEventListener('click',()=>{
+ const opened=document.body.classList.toggle('geo-mobile-open');
+ mobileToggle.setAttribute('aria-expanded',String(opened));
+ mobileToggle.textContent=opened?'Fechar geometria':'Geometria · PX';
+});
+document.addEventListener('keydown',event=>{
+ if(event.key==='Escape'&&document.body.classList.contains('geo-mobile-open')){
+  document.body.classList.remove('geo-mobile-open');
+  mobileToggle?.setAttribute('aria-expanded','false');
+  if(mobileToggle)mobileToggle.textContent='Geometria · PX';
+ }
+});
 window.NexaPagGeometry={
  get:()=>getSnapshot(),
  css:()=>exportCSS(),
