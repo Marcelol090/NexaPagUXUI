@@ -1,0 +1,80 @@
+/* NexaPag Motion Studio 9.20. Motion must never scale the phone or change geometry. */
+.workspace-inspector .nm-studio{margin:0 0 17px;color:#e0efe4}
+.nm-studio *{box-sizing:border-box}
+.nm-studio button,.nm-studio select{font:inherit}
+.nm-studio button{cursor:pointer}
+.nm-studio .nm-topline,.nm-studio .nm-titleline,.nm-studio .nm-preview-title,.nm-studio .nm-time-axis{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.nm-studio .nm-topline{font-size:9px;letter-spacing:.12em;color:#a9cdb7;font-weight:740}
+.nm-studio .nm-topline small{padding:4px 7px;border-radius:7px;border:1px solid rgba(211,236,218,.16);color:#d1e7c1;font-size:10px}
+.nm-studio .nm-titleline{margin:11px 0 0}
+.nm-studio .nm-titleline strong{font-size:20px;font-weight:720;letter-spacing:-.045em;color:#eef6ed}
+.nm-studio .nm-live{font-size:10px;color:#c9e5b8;padding:5px 9px;border-radius:999px;background:rgba(153,207,128,.10);border:1px solid rgba(185,225,169,.15)}
+.nm-studio .nm-description,.nm-studio .nm-assist{font-size:11px;line-height:1.55;color:#abc5b5;margin:9px 0 13px}
+.nm-studio .nm-presetbar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.nm-studio .nm-presetbar button{min-height:38px;padding:8px 4px;color:#c8ddcc;font-weight:680;font-size:11px;background:rgba(7,36,34,.64);border:1px solid rgba(214,239,221,.15);border-radius:10px}
+.nm-studio .nm-presetbar button[aria-pressed=true]{background:linear-gradient(140deg,#dceabf,#aacf8d);color:#153022;border-color:rgba(245,255,237,.43)}
+.nm-studio .nm-preview{margin:14px 0;padding:13px;border:1px solid rgba(219,244,222,.13);border-radius:14px;background:linear-gradient(140deg,rgba(39,72,60,.30),rgba(7,30,32,.54))}
+.nm-studio .nm-preview-title{font-size:11px;color:#bdd9c5}
+.nm-studio .nm-preview-title b{color:#dfefcf;font-size:10px}
+.nm-studio .nm-motion-track{height:55px;margin:9px 0 3px;border-radius:10px;padding:0 12px;display:flex;align-items:center;gap:9px;overflow:hidden;background:linear-gradient(90deg,rgba(122,179,143,.12),rgba(33,89,80,.055))}
+.nm-studio .nm-motion-track i{display:block;width:43px;height:23px;border-radius:8px;background:linear-gradient(132deg,rgba(190,219,179,.58),rgba(51,127,104,.52));border:1px solid rgba(240,255,243,.25);box-shadow:0 8px 16px -11px #000a;animation:nm-sample var(--nm-preview-duration,260ms) var(--nm-preview-ease,ease-out) both}
+.nm-studio .nm-motion-track i:nth-child(2){animation-delay:var(--nm-preview-delay,38ms)}
+.nm-studio .nm-motion-track i:nth-child(3){animation-delay:calc(2 * var(--nm-preview-delay,38ms))}
+@keyframes nm-sample{from{transform:translateY(10px);opacity:.32}to{transform:translateY(0);opacity:1}}
+.nm-studio .nm-time-axis{font-size:10px;font-variant-numeric:tabular-nums;color:#9ebfac}
+.nm-studio .nm-group{margin:9px 0;border:1px solid rgba(211,234,220,.13);border-radius:13px;background:rgba(5,25,27,.32);overflow:hidden}
+.nm-studio .nm-group>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:13px 12px;color:#e4f1e6;font-size:12px;font-weight:690;cursor:pointer}
+.nm-studio .nm-group>summary::-webkit-details-marker{display:none}
+.nm-studio .nm-group>summary small{font-size:10px;text-align:right;font-weight:500;color:#9ab5a6}
+.nm-studio .nm-group[open]>summary{border-bottom:1px solid rgba(210,237,221,.075)}
+.nm-studio .nm-inner{padding:4px 13px 13px}
+.nm-studio .nm-control{display:block;padding:11px 0 5px;border-bottom:1px solid rgba(212,238,217,.065)}
+.nm-studio .nm-control>span{display:flex;align-items:baseline;justify-content:space-between;gap:7px;color:#d0e3d4;font-size:11px}
+.nm-studio .nm-control output{font-size:11px;font-weight:720;font-variant-numeric:tabular-nums;color:#d4e9b6}
+.nm-studio .nm-select-control{display:grid;gap:8px;margin:12px 0 3px;font-size:11px;color:#cde0d1}
+.nm-studio select{height:37px;min-width:0;width:100%;padding:0 9px;border:1px solid rgba(210,233,217,.21);border-radius:9px;color:#eaf3e8;background:#102c2a;font-size:11px}
+.nm-studio .nm-assist{font-size:10px;margin:9px 0 4px}
+.nm-studio .nm-checkbox{display:flex;align-items:flex-start;gap:11px;font-size:11px;color:#d8e9db;margin:16px 1px}
+.nm-studio .nm-checkbox input{width:17px;height:17px;flex:none;accent-color:#b5dc96}
+.nm-studio .nm-checkbox small{display:block;color:#a1beac;line-height:1.45;margin-top:3px}
+.nm-studio .nm-actions{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:6px;margin:13px 0}
+.nm-studio .nm-actions button{min-height:39px;padding:8px 5px;border:1px solid rgba(212,238,221,.19);border-radius:10px;background:rgba(15,49,42,.75);color:#e2f0e2;font-size:10px;font-weight:700}
+.nm-studio .nm-actions .nm-primary{background:linear-gradient(140deg,#dceabe,#aed18b);color:#112b21;border-color:rgba(247,255,238,.41)}
+.nm-studio button:focus-visible,.nm-studio select:focus-visible,.nm-studio summary:focus-visible,.nm-studio input:focus-visible{outline:2px solid #cde7ab;outline-offset:3px}
+.nm-studio .nm-feedback{padding:9px 10px;min-height:32px;border:1px solid rgba(184,228,192,.13);border-radius:9px;background:rgba(4,25,25,.44);color:#d2e9d4;font-size:10px;line-height:1.45}
+.nm-studio .nm-readback{margin:8px 0 0;color:#95baa6;font-size:10px;line-height:1.45;overflow-wrap:anywhere}
+/* Variables live on #phone and are inherited by genuine app components. */
+#phone[data-motion-studio] :is(.quick-board,.category-board,.nav button){
+ transition-duration:var(--nm-duration,260ms)!important;
+ transition-timing-function:var(--nm-ease,cubic-bezier(.22,1,.36,1))!important
+}
+#phone[data-motion-studio]:not(.no-motion) :is(.quick-board,.category-board,.nav button):active{transform:scale(var(--nm-press,.98))!important}
+@media(hover:hover) and (pointer:fine){
+ #phone[data-motion-studio]:not(.no-motion) :is(.quick-board,.category-board):hover{transform:translate3d(0,calc(-1 * var(--nm-lift,2px)),0)!important}
+ #phone[data-motion-studio]:not(.no-motion) .nav button:not(.active):hover{transform:translate3d(0,calc(-1 * var(--nm-lift,2px)),0)!important}
+}
+#phone[data-motion-studio]:not(.no-motion) .glass-scene::before{animation-duration:calc(22s * var(--nm-ambient-factor,1))!important}
+#phone[data-motion-studio]:not(.no-motion) .glass-scene::after{animation-duration:calc(29s * var(--nm-ambient-factor,1))!important}
+#phone[data-motion-studio]:not(.no-motion) .glass-pigment-fold{animation-duration:calc(27s * var(--nm-ambient-factor,1))!important}
+/* Shadow overrides are opt-in to preserve calibrated Material Engine 9.19. */
+#phone[data-nm-shadow]:not(.no-optics) :is(.glass-site>.panel,.glass-site>.metric,.quick-board,.category-board,.transaction,.nav){
+ box-shadow:0 var(--nm-shadow-y,18px) var(--nm-shadow-blur,35px) -14px rgba(1,10,12,var(--nm-shadow-alpha,.32)),inset 0 1px rgba(250,255,246,.075)!important
+}
+#phone[data-nm-paused] .glass-scene::before,#phone[data-nm-paused] .glass-scene::after,#phone[data-nm-paused] .glass-pigment-fold{animation-play-state:paused!important}
+#phone[data-nm-paused] :is(.quick-board,.category-board,.nav button){transition-duration:0ms!important}
+#phone[data-motion-studio][data-nm-paused]:not(.no-motion) :is(.quick-board,.category-board,.nav button):active{transform:none!important}
+#phone[data-motion-studio][data-nm-paused]:not(.no-motion) :is(.quick-board,.category-board,.nav button):hover{transform:none!important}
+@media(prefers-reduced-motion:reduce){
+ .nm-studio .nm-motion-track i{animation:none!important}
+ #phone[data-motion-studio] :is(.quick-board,.category-board,.nav button){transition-duration:0ms!important}
+ #phone[data-motion-studio]:not(.no-motion) :is(.quick-board,.category-board,.nav button):active{transform:none!important}
+ #phone[data-motion-studio]:not(.no-motion) :is(.quick-board,.category-board,.nav button):hover{transform:none!important}
+}
+#phone.no-motion[data-motion-studio] :is(.quick-board,.category-board,.nav button){transition-duration:0ms!important}
+#phone.no-motion[data-motion-studio] :is(.quick-board,.category-board,.nav button):active{transform:none!important}
+#phone.no-motion[data-motion-studio] :is(.quick-board,.category-board,.nav button):hover{transform:none!important}
+@media(max-width:380px){.nm-studio .nm-actions{grid-template-columns:1fr 1fr}.nm-studio .nm-actions .nm-primary{grid-column:span 2}}
+
+/* Value-aware ranges: clear active/inactive track, same pigment as the design system. */
+.workspace-inspector .nm-studio input[type="range"]::-webkit-slider-runnable-track{background:linear-gradient(90deg,rgba(180,219,146,.86) 0 var(--nm-progress,50%),rgba(210,234,215,.18) var(--nm-progress,50%) 100%)!important}
+.workspace-inspector .nm-studio input[type="range"]::-moz-range-track{background:linear-gradient(90deg,rgba(180,219,146,.86) 0 var(--nm-progress,50%),rgba(210,234,215,.18) var(--nm-progress,50%) 100%)!important}
