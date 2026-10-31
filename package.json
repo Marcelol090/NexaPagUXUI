@@ -1,13 +1,14 @@
 {
   "name": "nexapag-uxui-live-lab",
   "private": true,
-  "version": "9.3.0",
+  "version": "9.4.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
-    "check:syntax": "node --check src/app.js && node --check src/workbench.js"
+    "check:syntax": "node --check src/app.js && node --check src/workbench.js",
+    "test:design": "node --test tests/*.test.mjs"
   },
   "dependencies": {
     "culori": "^4.0.2",

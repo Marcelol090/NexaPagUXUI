@@ -91,7 +91,7 @@ style.textContent = `
 #nexa-live-lab .wb-footer-label{color:#bcd3c4}
 #nexa-live-lab .wb-toast{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);background:#1c392b;color:#ecffed;border:1px solid #a6eac54f;border-radius:999px;padding:10px 17px;font-size:12px;box-shadow:0 15px 35px #0007;display:none;pointer-events:none}
 #nexa-live-lab .wb-toast.show{display:block}
-@media(max-width:720px){#nexa-live-lab .wb-sheet{inset:auto 0 0 0;width:100%;border-radius:25px 25px 0 0;max-height:84dvh;transform:none}#nexa-live-lab .wb-trigger{right:12px;bottom:80px;padding:11px 13px;font-size:11px}#nexa-live-lab header{padding-top:15px}#nexa-live-lab .wb-tabs{padding-bottom:8px}}
+@media(max-width:720px){#nexa-live-lab .wb-trigger{display:none}#nexa-live-lab .wb-sheet{inset:auto 0 0 0;width:100%;border-radius:25px 25px 0 0;max-height:84dvh;transform:none}#nexa-live-lab .wb-trigger{right:12px;bottom:80px;padding:11px 13px;font-size:11px}#nexa-live-lab header{padding-top:15px}#nexa-live-lab .wb-tabs{padding-bottom:8px}}
 @media(prefers-reduced-motion:reduce){#nexa-live-lab *{animation:none!important;transition:none!important}}
 `;
 document.head.appendChild(style);
