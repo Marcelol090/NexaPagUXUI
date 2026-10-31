@@ -1,0 +1,58 @@
+/* NexaPag 9.18 | Workbench material contract
+ * Board/card/nav opacity and edge respond to the SAME real acrylic controls.
+ * No nested backdrop-filter; keep the existing shared atmospheric shader.
+ */
+#phone:not(.no-optics) :is(.quick-board,.category-board,.shop){
+ background:
+  linear-gradient(155deg,rgba(242,255,245,.035),rgba(7,22,25,.08) 53%,rgba(5,16,19,.10)),
+  rgba(9,28,29,var(--ux-inner-film,.48))!important;
+ border-color:rgba(225,244,235,var(--ux-inner-edge,.16))!important;
+}
+#phone:not(.no-optics) .category-board.selected{
+ background:
+  linear-gradient(158deg,rgba(var(--tone-rgb),.12),transparent 54%),
+  rgba(8,28,29,var(--ux-inner-film,.48))!important;
+ border-color:rgba(var(--tone-rgb),var(--ux-select-edge,.50))!important;
+}
+#phone:not(.no-optics) :is(.finance-insight,.integrations,.callout,.review-count,.day-detail,.review-item,.transaction){
+ background:linear-gradient(155deg,rgba(237,253,243,.035),transparent 70%),
+  rgba(10,28,29,var(--ux-inner-film,.48))!important;
+ border-color:rgba(220,241,232,var(--ux-inner-edge,.16))!important;
+}
+#phone:not(.no-optics) .nav{
+ background:linear-gradient(150deg,
+   rgba(11,33,34,var(--ux-nav-film,.91)),rgba(5,23,27,var(--ux-nav-film,.91)))!important;
+ border-color:rgba(225,244,233,var(--ux-inner-edge,.16))!important;
+ -webkit-backdrop-filter:blur(var(--ux-nav-blur,15px)) saturate(.89)!important;
+ backdrop-filter:blur(var(--ux-nav-blur,15px)) saturate(.89)!important;
+}
+#phone.no-optics :is(.quick-board,.category-board,.shop,.nav,.review-item,.transaction){
+ -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+ border-color:rgba(225,242,231,.09)!important;
+}
+.workspace-inspector .wb-category-editor{
+ border-top:1px solid rgba(213,239,217,.12);margin-top:19px;padding-top:14px;
+}
+.workspace-inspector .wb-category-editor h4{font-size:13px;color:#F0F6EC;margin:0 0 5px}
+.workspace-inspector .wb-category-editor p{
+ font-size:11px;line-height:1.45;color:#A9C4B4;margin:0 0 12px;
+}
+.workspace-inspector .wb-category-grid{display:grid;grid-template-columns:1fr;gap:7px}
+.workspace-inspector .wb-category-edit{
+ display:flex;align-items:center;gap:10px;min-height:43px;padding:6px 10px;
+ border:1px solid rgba(225,245,233,.13);border-radius:11px;
+ background:rgba(8,29,30,.40);
+}
+.workspace-inspector .wb-category-edit label{
+ flex:1;min-width:0;font-size:11px;color:#D7E6DB;
+}
+.workspace-inspector .wb-category-edit input[type=color]{
+ width:38px;min-width:38px;height:30px;padding:2px;cursor:pointer;
+ border:1px solid rgba(224,242,235,.22);border-radius:8px;
+ background:rgba(8,25,25,.6);
+}
+.workspace-inspector .wb-category-edit code{
+ font-size:10px;color:#A6CAB3;font-variant-numeric:tabular-nums;
+}
+.workspace-inspector .wb-category-edit input:focus-visible{outline:2px solid #D5E6A8;outline-offset:2px}
+.workspace-inspector .wb-category-footer{font-size:10px;color:#A4C7AE;margin:9px 0 0;min-height:16px}
