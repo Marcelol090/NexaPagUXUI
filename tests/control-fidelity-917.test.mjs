@@ -82,6 +82,17 @@ test('pigment and tonal mixing are independent and measurable',()=>{
  s.set('pigmentRange',0);
  assert.equal(Number(s.variables.get('--ux-mist-opacity')),0);
 });
+test('pigment 100 to 110 remains responsive at the full original slider range',()=>{
+ const s=sandboxControls();
+ s.set('pigmentRange',100);
+ const before=Number(s.variables.get('--ux-ambient-sage'));
+ s.set('pigmentRange',110);
+ assert.ok(Number(s.variables.get('--ux-ambient-sage'))>before);
+});
+test('motion switch turns off the one-shot finance intro',()=>{
+ const script=read('src/hero-transition-913.js');
+ assert.ok(script.includes("classList.contains('no-motion')"));
+});
 test('rim reflection controls a real border/shadow response',()=>{
  const s=sandboxControls();
  s.set('rimRange',0);
