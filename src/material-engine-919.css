@@ -115,3 +115,43 @@
  font-size:11px;font-weight:700;padding:8px 10px;cursor:pointer;
 }
 #inspector-panel-material .glass-live-button:focus-visible{outline:2px solid #D5E6A8;outline-offset:2px}
+
+/* Unified accessible slider anatomy, including Chromium / Opera GX.
+ * The existing legacy input styles used browser-native white rails. */
+.workspace-inspector input[type="range"]{
+ -webkit-appearance:none!important;appearance:none!important;
+ display:block;width:100%;min-width:0;
+ height:28px!important;min-height:28px!important;
+ margin:8px 0 0!important;padding:0!important;
+ border:0!important;border-radius:0!important;
+ outline:none;background:transparent!important;cursor:pointer;
+}
+.workspace-inspector input[type="range"]::-webkit-slider-runnable-track{
+ height:4px!important;border-radius:999px;
+ background:linear-gradient(90deg,rgba(168,217,94,.48),rgba(212,232,207,.34))!important;
+ border:1px solid rgba(223,245,225,.15);
+}
+.workspace-inspector input[type="range"]::-webkit-slider-thumb{
+ -webkit-appearance:none;appearance:none;
+ width:15px;height:15px;margin-top:-6.5px;
+ border-radius:50%;border:2px solid #F1F9E8;
+ background:#A9CE85;
+ box-shadow:0 2px 8px rgba(0,12,15,.42);
+}
+.workspace-inspector input[type="range"]::-moz-range-track{
+ height:4px;border-radius:999px;background:rgba(206,232,203,.36);
+}
+.workspace-inspector input[type="range"]::-moz-range-progress{
+ height:4px;border-radius:999px;background:rgba(169,211,133,.72);
+}
+.workspace-inspector input[type="range"]::-moz-range-thumb{
+ width:12px;height:12px;border:2px solid #F1F9E8;
+ background:#A9CE85;border-radius:50%;
+}
+.workspace-inspector input[type="range"]:focus-visible{
+ outline:2px solid #D5E6A8!important;outline-offset:3px;
+ border-radius:6px!important;
+}
+@media(prefers-reduced-motion:reduce){
+ .workspace-inspector input[type="range"]{scroll-behavior:auto!important}
+}
