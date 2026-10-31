@@ -28,3 +28,37 @@ Todos os dados são demonstrativos, nunca acessam SMS, Room, banco ou cartões. 
 - `node --check`: app.js/workbench.js
 - Chromium local via Playwright: 320/390/1440px; cinco abas e interações; 0 erros JS e 0 overflow horizontal.
 - Build Vite/npm ainda não executado no container (sem acesso ao registry). Verificar CI/deployment antes de liberar o Preview.
+
+## CI/CD oficial · GitHub Actions + GitHub Pages
+
+A fonte de verdade para o Visualize é a branch `main` deste repositório público. O workflow [`quality-pages.yml`](.github/workflows/quality-pages.yml) executa em cada push, pull request e manualmente:
+
+1. Instala Node.js 22 e dependências com `npm install --no-audit --no-fund`.
+2. Valida sintaxe JavaScript, testes existentes de design, geometria e material.
+3. Gera o Vite de produção e testa **Chromium real** em 1920×1080, 1366×768, 390 px e 320 px.
+4. Verifica o Workbench ao lado do celular, os sliders de Glass nos **cards reais**, tokens geométricos fracionários, navegação e acesso mobile.
+5. Guarda screenshots, vídeos e traces (inclusive em falhas) nos artefatos da aba **Actions**, por 14 dias.
+6. Publica em **GitHub Pages apenas se todos os testes passarem na `main`**. Pull requests executam QA, mas nunca publicam.
+
+### Ativar a publicação uma vez
+
+No GitHub, entre em **Settings → Pages → Build and deployment → Source → GitHub Actions**. A configuração inicial exige essa opção habilitada pelo responsável do repositório. A publicação será em `https://marcelol090.github.io/NexaPagUXUI/` **depois de um workflow de deploy bem-sucedido**. Se a configuração não estiver habilitada, o deploy permanece pendente, mesmo quando os testes passam.
+
+O projeto usa `base: './'` no Vite e links relativos para que o mesmo código funcione tanto em GitHub Pages (subdiretório) quanto em Vercel (raiz do domínio). A Vercel deixa de ser necessária para os builds frequentes.
+
+### Execução local
+
+```bash
+npm install
+npm run check:syntax
+npm run test:design
+npm run build
+npx playwright install chromium
+npm run test:e2e
+```
+
+**Controle de qualidade da main:** em **Settings → Rules → Rulesets**, crie uma regra para `main` exigindo o status **Validate design, build and browser** antes de aceitar PRs. Sem essa proteção, GitHub Actions notifica falhas, mas não impede merges manualmente.
+
+**Reprodutibilidade:** o repositório ainda não possui `package-lock.json` versionado; por isso o CI usa `npm install`. Assim que o lockfile for gerado e revisado, altere para `npm ci` com cache de dependências para builds reproduzíveis.
+
+Isso verifica somente o protótipo HTML/CSS/JS. O aplicativo Android/Kotlin possui pipeline separado e não é implantado via Pages.
