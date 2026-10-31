@@ -2,6 +2,7 @@
 import './geometry-system-918.css';
 import './workbench-material-918.css';
 import './material-engine-919.css';
+import './motion-studio-920.css';
 
 import './app.js';
 import './workbench.js';
@@ -16,3 +17,4 @@ import './control-fidelity-917.js';
 import './geometry-system-918.js';
 import './workbench-material-918.js';
 import './material-engine-919.js';
+import './motion-studio-920.js';
