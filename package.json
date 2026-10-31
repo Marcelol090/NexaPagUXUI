@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "npm run test:geometry && vite build",
+    "build": "npm run test:geometry && npm run test:material && vite build",
     "preview": "vite preview --host 0.0.0.0",
     "check:syntax": "node --check src/app.js && node --check src/workbench.js",
     "test:design": "node --test tests/*.test.mjs",
-    "test:geometry": "node --test tests/geometry-system-918.test.mjs tests/geometry-system-918.runtime.test.mjs tests/workbench-material-918.test.mjs"
+    "test:geometry": "node --test tests/geometry-system-918.test.mjs tests/geometry-system-918.runtime.test.mjs tests/workbench-material-918.test.mjs",
+    "test:material": "node --test tests/material-engine-919.test.mjs"
   },
   "dependencies": {
     "culori": "^4.0.2",

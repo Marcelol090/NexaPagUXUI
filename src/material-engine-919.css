@@ -1,0 +1,157 @@
+/* NexaPag 9.19 · One calibrated optical material
+ * Overrides the fixed-opacity hero/metric/card styles from 9.10.
+ * All surfaces sample one atmospheric field; no isolated per-card pigment light.
+ * Enabled only after the JS engine has registered live tokens on #phone.
+ */
+#phone[data-live-glass]:not(.no-optics) :is(
+  .glass-site>.panel, .glass-site>.metric,
+  .panel:not(.orb-dialog):not(.orb-specimen)
+){
+ background:
+  linear-gradient(153deg,rgba(241,255,245,.060),rgba(15,52,44,.018) 42%,rgba(2,13,18,.105) 100%),
+  rgba(8,27,28,var(--live-glass-panel,.72))!important;
+ border-color:rgba(228,247,237,var(--live-glass-rim,.25))!important;
+ -webkit-backdrop-filter:blur(var(--live-glass-blur,21px)) saturate(.93)!important;
+ backdrop-filter:blur(var(--live-glass-blur,21px)) saturate(.93)!important;
+ box-shadow:
+  0 17px 31px -19px rgba(2,10,12,.65),
+  inset 0 1px 0 rgba(253,255,253,var(--live-glass-highlight,.15)),
+  inset 0 -1px 0 rgba(1,9,11,.16)!important;
+}
+#phone[data-live-glass]:not(.no-optics) .glass-site>.panel.fiduciary-hero{
+ background:
+  linear-gradient(149deg,rgba(237,255,238,.077),rgba(22,71,58,.022) 45%,rgba(2,16,20,.10) 100%),
+  rgba(8,28,29,var(--live-glass-hero,.67))!important;
+ border-color:rgba(235,252,240,var(--live-glass-rim,.25))!important;
+ -webkit-backdrop-filter:blur(var(--live-glass-blur,21px)) saturate(.93)!important;
+ backdrop-filter:blur(var(--live-glass-blur,21px)) saturate(.93)!important;
+}
+#phone[data-live-glass]:not(.no-optics) .glass-site[data-optic="metric"]>.metric{
+ background:
+  linear-gradient(155deg,rgba(242,255,247,.052),transparent 63%),
+  rgba(9,27,28,var(--live-glass-metric,.70))!important;
+ border-color:rgba(228,248,237,var(--live-glass-rim,.25))!important;
+ -webkit-backdrop-filter:blur(var(--live-glass-blur,21px)) saturate(.93)!important;
+ backdrop-filter:blur(var(--live-glass-blur,21px)) saturate(.93)!important;
+}
+#phone[data-live-glass]:not(.no-optics) .glass-site>:is(.panel,.metric)::after{
+ opacity:var(--live-glass-sheen,.55)!important;
+}
+/* The existing colored wells stay intact. Acrylic boards themselves have
+ * the same optical source and varying density, not another colored shader. */
+#phone[data-live-glass]:not(.no-optics) :is(
+  .quick-board,.category-board,.shop,.review-item,.transaction,
+  .finance-insight,.integrations,.callout,.review-count,.day-detail,
+  .category-detail,.legend-option
+){
+ background:
+  linear-gradient(154deg,rgba(241,255,247,.052),rgba(10,39,35,.015) 44%,rgba(3,19,23,.09) 95%),
+  rgba(9,29,29,var(--live-glass-board,.51))!important;
+ border-color:rgba(220,241,231,var(--live-glass-rim,.25))!important;
+ -webkit-backdrop-filter:blur(var(--live-glass-board-blur,9px)) saturate(.92)!important;
+ backdrop-filter:blur(var(--live-glass-board-blur,9px)) saturate(.92)!important;
+ box-shadow:
+  0 10px 21px -17px rgba(0,10,12,.57),
+  inset 0 1px 0 rgba(255,255,255,var(--live-glass-mini-highlight,.07))!important;
+}
+/* Per-category pigments stay category-specific; only the neutral lens changes. */
+#phone[data-live-glass]:not(.no-optics) .category-board.selected{
+ background:
+  linear-gradient(158deg,rgba(var(--tone-rgb),.13),transparent 57%),
+  rgba(9,29,29,var(--live-glass-board,.51))!important;
+ border-color:rgba(var(--tone-rgb),var(--live-glass-select-rim,.42))!important;
+}
+#phone[data-live-glass]:not(.no-optics) .nav{
+ background:
+  linear-gradient(155deg,rgba(232,249,238,.052),transparent 52%),
+  rgba(6,25,27,var(--live-glass-nav,.89))!important;
+ border-color:rgba(228,244,235,var(--live-glass-rim,.25))!important;
+ -webkit-backdrop-filter:blur(var(--live-glass-nav-blur,14px)) saturate(.90)!important;
+ backdrop-filter:blur(var(--live-glass-nav-blur,14px)) saturate(.90)!important;
+ box-shadow:0 15px 31px -17px rgba(0,6,8,.70),inset 0 1px 0 rgba(255,255,255,var(--live-glass-highlight,.15))!important;
+}
+/* Optical OFF must be a true all-surfaces bypass. Preserve foreground ink. */
+#phone[data-live-glass].no-optics :is(
+  .glass-site>.panel,.glass-site>.metric,.quick-board,.category-board,
+  .shop,.finance-insight,.integrations,.callout,.review-item,.transaction,
+  .category-detail,.nav
+){
+ background:rgba(10,30,31,.96)!important;
+ border-color:rgba(226,244,232,.10)!important;
+ -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 12px 26px -19px rgba(0,7,9,.66)!important;
+}
+#phone[data-live-glass].no-optics .glass-site>:is(.panel,.metric)::after{opacity:0!important}
+/* The shared atmospheric light changes the underlying field, never the text.
+ * This is deliberately NOT a glowing overlay on individual cards. */
+#phone[data-live-glass]:not(.no-shader) .ambient::before{
+ opacity:var(--live-light-sage,.46)!important;
+}
+#phone[data-live-glass]:not(.no-shader) .ambient::after{
+ opacity:var(--live-light-sky,.35)!important;
+}
+#phone[data-live-glass]:not(.no-shader) .mist{
+ opacity:var(--live-light-mist,.60)!important;
+}
+#inspector-panel-material .glass-live-proof{
+ margin-top:15px;padding:12px 13px;border-radius:14px;
+ border:1px solid rgba(220,245,230,.15);
+ background:linear-gradient(151deg,rgba(30,64,53,.40),rgba(9,27,27,.47));
+}
+#inspector-panel-material .glass-live-head{display:flex;align-items:center;justify-content:space-between;gap:9px}
+#inspector-panel-material .glass-live-head strong{font-size:12px;color:#E6F3E7}
+#inspector-panel-material .glass-live-head small{font-size:10px;color:#B2D3BB;font-variant-numeric:tabular-nums}
+#inspector-panel-material .glass-live-proof p{
+ font-size:10px;line-height:1.55;color:#ABC9BA;margin:8px 0;
+}
+#inspector-panel-material .glass-live-readback{
+ font-size:10px;line-height:1.65;color:#D5EAD8;
+ background:rgba(4,19,21,.33);border-radius:9px;padding:8px 9px;
+ font-variant-numeric:tabular-nums;
+}
+#inspector-panel-material .glass-live-button{
+ min-height:35px;margin-top:10px;border:1px solid rgba(216,239,213,.28);
+ border-radius:10px;background:rgba(13,52,40,.48);color:#E3F3E6;
+ font-size:11px;font-weight:700;padding:8px 10px;cursor:pointer;
+}
+#inspector-panel-material .glass-live-button:focus-visible{outline:2px solid #D5E6A8;outline-offset:2px}
+
+/* Unified accessible slider anatomy, including Chromium / Opera GX.
+ * The existing legacy input styles used browser-native white rails. */
+.workspace-inspector input[type="range"]{
+ -webkit-appearance:none!important;appearance:none!important;
+ display:block;width:100%;min-width:0;
+ height:28px!important;min-height:28px!important;
+ margin:8px 0 0!important;padding:0!important;
+ border:0!important;border-radius:0!important;
+ outline:none;background:transparent!important;cursor:pointer;
+}
+.workspace-inspector input[type="range"]::-webkit-slider-runnable-track{
+ height:4px!important;border-radius:999px;
+ background:linear-gradient(90deg,rgba(168,217,94,.48),rgba(212,232,207,.34))!important;
+ border:1px solid rgba(223,245,225,.15);
+}
+.workspace-inspector input[type="range"]::-webkit-slider-thumb{
+ -webkit-appearance:none;appearance:none;
+ width:15px;height:15px;margin-top:-6.5px;
+ border-radius:50%;border:2px solid #F1F9E8;
+ background:#A9CE85;
+ box-shadow:0 2px 8px rgba(0,12,15,.42);
+}
+.workspace-inspector input[type="range"]::-moz-range-track{
+ height:4px;border-radius:999px;background:rgba(206,232,203,.36);
+}
+.workspace-inspector input[type="range"]::-moz-range-progress{
+ height:4px;border-radius:999px;background:rgba(169,211,133,.72);
+}
+.workspace-inspector input[type="range"]::-moz-range-thumb{
+ width:12px;height:12px;border:2px solid #F1F9E8;
+ background:#A9CE85;border-radius:50%;
+}
+.workspace-inspector input[type="range"]:focus-visible{
+ outline:2px solid #D5E6A8!important;outline-offset:3px;
+ border-radius:6px!important;
+}
+@media(prefers-reduced-motion:reduce){
+ .workspace-inspector input[type="range"]{scroll-behavior:auto!important}
+}
