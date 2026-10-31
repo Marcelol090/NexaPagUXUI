@@ -88,7 +88,12 @@ test('Glass density affects the actual hero, metric and board, not just a slider
     return {hasGlass:phone.hasAttribute('data-live-glass'),token:phone.style.getPropertyValue('--live-glass-hero'),
       image:style?.backgroundImage,color:style?.backgroundColor,selectorMatch:el?.matches('#phone[data-live-glass]:not(.no-optics) .glass-site>.panel.fiduciary-hero'),
       styles:[...document.querySelectorAll('link[rel="stylesheet"]')].map(x=>({href:x.getAttribute('href'),loaded:!!x.sheet})),
-      sheets:[...document.styleSheets].map(x=>x.href||'inline')};
+      sheets:[...document.styleSheets].map(x=>x.href||'inline'),
+      matchedRules:[...document.styleSheets].flatMap(sheet=>{
+        try{return [...sheet.cssRules].filter(r=>r.selectorText&&r.selectorText.includes('data-live-glass')&&r.selectorText.includes('panel')).slice(0,8).map(r=>({selector:r.selectorText,background:r.style?.background,valid:r.style?.getPropertyPriority('background')}));}
+        catch{return [];}
+      })
+    };
   })));
 
   for (const name of ['hero', 'metric', 'board']) {
@@ -122,7 +127,16 @@ test('One geometry token changes multiple actual card types with fractional pixe
     geometry.reset();
     return result;
   });
-  console.log('GEOMETRY DIAGNOSTIC', JSON.stringify(proof));
+  console.log('GEOMETRY DIAGNOSTIC', JSON.stringify({
+    proof,
+    extra:await page.evaluate(()=>{
+      const p=document.querySelector('#phone'),card=p?.querySelector('.quick-board');
+      return {
+       attr:p?.hasAttribute('data-ds-radius'),selector:card?.matches('#phone[data-ds-radius] .quick-board'),
+       rules:[...document.styleSheets].flatMap(sheet=>{try{return [...sheet.cssRules].filter(r=>r.selectorText?.includes('data-ds-radius')).slice(0,5).map(r=>({selector:r.selectorText,radius:r.style?.borderRadius}));}catch{return [];}})
+      };
+    })
+  }));
   expect(proof.applied).toBe(true);
   expect(proof.token).toBe('12.25px');
   expect(proof.quickBoard).toBe('12.25px');
