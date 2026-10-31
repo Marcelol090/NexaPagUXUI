@@ -89,9 +89,19 @@ test('Glass density affects the actual hero, metric and board, not just a slider
       image:style?.backgroundImage,color:style?.backgroundColor,selectorMatch:el?.matches('#phone[data-live-glass]:not(.no-optics) .glass-site>.panel.fiduciary-hero'),
       styles:[...document.querySelectorAll('link[rel="stylesheet"]')].map(x=>({href:x.getAttribute('href'),loaded:!!x.sheet})),
       sheets:[...document.styleSheets].map(x=>x.href||'inline'),
-      matchedRules:[...document.styleSheets].flatMap(sheet=>{
-        try{return [...sheet.cssRules].filter(r=>r.selectorText&&r.selectorText.includes('data-live-glass')&&r.selectorText.includes('panel')).slice(0,8).map(r=>({selector:r.selectorText,background:r.style?.background,valid:r.style?.getPropertyPriority('background')}));}
-        catch{return [];}
+      matchedRules:(()=>{
+        const out=[];
+        const walk=(rules,parent='')=>{for(const r of rules){
+          if(r.selectorText?.includes('data-live-glass')||r.selectorText?.includes('data-ds-radius'))
+            out.push({selector:r.selectorText,condition:parent,background:r.style?.background,radius:r.style?.borderRadius});
+          if(r.cssRules)walk(r.cssRules,r.conditionText||r.name||parent);
+        }};
+        for(const sheet of document.styleSheets)try{walk(sheet.cssRules)}catch{}
+        return out.slice(0,16);
+      })(),
+      cssOM:[...document.styleSheets].map(sheet=>{
+        try{return{href:sheet.href,count:sheet.cssRules.length,first:[...sheet.cssRules].slice(0,3).map(r=>r.cssText.slice(0,80)),
+          last:[...sheet.cssRules].slice(-5).map(r=>r.cssText.slice(0,140))};}catch{return{href:sheet.href,blocked:true}}
       })
     };
   })));
@@ -123,6 +133,8 @@ test('One geometry token changes multiple actual card types with fractional pixe
       quickBoard: card ? getComputedStyle(card).borderRadius : null,
       nav: nav ? getComputedStyle(nav).borderRadius : null,
       token: document.querySelector('#phone').style.getPropertyValue('--ds-radius').trim(),
+      attr:document.querySelector('#phone').hasAttribute('data-ds-radius'),
+      selectorMatch:card?.matches('#phone[data-ds-radius] .quick-board'),
     };
     geometry.reset();
     return result;
