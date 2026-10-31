@@ -1,0 +1,134 @@
+/* NexaPag v9.18 · Global Geometry Design Tokens
+ * Primitive -> semantic -> component contract (Figma/USWDS token architecture).
+ * Global controls are OPT-IN PER PROPERTY. No original geometry changes on load.
+ * Fractional CSS pixels are permitted; rasterization may vary by device DPR.
+ * Higher precedence ID selector intentionally overrides old per-component !important.
+ */
+#phone[data-ds-radius] :is(
+ .glass-site>.panel,.glass-site>.metric,.panel,.metric,
+ .quick-board,.category-board,.shop,.finance-insight,.integrations,
+ .callout,.review-count,.review-item,.bankcard,.transaction,
+ .category-detail,.cardslider,.day-detail,.glass-demo,.nav,
+ .goal-layout,.goal-side,.subhead
+){border-radius:var(--ds-radius)!important}
+#phone[data-ds-radius] :is(
+ .quick-icon,.small-icon,.cat-symbol,.txn-icon,.shop-mark,.square,
+ .iconbutton,.tiny-pill,.primarybtn,.textbtn,.linkish,.tag,.subcat-chip,
+ .hero-period-badge,.nav button,.overview-period button,
+ .segmented button,.filters button,.review-actions button,.orb-open-btn,
+ .orb-mini-btn,.goal-button,.review-badge
+){border-radius:max(2px,calc(var(--ds-radius) - 7px))!important}
+#phone[data-ds-icon] :is(
+ .quick-icon,.small-icon,.cat-symbol,.txn-icon,.shop-mark,.square,
+ .iconbutton,.insight-symbol,.review-badge
+){border-radius:var(--ds-icon)!important}
+#phone[data-ds-gap] :is(
+ .metric-row,.quick-grid,.category-board-grid,.shops,.review-actions,
+ .overview-period,.segmented,.filters,.nav,.orb-action-row,
+ .goal-layout,.goal-side,.subhead,.category-detail-head,.cardslider,
+ .category-board-top,.row,.integrations
+){gap:var(--ds-gap)!important}
+#phone[data-ds-padding] :is(
+ .glass-site>.panel,.glass-site>.metric,.panel,.metric,
+ .quick-board,.category-board,.shop,.finance-insight,.integrations,
+ .callout,.review-count,.review-item,.bankcard,.transaction,
+ .category-detail,.day-detail
+){padding:var(--ds-padding)!important}
+#phone[data-ds-padding] :is(
+ .nav,.nav button,.primarybtn,.textbtn,.iconbutton,.tiny-pill,
+ .overview-period button,.segmented button,.filters button,
+ .tag,.subcat-chip,.orb-open-btn,.review-actions button
+){padding:clamp(2px,calc(var(--ds-padding) * .52),15px)!important}
+#phone[data-ds-border] :is(
+ .glass-site>.panel,.glass-site>.metric,.panel,.metric,
+ .quick-board,.category-board,.shop,.finance-insight,.integrations,
+ .callout,.review-count,.review-item,.bankcard,.transaction,
+ .category-detail,.day-detail,.nav,.nav button,.primarybtn,.iconbutton,
+ .tiny-pill,.overview-period button,.segmented button,.filters button,
+ .tag,.subcat-chip,.quick-icon,.small-icon,.cat-symbol,.txn-icon,
+ .shop-mark,.square,.review-actions button
+){border-width:var(--ds-border)!important}
+/* Don't globally change fixed-height financial canvases or button height.
+   Inner glyphs use the concentric radius principle without clipping strokes. */
+#inspector-panel-geometry .global-geometry{
+ margin:0 0 16px;padding:15px 13px 13px;
+ border-radius:17px;border:1px solid rgba(225,247,227,.16);
+ background:linear-gradient(152deg,rgba(26,56,46,.60),rgba(9,27,28,.54));
+ box-shadow:inset 0 1px 0 rgba(247,255,245,.08);
+}
+#inspector-panel-geometry .gg-top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:6px}
+#inspector-panel-geometry .gg-eyebrow{font-size:10px;color:#AAD3B2;letter-spacing:.09em;font-weight:780}
+#inspector-panel-geometry .gg-state{border:1px solid rgba(213,236,206,.20);padding:3px 7px;border-radius:7px;font-size:9px;color:#DEEDCE}
+#inspector-panel-geometry .global-geometry h4{font-size:16px;letter-spacing:-.035em;color:#E9F4E9;margin:8px 0 5px}
+#inspector-panel-geometry .gg-note{color:#A8C6B5;font-size:11px;line-height:1.55;margin:0 0 12px}
+#inspector-panel-geometry .gg-stepper{
+ display:flex;justify-content:space-between;align-items:center;gap:7px;
+ border-top:1px solid rgba(228,246,230,.09);padding:10px 0 6px;margin-top:3px;
+}
+#inspector-panel-geometry .gg-stepper>span{font-size:11px;color:#C4DACD}
+#inspector-panel-geometry .gg-step-options{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end}
+#inspector-panel-geometry .gg-step-options button{
+ min-width:32px;min-height:32px;border:1px solid rgba(208,238,219,.17);
+ background:rgba(2,20,21,.40);color:#BBD2C3;
+ border-radius:7px;padding:5px 6px;font-size:10px;cursor:pointer;
+}
+#inspector-panel-geometry .gg-step-options button[aria-pressed="true"]{
+ color:#0B251C;background:linear-gradient(150deg,#D5E6A8,#A8D95E);
+ border-color:rgba(248,255,245,.52);font-weight:750;
+}
+#inspector-panel-geometry .gg-field{
+ padding:11px 0 10px;border-top:1px solid rgba(224,244,228,.07);
+}
+#inspector-panel-geometry .gg-field label{display:block;font-size:11px;color:#D5E7D9;font-weight:650;margin-bottom:8px}
+#inspector-panel-geometry .gg-inputs{display:grid;grid-template-columns:minmax(0,1fr) 75px;gap:10px;align-items:center}
+#inspector-panel-geometry input[type="range"][data-ds-prop]{
+ width:100%;min-width:0;accent-color:#B8D688;cursor:pointer;
+ min-height:30px;touch-action:pan-y;
+}
+#inspector-panel-geometry input[type="number"][data-ds-num]{
+ width:100%;min-width:0;padding:7px 5px 7px 7px;min-height:34px;
+ color:#F4FAEE;border-radius:9px;border:1px solid rgba(228,246,232,.21);
+ background:rgba(6,22,25,.62);font:600 12px/1.2 Inter,system-ui,sans-serif;
+ font-variant-numeric:tabular-nums;text-align:right;
+}
+#inspector-panel-geometry .gg-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px}
+#inspector-panel-geometry .gg-actions button{
+ min-height:36px;border-radius:9px;border:1px solid rgba(223,244,226,.23);
+ background:rgba(15,49,41,.54);color:#DCEEDD;font-size:11px;font-weight:680;cursor:pointer;
+}
+#inspector-panel-geometry .gg-actions button:last-child{
+ background:linear-gradient(145deg,#D5E6A8,#A8D95E);color:#10291D;
+ border-color:rgba(255,255,255,.25);
+}
+#inspector-panel-geometry .gg-feedback{
+ min-height:24px;margin:11px 0 0;
+ color:#C6E6C5;font-size:10px;line-height:1.5;
+}
+#inspector-panel-geometry .gg-refinements{
+ border:1px solid rgba(215,239,221,.13);border-radius:14px;
+ overflow:hidden;background:rgba(8,26,28,.40);
+}
+#inspector-panel-geometry .gg-refinements>summary{
+ list-style:none;display:flex;justify-content:space-between;gap:10px;
+ cursor:pointer;align-items:center;min-height:42px;
+ padding:12px 14px;color:#D5E7D9;font-weight:700;font-size:12px;
+}
+#inspector-panel-geometry .gg-refinements>summary::-webkit-details-marker{display:none}
+#inspector-panel-geometry .gg-refinements>summary:after{content:"+";font-size:18px;line-height:1}
+#inspector-panel-geometry .gg-refinements[open]>summary:after{content:"−"}
+#inspector-panel-geometry .gg-refinements-body{padding:0 13px 13px}
+#inspector-panel-geometry .gg-refinements-body .geo-hub{border:0;background:none;box-shadow:none;padding:0!important}
+#inspector-panel-geometry .gg-refinements-body .geo-specimen{margin-top:10px}
+#inspector-panel-geometry .gg-refinements-body .geo-scopes button{min-height:36px}
+#inspector-panel-geometry .gg-refinements-body input[data-geo-prop]{min-height:29px}
+#inspector-panel-geometry .global-geometry :focus-visible,
+#inspector-panel-geometry .gg-refinements :focus-visible{
+ outline:2px solid #D5E6A8;outline-offset:2px
+}
+@media(max-width:940px){
+ #inspector-panel-geometry .global-geometry{padding:14px 12px}
+ #inspector-panel-geometry .gg-inputs{grid-template-columns:minmax(0,1fr) 78px}
+}
+@media(prefers-reduced-motion:reduce){
+ #inspector-panel-geometry .gg-step-options button{transition:none!important}
+}
