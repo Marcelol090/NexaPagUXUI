@@ -62,15 +62,19 @@
 }
 #phone[data-nm-paused] .glass-scene::before,#phone[data-nm-paused] .glass-scene::after,#phone[data-nm-paused] .glass-pigment-fold{animation-play-state:paused!important}
 #phone[data-nm-paused] :is(.quick-board,.category-board,.nav button){transition-duration:0ms!important}
-#phone[data-nm-paused] :is(.quick-board,.category-board,.nav button):active{transform:none!important}
-#phone[data-nm-paused] :is(.quick-board,.category-board,.nav button):hover{transform:none!important}
+#phone[data-motion-studio][data-nm-paused]:not(.no-motion) :is(.quick-board,.category-board,.nav button):active{transform:none!important}
+#phone[data-motion-studio][data-nm-paused]:not(.no-motion) :is(.quick-board,.category-board,.nav button):hover{transform:none!important}
 @media(prefers-reduced-motion:reduce){
  .nm-studio .nm-motion-track i{animation:none!important}
  #phone[data-motion-studio] :is(.quick-board,.category-board,.nav button){transition-duration:0ms!important}
- #phone[data-motion-studio] :is(.quick-board,.category-board,.nav button):active{transform:none!important}
- #phone[data-motion-studio] :is(.quick-board,.category-board,.nav button):hover{transform:none!important}
+ #phone[data-motion-studio]:not(.no-motion) :is(.quick-board,.category-board,.nav button):active{transform:none!important}
+ #phone[data-motion-studio]:not(.no-motion) :is(.quick-board,.category-board,.nav button):hover{transform:none!important}
 }
 #phone.no-motion[data-motion-studio] :is(.quick-board,.category-board,.nav button){transition-duration:0ms!important}
 #phone.no-motion[data-motion-studio] :is(.quick-board,.category-board,.nav button):active{transform:none!important}
 #phone.no-motion[data-motion-studio] :is(.quick-board,.category-board,.nav button):hover{transform:none!important}
 @media(max-width:380px){.nm-studio .nm-actions{grid-template-columns:1fr 1fr}.nm-studio .nm-actions .nm-primary{grid-column:span 2}}
+
+/* Value-aware ranges: clear active/inactive track, same pigment as the design system. */
+.workspace-inspector .nm-studio input[type="range"]::-webkit-slider-runnable-track{background:linear-gradient(90deg,rgba(180,219,146,.86) 0 var(--nm-progress,50%),rgba(210,234,215,.18) var(--nm-progress,50%) 100%)!important}
+.workspace-inspector .nm-studio input[type="range"]::-moz-range-track{background:linear-gradient(90deg,rgba(180,219,146,.86) 0 var(--nm-progress,50%),rgba(210,234,215,.18) var(--nm-progress,50%) 100%)!important}
