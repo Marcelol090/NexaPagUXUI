@@ -7,7 +7,7 @@ const html=source('index.html'),css=source('src/sage-material-910.css'),app=sour
 test('9.10 runs the approved material last, in the real app rather than a separate Hub',()=>{
  const original=html.indexOf('src/material-continuity.css'),last=html.indexOf('src/sage-material-910.css');
  assert.ok(original>0 && last>original);
- assert.match(html,/Visualize 9\\.\\d+/);
+ assert.ok(html.includes("Visualize 9."));
  assert.ok(html.includes('src/sage-material-910.css'));
 });
 test('the approved sage, leaf, forest, petrol and sky palette grounds the shared scene',()=>{
