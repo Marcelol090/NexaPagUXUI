@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1718">
+<title>NexaPag · Hub de Colorimetria 9.09u1</title>
+<style>
+:root{
+  color-scheme: dark;
+  --bg-top:#152928; --bg-bottom:#0c1718; --mist-a:#d5e6a8; --mist-b:#5fa9d8;
+  --cat-1:#D5E6A8; --cat-2:#A8D95E; --cat-3:#6FB81E; --cat-4:#1F8B57; --cat-5:#0D6372; --cat-6:#5FA9D8;
+  --card-blur:24px; --card-film:78%; --card-border-alpha:14%; --card-highlight:12%; --card-shadow:25%; --card-radius:20px; --card-gap:12px; --card-border-width:1px; --card-pigment:13%; --card-pigment-spread:82%; --card-saturation:88%; --card-brightness:92%;
+  --board-blur:0px; --board-film:94%; --board-border-alpha:15%; --board-highlight:10%; --board-shadow:18%; --board-radius:17px; --board-gap:10px; --board-border-width:1px; --board-pigment:12%; --board-pigment-spread:78%; --board-saturation:100%; --board-brightness:100%;
+  --button-blur:0px; --button-film:92%; --button-border-alpha:13%; --button-highlight:10%; --button-shadow:16%; --button-radius:999px; --button-gap:8px; --button-border-width:1px; --button-pigment:10%; --button-pigment-spread:120%;
+  --nav-blur:18px; --nav-film:96%; --nav-border-alpha:15%; --nav-highlight:9%; --nav-shadow:30%; --nav-radius:20px; --nav-gap:4px; --nav-border-width:1px; --nav-pigment:10%; --nav-pigment-spread:120%;
+  --text-1:#eff6f1; --text-2:#b5c9bf; --text-3:#8ea39a;
+}
+*{box-sizing:border-box} html,body{height:100%} body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text-1);
+background:radial-gradient(ellipse 45% 55% at 10% 8%, rgba(159,208,99,.10), transparent 55%),radial-gradient(ellipse 36% 44% at 88% 92%, rgba(95,169,216,.10), transparent 55%),linear-gradient(135deg,#081214 0%,#0c191a 50%,#081113 100%);} 
+button,input,select,textarea{font:inherit}
+a{color:inherit}
+.app{display:grid;grid-template-columns:360px minmax(0,1fr);min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;overflow:auto;padding:18px 16px 36px;border-right:1px solid rgba(255,255,255,.06);background:linear-gradient(180deg,rgba(9,18,20,.96),rgba(8,15,16,.88));backdrop-filter:blur(20px)}
+.main{padding:18px;display:grid;gap:18px}
+.overline{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#9eb3ab}
+h1{font-size:29px;line-height:1.04;letter-spacing:-.05em;margin:10px 0 8px}.sidebar p{font-size:14px;line-height:1.46;color:var(--text-2);margin:0 0 14px}
+.section,.panel{border:1px solid rgba(255,255,255,.07);border-radius:22px;background:linear-gradient(180deg,rgba(16,29,31,.78),rgba(9,18,20,.70));box-shadow:0 16px 38px rgba(0,0,0,.20)}
+.section{padding:14px;margin-top:14px}.section h2{margin:0 0 12px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#d2e3db}
+.panel-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06)} .panel-head h3{margin:0;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#cfe0d8}
+.banner{display:flex;justify-content:space-between;gap:18px;padding:18px 20px}.banner h3{margin:0 0 6px;font-size:18px}.banner p{margin:0;color:var(--text-2);max-width:880px;line-height:1.5}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.badge{padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);font-size:11px;color:#d9e8e0}
+.label{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:#d9e6e0;margin:10px 0 6px}.label output{color:#9fd063;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:#9fd063} input[type=color]{width:100%;height:38px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,.10);padding:3px}
+.grid2,.grid3,.grid6,.chips,.mini-actions{display:grid;gap:8px}.grid2{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:repeat(3,1fr)}.grid6{grid-template-columns:repeat(2,1fr)}.chips{grid-template-columns:1fr 1fr}.mini-actions{grid-template-columns:1fr 1fr}
+.chips button,.ghost,.copy,select{width:100%;padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.08);color:#e7f1ec;background:linear-gradient(160deg,rgba(26,42,44,.88),rgba(11,21,24,.96));cursor:pointer}
+.chips button.active,.toggle.active{background:linear-gradient(160deg,rgba(62,101,80,.96),rgba(19,71,63,.98) 58%,rgba(10,56,64,.98));border-color:rgba(215,238,223,.18);color:#fff}
+.swatch{display:grid;gap:6px}.swatch span{font-size:11px;color:#b9cbc3}.helper{font-size:12px;color:#95aba2;line-height:1.45}.mini-note{font-size:11px;color:#8ca49d;margin-top:8px}
+textarea{width:100%;min-height:160px;border-radius:14px;padding:12px;border:1px solid rgba(255,255,255,.08);background:#091214;color:#d6e8df;resize:vertical;line-height:1.45}
+.top-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.bottom-grid{display:grid;grid-template-columns:minmax(520px,1fr) 420px;gap:18px}
+.preview-body,.focus-body,.gallery-body,.tokens-body{padding:18px}
+.preview-body{display:grid;place-items:center}.focus-body{display:grid;gap:14px}.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.compare-card{border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:14px;background:linear-gradient(180deg,rgba(10,18,20,.68),rgba(12,21,23,.60))}
+.compare-card h4{margin:0 0 12px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#b7ccc3}
+.focus-toolbar{display:flex;flex-wrap:wrap;gap:8px}.toggle{padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:#d7e7df;cursor:pointer}
+.phone{width:390px;max-width:100%;height:820px;border-radius:40px;position:relative;overflow:hidden;border:1px solid rgba(226,243,235,.18);box-shadow:0 36px 90px rgba(0,0,0,.42),0 0 0 6px #182628,0 0 0 7px rgba(236,252,242,.10);background:linear-gradient(155deg,var(--bg-top),var(--bg-bottom))}
+.ambient,.mist,.grain{position:absolute;inset:0;pointer-events:none}.ambient::before,.ambient::after{content:"";position:absolute;border-radius:50%;filter:blur(28px)} .ambient::before{width:280px;height:260px;left:-90px;top:60px;background:radial-gradient(circle, color-mix(in oklab, var(--mist-a) 22%, transparent), transparent 70%)} .ambient::after{width:270px;height:280px;right:-80px;bottom:150px;background:radial-gradient(circle, color-mix(in oklab, var(--mist-b) 18%, transparent), transparent 70%)}
+.mist{background:radial-gradient(circle at 80% 18%, color-mix(in oklab, var(--mist-a) 8%, transparent), transparent 28%),radial-gradient(circle at 20% 70%, color-mix(in oklab, var(--mist-b) 7%, transparent), transparent 28%)}
+.grain{opacity:.08;background-image:radial-gradient(rgba(255,255,255,.7) .6px, transparent .7px);background-size:8px 8px;mix-blend-mode:overlay}
+.status{position:absolute;top:18px;left:22px;right:22px;display:flex;justify-content:space-between;z-index:3;font-size:12px;color:#e1eee8}.header{position:relative;z-index:2;padding:56px 18px 14px}.brandline{display:flex;align-items:center;justify-content:space-between;gap:12px}.brandwrap{display:flex;align-items:center;gap:10px}.mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:#0d2218;font-weight:900;background:linear-gradient(140deg,var(--cat-1),var(--cat-4) 56%,var(--cat-5));box-shadow:inset 0 1px 0 rgba(255,255,255,.45)}.brandcopy strong{display:block;font-size:17px}.brandcopy small{display:block;color:#98aca5;font-size:12px;margin-top:2px}.iconbutton{width:36px;height:36px;border-radius:14px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);color:#e4f1ea}
+.content-scroll{position:absolute;inset:105px 0 92px;overflow:auto;padding:0 18px 24px;z-index:2}.stack{display:grid;gap:var(--card-gap)}
+.component{position:relative;transition:opacity .2s ease, transform .2s ease, box-shadow .2s ease}.component[data-kind]{cursor:pointer}.component.selected{transform:translateY(-1px);filter:drop-shadow(0 0 0 rgba(0,0,0,0))}.component.selected::before{content:"";position:absolute;inset:-5px;border-radius:inherit;pointer-events:none;border:1.5px solid rgba(214,233,184,.74);box-shadow:0 0 0 4px rgba(189,224,130,.08)}.component.dimmed{opacity:.34}
+
+.card-surface,.board-surface,.button-surface,.nav-surface{position:relative;overflow:hidden;isolation:isolate}
+.card-surface{border-radius:var(--card-radius);padding:16px;border:var(--card-border-width) solid rgba(223,243,232,var(--card-border-alpha));background:radial-gradient(ellipse var(--card-pigment-spread) 72% at 10% 0%, rgba(var(--tone-rgb,95,169,216),var(--card-pigment)), transparent 78%),linear-gradient(150deg, rgba(250,255,252,.025), rgba(10,18,20,.08) 44%, rgba(9,17,20,.14)),rgba(17,29,31,var(--card-film));-webkit-backdrop-filter:blur(var(--card-blur)) saturate(var(--card-saturation)) brightness(var(--card-brightness));backdrop-filter:blur(var(--card-blur)) saturate(var(--card-saturation)) brightness(var(--card-brightness));box-shadow:0 18px 40px rgba(0,0,0,var(--card-shadow)),inset 0 1px 0 rgba(255,255,255,var(--card-highlight)),inset 0 -1px 0 rgba(0,0,0,.18)}
+.board-surface{border-radius:var(--board-radius);padding:12px;border:var(--board-border-width) solid rgba(223,243,232,var(--board-border-alpha));background:radial-gradient(ellipse var(--board-pigment-spread) 68% at 18% 0%, rgba(var(--tone-rgb,95,169,216),var(--board-pigment)), transparent 80%),linear-gradient(152deg, rgba(255,255,255,.02), rgba(10,18,20,.08) 40%, rgba(8,16,18,.14)),rgba(16,28,30,var(--board-film));-webkit-backdrop-filter:blur(var(--board-blur)) saturate(var(--board-saturation)) brightness(var(--board-brightness));backdrop-filter:blur(var(--board-blur)) saturate(var(--board-saturation)) brightness(var(--board-brightness));box-shadow:0 12px 22px rgba(0,0,0,var(--board-shadow)),inset 0 1px 0 rgba(255,255,255,var(--board-highlight))}
+.button-surface{border-radius:var(--button-radius);padding:10px 14px;border:var(--button-border-width) solid rgba(223,243,232,var(--button-border-alpha));background:radial-gradient(ellipse var(--button-pigment-spread) 110% at 15% 0%, rgba(var(--tone-rgb,95,169,216),var(--button-pigment)), transparent 76%),linear-gradient(155deg, rgba(255,255,255,.02), rgba(10,18,20,.12) 42%),rgba(15,27,29,var(--button-film));box-shadow:0 10px 18px rgba(0,0,0,var(--button-shadow)),inset 0 1px 0 rgba(255,255,255,var(--button-highlight));-webkit-backdrop-filter:blur(var(--button-blur));backdrop-filter:blur(var(--button-blur))}
+.nav-surface{border-radius:var(--nav-radius);padding:5px;border:var(--nav-border-width) solid rgba(223,243,232,var(--nav-border-alpha));background:radial-gradient(ellipse var(--nav-pigment-spread) 110% at 50% 0%, rgba(95,169,216,var(--nav-pigment)), transparent 74%),linear-gradient(160deg, rgba(255,255,255,.02), rgba(10,18,20,.12) 46%),rgba(14,26,28,var(--nav-film));box-shadow:0 14px 28px rgba(0,0,0,var(--nav-shadow)),inset 0 1px 0 rgba(255,255,255,var(--nav-highlight));-webkit-backdrop-filter:blur(var(--nav-blur));backdrop-filter:blur(var(--nav-blur))}
+.card-surface::after,.board-surface::after,.button-surface::after,.nav-surface::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(120deg, rgba(255,255,255,.08), transparent 28%, transparent 72%, rgba(255,255,255,.025))}
+.hero{--tone-rgb:31,139,87;min-height:200px}.eyebrow{font-size:11px;color:#b9cec7}.big{font-size:36px;letter-spacing:-.06em;font-weight:820;margin:9px 0 7px}.sub{display:flex;align-items:center;gap:8px;color:#cae6d4;font-size:12px}.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:rgba(127,224,166,.16);color:#d8f9e4;border:1px solid rgba(162,233,180,.18)}.chart{margin-top:18px;height:72px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.02),transparent)}.chart svg{width:100%;height:100%}
+.metric-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--card-gap)}.metric{min-height:94px;display:flex;align-items:flex-start;gap:12px}.metric .icon{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.07);flex:none}.metric strong{display:block;font-size:18px;margin-top:3px}.metric small{display:block;color:#9bb0a8;margin-top:4px}
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--board-gap)}.quick-board{min-height:104px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}.quick-board .well{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(155deg, rgba(var(--tone-rgb),.30), rgba(var(--tone-rgb),.12) 60%, rgba(10,18,20,.28));border:1px solid rgba(var(--tone-rgb),.34);box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}.quick-board strong{font-size:11px}.quick-board small{font-size:9px;color:#9bb1a9}
+.category-card{--tone-rgb:111,184,30}.category-list{display:grid;gap:10px}.category-item{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center}.category-symbol{width:44px;height:44px;border-radius:14px;background:linear-gradient(155deg, rgba(var(--tone-rgb),.32), rgba(var(--tone-rgb),.13) 60%, rgba(10,18,20,.32));border:1px solid rgba(var(--tone-rgb),.30);display:grid;place-items:center}.category-item b{display:block;font-size:13px}.category-item small{color:#9bb1a9}.amt{font-variant-numeric:tabular-nums;color:#eff6f1}.tab-row{display:flex;gap:var(--button-gap);flex-wrap:wrap}.tab-btn{font-size:12px;color:#adc1b9;background:none}.tab-btn.active{background:linear-gradient(160deg,rgba(66,103,82,.90),rgba(27,83,71,.94) 58%,rgba(13,64,73,.92));color:#edf6ef}
+.nav-wrap{position:absolute;left:0;right:0;bottom:0;padding:8px 14px 18px;background:linear-gradient(0deg,rgba(7,18,20,.98),rgba(7,18,20,.88) 70%,transparent)}.nav{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--nav-gap)}.nav-btn{position:relative;text-align:center;color:#91a6a4;min-height:52px;display:grid;align-content:center;gap:4px;font-size:10px}.nav-btn.active{background:linear-gradient(160deg,rgba(64,103,83,.90),rgba(18,70,62,.96) 58%,rgba(10,54,64,.95));color:white;border-radius:15px}.nav-btn.active::after{content:"";position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:12px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--cat-1),var(--cat-6))}
+.focus-stage{min-height:300px;display:grid;place-items:center;border-radius:18px;background:radial-gradient(circle at 50% 15%, rgba(255,255,255,.03), transparent 24%),linear-gradient(180deg,rgba(9,17,19,.72),rgba(6,12,13,.86));border:1px dashed rgba(255,255,255,.08);padding:14px;overflow:hidden}
+.focus-stage.plain{background:linear-gradient(180deg,#0b1214,#0b1214)} .focus-stage.gridbg{background-image:linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(180deg,#0b1214,#0b1214);background-size:16px 16px,16px 16px,100% 100%}
+.specimen-wrap{width:min(100%,420px)} .specimen-wrap .quick-grid{grid-template-columns:repeat(2,1fr)} .specimen-wrap .nav{grid-template-columns:repeat(5,1fr)} .specimen-wrap .tab-row{justify-content:flex-start}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.kpi{padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}.kpi span{display:block;font-size:11px;color:#9fb3aa}.kpi strong{display:block;margin-top:6px;font-size:16px}
+.token-list{display:grid;gap:10px}.token-item{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06)}.token-item .name{font-size:12px;color:#dce9e2}.token-item .old,.token-item .new{font-variant-numeric:tabular-nums;font-size:12px}.token-item .old{color:#8ea49b}.token-item .new{color:#cce6b4}.token-item.changed{outline:1px solid rgba(199,226,137,.22)}
+.gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.gallery-tile{padding:14px;border-radius:18px;border:1px solid rgba(255,255,255,.07);background:linear-gradient(180deg,rgba(10,18,20,.68),rgba(12,21,23,.60))}.gallery-tile .title{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#b7ccc3;margin-bottom:10px}
+@media (max-width:1380px){.top-grid,.bottom-grid{grid-template-columns:1fr}.compare-grid{grid-template-columns:1fr 1fr}} @media (max-width:1024px){.app{grid-template-columns:1fr}.sidebar{position:relative;height:auto;border-right:0;border-bottom:1px solid rgba(255,255,255,.06)}} @media (max-width:720px){.banner{display:grid}.gallery-grid,.compare-grid,.kpis{grid-template-columns:1fr}.phone{height:780px}.quick-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* The workbench must shrink on phones: grid children may not set min-content widths. */
+.app,.sidebar,.main,.section,.panel,.top-grid,.bottom-grid,.compare-grid,.focus-body,.preview-body,.gallery-body,.tokens-body,.compare-card,.specimen-wrap{min-width:0;}
+@media (max-width:1024px){.app{grid-template-columns:minmax(0,1fr)!important}.main{width:100%;max-width:100%;overflow:hidden}}
+@media (max-width:720px){.top-grid,.bottom-grid{grid-template-columns:minmax(0,1fr)!important}.compare-grid{grid-template-columns:minmax(0,1fr)!important}.focus-body{padding:12px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.compare-card{padding:10px}.sidebar{width:100%;overflow-x:hidden}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="overline">NexaPag / Color Lab · 9.09u1</div>
+    <p style="margin:9px 0 6px;font-size:12px"><a href="/" style="text-decoration:none;color:#bdddb7">← Visualize principal</a></p>
+    <h1>Hub de colorimetria<br>melhorado</h1>
+    <p>Agora com <b>isolador de componente</b>, <b>comparação antes/depois</b>, <b>foco no componente selecionado</b> e um painel de tokens alterados para você enxergar exatamente o que está mudando.</p>
+
+    <div class="section">
+      <h2>1. Escopo</h2>
+      <div class="chips" id="scopeChips">
+        <button class="active" data-scope="card">Cards</button>
+        <button data-scope="board">Boards</button>
+        <button data-scope="button">Buttons/Tabs</button>
+        <button data-scope="nav">Navbar</button>
+      </div>
+      <div class="mini-actions">
+        <button class="ghost" id="applyAll">Aplicar em todos</button>
+        <button class="ghost" id="resetScope">Resetar escopo</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>2. Visualização</h2>
+      <div class="chips" id="viewToggles">
+        <button class="active" data-toggle="focus">Foco ativo</button>
+        <button class="active" data-toggle="compare">Comparar</button>
+        <button data-bg="soft" class="active">Fundo soft</button>
+        <button data-bg="plain">Fundo plain</button>
+        <button data-bg="grid">Fundo grid</button>
+      </div>
+      <div class="mini-note">O fundo do isolador pode ser trocado para facilitar a leitura do blur, da borda e da pigmentação.</div>
+    </div>
+
+    <div class="section">
+      <h2>3. Paleta e shader</h2>
+      <div class="grid2">
+        <label class="swatch"><span>Fundo top</span><input type="color" data-var="--bg-top" value="#152928"></label>
+        <label class="swatch"><span>Fundo base</span><input type="color" data-var="--bg-bottom" value="#0c1718"></label>
+        <label class="swatch"><span>Mist A</span><input type="color" data-var="--mist-a" value="#d5e6a8"></label>
+        <label class="swatch"><span>Mist B</span><input type="color" data-var="--mist-b" value="#5fa9d8"></label>
+      </div>
+      <div class="grid6" style="margin-top:10px">
+        <label class="swatch"><span>Cat 1</span><input type="color" data-var="--cat-1" value="#D5E6A8"></label>
+        <label class="swatch"><span>Cat 2</span><input type="color" data-var="--cat-2" value="#A8D95E"></label>
+        <label class="swatch"><span>Cat 3</span><input type="color" data-var="--cat-3" value="#6FB81E"></label>
+        <label class="swatch"><span>Cat 4</span><input type="color" data-var="--cat-4" value="#1F8B57"></label>
+        <label class="swatch"><span>Cat 5</span><input type="color" data-var="--cat-5" value="#0D6372"></label>
+        <label class="swatch"><span>Cat 6</span><input type="color" data-var="--cat-6" value="#5FA9D8"></label>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>4. Material</h2>
+      <div class="label"><span>Blur</span><output id="o-blur">24px</output></div><input type="range" min="0" max="42" step="1" value="24" data-prop="blur">
+      <div class="label"><span>Film</span><output id="o-film">78%</output></div><input type="range" min="45" max="98" step="1" value="78" data-prop="film">
+      <div class="label"><span>Pigmentação</span><output id="o-pigment">13%</output></div><input type="range" min="0" max="40" step="1" value="13" data-prop="pigment">
+      <div class="label"><span>Spread do pigmento</span><output id="o-spread">82%</output></div><input type="range" min="40" max="150" step="1" value="82" data-prop="spread">
+      <div class="label"><span>Alpha da borda</span><output id="o-borderAlpha">14%</output></div><input type="range" min="0" max="40" step="1" value="14" data-prop="border-alpha">
+      <div class="label"><span>Highlight</span><output id="o-highlight">12%</output></div><input type="range" min="0" max="30" step="1" value="12" data-prop="highlight">
+      <div class="label"><span>Shadow</span><output id="o-shadow">25%</output></div><input type="range" min="0" max="50" step="1" value="25" data-prop="shadow">
+      <div class="label"><span>Saturação</span><output id="o-saturation">88%</output></div><input type="range" min="40" max="130" step="1" value="88" data-prop="saturation">
+      <div class="label"><span>Brightness</span><output id="o-brightness">92%</output></div><input type="range" min="70" max="120" step="1" value="92" data-prop="brightness">
+    </div>
+
+    <div class="section">
+      <h2>5. Borda e geometria</h2>
+      <div class="label"><span>Border width</span><output id="o-borderWidth">1px</output></div><input type="range" min="0" max="3" step="0.25" value="1" data-prop="border-width">
+      <div class="label"><span>Radius</span><output id="o-radius">20px</output></div><input type="range" min="8" max="32" step="1" value="20" data-prop="radius">
+      <div class="label"><span>Gap</span><output id="o-gap">12px</output></div><input type="range" min="4" max="24" step="1" value="12" data-prop="gap">
+    </div>
+
+    <div class="section">
+      <h2>6. Presets e saída</h2>
+      <div class="chips">
+        <button data-preset="quiet">Discreto</button>
+        <button data-preset="balanced" class="active">Equilibrado</button>
+        <button data-preset="rich">Expressivo</button>
+        <button data-preset="crisp">Crystalline</button>
+      </div>
+      <div class="mini-actions" style="margin-top:10px">
+        <button class="copy" id="copyCss">Copiar CSS</button>
+        <button class="copy" id="copyVars">Copiar variáveis</button>
+      </div>
+      <textarea id="cssOut" spellcheck="false"></textarea>
+    </div>
+  </aside>
+
+  <main class="main">
+    <section class="panel banner">
+      <div>
+        <h3>Agora ficou muito mais fácil ver o que está mudando</h3>
+        <p>Além do preview completo do aplicativo, o hub mostra um <b>componente isolado</b> e um <b>comparador lado a lado</b> entre o baseline e o estado atual. Também há um painel com os <b>tokens alterados</b> no escopo ativo.</p>
+        <div class="badges"><span class="badge">Antes / Depois</span><span class="badge">Foco no componente</span><span class="badge">Tokens alterados</span><span class="badge">Fundo trocável</span></div>
+      </div>
+      <div class="helper">Escopo: <b id="scopeReadout">Cards</b><br>Preset: <b id="presetReadout">Equilibrado</b></div>
+    </section>
+
+    <div class="top-grid">
+      <section class="panel">
+        <div class="panel-head"><h3>Preview do app</h3><span class="helper">Clique em um componente para focar</span></div>
+        <div class="preview-body">
+          <div class="phone" id="phone">
+            <div class="ambient"></div><div class="mist"></div><div class="grain"></div>
+            <div class="status"><span>09:41</span><span>LTE · 82%</span></div>
+            <div class="header"><div class="brandline"><div class="brandwrap"><div class="mark">N</div><div class="brandcopy"><strong>NexaPag</strong><small>Small steps, big goals</small></div></div><div class="iconbutton">◌</div></div></div>
+            <div class="content-scroll">
+              <div class="stack" id="appStack">
+                <div class="component card-surface hero" data-kind="card" style="--tone-rgb:31,139,87"><div class="eyebrow">Saldo total</div><div class="big">R$ 54.000,00</div><div class="sub"><span class="chip">↑ +2,49%</span><span>vs mês passado</span></div><div class="chart"><svg viewBox="0 0 300 72" fill="none"><path d="M0 57C19 42 34 52 53 41S83 23 101 31 134 49 154 39 180 25 198 31 218 49 237 43 259 20 276 23 294 36 300 11" stroke="url(#lineGrad)" stroke-width="3.4" stroke-linecap="round"/><defs><linearGradient id="lineGrad" x1="0" x2="300" y1="0" y2="0"><stop stop-color="#c8e2d3"/><stop offset="1" stop-color="#8bc4ae"/></linearGradient></defs></svg></div></div>
+                <div class="component tab-row" data-kind="button"><button class="button-surface tab-btn active" style="--tone-rgb:111,184,30">Mensal</button><button class="button-surface tab-btn" style="--tone-rgb:95,169,216">3 Meses</button><button class="button-surface tab-btn" style="--tone-rgb:31,139,87">Anual</button></div>
+                <div class="component metric-row" data-kind="card"><div class="card-surface metric" style="--tone-rgb:213,230,168"><div class="icon">↑</div><div><span>Recebimentos</span><strong>R$ 1.950,00</strong><small>Entradas confirmadas</small></div></div><div class="card-surface metric" style="--tone-rgb:95,169,216"><div class="icon">↺</div><div><span>Estornos</span><strong>R$ 349,90</strong><small>Valores devolvidos</small></div></div></div>
+                <div class="component quick-grid" data-kind="board"><div class="board-surface quick-board" style="--tone-rgb:213,230,168"><div class="well">☷</div><strong>Marketplace</strong><small>R$ 1.145,90</small></div><div class="board-surface quick-board" style="--tone-rgb:168,217,94"><div class="well">⌂</div><strong>Casa</strong><small>R$ 874,40</small></div><div class="board-surface quick-board" style="--tone-rgb:31,139,87"><div class="well">✦</div><strong>Meta</strong><small>R$ 270,00</small></div><div class="board-surface quick-board" style="--tone-rgb:95,169,216"><div class="well">◔</div><strong>Cartões</strong><small>3 ativos</small></div></div>
+                <div class="component card-surface category-card" data-kind="card" style="--tone-rgb:111,184,30"><div class="helper" style="margin-bottom:10px;color:#cfe0d8">Gastos por categoria</div><div class="category-list"><div class="category-item"><div class="category-symbol">▣</div><div><b>Marketplace</b><small>Compras online</small></div><div class="amt">R$ 1.145,90</div></div><div class="category-item"><div class="category-symbol" style="background:linear-gradient(155deg, rgba(95,169,216,.32), rgba(95,169,216,.13) 60%, rgba(10,18,20,.32)); border-color:rgba(95,169,216,.30)">◈</div><div><b>Transporte</b><small>Aplicativos e combustível</small></div><div class="amt">R$ 430,00</div></div></div></div>
+              </div>
+            </div>
+            <div class="nav-wrap"><div class="component nav-surface nav" data-kind="nav"><div class="nav-btn active">⌂<span>Início</span></div><div class="nav-btn">◫<span>Gastos</span></div><div class="nav-btn">◎<span>Anúncios</span></div><div class="nav-btn">◔<span>Cartões</span></div><div class="nav-btn">✓<span>Revisar</span></div></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><h3>Isolador do componente</h3><span class="helper">Enxergue o material sem ruído visual</span></div>
+        <div class="focus-body">
+          <div class="focus-toolbar"><button class="toggle active" data-toggle="focus">Foco ligado</button><button class="toggle active" data-toggle="compare">Comparar baseline</button><button class="toggle" id="cycleScope">Próximo escopo</button></div>
+          <div class="kpis"><div class="kpi"><span>Escopo ativo</span><strong id="kpiScope">Cards</strong></div><div class="kpi"><span>Tokens alterados</span><strong id="kpiChanged">0</strong></div><div class="kpi"><span>Blur / Film</span><strong id="kpiMain">24px / 78%</strong></div></div>
+          <div class="compare-grid" id="compareGrid">
+            <div class="compare-card"><h4>Baseline</h4><div class="focus-stage" id="baselineStage"><div class="specimen-wrap" id="baselineSpecimen"></div></div></div>
+            <div class="compare-card"><h4>Atual</h4><div class="focus-stage" id="currentStage"><div class="specimen-wrap" id="currentSpecimen"></div></div></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="bottom-grid">
+      <section class="panel">
+        <div class="panel-head"><h3>Galeria rápida</h3><span class="helper">Clique para escolher o componente de estudo</span></div>
+        <div class="gallery-body">
+          <div class="gallery-grid">
+            <div class="gallery-tile component" data-kind="card"><div class="title">Card</div><div class="card-surface" style="--tone-rgb:31,139,87"><div class="eyebrow">Resumo</div><div class="big" style="font-size:28px">R$ 3.468,20</div><div class="helper">Acrílico escuro com shader compartilhado.</div></div></div>
+            <div class="gallery-tile component" data-kind="board"><div class="title">Quick board</div><div class="quick-grid"><div class="board-surface quick-board" style="--tone-rgb:95,169,216"><div class="well">◔</div><strong>Cartões</strong><small>3 ativos</small></div><div class="board-surface quick-board" style="--tone-rgb:168,217,94"><div class="well">✦</div><strong>Meta</strong><small>Semanal</small></div></div></div>
+            <div class="gallery-tile component" data-kind="button"><div class="title">Buttons / tabs</div><div class="tab-row"><button class="button-surface tab-btn active" style="--tone-rgb:213,230,168">Ativo</button><button class="button-surface tab-btn" style="--tone-rgb:95,169,216">Inativo</button></div></div>
+            <div class="gallery-tile component" data-kind="nav"><div class="title">Navbar</div><div class="nav-surface nav"><div class="nav-btn active">⌂<span>Home</span></div><div class="nav-btn">◫<span>Gastos</span></div><div class="nav-btn">◎<span>Anúncios</span></div><div class="nav-btn">◔<span>Cartões</span></div><div class="nav-btn">✓<span>Revisar</span></div></div></div>
+          </div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h3>Tokens alterados</h3><span class="helper">Comparação contra o baseline do escopo</span></div>
+        <div class="tokens-body"><div class="token-list" id="tokenList"></div></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<script>
+const root=document.documentElement;
+const state={scope:'card', preset:'balanced', focus:true, compare:true, bg:'soft'};
+const defaults={
+  palette:{'--bg-top':'#152928','--bg-bottom':'#0c1718','--mist-a':'#d5e6a8','--mist-b':'#5fa9d8','--cat-1':'#D5E6A8','--cat-2':'#A8D95E','--cat-3':'#6FB81E','--cat-4':'#1F8B57','--cat-5':'#0D6372','--cat-6':'#5FA9D8'},
+  card:{blur:24,film:78,pigment:13,spread:82,'border-alpha':14,highlight:12,shadow:25,saturation:88,brightness:92,'border-width':1,radius:20,gap:12},
+  board:{blur:0,film:94,pigment:12,spread:78,'border-alpha':15,highlight:10,shadow:18,saturation:100,brightness:100,'border-width':1,radius:17,gap:10},
+  button:{blur:0,film:92,pigment:10,spread:120,'border-alpha':13,highlight:10,shadow:16,'border-width':1,radius:999,gap:8},
+  nav:{blur:18,film:96,pigment:10,spread:120,'border-alpha':15,highlight:9,shadow:30,'border-width':1,radius:20,gap:4}
+};
+const presets={
+  quiet:{card:{pigment:8,blur:20,film:82,highlight:9,shadow:20},board:{pigment:7,film:95,highlight:7,shadow:14},button:{pigment:7,film:93,shadow:12},nav:{pigment:8,film:97,shadow:24}},
+  balanced:{card:{pigment:13,blur:24,film:78,highlight:12,shadow:25},board:{pigment:12,film:94,highlight:10,shadow:18},button:{pigment:10,film:92,shadow:16},nav:{pigment:10,film:96,shadow:30}},
+  rich:{card:{pigment:20,blur:28,film:73,highlight:14,shadow:30},board:{pigment:18,film:91,highlight:12,shadow:22},button:{pigment:15,film:89,shadow:20},nav:{pigment:14,film:94,shadow:34}},
+  crisp:{card:{pigment:10,blur:18,film:84,highlight:16,shadow:18},board:{pigment:9,film:96,highlight:15,shadow:14},button:{pigment:8,film:95,shadow:12},nav:{pigment:9,film:97,shadow:24}}
+};
+const scopeLabel={card:'Cards', board:'Boards', button:'Buttons/Tabs', nav:'Navbar'};
+const propMap={blur:'blur',film:'film',pigment:'pigment',spread:'pigment-spread','border-alpha':'border-alpha',highlight:'highlight',shadow:'shadow',saturation:'saturation',brightness:'brightness','border-width':'border-width',radius:'radius',gap:'gap'};
+const specimenTemplates={
+  card:`<div class="card-surface" style="--tone-rgb:31,139,87"><div class="eyebrow">Card principal</div><div class="big" style="font-size:30px">R$ 3.468,20</div><div class="sub"><span class="chip">+ 12%</span><span>continuidade óptica</span></div><div class="chart"><svg viewBox="0 0 300 72" fill="none"><path d="M0 52C20 44 38 49 55 38S87 16 107 27 136 49 158 42 184 19 204 23 235 49 254 37 283 18 300 12" stroke="#9cd0bb" stroke-width="3.2" stroke-linecap="round"/></svg></div></div>`,
+  board:`<div class="quick-grid"><div class="board-surface quick-board" style="--tone-rgb:213,230,168"><div class="well">☷</div><strong>Marketplace</strong><small>R$ 1.145,90</small></div><div class="board-surface quick-board" style="--tone-rgb:168,217,94"><div class="well">⌂</div><strong>Casa</strong><small>R$ 874,40</small></div><div class="board-surface quick-board" style="--tone-rgb:31,139,87"><div class="well">✦</div><strong>Meta</strong><small>R$ 270,00</small></div><div class="board-surface quick-board" style="--tone-rgb:95,169,216"><div class="well">◔</div><strong>Cartões</strong><small>3 ativos</small></div></div>`,
+  button:`<div class="tab-row"><button class="button-surface tab-btn active" style="--tone-rgb:111,184,30">Ativo</button><button class="button-surface tab-btn" style="--tone-rgb:95,169,216">Inativo</button><button class="button-surface tab-btn" style="--tone-rgb:31,139,87">CTA</button></div>`,
+  nav:`<div class="nav-surface nav"><div class="nav-btn active">⌂<span>Início</span></div><div class="nav-btn">◫<span>Gastos</span></div><div class="nav-btn">◎<span>Anúncios</span></div><div class="nav-btn">◔<span>Cartões</span></div><div class="nav-btn">✓<span>Revisar</span></div></div>`
+};
+function cssVar(scope, prop){return `--${scope}-${propMap[prop]}`}
+function format(prop,v){if(['film','pigment','spread','border-alpha','highlight','shadow','saturation','brightness'].includes(prop)) return `${v}%`; if(['blur','radius','gap','border-width'].includes(prop)) return `${v}px`; return String(v)}
+function getVar(name){return getComputedStyle(root).getPropertyValue(name).trim()}
+function setVar(name,val){root.style.setProperty(name,val)}
+function baselineStyle(scope){
+  const vars=[];
+  for(const [k,v] of Object.entries(defaults.palette)) vars.push(`${k}:${v}`);
+  for(const [k,v] of Object.entries(defaults[scope])) vars.push(`${cssVar(scope,k)}:${format(k,v)}`);
+  return vars.join(';');
+}
+function currentKpi(){return `${getVar(cssVar(state.scope,'blur'))} / ${getVar(cssVar(state.scope,'film'))}`}
+function changedCount(){let c=0; for(const [k,v] of Object.entries(defaults[state.scope])) if(getVar(cssVar(state.scope,k))!==format(k,v)) c++; return c}
+function updateOutputs(){
+  const map={blur:'o-blur',film:'o-film',pigment:'o-pigment',spread:'o-spread','border-alpha':'o-borderAlpha',highlight:'o-highlight',shadow:'o-shadow',saturation:'o-saturation',brightness:'o-brightness','border-width':'o-borderWidth',radius:'o-radius',gap:'o-gap'};
+  Object.entries(map).forEach(([prop,id])=>{const input=document.querySelector(`input[data-prop="${prop}"]`); if(input) document.getElementById(id).textContent=format(prop, parseFloat(input.value))});
+  document.getElementById('kpiScope').textContent=scopeLabel[state.scope];
+  document.getElementById('kpiChanged').textContent=String(changedCount());
+  document.getElementById('kpiMain').textContent=currentKpi();
+}
+function syncControls(){
+  for(const prop of Object.keys(propMap)){ const input=document.querySelector(`input[data-prop="${prop}"]`); if(!input) continue; const parsed=parseFloat(getVar(cssVar(state.scope,prop))); if(Number.isFinite(parsed)) input.value=parsed; }
+  updateOutputs();
+}
+function setScope(scope){
+  state.scope=scope;
+  document.querySelectorAll('[data-scope]').forEach(b=>b.classList.toggle('active', b.dataset.scope===scope));
+  document.getElementById('scopeReadout').textContent=scopeLabel[scope];
+  syncControls(); updateFocus(); updateTokenList(); updateCssOut(); updateSelectionStates();
+}
+function applyPreset(name){
+  state.preset=name; document.querySelectorAll('[data-preset]').forEach(b=>b.classList.toggle('active', b.dataset.preset===name));
+  document.getElementById('presetReadout').textContent={quiet:'Discreto', balanced:'Equilibrado', rich:'Expressivo', crisp:'Crystalline'}[name];
+  for(const [scope,vals] of Object.entries(presets[name])) for(const [prop,v] of Object.entries(vals)) setVar(cssVar(scope,prop), format(prop,v));
+  syncControls(); updateFocus(); updateTokenList(); updateCssOut();
+}
+function updateTokenList(){
+  const list=document.getElementById('tokenList'); list.innerHTML='';
+  for(const [prop,base] of Object.entries(defaults[state.scope])){
+    const oldV=format(prop,base), newV=getVar(cssVar(state.scope,prop));
+    const row=document.createElement('div'); row.className='token-item'+(oldV!==newV?' changed':'');
+    row.innerHTML=`<div class="name">${prop}</div><div class="old">${oldV}</div><div class="new">${newV}</div>`; list.appendChild(row);
+  }
+}
+function updateCssOut(){
+  const scopes=['card','board','button','nav']; const lines=[':root{'];
+  for(const [k,v] of Object.entries(defaults.palette)) lines.push(`  ${k}:${getVar(k)||v};`);
+  for(const scope of scopes){ for(const prop of Object.keys(propMap)) lines.push(`  ${cssVar(scope,prop)}:${getVar(cssVar(scope,prop))};`) }
+  lines.push('}','','/* escopo atual: '+state.scope+' */');
+  document.getElementById('cssOut').value=lines.join('\n');
+}
+function updateSelectionStates(){
+  document.querySelectorAll('.component[data-kind]').forEach(el=>{
+    el.classList.toggle('selected', el.dataset.kind===state.scope);
+    el.classList.toggle('dimmed', state.focus && el.dataset.kind!==state.scope);
+  });
+}
+function updateFocus(){
+  document.getElementById('baselineSpecimen').innerHTML=specimenTemplates[state.scope];
+  document.getElementById('baselineSpecimen').style.cssText=baselineStyle(state.scope);
+  document.getElementById('currentSpecimen').innerHTML=specimenTemplates[state.scope];
+  document.getElementById('currentSpecimen').style.cssText='';
+  const compare=state.compare;
+  document.getElementById('compareGrid').style.gridTemplateColumns = compare ? '' : '1fr';
+  document.querySelector('#compareGrid .compare-card:first-child').style.display = compare ? '' : 'none';
+  const bgMap={soft:'', plain:'plain', grid:'gridbg'};
+  ['baselineStage','currentStage'].forEach(id=>{const el=document.getElementById(id); el.className='focus-stage '+(bgMap[state.bg]||'');});
+}
+function cycleScope(){const arr=['card','board','button','nav']; setScope(arr[(arr.indexOf(state.scope)+1)%arr.length]);}
+
+// init from defaults
+for(const [scope,obj] of Object.entries(defaults)){ if(scope==='palette'){ for(const [k,v] of Object.entries(obj)) setVar(k,v); } else { for(const [p,v] of Object.entries(obj)) setVar(cssVar(scope,p), format(p,v)); } }
+
+document.querySelectorAll('[data-scope]').forEach(b=>b.addEventListener('click',()=>setScope(b.dataset.scope)));
+document.querySelectorAll('input[data-prop]').forEach(i=>i.addEventListener('input',()=>{setVar(cssVar(state.scope,i.dataset.prop), format(i.dataset.prop, parseFloat(i.value))); updateOutputs(); updateFocus(); updateTokenList(); updateCssOut();}));
+document.querySelectorAll('input[data-var]').forEach(i=>i.addEventListener('input',()=>{setVar(i.dataset.var,i.value); updateCssOut();}));
+document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>applyPreset(b.dataset.preset)));
+document.getElementById('applyAll').addEventListener('click',()=>{const source=state.scope; for(const s of ['card','board','button','nav']){ if(s===source) continue; for(const p of Object.keys(propMap)) setVar(cssVar(s,p), getVar(cssVar(source,p))); } updateCssOut(); updateFocus(); updateTokenList();});
+document.getElementById('resetScope').addEventListener('click',()=>{for(const [p,v] of Object.entries(defaults[state.scope])) setVar(cssVar(state.scope,p), format(p,v)); syncControls(); updateFocus(); updateTokenList(); updateCssOut();});
+document.querySelectorAll('.component[data-kind], .gallery-tile[data-kind]').forEach(el=>el.addEventListener('click',()=>setScope(el.dataset.kind)));
+document.querySelectorAll('[data-toggle="focus"]').forEach(btn=>btn.addEventListener('click',()=>{state.focus=!state.focus; document.querySelectorAll('[data-toggle="focus"]').forEach(x=>x.classList.toggle('active',state.focus)); updateSelectionStates();}));
+document.querySelectorAll('[data-toggle="compare"]').forEach(btn=>btn.addEventListener('click',()=>{state.compare=!state.compare; document.querySelectorAll('[data-toggle="compare"]').forEach(x=>x.classList.toggle('active',state.compare)); updateFocus();}));
+document.querySelectorAll('[data-bg]').forEach(btn=>btn.addEventListener('click',()=>{state.bg=btn.dataset.bg; document.querySelectorAll('[data-bg]').forEach(x=>x.classList.toggle('active',x.dataset.bg===state.bg)); updateFocus();}));
+document.getElementById('cycleScope').addEventListener('click',cycleScope);
+document.getElementById('copyCss').addEventListener('click',async(e)=>{await navigator.clipboard.writeText(document.getElementById('cssOut').value);const t=e.currentTarget.textContent;e.currentTarget.textContent='CSS copiado';setTimeout(()=>e.currentTarget.textContent=t,1200)});
+document.getElementById('copyVars').addEventListener('click',async(e)=>{await navigator.clipboard.writeText(document.getElementById('cssOut').value.split('\n').slice(0,25).join('\n'));const t=e.currentTarget.textContent;e.currentTarget.textContent='Variáveis copiadas';setTimeout(()=>e.currentTarget.textContent=t,1200)});
+
+applyPreset('balanced'); setScope('card'); updateCssOut(); updateFocus(); updateTokenList(); updateSelectionStates();
+</script>
+</body>
+</html>
