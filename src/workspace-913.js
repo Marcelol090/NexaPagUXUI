@@ -16,7 +16,7 @@ if(right){
  }
  const make=(tag,className,html='')=>{const n=document.createElement(tag);n.className=className;if(html)n.innerHTML=html;return n};
  const main=make('div','inspector-head');
- main.innerHTML='<div><div class="inspector-eyebrow">NexaPag / Design system</div><h2 class="inspector-title">Workbench</h2><p class="inspector-subtitle">Material, pigmento e geometria reais</p></div>';
+ main.innerHTML='<div><div class="inspector-eyebrow">NexaPag / Design system</div><h2 class="inspector-title">Workbench</h2><p class="inspector-subtitle">Vidro, pigmentos, geometria e motion</p></div>';
  const close=make('button','inspector-close','×');
  close.type='button';close.setAttribute('aria-label','Fechar customização');main.appendChild(close);
  const tabs=make('nav','inspector-tabs');
@@ -27,7 +27,7 @@ if(right){
   ['material','Vidro','Material e ótica','Calibre o acrílico sem recriar o shader.'],
   ['pigment','Pigmentos','Colorimetria','Cores da paleta Sage Glass filtradas pelo mesmo ambiente.'],
   ['geometry','Geometria','Layout e formas','Edite somente o componente desejado.'],
-  ['motion','Motion','Movimento','Uma revelação curta, seguida pelo analytics.']
+  ['motion','Motion','Movimento','Transições, resposta tátil e efeitos com ritmo controlável.']
  ];
  for(const [key,name,title,description] of categories){
   const button=make('button','inspector-tab',name);
@@ -55,7 +55,7 @@ if(right){
   '<button type="button" class="motion-action" id="inspector-replay">Reproduzir saída líquida</button>'+
   '<p class="motion-note">A luz se organiza por cerca de 2,5 segundos e devolve a cena ao gráfico. Movimento reduzido mostra os dados imediatamente.</p>');
  pages.motion.appendChild(motionUI);
- const foot=make('footer','inspector-foot','<span>Visualize 9.14 · Sage Glass</span><b>Ajustes instantâneos</b>');
+ const foot=make('footer','inspector-foot','<span>Visualize 9.20 · Material + Motion</span><b>Ajustes instantâneos</b>');
  right.appendChild(foot);
  const scrim=make('div','inspector-scrim');scrim.setAttribute('aria-hidden','true');
  const mobileOpen=make('button','inspector-open-button','Personalizar');
