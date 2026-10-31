@@ -32,6 +32,8 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Validate source syntax
         run: npm run check:syntax
+      - name: Validate CSS blocks and media-query boundaries
+        run: npm run check:css
       - name: Run design and component regression tests
         run: npm run test:design
       - name: Build production preview
