@@ -11,7 +11,7 @@ const uxMix=(a,b,ratio)=>{
 };
 let uxRaf=0;
 function uxReconnect(){
- const pigment=uxBound(uxRead('pigmentRange',74)/100,0,1);
+ const pigment=uxBound(uxRead('pigmentRange',74)/100,0,1.1);
  const light=uxBound(uxRead('lightRange',78)/100,0,1);
  const mix=uxBound(uxRead('blendRange',44)/100,0,1);
  const rim=uxBound(uxRead('rimRange',72)/100,0,1);
@@ -79,6 +79,15 @@ if(uxMotion){
  '<button type="button" id="motionShakeOrb">Agitar</button></div>';
  group.innerHTML=html;
  uxMotion.appendChild(group);
+ for(const id of ['orbRefraction','orbSeam','orbMotion']){
+  const original=document.getElementById(id);
+  original?.addEventListener('input',()=>{
+   const mirror=group.querySelector('[data-orb-control="'+id+'"]');
+   const output=group.querySelector('[data-orb-output="'+id+'"]');
+   if(mirror)mirror.value=original.value;
+   if(output)output.textContent=original.value+'%';
+  });
+ }
  group.querySelectorAll('input[data-orb-control]').forEach(input=>{
   input.addEventListener('input',()=>{
    const id=input.dataset.orbControl;
