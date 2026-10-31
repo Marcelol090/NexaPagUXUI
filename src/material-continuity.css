@@ -1,0 +1,90 @@
+/* NexaPag 9.08 · Shared shader, acrylic lenses.
+ * The only lighting originates at the phone's ambient backdrop.
+ * No extra light sources, independent color blobs or stacked blur inside cards. */
+:root{--material-shadow:0 15px 34px -19px rgba(0,7,10,.62),0 3px 10px rgba(0,7,10,.18);--material-edge:rgba(218,239,229,.125)}
+.phone .ambient::before{
+ opacity:calc(var(--glass-glow,.78) * var(--pigment-strength,.74) * .67)!important;
+ filter:blur(var(--pigment-diffusion,20px)) saturate(.84)!important
+}
+.phone .ambient::after{
+ opacity:calc(var(--glass-glow,.78) * var(--pigment-strength,.74) * .40 + var(--pigment-interlock,.44) * .07)!important;
+ filter:blur(var(--pigment-diffusion,20px)) saturate(.83)!important
+}
+.phone.no-shader .ambient::before,.phone.no-shader .ambient::after{display:none!important}
+.glass-site{isolation:auto!important;z-index:auto!important}
+.glass-site > .glass-scene{display:none!important}
+/* One matte acrylic contract, with shared film, blur and rim controls. */
+.phone:not(.no-optics) .glass-site > :is(.panel,.metric){
+ background:linear-gradient(160deg,rgba(244,255,249,.031),transparent 43%,rgba(3,16,19,.145)),rgba(15,29,31,var(--glass-film,.74))!important;
+ -webkit-backdrop-filter:blur(var(--glass-blur,23px)) saturate(.88) brightness(.96)!important;
+ backdrop-filter:blur(var(--glass-blur,23px)) saturate(.88) brightness(.96)!important;
+ border:1px solid var(--material-edge)!important;
+ box-shadow:var(--material-shadow),inset 0 1px 0 rgba(245,255,249,.065),inset 0 -1px 0 rgba(0,8,12,.20)!important;
+ transform:none!important
+}
+.phone:not(.no-optics) .glass-site > .panel.fiduciary-hero{
+ background:linear-gradient(158deg,rgba(227,249,241,.048),transparent 45%,rgba(4,18,22,.155)),rgba(15,34,36,var(--glass-film,.74))!important;
+ border-color:rgba(223,244,233,.17)!important;
+ box-shadow:0 19px 43px -21px rgba(0,6,10,.70),0 4px 11px rgba(0,7,12,.22),inset 0 1px 0 rgba(247,255,251,.09)!important
+}
+.phone:not(.no-optics) .glass-site[data-optic="metric"] > .metric{
+ background:linear-gradient(153deg,rgba(240,255,248,.022),transparent 55%),rgba(14,28,30,var(--glass-film,.74))!important;
+ border-color:rgba(218,239,228,.105)!important;
+ box-shadow:0 11px 25px -17px rgba(0,6,9,.57),inset 0 1px 0 rgba(250,255,252,.045)!important
+}
+/* Edge highlights remain directional, neutral and 1 CSS pixel wide. */
+.phone:not(.no-optics) .glass-site > :is(.panel,.metric)::before{
+ background:linear-gradient(150deg,rgba(247,255,250,.034),transparent 37%,rgba(3,17,20,.035) 90%)!important;
+ opacity:1!important;filter:none!important
+}
+.phone:not(.no-optics) .glass-site > .panel.fiduciary-hero::before{
+ background:linear-gradient(149deg,rgba(244,255,249,.048),transparent 45%)!important;
+ opacity:1!important;filter:none!important
+}
+.phone:not(.no-optics) .glass-site > :is(.panel,.metric)::after{
+ opacity:var(--glass-rim-strength,.72)!important;
+ background:radial-gradient(ellipse 95% 85% at -11% -7%,rgba(252,255,252,.22),transparent 68%),linear-gradient(148deg,rgba(235,253,244,.20),rgba(245,255,252,.018) 43%,rgba(173,211,206,.034) 80%,rgba(213,237,232,.092))!important;
+ padding:1px!important
+}
+/* Standalone category and quick-access boards filter the global backdrop. */
+.phone:not(.no-optics) :is(.quick-board,.category-board){
+ background:radial-gradient(ellipse 68% 41% at 12% 0%,rgba(var(--tone-rgb),.043),transparent 88%),linear-gradient(154deg,rgba(247,255,249,.025),transparent 48%),rgba(16,30,31,var(--glass-film,.74))!important;
+ -webkit-backdrop-filter:blur(var(--glass-blur,23px)) saturate(.88) brightness(.96)!important;
+ backdrop-filter:blur(var(--glass-blur,23px)) saturate(.88) brightness(.96)!important;
+ border:1px solid rgba(221,239,231,.12)!important;
+ box-shadow:0 10px 25px -18px rgba(0,7,11,.62),inset 0 1px 0 rgba(246,255,250,.053)!important
+}
+.phone:not(.no-optics) :is(.quick-board,.category-board)::before{
+ background:linear-gradient(148deg,rgba(252,255,251,.025),transparent 46%)!important;
+ opacity:1!important;filter:none!important
+}
+.phone:not(.no-optics) .quick-board::after{
+ background:linear-gradient(90deg,transparent,rgba(var(--tone-rgb),.40),transparent)!important;
+ opacity:.70!important
+}
+.phone:not(.no-optics) .category-board.selected{
+ border-color:rgba(var(--tone-rgb),.42)!important;
+ background:linear-gradient(160deg,rgba(var(--tone-rgb),.066),transparent 48%),rgba(16,31,32,var(--glass-film,.74))!important
+}
+.phone:not(.no-optics) :is(.finance-insight,.integrations,.callout,.review-count,.day-detail){
+ background:linear-gradient(157deg,rgba(245,255,249,.021),transparent 58%),rgba(17,31,32,.72)!important;
+ -webkit-backdrop-filter:blur(var(--glass-blur,23px)) saturate(.88) brightness(.96)!important;
+ backdrop-filter:blur(var(--glass-blur,23px)) saturate(.88) brightness(.96)!important;
+ border-color:rgba(220,238,229,.12)!important
+}
+/* Nested cards already sit behind the parent's glass: do NOT blur twice. */
+.phone:not(.no-optics) .glass-site > .panel :is(.category-board,.finance-insight,.integrations,.callout,.day-detail){
+ -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+ background:linear-gradient(153deg,rgba(238,255,247,.024),transparent 60%),rgba(13,27,29,.26)!important
+}
+.phone:not(.no-optics) .glass-site > .panel .category-board.selected{
+ background:linear-gradient(155deg,rgba(var(--tone-rgb),.082),transparent 58%),rgba(13,27,29,.29)!important
+}
+@media(prefers-reduced-motion:reduce){
+ .phone .ambient::before,.phone .ambient::after{animation:none!important}
+}
+@media(forced-colors:active){
+ .phone :is(.panel,.metric,.quick-board,.category-board,.finance-insight){
+  background:Canvas!important;color:CanvasText!important;box-shadow:none!important;border-color:CanvasText!important
+ }
+}
