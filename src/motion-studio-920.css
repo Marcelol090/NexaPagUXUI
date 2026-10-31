@@ -62,12 +62,15 @@
 }
 #phone[data-nm-paused] .glass-scene::before,#phone[data-nm-paused] .glass-scene::after,#phone[data-nm-paused] .glass-pigment-fold{animation-play-state:paused!important}
 #phone[data-nm-paused] :is(.quick-board,.category-board,.nav button){transition-duration:0ms!important}
+#phone[data-nm-paused] :is(.quick-board,.category-board,.nav button):active{transform:none!important}
+#phone[data-nm-paused] :is(.quick-board,.category-board,.nav button):hover{transform:none!important}
 @media(prefers-reduced-motion:reduce){
  .nm-studio .nm-motion-track i{animation:none!important}
  #phone[data-motion-studio] :is(.quick-board,.category-board,.nav button){transition-duration:0ms!important}
  #phone[data-motion-studio] :is(.quick-board,.category-board,.nav button):active{transform:none!important}
- #phone[data-motion-studio] :is(.quick-board,.category-board):hover{transform:none!important}
+ #phone[data-motion-studio] :is(.quick-board,.category-board,.nav button):hover{transform:none!important}
 }
 #phone.no-motion[data-motion-studio] :is(.quick-board,.category-board,.nav button){transition-duration:0ms!important}
 #phone.no-motion[data-motion-studio] :is(.quick-board,.category-board,.nav button):active{transform:none!important}
+#phone.no-motion[data-motion-studio] :is(.quick-board,.category-board,.nav button):hover{transform:none!important}
 @media(max-width:380px){.nm-studio .nm-actions{grid-template-columns:1fr 1fr}.nm-studio .nm-actions .nm-primary{grid-column:span 2}}
