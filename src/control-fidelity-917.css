@@ -72,3 +72,44 @@
  opacity:0!important;
 }
 /* Text/financial semantics and glyph ink are never recolored by controls. */
+
+/* Physics controls stay with the existing Motion tab, not in another modal. */
+.workspace-inspector .motion-physics{
+ margin-top:18px;padding-top:15px;
+ border-top:1px solid rgba(216,243,225,.11);
+}
+.workspace-inspector .motion-physics h4{
+ margin:0 0 7px;font-size:13px;color:#F0F7EF;font-weight:720;
+}
+.workspace-inspector .motion-physics p{
+ font-size:11px;line-height:1.55;color:#A6C4B5;margin:0 0 12px;
+}
+.workspace-inspector .motion-physics-row{
+ display:block;padding:10px 0 8px;
+ border-top:1px solid rgba(214,237,224,.065);
+}
+.workspace-inspector .motion-physics-row span{
+ display:flex;justify-content:space-between;gap:10px;align-items:center;
+ color:#CFDED4;font-size:12px;
+}
+.workspace-inspector .motion-physics-row output{
+ color:#DFEAC9;font-variant-numeric:tabular-nums;font-weight:700;
+}
+.workspace-inspector .motion-physics-row input[type=range]{
+ width:100%;min-height:26px;margin-top:8px;accent-color:#B4D78B;cursor:pointer;
+}
+.workspace-inspector .motion-physics-actions{
+ display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;
+}
+.workspace-inspector .motion-physics-actions button{
+ min-height:39px;border-radius:11px;padding:8px 9px;font-size:11px;font-weight:680;
+ border:1px solid rgba(216,243,221,.22);
+ background:rgba(31,86,69,.40);color:#E9F6E9;
+}
+.workspace-inspector .motion-physics-actions button:first-child{
+ background:linear-gradient(140deg,#D5E6A8,#A8D95E);
+ color:#122820;border-color:rgba(245,255,236,.38);
+}
+@media(prefers-reduced-motion:reduce){
+ .workspace-inspector .motion-physics-row input{scroll-behavior:auto}
+}
