@@ -1,8 +1,8 @@
-/* NexaPag Visualize 9.13 | Real inspector.
+/* NexaPag Visualize 9.14 | Fixed stage inspector.
  * Progressive disclosure per Raphael Salaja (User Interface Wiki).
  * Existing inputs and handlers are MOVED, not re-created; semantics remain live.
  */
-const right=document.querySelector('.studio>.rail.right');
+const right=document.querySelector('.workspace-stage>.rail.right');
 const oldLeft=document.querySelector('.studio>.rail.left.geometry-left');
 const geometry=oldLeft?.querySelector('#geometryHub');
 const geometrySample=oldLeft?.querySelector('.geo-specimen');
@@ -55,7 +55,7 @@ if(right){
   '<button type="button" class="motion-action" id="inspector-replay">Reproduzir saída líquida</button>'+
   '<p class="motion-note">A luz se organiza por cerca de 2,5 segundos e devolve a cena ao gráfico. Movimento reduzido mostra os dados imediatamente.</p>');
  pages.motion.appendChild(motionUI);
- const foot=make('footer','inspector-foot','<span>Visualize 9.13 · Sage Glass</span><b>Ajustes instantâneos</b>');
+ const foot=make('footer','inspector-foot','<span>Visualize 9.14 · Sage Glass</span><b>Ajustes instantâneos</b>');
  right.appendChild(foot);
  const scrim=make('div','inspector-scrim');scrim.setAttribute('aria-hidden','true');
  const mobileOpen=make('button','inspector-open-button','Personalizar');

@@ -1,0 +1,144 @@
+/* NexaPag Visualize 9.14 | Stable two-column stage.
+ * Root cause: the legacy .studio grid and right rail carried contradictory
+ * positioning/layout rules across historical stylesheets. We isolate the phone
+ * and the live inspector in a dedicated stage, instead of relying on
+ * implicit grid placement of legacy siblings. Material and finance untouched.
+ *
+ * Reference: 1920x1080 Opera GX at 100% zoom, plus reduced viewports.
+ * Raphael Salaja: progressive disclosure, spatial grouping and readable controls.
+ */
+:root {
+ --nexa-stage-phone:408px;
+ --nexa-stage-inspector:404px;
+ --nexa-stage-gap:clamp(18px,2.5vw,34px);
+ --nexa-stage-padding:clamp(14px,2.5vw,34px);
+}
+html{min-width:0}
+body{overflow-x:hidden}
+body>.studio{
+ width:100%!important;max-width:none!important;
+ min-height:100dvh!important;
+ margin:0!important;
+ padding:var(--nexa-stage-padding)!important;
+ display:flex!important;flex-direction:column!important;
+ justify-content:center!important;align-items:center!important;
+ grid-template-columns:none!important;grid-template-rows:none!important;
+ gap:0!important;
+}
+body>.studio>.rail.left.geometry-left,
+body>.studio>.geo-mobile-toggle{display:none!important}
+.workspace-stage{
+ display:grid!important;
+ position:relative;
+ width:min(100%,calc(var(--nexa-stage-phone) + var(--nexa-stage-inspector) + var(--nexa-stage-gap)))!important;
+ min-width:0!important;
+ margin-inline:auto!important;
+ padding:0!important;
+ grid-template-columns:minmax(0,var(--nexa-stage-phone)) minmax(0,var(--nexa-stage-inspector))!important;
+ grid-template-rows:minmax(0,1fr)!important;
+ column-gap:var(--nexa-stage-gap)!important;
+ row-gap:0!important;
+ justify-items:stretch!important;
+ align-items:center!important;
+ justify-content:center!important;
+}
+.workspace-stage>.phone{
+ display:block!important;
+ grid-column:1!important;grid-row:1!important;
+ justify-self:center!important;align-self:center!important;
+ width:var(--nexa-stage-phone)!important;
+ max-width:100%!important;
+ height:min(850px,calc(100dvh - 2 * var(--nexa-stage-padding)))!important;
+ min-height:560px!important;
+ position:relative!important;
+ margin:0!important;
+ z-index:1!important;
+ transform:none!important;
+}
+.workspace-stage>.rail.right.workspace-inspector{
+ display:flex!important;flex-direction:column!important;
+ grid-column:2!important;grid-row:1!important;
+ justify-self:stretch!important;align-self:stretch!important;
+ position:relative!important;left:auto!important;right:auto!important;
+ top:auto!important;bottom:auto!important;inset:auto!important;
+ width:100%!important;min-width:0!important;max-width:none!important;
+ height:min(850px,calc(100dvh - 2 * var(--nexa-stage-padding)))!important;
+ min-height:560px!important;max-height:none!important;
+ margin:0!important;padding:0!important;
+ overflow:hidden!important;
+ border-radius:22px!important;
+ z-index:2!important;
+}
+/* Stay readable even before the JS component mover has finished initializing. */
+.workspace-stage>.rail.right:not(.workspace-inspector){
+ grid-column:2!important;grid-row:1!important;min-width:0;
+ width:100%;max-width:none;height:min(850px,calc(100dvh - 2 * var(--nexa-stage-padding)));
+ min-height:560px;overflow-y:auto;align-self:center;margin:0;
+}
+/* Header/tabs stay visible, only tab content scrolls. */
+.workspace-stage .workspace-inspector .inspector-head,
+.workspace-stage .workspace-inspector .inspector-tabs,
+.workspace-stage .workspace-inspector .inspector-foot{flex-shrink:0}
+.workspace-stage .workspace-inspector .inspector-scroll{
+ flex:1 1 0!important;
+ min-height:0!important;
+ overflow-y:auto!important;
+ overscroll-behavior:contain;
+ scrollbar-width:thin;
+}
+/* Guarantee touch/click sizes for inspector controls at native browser zoom. */
+.workspace-stage .workspace-inspector .inspector-tab{min-height:42px}
+.workspace-stage .workspace-inspector .geo-scopes button{min-height:38px}
+.workspace-stage .workspace-inspector input[type="range"]{min-height:28px}
+/* At medium widths there is not enough room for a full-size phone plus
+ * a usable inspector. Keep phone full size, switch the inspector to a sheet. */
+@media(max-width:940px){
+ body>.studio{
+  width:100%!important;min-height:100dvh!important;
+  padding:0!important;
+  align-items:center!important;
+  justify-content:center!important;
+ }
+ .workspace-stage{
+  display:flex!important;flex-direction:column!important;
+  align-items:center!important;justify-content:center!important;
+  width:100%!important;max-width:100%!important;
+  gap:0!important;
+ }
+ .workspace-stage>.phone{
+  grid-column:auto!important;grid-row:auto!important;
+  width:min(100%,408px)!important;max-width:408px!important;
+  height:100dvh!important;min-height:600px!important;
+  flex:none!important;
+ }
+ .workspace-stage>.rail.right.workspace-inspector,
+ .workspace-stage>.rail.right:not(.workspace-inspector){
+  display:none!important;
+ }
+ body.inspector-open .workspace-stage>.rail.right.workspace-inspector{
+  display:flex!important;position:fixed!important;
+  z-index:93!important;
+  inset:auto 10px 10px 10px!important;
+  width:auto!important;max-width:540px!important;
+  margin:auto!important;
+  height:min(82dvh,780px)!important;min-height:0!important;
+  border-radius:22px!important;
+ }
+ .inspector-open-button{display:flex!important;z-index:80!important}
+ body.inspector-open .inspector-open-button{display:none!important}
+ body.inspector-open .inspector-scrim{display:block!important}
+}
+@media(max-width:450px){
+ .workspace-stage>.phone{
+  width:100vw!important;max-width:none!important;
+  border:0!important;border-radius:0!important;box-shadow:none!important;
+ }
+ body.inspector-open .workspace-stage>.rail.right.workspace-inspector{
+  left:6px!important;right:6px!important;bottom:6px!important;
+  height:min(88dvh,820px)!important;
+ }
+}
+/* Nothing here changes shader pigment, the cards, heatmap or liquid solver. */
+@media(prefers-reduced-motion:reduce){
+ .workspace-stage .workspace-inspector *{scroll-behavior:auto!important}
+}
