@@ -82,6 +82,14 @@ test('Glass density affects the actual hero, metric and board, not just a slider
   const low = await measure();
   await change('filmRange', 92);
   const high = await measure();
+  console.log('GLASS DIAGNOSTIC', JSON.stringify(await page.evaluate(() => {
+    const el=document.querySelector('#phone .fiduciary-hero'),phone=document.querySelector('#phone');
+    const style=el?getComputedStyle(el):null;
+    return {hasGlass:phone.hasAttribute('data-live-glass'),token:phone.style.getPropertyValue('--live-glass-hero'),
+      image:style?.backgroundImage,color:style?.backgroundColor,selectorMatch:el?.matches('#phone[data-live-glass]:not(.no-optics) .glass-site>.panel.fiduciary-hero'),
+      styles:[...document.querySelectorAll('link[rel="stylesheet"]')].map(x=>({href:x.getAttribute('href'),loaded:!!x.sheet})),
+      sheets:[...document.styleSheets].map(x=>x.href||'inline')};
+  })));
 
   for (const name of ['hero', 'metric', 'board']) {
     expect(low[name], `${name} absent from screen`).not.toBeNull();
@@ -114,6 +122,7 @@ test('One geometry token changes multiple actual card types with fractional pixe
     geometry.reset();
     return result;
   });
+  console.log('GEOMETRY DIAGNOSTIC', JSON.stringify(proof));
   expect(proof.applied).toBe(true);
   expect(proof.token).toBe('12.25px');
   expect(proof.quickBoard).toBe('12.25px');
