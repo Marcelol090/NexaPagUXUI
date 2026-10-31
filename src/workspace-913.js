@@ -1,8 +1,8 @@
-/* NexaPag Visualize 9.13 | Real inspector.
+/* NexaPag Visualize 9.14 | Fixed stage inspector.
  * Progressive disclosure per Raphael Salaja (User Interface Wiki).
  * Existing inputs and handlers are MOVED, not re-created; semantics remain live.
  */
-const right=document.querySelector('.studio>.rail.right');
+const right=document.querySelector('.workspace-stage>.rail.right');
 const oldLeft=document.querySelector('.studio>.rail.left.geometry-left');
 const geometry=oldLeft?.querySelector('#geometryHub');
 const geometrySample=oldLeft?.querySelector('.geo-specimen');
