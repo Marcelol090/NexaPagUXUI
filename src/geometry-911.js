@@ -26,6 +26,8 @@ function put(group){
 function setScope(next){
  if(!defaults[next])return;
  scope=next;
+ const iconControl=editor?.querySelector('[data-geo-prop="icon"]')?.closest('.geo-control');
+ if(iconControl)iconControl.hidden=!['metric','board','nav'].includes(scope);
  for(const btn of scopeButtons){
   const selected=btn.dataset.geoScope===scope;
   btn.setAttribute('aria-pressed',String(selected));
