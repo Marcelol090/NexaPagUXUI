@@ -29,7 +29,7 @@ test('four inspector tabs preserve original connected DOM controls and real geom
   assert.ok(ui.includes(id),id);
  assert.match(ui,/pages\.geometry\.appendChild\(geometry\)/);
  assert.match(ui,/pages\.geometry\.appendChild\(geometrySample\)/);
- assert.match(ui,/querySelectorAll\('input\[data-geo-prop\]'\)/);
+ assert.match(geometry,/querySelectorAll\('input\[data-geo-prop\]'\)/);
  assert.ok(geometry.includes("phone.setAttribute(attr(group,key)"));
 });
 test('new inspector replaces duplicate workbench instead of nesting a second modal',()=>{
