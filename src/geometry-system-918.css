@@ -132,3 +132,30 @@
 @media(prefers-reduced-motion:reduce){
  #inspector-panel-geometry .gg-step-options button{transition:none!important}
 }
+
+/* Narrow device preview. Change actual phone layout width, never transform.
+ * Override 9.15's rigid width only when the viewer picks a device width. */
+body>.studio>#workspaceStage>#phone[data-ds-device]{
+ width:var(--ds-device-width)!important;
+ min-width:var(--ds-device-width)!important;
+ max-width:var(--ds-device-width)!important;
+ flex:0 0 var(--ds-device-width)!important;
+ aspect-ratio:auto!important;
+ transform:none!important;
+ scale:1!important;
+}
+#phone[data-ds-device] :is(.metric-row,.quick-grid,.category-board-grid,.shops){
+ min-width:0!important;
+ grid-template-columns:repeat(2,minmax(0,1fr))!important;
+}
+#phone[data-ds-device] :is(.quick-board,.category-board,.metric,.nav button,.shop){
+ min-width:0!important;
+}
+#phone[data-ds-device] :is(.hero-value,.metric strong,.card-amount){overflow-wrap:anywhere}
+#phone[data-ds-device] .content{overflow-x:hidden!important}
+@media(max-width:450px){
+ body>.studio>#workspaceStage>#phone[data-ds-device]{
+  width:min(var(--ds-device-width),100vw)!important;
+  min-width:0!important;max-width:100vw!important;
+ }
+}
