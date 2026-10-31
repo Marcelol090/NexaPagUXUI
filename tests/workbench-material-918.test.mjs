@@ -56,7 +56,7 @@ test('border/reflection and nav blur have real CSS destinations',()=>{
 test('color editor updates real data-backed category, weekly composition, and card palettes',()=>{
  assert.match(js,/NexaPagPreview\?\.setColor\(group.target,item.name,current\)/);
  for(const group of ['category','weekCat','weekCard'])assert.ok(js.includes(group));
- assert.match(js,/input\.type='color'/);
+ assert.match(js,/color\.type='color'/);
  assert.match(js,/window\.addEventListener\('nexa:state'/);
  assert.match(css,/\.wb-category-edit input\[type=color\]/);
 });
