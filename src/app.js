@@ -211,8 +211,8 @@ function mountOpticalSurfaces(root){
       el.querySelector('.transaction')?'activity':
       el.classList.contains('metric')?'metric':
       el.textContent.includes('Estornos reconhecidos')?'refund':'default';
-   const light=document.createElement('div');light.className='glass-scene';light.setAttribute('aria-hidden','true');
-   el.parentNode.insertBefore(site,el);site.appendChild(light);const fold=document.createElement('span');fold.className='glass-pigment-fold';fold.setAttribute('aria-hidden','true');light.appendChild(fold);site.appendChild(el);
+   // All cards sample the same ambient shader; no per-card paint or light DOM.
+   el.parentNode.insertBefore(site,el);site.appendChild(el);
  }
 }
 function render(keepScroll=false){let c=$('#content'),top=keepScroll?c.scrollTop:0;$('#phone').classList.toggle('no-shader',!state.shader);$('#phone').classList.toggle('no-motion',!state.motion);$('#phone').classList.toggle('no-optics',!state.optics);$('#header').innerHTML=header();$('#nav-wrap').innerHTML=nav();c.innerHTML=({home,spending,ads,cards,review}[state.tab]||home)();mountOpticalSurfaces(c);c.scrollTop=top;drawMaterialOrb();$('#toast-layer').innerHTML=state.toast?`<div class="toast" role="status">${state.toast}</div>`:'';$('#shaderSwitch')?.classList.toggle('off',!state.shader);$('#motionSwitch')?.classList.toggle('off',!state.motion);$('#opticsSwitch')?.classList.toggle('off',!state.optics)}
