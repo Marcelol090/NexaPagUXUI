@@ -14,7 +14,8 @@ test('phone and inspector are siblings in a dedicated stage, not separate implic
   const close=html.indexOf('</aside></div></div><div class="lab-scrim"');
   assert.ok(open>0&&open<phone&&phone<inspector&&inspector<close);
   assert.ok(ui.includes("document.querySelector('.workspace-stage>.rail.right')"));
-  assert.ok(html.includes('src/workspace-914.css'));
+  assert.ok(html.includes('nexa-workspace-contract'));
+ assert.ok(!html.includes('href="./src/workspace-914.css"'));
 });
 test('100% zoom desktop forces two aligned columns with fixed readable phone and inspector',()=>{
   assert.match(css,/body>\.studio\{/);
