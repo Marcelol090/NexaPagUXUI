@@ -58,7 +58,7 @@
   proof.innerHTML='<div class="glass-live-head"><strong>Material aplicado</strong><small id="glassLiveCount">Aguardando leitura</small></div>'+
    '<p>Os controles modificam o acrílico real dos cards, métricas, boards e navegação. O valor abaixo vem do CSS calculado, não da posição do slider.</p>'+
    '<div class="glass-live-readback" id="glassLiveReadback" aria-live="polite"></div>'+
-   '<button class="glass-live-button" type="button" id="glassLiveReset">Restaurar material original</button>';
+   '<button class="glass-live-button" type="button" id="glassLiveAudit">Testar resposta dos cards</button> <button class="glass-live-button" type="button" id="glassLiveReset">Restaurar material original</button>';
   pane.appendChild(proof);
   readback=proof.querySelector('#glassLiveReadback');
   meta=proof.querySelector('#glassLiveCount');
@@ -125,6 +125,43 @@
   apply();
   if(readback)readback.textContent='Parâmetros originais restaurados';
  });
+ const settle=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+ async function verifyOpticalResponse(){
+  const control=document.getElementById('filmRange');
+  if(!control)return {passed:0,total:0,failed:[]};
+  const initial=control.value;
+  const active=document.activeElement;
+  try{
+   control.value='12';
+   apply();await settle();
+   const low=read();
+   control.value='92';
+   apply();await settle();
+   const high=read();
+   const names=Object.keys(low).filter(k=>high[k]);
+   const changed=window.NexaPagMaterialEngine.changed(low,high);
+   const failed=names.filter(name=>!changed.includes(name));
+   return {passed:changed.length,total:names.length,failed};
+  }finally{
+   control.value=initial;apply();await settle();
+   if(active instanceof HTMLElement&&active.isConnected)active.focus({preventScroll:true});
+  }
+ }
+ proof?.querySelector('#glassLiveAudit')?.addEventListener('click',async()=>{
+  const button=proof.querySelector('#glassLiveAudit');
+  if(button.disabled)return;
+  button.disabled=true;button.textContent='Verificando…';
+  try{
+   const result=await verifyOpticalResponse();
+   readback.textContent=result.total
+    ?result.passed+'/'+result.total+' superfícies responderam ao acrílico.'+
+       (result.failed.length?' Sem mudança: '+result.failed.join(', '):'')
+    :'Nenhuma superfície visível nesta aba.';
+   meta.textContent=result.failed.length?'Verificar CSS':'Material conectado';
+  }catch(error){
+   readback.textContent='Diagnóstico indisponível; confira os componentes desta aba.';
+  }finally{button.disabled=false;button.textContent='Testar resposta dos cards';}
+ });
  const content=document.getElementById('content');
  const nav=document.getElementById('nav-wrap');
  if(typeof MutationObserver!=='undefined'){
@@ -133,7 +170,7 @@
   if(nav)observer.observe(nav,{childList:true,subtree:false});
  }
  window.NexaPagMaterialEngine=Object.freeze({
-  apply,read,makeVars,
+  apply,read,makeVars,verifyOpticalResponse,
   inspect(){
    const fields=read(),vars=makeVars();
    return {inputs:Object.fromEntries(ids.map(id=>[id,document.getElementById(id)?.value||''])),vars,fields};
