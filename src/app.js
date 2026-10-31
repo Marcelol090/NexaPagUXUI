@@ -1,3 +1,4 @@
+import { paintStackedLiquid } from './stacked-liquid.js';
 
 (()=>{
 const $=s=>document.querySelector(s);
@@ -32,19 +33,20 @@ function home(){
  const net=currentMonth?'R$ 3.468,20':'R$ 270,00';
  const subtitle=currentMonth?'R$ 3.818,10 em compras · R$ 349,90 em estornos':'22,5% da meta semanal de R$ 1.200,00';
  return `<div class="tab-title homepage-title"><div><div class="eyebrow">Seu panorama financeiro</div><div class="t">Bom dia<span class="title-punct">.</span></div></div><span class="home-date">31 out 2026</span></div>
- <section class="panel hero glass-panel fiduciary-hero" aria-label="Visão financeira do período">
-  <div class="hero-head"><span class="label">${currentMonth?'Saídas líquidas':'Gastos da semana'}</span><span class="hero-period-badge">${icon('calendar')} ${currentMonth?'Outubro 2026':'Semana atual'}</span></div>
-  <div class="hero-value">${net}</div><div class="hero-meta">${subtitle}</div>
-  <div class="hero-graph-frame">${graph()}</div>
-  <div class="hero-bottom"><span><i class="dot" style="background:var(--red)"></i>Saídas</span><span><i class="dot" style="background:var(--green)"></i>Entradas</span><span class="hero-caption">Fluxo demonstrativo</span></div>
- </section>
- <div class="overview-period" role="group" aria-label="Período do panorama"><button class="${currentMonth?'active':''}" data-action="period-set" data-value="month" aria-pressed="${currentMonth}">Mensal</button><button class="${!currentMonth?'active':''}" data-action="period-set" data-value="week" aria-pressed="${!currentMonth}">Esta semana</button></div>
- <div class="metric-row" aria-label="Resumo das movimentações"><div class="metric metric-income"><div class="metric-top"><span class="small-icon">${icon('down')}</span><span>Recebimentos</span></div><strong>${money(1950)}</strong><span class="metric-caption">Entradas confirmadas</span></div><div class="metric metric-refund"><div class="metric-top"><span class="small-icon">${icon('refund')}</span><span>Estornos</span></div><strong>${money(349.9)}</strong><span class="metric-caption">Valores devolvidos</span></div></div>
- <div class="section-head"><strong>Acessos rápidos</strong><span class="section-side-label">AÇÕES FREQUENTES</span></div>${quickBoards()}
- <div class="section-head"><strong>Meta semanal</strong><button class="linkish" data-action="tab" data-value="spending">Explorar ${icon('arrow')}</button></div>${goal()}
- <div class="finance-insight"><span class="insight-symbol">${icon('spark')}</span><div><strong>Ritmo da semana</strong><p>R$ 270,00 utilizados dos R$ 1.200,00 previstos. Restam <b>R$ 930,00</b> na meta.</p></div><span class="insight-mark">22,5%</span></div>
- <div class="section-head"><strong>Movimentações recentes</strong><button class="linkish" data-action="tab" data-value="cards">Ver cartões ${icon('arrow')}</button></div>${transactionList()}
- <div class="section-head"><strong>Explorar lojas</strong></div><div class="integrations"><div class="square" style="color:#91d4a8">${icon('store')}</div><div style="flex:1"><strong>Catálogo de parceiros</strong><small>Disponibilidade das integrações</small></div><button class="textbtn" data-action="tab" data-value="ads">Abrir</button></div>`;
+  <section class="panel hero glass-panel fiduciary-hero" aria-label="Visão financeira do período">
+   <div class="hero-head"><span class="label">${currentMonth?'Saídas líquidas':'Gastos da semana'}</span><span class="hero-period-badge">${icon('calendar')} ${currentMonth?'Outubro 2026':'Semana atual'}</span></div>
+   <div class="hero-value">${net}</div>
+   <div class="hero-meta">${subtitle}</div>
+   <div class="hero-graph-frame">${graph()}</div>
+   <div class="hero-bottom"><span><i class="dot" style="background:var(--red)"></i>Saídas</span><span><i class="dot" style="background:var(--green)"></i>Entradas</span><span class="hero-caption">Fluxo demonstrativo</span></div>
+  </section>
+  <div class="overview-period" role="group" aria-label="Período do panorama"><button class="${currentMonth?'active':''}" data-action="period-set" data-value="month" aria-pressed="${currentMonth}">Mensal</button><button class="${!currentMonth?'active':''}" data-action="period-set" data-value="week" aria-pressed="${!currentMonth}">Esta semana</button></div>
+  <div class="metric-row" aria-label="Resumo das movimentações"><div class="metric metric-income"><div class="metric-top"><span class="small-icon">${icon('down')}</span><span>Recebimentos</span></div><strong>${money(1950)}</strong><span class="metric-caption">Entradas confirmadas</span></div><div class="metric metric-refund"><div class="metric-top"><span class="small-icon">${icon('refund')}</span><span>Estornos</span></div><strong>${money(349.9)}</strong><span class="metric-caption">Valores devolvidos</span></div></div>
+  <div class="section-head"><strong>Acessos rápidos</strong><span class="section-side-label">AÇÕES FREQUENTES</span></div>${quickBoards()}
+  <div class="section-head"><strong>Meta semanal</strong><button class="linkish" data-action="tab" data-value="spending">Explorar ${icon('arrow')}</button></div>${goal()}
+  <div class="finance-insight"><span class="insight-symbol">${icon('spark')}</span><div><strong>Ritmo da semana</strong><p>R$ 270,00 utilizados dos R$ 1.200,00 previstos. Restam <b>R$ 930,00</b> na meta.</p></div><span class="insight-mark">22,5%</span></div>
+  <div class="section-head"><strong>Movimentações recentes</strong><button class="linkish" data-action="tab" data-value="cards">Ver cartões ${icon('arrow')}</button></div>${transactionList()}
+  <div class="section-head"><strong>Explorar lojas</strong></div><div class="integrations"><div class="square" style="color:#91d4a8">${icon('store')}</div><div style="flex:1"><strong>Catálogo de parceiros</strong><small>Disponibilidade das integrações</small></div><button class="textbtn" data-action="tab" data-value="ads">Abrir</button></div>`;
 }
 
 function heat(){
@@ -109,66 +111,7 @@ function attachOrb(canvas,large=false){
  }
  function paint(){
    if(!alive)return;
-   ctx.clearRect(0,0,w,w);
-   // Optics behind the pigment: cool green ambient, matte interior; not a white fill.
-   const bg=ctx.createRadialGradient(w*.28,w*.16,w*.01,w*.55,w*.5,w*.74);
-   bg.addColorStop(0,'#607f77');bg.addColorStop(.30,'#254c42');bg.addColorStop(.75,'#142a2a');bg.addColorStop(1,'#0a171c');
-   ctx.fillStyle=bg;ctx.beginPath();ctx.arc(center,center,r,0,Math.PI*2);ctx.fill();
-   ctx.save();ctx.beginPath();ctx.arc(center,center,r,0,Math.PI*2);ctx.clip();
-   let lower=()=>w;
-   for(let k=0;k<L;k++){
-     const upper=x=>surfaceY(k,x); const hex=entries[k].color;
-     ctx.save();ctx.beginPath();ctx.moveTo(xvals[0],lower(xvals[0]));
-     for(let j=1;j<xvals.length;j++)ctx.lineTo(xvals[j],lower(xvals[j]));
-     for(let j=xvals.length-1;j>=0;j--)ctx.lineTo(xvals[j],upper(xvals[j]));
-     ctx.closePath();ctx.clip();
-     const ylow=w*(1-cumulative[k]),yhigh=w*(1-cumulative[k+1]);
-     const g=ctx.createLinearGradient(0,ylow+2,0,yhigh-2);
-     g.addColorStop(0,blendHex(hex,0,.23));g.addColorStop(.42,hex);g.addColorStop(1,blendHex(hex,255,.19));
-     ctx.fillStyle=g;ctx.fillRect(0,0,w,w);
-     const spot=ctx.createRadialGradient(w*(k%2?.35:.66),ylow-(ylow-yhigh)*.56,0,w*(k%2?.35:.66),ylow-(ylow-yhigh)*.56,w*.27);
-     spot.addColorStop(0,'rgba(246,255,251,.13)');spot.addColorStop(1,'rgba(246,255,251,0)');
-     ctx.fillStyle=spot;ctx.fillRect(0,0,w,w);
-     ctx.restore();
-     // Transition is a narrow semi-translucent seam, never a full color-mixing blur.
-     if(k<L-1){
-       ctx.beginPath();xvals.forEach((x,i)=>i?ctx.lineTo(x,upper(x)):ctx.moveTo(x,upper(x)));
-       ctx.lineCap='round';ctx.lineJoin='round';
-       ctx.strokeStyle=entries[k+1].color;ctx.globalAlpha=orbSettings.seam*.16;
-       ctx.lineWidth=w*(.007+orbSettings.seam*.013);ctx.stroke();ctx.globalAlpha=1;
-       ctx.strokeStyle='rgba(248,255,251,.30)';ctx.lineWidth=Math.max(1,w*.003);ctx.stroke();
-     }
-     lower=upper;
-   }
-   // Distinct top meniscus with a thin caustic, physically attached to the upper fluid surface.
-   ctx.beginPath();xvals.forEach((x,i)=>i?ctx.lineTo(x,surfaceY(L-1,x)):ctx.moveTo(x,surfaceY(L-1,x)));
-   ctx.strokeStyle='rgba(247,255,250,.58)';ctx.lineWidth=w*.004;ctx.stroke();
-   // Offset environmental reflections emphasize the sphere; never change finance data.
-   if(large && orbSettings.iridescence>.06){
-     ctx.save();ctx.globalCompositeOperation='screen';
-     for(const band of [{y:.33,span:.69,a:.11},{y:.46,span:.77,a:.085},{y:.61,span:.61,a:.07}]){
-       ctx.beginPath();
-       ctx.moveTo(w*(.5-band.span/2),w*band.y);
-       ctx.bezierCurveTo(w*.40,w*(band.y-.029),w*.63,w*(band.y+.035),w*(.5+band.span/2),w*(band.y-.008));
-       const g=ctx.createLinearGradient(w*.14,0,w*.84,0);
-       g.addColorStop(0,'rgba(242,252,255,0)');g.addColorStop(.24,'rgba(225,242,255,.62)');
-       g.addColorStop(.58,'rgba(242,210,245,.42)');g.addColorStop(1,'rgba(202,255,230,0)');
-       ctx.globalAlpha=band.a*orbSettings.iridescence;ctx.strokeStyle=g;ctx.lineWidth=w*.020;ctx.stroke();
-     }
-     ctx.restore();
-   }
-   // Spherical edge: stronger Fresnel-like reflection near edge; interior remains transparent.
-   const edge=ctx.createRadialGradient(center,center,r*.63,center,center,r);
-   edge.addColorStop(0,'rgba(255,255,255,0)');edge.addColorStop(.55,'rgba(6,20,23,.02)');edge.addColorStop(.9,'rgba(2,14,18,.24)');edge.addColorStop(1,'rgba(194,247,236,.22)');
-   ctx.fillStyle=edge;ctx.fillRect(0,0,w,w);
-   if(orbSettings.iridescence>.01){
-     ctx.globalAlpha=.50*orbSettings.iridescence;
-     const caustic=ctx.createLinearGradient(w*.10,w*.18,w*.83,w*.93);
-     caustic.addColorStop(0,'rgba(157,235,215,.00)');caustic.addColorStop(.27,'rgba(164,224,255,.18)');caustic.addColorStop(.48,'rgba(242,231,252,.06)');caustic.addColorStop(.71,'rgba(243,169,203,.17)');caustic.addColorStop(1,'rgba(255,255,255,0)');
-     ctx.strokeStyle=caustic;ctx.lineWidth=w*.016;
-     ctx.beginPath();ctx.ellipse(center,center,r*.94,r*.95,.15,.21,Math.PI*1.45);ctx.stroke();ctx.globalAlpha=1;
-   }
-   ctx.restore();
+   paintStackedLiquid({ctx,w,center,r,entries,cumulative,xvals,surfaceY,large,seam:orbSettings.seam,iridescence:orbSettings.iridescence});
  }
  function running(){return waves.some((layer,k)=>layer.some((v,i)=>Math.abs(v)>.00016||Math.abs(velocities[k][i])>.00042));}
  function integrate(dt){
@@ -273,7 +216,7 @@ function mountOpticalSurfaces(root){
  }
 }
 function render(keepScroll=false){let c=$('#content'),top=keepScroll?c.scrollTop:0;$('#phone').classList.toggle('no-shader',!state.shader);$('#phone').classList.toggle('no-motion',!state.motion);$('#phone').classList.toggle('no-optics',!state.optics);$('#header').innerHTML=header();$('#nav-wrap').innerHTML=nav();c.innerHTML=({home,spending,ads,cards,review}[state.tab]||home)();mountOpticalSurfaces(c);c.scrollTop=top;drawMaterialOrb();$('#toast-layer').innerHTML=state.toast?`<div class="toast" role="status">${state.toast}</div>`:'';$('#shaderSwitch')?.classList.toggle('off',!state.shader);$('#motionSwitch')?.classList.toggle('off',!state.motion);$('#opticsSwitch')?.classList.toggle('off',!state.optics)}
-$('#phone').addEventListener('click',e=>{const el=e.target.closest('[data-action]');if(!el)return;const a=el.dataset.action,v=el.dataset.value;switch(a){case 'orb-detail':openOrbDetail();break;case 'pigment-lab':if(document.getElementById('wbTrigger'))document.getElementById('wbTrigger').click();else document.body.classList.add('lab-open');break;case 'tab':set({tab:v},false);break;case 'shortcut':if(v==='goal'){set({tab:'home'},false);requestAnimationFrame(()=>{const el=$('#weekly-goal');if(el)$('#content').scrollTop=el.offsetTop-120;});}else{set({tab:v},false)}break;case 'period':set({period:state.period==='month'?'week':'month'},true);break;case 'period-set':set({period:v},true);break;case 'goal-mode':set({goalMode:v,goalPick:0},true);break;case 'goal-pick':set({goalPick:Number(v)},true);break;case 'day':set({day:Number(v)},true);break;case 'category':set({categoryIndex:state.categoryIndex===Number(v)?-1:Number(v)},true);break;case 'filter':set({filter:v},false);break;case 'shop':set({shop:Number(v)},true);break;case 'card':set({activeCard:Number(v)},true);break;case 'review-view':set({reviewView:v},true);break;case 'resolve':set({done:[...state.done,Number(v)],outcomes:{...state.outcomes,[v]:'Confirmado'}},true);toast('Evento confirmado nesta demonstração.');break;case 'ignore':set({done:[...state.done,Number(v)],outcomes:{...state.outcomes,[v]:'Ignorado'}},true);toast('Evento ignorado nesta demonstração.');break;case 'analyze':toast('Gateway não confirmado: análise indisponível no protótipo.');break;case 'ad-search':toast('Busca será habilitada após conexão com o catálogo.');break;case 'card-info':toast('3 cartões de exemplo, sem acesso ao banco real.');break;case 'review-info':toast('Esta prévia exibe apenas a fila demonstrativa.');break;case 'filters':toast('Use os filtros rápidos logo abaixo do título.');break;}});
+$('#phone').addEventListener('click',e=>{const el=e.target.closest('[data-action]');if(!el)return;const a=el.dataset.action,v=el.dataset.value;switch(a){case 'orb-detail':openOrbDetail();break;case 'pigment-lab':if(document.getElementById('wbTrigger')) document.getElementById('wbTrigger').click();else document.body.classList.add('lab-open');break;case 'tab':set({tab:v},false);break;case 'shortcut':if(v==='goal'){set({tab:'home'},false);requestAnimationFrame(()=>{const el=$('#weekly-goal');if(el)$('#content').scrollTop=el.offsetTop-120;});}else{set({tab:v},false)}break;case 'period':set({period:state.period==='month'?'week':'month'},true);break;case 'period-set':set({period:v},true);break;case 'goal-mode':set({goalMode:v,goalPick:0},true);break;case 'goal-pick':set({goalPick:Number(v)},true);break;case 'day':set({day:Number(v)},true);break;case 'category':set({categoryIndex:state.categoryIndex===Number(v)?-1:Number(v)},true);break;case 'filter':set({filter:v},false);break;case 'shop':set({shop:Number(v)},true);break;case 'card':set({activeCard:Number(v)},true);break;case 'review-view':set({reviewView:v},true);break;case 'resolve':set({done:[...state.done,Number(v)],outcomes:{...state.outcomes,[v]:'Confirmado'}},true);toast('Evento confirmado nesta demonstração.');break;case 'ignore':set({done:[...state.done,Number(v)],outcomes:{...state.outcomes,[v]:'Ignorado'}},true);toast('Evento ignorado nesta demonstração.');break;case 'analyze':toast('Gateway não confirmado: análise indisponível no protótipo.');break;case 'ad-search':toast('Busca será habilitada após conexão com o catálogo.');break;case 'card-info':toast('3 cartões de exemplo, sem acesso ao banco real.');break;case 'review-info':toast('Esta prévia exibe apenas a fila demonstrativa.');break;case 'filters':toast('Use os filtros rápidos logo abaixo do título.');break;}});
 $('#closeLab').addEventListener('click',()=>document.body.classList.remove('lab-open'));$('#labScrim').addEventListener('click',()=>document.body.classList.remove('lab-open'));
 $('#shaderSwitch').addEventListener('click',()=>set({shader:!state.shader},true));$('#motionSwitch').addEventListener('click',()=>set({motion:!state.motion},true));
 $('#opticsSwitch').addEventListener('click',()=>set({optics:!state.optics},true));
