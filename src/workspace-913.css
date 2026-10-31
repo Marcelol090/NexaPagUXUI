@@ -265,3 +265,14 @@ body{overflow-x:hidden}
  .phone .fiduciary-hero .hero-graph-frame{opacity:1!important;transform:none!important}
  .workspace-inspector .inspector-tab{transition:none!important}
 }
+
+/* The old floating modal trigger is retired: one inspector, not two overlapping editors. */
+#nexa-live-lab .wb-trigger{display:none!important}
+#nexa-live-lab:not(.open){pointer-events:none}
+.workspace-inspector [hidden]{display:none!important}
+.workspace-inspector .geo-scopes button:focus-visible,
+.workspace-inspector .inspector-tab:focus-visible{outline:2px solid #D5E6A8;outline-offset:2px}
+.workspace-inspector input[type="range"]:focus-visible{outline:2px solid #D5E6A8;outline-offset:2px}
+@media(min-width:821px) and (max-height:690px){
+ .studio>.phone,.studio>.rail.right.workspace-inspector{height:min(850px,calc(100dvh - 24px))!important;min-height:560px}
+}
