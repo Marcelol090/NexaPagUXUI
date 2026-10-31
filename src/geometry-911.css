@@ -133,3 +133,24 @@
 @media(prefers-reduced-motion:reduce){
  .geometry-left .geo-scopes button{transition:none}
 }
+
+.geo-mobile-toggle{display:none}
+@media(max-width:950px){
+ .geo-mobile-toggle{
+  display:block;position:fixed;z-index:82;left:14px;bottom:107px;
+  padding:9px 13px;border-radius:12px;
+  background:linear-gradient(145deg,#D5E6A8,#A8D95E);
+  border:1px solid rgba(255,255,255,.54);box-shadow:0 10px 22px rgba(0,5,7,.40);
+  color:#0E2420;font-size:11px;font-weight:780;cursor:pointer;
+ }
+ body.geo-mobile-open .geo-mobile-toggle{top:12px;right:16px;left:auto;bottom:auto;z-index:94}
+ body.geo-mobile-open .rail.left.geometry-left{
+  display:block;position:fixed;left:10px;right:10px;bottom:10px;top:auto;
+  z-index:92;width:auto;max-width:500px;max-height:min(80dvh,720px);
+  overflow:auto;padding:18px 15px;
+  border-radius:24px;border:1px solid rgba(208,236,214,.27);
+  background:linear-gradient(155deg,rgba(16,42,39,.98),rgba(6,24,28,.99));
+  box-shadow:0 22px 60px rgba(0,3,6,.69);
+ }
+ body.geo-mobile-open .geometry-left .geo-editorial{display:none}
+}
