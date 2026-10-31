@@ -1,0 +1,144 @@
+/* NexaPag UXUI 9.06 | Chromatic Discipline
+   Reference: composed financial hierarchy (not white-theme cloning), neutral
+   refractive glass, and category pigments reserved for meaningful surfaces.
+   Imported LAST: does not replace layout, data models, hit targets or the orb solver. */
+:root{
+ --base:#0b1718;
+ --surface:rgba(19,31,32,.88);
+ --surface2:rgba(24,38,39,.87);
+ --line:rgba(218,234,228,.13);
+ --primary:#eef4f1;
+ --muted:#aabbb5;
+ --soft:#829a92;
+ --green:#7dc9a4;
+ --red:#e18c93;
+ --yellow:#dbbd7f;
+ --ref-surface:rgba(18,30,31,.91);
+ --ref-surface-raised:rgba(24,39,40,.87);
+ --ref-outline:rgba(208,230,221,.13);
+ --ref-sub:#adbbb5;
+}
+/* Environmental pigment belongs behind the cards. Narrow the light-field,
+   de-emphasize the dark-green glow and remove simultaneous pink splashes. */
+.studio{
+ background:radial-gradient(ellipse 44% 52% at 48% 30%,#1c3030 0%,#121e20 58%,#0b1516 100%);
+}
+.phone{background:#0b1718}
+.ambient{
+ background:linear-gradient(155deg,#0c181a 7%,#152928 52%,#0c1718 100%)!important;
+}
+.ambient::before{
+ background:radial-gradient(ellipse at 45% 40%,rgba(66,115,99,.33),rgba(40,82,71,.08) 53%,transparent 76%)!important;
+ opacity:.53!important;
+}
+.ambient::after{
+ background:radial-gradient(ellipse at 75% 78%,rgba(87,113,103,.15),transparent 72%)!important;
+ opacity:.30!important;
+}
+.mist{opacity:.12!important}
+/* A uniform glass material: structural depth from toned layers, not rainbow
+   overlays and constant colored glow behind every card. */
+.glass-site .glass-scene{opacity:calc(var(--glass-glow) * .25)!important;filter:saturate(.52) blur(5px)!important}
+.glass-site[data-optic="hero"] .glass-scene{opacity:calc(var(--glass-glow) * .40)!important}
+.glass-site[data-optic="goal"] .glass-scene{opacity:calc(var(--glass-glow) * .33)!important}
+.glass-site[data-optic="metric"] .glass-scene{opacity:calc(var(--glass-glow) * .12)!important}
+.glass-site[data-optic="category"] .glass-scene{opacity:calc(var(--glass-glow) * .13)!important}
+.glass-site > :is(.panel,.metric),.panel,.metric{
+ background:linear-gradient(152deg,rgba(35,50,50,.42),rgba(13,24,26,.50) 56%),rgba(17,29,31,var(--glass-film,.83))!important;
+ border-color:rgba(216,239,230,.11)!important;
+ box-shadow:0 14px 35px rgba(0,7,11,.27),inset 0 1px 0 rgba(242,255,249,.055),inset 0 -1px 0 rgba(0,0,0,.18)!important;
+ -webkit-backdrop-filter:blur(var(--glass-blur,21px)) saturate(.79);
+ backdrop-filter:blur(var(--glass-blur,21px)) saturate(.79);
+}
+.glass-site > :is(.panel,.metric)::before,.panel::before{opacity:.36!important}
+.glass-site > :is(.panel,.metric)::after{opacity:.30!important}
+.panel.fiduciary-hero,.glass-site > .panel.fiduciary-hero{
+ background:radial-gradient(ellipse 75% 77% at 98% 76%,rgba(68,117,111,.21),transparent 75%),linear-gradient(148deg,#182c30 0%,#133737 54%,#102729 100%)!important;
+ border:1px solid rgba(196,232,223,.18)!important;
+ box-shadow:0 17px 39px rgba(2,8,13,.34),inset 0 1px 0 rgba(248,255,252,.10)!important;
+}
+.fiduciary-hero::before{opacity:.27!important;filter:blur(26px)!important}
+.fiduciary-hero::after{opacity:.055!important}
+.hero-value{color:#f4f7f5;letter-spacing:-.049em;text-shadow:none}
+.hero-meta{color:#baccc5}
+.hero-graph{filter:none!important}
+.hero-bottom{border-color:rgba(237,255,246,.11)}
+.hero-period-badge{background:rgba(238,248,242,.052);border-color:rgba(236,252,243,.12)}
+.overview-period{background:rgba(9,21,23,.48);border-color:rgba(221,244,234,.10)}
+.overview-period button.active{background:linear-gradient(155deg,#344e4b,#263c3a);box-shadow:0 2px 8px rgba(0,5,8,.16),inset 0 1px 0 rgba(245,255,249,.08)}
+.metric,.glass-site .metric{min-height:101px;border-radius:18px!important}
+.metric-top{color:#b9cac4}
+.metric .metric-caption{color:#8fa8a0}
+.metric-income strong{color:#a4e4bf}
+.metric-refund strong{color:#ead199}
+.glass-site .metric .small-icon{border-radius:11px;background:rgba(223,241,232,.055);border:1px solid rgba(228,248,239,.09)}
+.glass-site .metric-income .small-icon{background:rgba(74,150,113,.17);border-color:rgba(131,200,164,.18)}
+.glass-site .metric-refund .small-icon{background:rgba(160,124,64,.16);border-color:rgba(214,185,126,.18)}
+/* Board color is visible, but appears as translucent material, not a colored
+   slab. Pigmented icon wells and slim accents retain semantic identity. */
+.quick-board{
+ background:linear-gradient(154deg,rgba(39,55,55,.44),rgba(14,26,29,.85))!important;
+ border:1px solid rgba(225,240,233,.115)!important;
+ box-shadow:inset 0 1px 0 rgba(252,255,251,.06),0 9px 19px rgba(0,6,10,.18)!important;
+ border-radius:17px!important;
+}
+.quick-board::before{
+ opacity:1!important;
+ inset:0!important;
+ background:radial-gradient(ellipse 76% 43% at 15% 1%,rgba(var(--tone-rgb),.11),transparent 94%)!important;
+}
+.quick-board::after{
+ background:linear-gradient(112deg,rgba(var(--tone-rgb),.36),transparent 66%)!important;
+ inset:0 auto 0 0!important;
+ width:2px!important;
+ opacity:.7!important;
+}
+.quick-board .quick-icon{
+ color:color-mix(in oklab,var(--accent) 79%,white)!important;
+ background:radial-gradient(ellipse at 28% 14%,rgba(255,255,255,.13),transparent 61%),linear-gradient(154deg,rgba(var(--tone-rgb),.36),rgba(var(--tone-rgb),.13) 62%,rgba(8,24,26,.36))!important;
+ border:1px solid rgba(var(--tone-rgb),.39)!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.13),inset 0 -4px 8px rgba(0,0,0,.09),0 5px 13px rgba(0,4,7,.14)!important;
+}
+.quick-board strong{color:#e7f0ec;letter-spacing:-.016em}
+.quick-board small{color:#a4b7b0}
+.quick-board:hover,.quick-board:focus-visible{border-color:rgba(var(--tone-rgb),.39)!important}
+/* Category boards have an independently pigmented WELL and restrained field.
+   The numeric value has priority over the colored background. */
+.category-board{
+ background:radial-gradient(ellipse 80% 68% at 0% 0%,rgba(var(--tone-rgb),.095),transparent 88%),linear-gradient(151deg,rgba(37,53,53,.52),rgba(12,25,27,.85))!important;
+ border:1px solid rgba(219,237,230,.115)!important;
+ border-radius:17px!important;
+ box-shadow:inset 0 1px 0 rgba(250,255,251,.045),0 11px 22px rgba(0,6,10,.13)!important;
+}
+.category-board::before{
+ background:linear-gradient(115deg,rgba(var(--tone-rgb),.31),transparent 70%)!important;
+ width:2px!important;
+ inset:0 auto 0 0!important;
+ opacity:.88!important;
+}
+.category-board.selected{
+ border-color:rgba(var(--tone-rgb),.57)!important;
+ background:radial-gradient(ellipse 81% 69% at 6% 4%,rgba(var(--tone-rgb),.17),transparent 89%),linear-gradient(147deg,rgba(37,54,53,.56),rgba(12,24,27,.83))!important;
+}
+.category-board .cat-symbol,.category-detail .cat-symbol{
+ color:color-mix(in oklab,var(--accent) 74%,#f4f1e8)!important;
+ background:radial-gradient(ellipse at 24% 12%,rgba(255,255,255,.11),transparent 70%),linear-gradient(148deg,rgba(var(--tone-rgb),.40),rgba(var(--tone-rgb),.14) 61%,rgba(11,26,28,.40))!important;
+ border-color:rgba(var(--tone-rgb),.42)!important;
+}
+.category-board .category-percent{color:color-mix(in oklab,var(--accent) 64%,#e4e6e0)}
+.category-board .category-value{color:#f2f6f2;font-variant-numeric:tabular-nums}
+.category-board small{color:#a4b5b0}
+.category-detail{background:linear-gradient(150deg,rgba(var(--tone-rgb),.085),rgba(13,27,28,.80))!important;border-color:rgba(var(--tone-rgb),.25)!important}
+/* Semantic chips should look like information rather than hard neon decals. */
+.legend-option{background:rgba(18,33,34,.38)!important;border-color:rgba(216,235,227,.11)!important}
+.legend-option.selected{background:rgba(var(--tone-rgb),.12)!important;border-color:rgba(var(--tone-rgb),.35)!important}
+.finance-insight{background:linear-gradient(147deg,rgba(37,54,53,.39),rgba(14,26,28,.78))!important;border-color:rgba(228,244,235,.11)!important}
+.nav{background:linear-gradient(158deg,rgba(28,44,43,.96),rgba(10,24,26,.97))!important;border-color:rgba(230,246,237,.15)!important}
+.nav button.active{background:linear-gradient(148deg,rgba(68,104,91,.59),rgba(45,79,68,.56))!important}
+/* No change to .heatmap levels. Scale must stay monotonic green-forest.
+   Orb fluid volumes and wave solver retain their original values. */
+@media (prefers-contrast:more){.quick-board,.category-board,.panel,.metric{border-color:rgba(241,255,249,.46)!important}.muted,.metric-caption{color:#e1ece7!important}}
+@media (forced-colors:active){.quick-board,.category-board,.panel,.metric{background:Canvas!important;color:CanvasText!important;border-color:CanvasText!important}}
+
+.material-gallery-link{display:inline-flex;align-items:center;justify-content:center;margin-top:15px;color:#cce7d9;border:1px solid rgba(212,238,224,.19);padding:11px 13px;border-radius:12px;font-size:11px;letter-spacing:.008em;background:rgba(24,45,43,.54);transition:border-color .2s,background .2s}
+.material-gallery-link:hover,.material-gallery-link:focus-visible{border-color:rgba(188,235,208,.52);background:rgba(39,67,58,.66)}
