@@ -7,3 +7,4 @@ import './hero-transition-913.js';
 import './workspace-913.js';
 
 import './workspace-915.js';
+import './control-fidelity-917.js';
