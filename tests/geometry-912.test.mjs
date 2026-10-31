@@ -33,7 +33,8 @@ test('geometry edits never modify optics, pigmented scene or LiquidOrb physics',
  assert.match(html,/id="blurRange"/);
 });
 test('mobile editor and accessible guide mode remain intact',()=>{
- assert.match(html,/id="geoMobileToggle"/);
+ assert.doesNotMatch(html,/id="geoMobileToggle"/);
+ assert.match(html,/id="geometryHub"/);
  assert.match(js,/aria-expanded/);
  assert.match(js,/Escape/);
  assert.match(html,/aria-live="polite"/);

@@ -1,3 +1,8 @@
+// Explicit Vite CSS imports: ensure global geometry and material rules survive production bundling.
+import './geometry-system-918.css';
+import './workbench-material-918.css';
+import './material-engine-919.css';
+
 import './app.js';
 import './workbench.js';
 

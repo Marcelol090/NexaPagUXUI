@@ -119,3 +119,4 @@
 @media(prefers-reduced-motion:reduce){.nav button,.quick-board,.primarybtn{transition:none!important;animation:none!important}}
 @media(prefers-contrast:more){.nav button.active{border-color:rgba(235,255,236,.65)!important}.quick-board{border-color:rgba(235,255,236,.38)!important}}
 @media(forced-colors:active){.nav button,.quick-board,.primarybtn{forced-color-adjust:auto!important}
+}

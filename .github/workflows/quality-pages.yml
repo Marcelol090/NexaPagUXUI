@@ -1,0 +1,80 @@
+name: NexaPag UX/UI · CI and Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nexapag-uxui-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Validate design, build and browser
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      # The repository does not have a committed package-lock.json yet.
+      # npm install is intentional; switch to npm ci after committing a lockfile.
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Validate source syntax
+        run: npm run check:syntax
+      - name: Validate CSS blocks and media-query boundaries
+        run: npm run check:css
+      - name: Run design and component regression tests
+        run: npm run test:design
+      - name: Build production preview
+        run: npm run build
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Browser QA · 1920px, 1366px and mobile
+        run: npm run test:e2e
+      - name: Upload QA screenshots and traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: uxui-browser-qa-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Configure GitHub Pages
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/configure-pages@v5
+      - name: Upload site to GitHub Pages
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist/
+
+  deploy:
+    name: Publish validated Visualize
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy only the artifact that passed browser QA
+        id: deployment
+        uses: actions/deploy-pages@v4

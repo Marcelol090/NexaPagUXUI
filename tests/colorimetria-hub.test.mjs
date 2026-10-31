@@ -10,8 +10,8 @@ test('colorimetria hub is self-contained and linked from all design workspaces',
   assert.match(hub, /<style>/);
   assert.match(hub, /<script>/);
   assert.match(hub, /Hub de colorimetria/);
-  assert.match(app, /href="\/colorimetria\.html"/);
-  assert.match(study, /href="\/colorimetria\.html"/);
+  assert.match(app, /href="\.\/colorimetria\.html"/);
+  assert.match(study, /href="\.\/colorimetria\.html"/);
 });
 test('every material scope and comparison control stays accessible', () => {
   for (const role of ['card', 'board', 'button', 'nav'])
