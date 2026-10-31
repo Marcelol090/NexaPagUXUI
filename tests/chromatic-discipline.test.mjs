@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 const at=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const html=at('index.html'),app=at('src/app.js'),css=at('src/color-discipline.css'),material=at('materials.html'),js=at('src/materials.js'),vite=at('vite.config.js');
-test('9.06 imports the chromatic discipline layer after earlier material layers',()=>{
+test('9.07u1 imports the chromatic discipline layer after earlier material layers',()=>{
  const a=html.indexOf('src/pigment-fidelity.css'),b=html.indexOf('src/color-discipline.css');
  assert.ok(a>=0&&b>a);
  assert.ok(css.includes('.panel.fiduciary-hero'));
@@ -11,7 +11,7 @@ test('9.06 imports the chromatic discipline layer after earlier material layers'
  assert.ok(css.includes('.quick-board'));
 });
 test('approved category roles remain distinct and financial values unmodified',()=>{
- for(const c of ['#B56E76','#91657B','#BE9868','#66A39D','#BA7796','#829E8A'])assert.ok(app.includes(c),c);
+ for(const c of ['#D5E6A8','#A8D95E','#6FB81E','#1F8B57','#0D6372','#5FA9D8'])assert.ok(app.includes(c),c);
  for(const amount of ['1145.9','874.4','620.3','407.5','340'])assert.ok(app.includes(amount));
  assert.ok(app.includes('weeklyBudget=1200'));
  assert.ok(app.includes('weeklySpend=270'));
