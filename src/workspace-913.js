@@ -55,7 +55,7 @@ if(right){
   '<button type="button" class="motion-action" id="inspector-replay">Reproduzir saída líquida</button>'+
   '<p class="motion-note">A luz se organiza por cerca de 2,5 segundos e devolve a cena ao gráfico. Movimento reduzido mostra os dados imediatamente.</p>');
  pages.motion.appendChild(motionUI);
- const foot=make('footer','inspector-foot','<span>Visualize 9.13 · Sage Glass</span><b>Ajustes instantâneos</b>');
+ const foot=make('footer','inspector-foot','<span>Visualize 9.14 · Sage Glass</span><b>Ajustes instantâneos</b>');
  right.appendChild(foot);
  const scrim=make('div','inspector-scrim');scrim.setAttribute('aria-hidden','true');
  const mobileOpen=make('button','inspector-open-button','Personalizar');
