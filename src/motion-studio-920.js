@@ -83,7 +83,12 @@
   phone.toggleAttribute('data-nm-paused',paused);
   qa('[data-nm-key]').forEach(input=>{
    const key=input.dataset.nmKey;
-   if(input.type==='checkbox')input.checked=state[key];else input.value=state[key];
+   if(input.type==='checkbox')input.checked=state[key];
+   else input.value=state[key];
+   if(input.type==='range'){
+    const low=Number(input.min),high=Number(input.max);
+    input.style?.setProperty('--nm-progress',((state[key]-low)/(high-low)*100).toFixed(1)+'%');
+   }
   });
   qa('[data-nm-output]').forEach(output=>{output.textContent=fmt(output.dataset.nmOutput,state[output.dataset.nmOutput])});
   qa('[data-nm-preset]').forEach(btn=>btn.setAttribute('aria-pressed',String(Object.entries(presets[btn.dataset.nmPreset]).every(([k,v])=>state[k]===v))));
@@ -92,7 +97,7 @@
   studio.style.setProperty('--nm-preview-duration',state.duration+'ms');
   studio.style.setProperty('--nm-preview-delay',state.stagger+'ms');
   studio.style.setProperty('--nm-preview-ease',curves[state.ease]);
-  const element=content.querySelector('.quick-board,.category-board,.glass-site>.metric,.glass-site>.panel');
+  const element=content.querySelector('.quick-board,.category-board')||phone.querySelector('.nav button');
   const computed=element?getComputedStyle(element):null;
   q('#nmReadback').textContent=computed
    ?'CSS calculado · '+computed.transitionDuration+' · '+computed.transitionTimingFunction
