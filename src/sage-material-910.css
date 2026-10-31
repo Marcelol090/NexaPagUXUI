@@ -1,0 +1,241 @@
+/* NexaPag UX/UI 9.10 · Sage Material.
+ * Approved reference: sage / lime / leaf / forest / petrol / mist-blue.
+ * A single chromatic environment; neutral acrylic is the lens.
+ * Glyph ink is only white or near-black. Data color retains semantic meaning.
+ * MDN backdrop-root rule: avoid filters on ancestors and nested backdrop blurs.
+ */
+:root {
+ --nexa-sage:#D5E6A8;
+ --nexa-lime:#A8D95E;
+ --nexa-leaf:#6FB81E;
+ --nexa-forest:#1F8B57;
+ --nexa-petrol:#0D6372;
+ --nexa-sky:#5FA9D8;
+ --nexa-white:#F4F8F5;
+ --nexa-ink:#0B1B1A;
+ --nexa-muted:#AABEB7;
+ --nexa-edge:rgba(227,246,237,.17);
+ --nexa-acrylic:rgba(10,26,27,.69);
+ --nexa-acrylic-raised:rgba(12,30,29,.75);
+ --nexa-motion:cubic-bezier(.24,.82,.25,1);
+ --glass-film:.70;
+ --glass-blur:21px;
+ --glass-rim-strength:.58;
+ --glass-glow:.71;
+ --pigment-strength:.72;
+ --pigment-diffusion:21px;
+ --pigment-interlock:.38;
+}
+/* Background pigments belong to one scene, not to each card. */
+.studio {
+ background:
+  radial-gradient(ellipse 38% 66% at 14% 14%,rgba(213,230,168,.19),transparent 76%),
+  radial-gradient(ellipse 35% 70% at 86% 86%,rgba(95,169,216,.15),transparent 70%),
+  linear-gradient(137deg,#0b2523,#0d3731 42%,#0c2d34 70%,#081b20)!important;
+}
+.phone{background:#0b2626!important}
+.phone .ambient{
+ background:
+  radial-gradient(ellipse 110% 78% at 8% -12%,rgba(213,230,168,.16),transparent 62%),
+  linear-gradient(151deg,#153c32 0%,#0e4034 27%,#12503e 48%,#0c3c41 68%,#082934 100%)!important;
+}
+.phone .ambient::before{
+ width:410px;height:340px;top:32px;left:-132px;
+ background:radial-gradient(ellipse at 35% 30%,rgba(213,230,168,.46),rgba(168,217,94,.17) 44%,transparent 78%)!important;
+ opacity:calc(var(--pigment-strength,.72) * .77)!important;
+ filter:blur(var(--pigment-diffusion,21px)) saturate(.84)!important;
+}
+.phone .ambient::after{
+ width:410px;height:440px;right:-160px;bottom:-84px;
+ background:radial-gradient(ellipse at 58% 52%,rgba(95,169,216,.42),rgba(13,99,114,.20) 43%,transparent 77%)!important;
+ opacity:calc(var(--pigment-strength,.72) * .60)!important;
+ filter:blur(var(--pigment-diffusion,21px)) saturate(.87)!important;
+}
+.phone .mist{
+ opacity:.82!important;
+ background:
+  radial-gradient(ellipse 63% 33% at 78% 22%,rgba(168,217,94,.105),transparent 80%),
+  radial-gradient(ellipse 70% 48% at 8% 75%,rgba(31,139,87,.15),transparent 78%)!important;
+}
+.phone.no-shader .ambient::before,
+.phone.no-shader .ambient::after{display:none!important}
+.phone.no-shader .ambient{background:#102725!important}
+.phone.no-shader .mist{display:none!important}
+/* The wrapper does not create an independent light. */
+.phone .glass-site{isolation:auto!important;z-index:auto!important}
+.phone .glass-site>.glass-scene{display:none!important}
+/* Lens is semitransparent; backdrop-filter samples the shared scene.
+   Panel content remains sharp because filter is applied behind the panel. */
+.phone:not(.no-optics) .glass-site>:is(.panel,.metric),
+.phone:not(.no-optics) .panel:not(.orb-dialog):not(.orb-specimen) {
+ background:
+  linear-gradient(156deg,rgba(242,255,245,.055),transparent 36%,rgba(2,15,19,.105) 88%),
+  rgba(9,24,26,var(--glass-film,.70))!important;
+ border:1px solid var(--nexa-edge)!important;
+ box-shadow:
+  0 16px 32px -18px rgba(0,5,8,.65),
+  0 3px 9px rgba(2,12,14,.20),
+  inset 0 1px 0 rgba(251,255,251,.09),
+  inset 0 -1px 0 rgba(3,12,15,.19)!important;
+ -webkit-backdrop-filter:blur(var(--glass-blur,21px)) saturate(.91) brightness(.99)!important;
+ backdrop-filter:blur(var(--glass-blur,21px)) saturate(.91) brightness(.99)!important;
+ transform:none!important;
+}
+.phone:not(.no-optics) .glass-site>.panel.fiduciary-hero{
+ background:
+  linear-gradient(147deg,rgba(228,255,236,.073),rgba(5,26,28,.06) 42%,rgba(2,15,20,.11) 95%),
+  rgba(8,29,28,.67)!important;
+ border-color:rgba(230,250,238,.23)!important;
+ box-shadow:0 20px 37px -19px rgba(0,9,11,.67),inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+.phone:not(.no-optics) .glass-site[data-optic="metric"]>.metric{
+ background:linear-gradient(154deg,rgba(242,255,247,.040),transparent 57%),rgba(9,25,27,.71)!important;
+ border-color:rgba(230,245,237,.16)!important;
+ box-shadow:0 12px 25px -18px rgba(0,5,8,.58),inset 0 1px 0 rgba(251,255,252,.07)!important;
+}
+.phone:not(.no-optics) .glass-site>:is(.panel,.metric)::before{
+ background:linear-gradient(146deg,rgba(255,255,255,.035),transparent 45%)!important;
+ opacity:1!important;filter:none!important;
+}
+.phone:not(.no-optics) .glass-site>:is(.panel,.metric)::after{
+ background:radial-gradient(ellipse 90% 110% at -7% -10%,rgba(255,255,255,.24),transparent 71%),
+  linear-gradient(150deg,rgba(252,255,251,.19),rgba(240,255,249,.022) 39%,rgba(175,220,208,.024) 78%,rgba(212,237,232,.11))!important;
+ opacity:var(--glass-rim-strength,.58)!important;
+ padding:1px!important;
+}
+.phone .fiduciary-hero::before,
+.phone .fiduciary-hero::after{filter:none!important;opacity:.05!important}
+.phone .hero-value,.phone .metric strong{color:var(--nexa-white)}
+.phone .hero-meta,.phone .metric-caption{color:#BDCCC7}
+/* The pigment sits on a small, physical region: the monochrome glyph well.
+   Boards stay translucent so the environment can be seen, without double blur. */
+.phone:not(.no-optics) :is(.quick-board,.category-board,.shop,.legend-option) {
+ -webkit-backdrop-filter:none!important;
+ backdrop-filter:none!important;
+}
+.phone:not(.no-optics) :is(.quick-board,.category-board) {
+ background:
+  linear-gradient(155deg,rgba(242,255,245,.038),rgba(7,22,25,.08) 53%,rgba(5,16,19,.12)),
+  rgba(9,28,29,.43)!important;
+ border:1px solid rgba(221,241,233,.145)!important;
+ box-shadow:0 10px 19px -16px rgba(0,8,11,.59),inset 0 1px 0 rgba(255,255,255,.065)!important;
+}
+.phone:not(.no-optics) :is(.quick-board,.category-board)::before{
+ background:linear-gradient(150deg,rgba(244,255,246,.038),transparent 62%)!important;
+ filter:none!important;opacity:1!important;
+}
+.phone:not(.no-optics) .quick-board::after{
+ background:linear-gradient(90deg,transparent,rgba(var(--tone-rgb),.24),transparent)!important;
+ height:1px!important;opacity:.8!important;
+}
+.phone:not(.no-optics) .category-board.selected{
+ background:linear-gradient(158deg,rgba(var(--tone-rgb),.12),transparent 54%),rgba(8,28,29,.49)!important;
+ border-color:rgba(var(--tone-rgb),.50)!important;
+}
+/* Distinct pigment, monochrome glyph. The per-item --glyph-ink is set from actual luminance. */
+.phone :is(.quick-icon,.cat-symbol,.small-icon,.txn-icon,.shop-mark,.insight-symbol,.square,.subcat-chip){
+ color:var(--glyph-ink,#F8FBF8)!important;
+ background:
+  linear-gradient(147deg,rgba(255,255,255,.09),transparent 48%),
+  linear-gradient(151deg,
+    color-mix(in oklab,var(--accent,var(--nexa-forest)) 76%,#122522),
+    color-mix(in oklab,var(--accent,var(--nexa-petrol)) 44%,#071c20))!important;
+ border:1px solid color-mix(in oklab,var(--accent,var(--nexa-forest)) 40%,#98B8A8)!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.17),0 6px 13px -10px rgba(0,6,8,.55)!important;
+ filter:none!important;
+}
+.phone :is(.quick-icon,.cat-symbol,.small-icon,.txn-icon,.shop-mark,.insight-symbol,.square,.subcat-chip) svg,
+.phone :is(.iconbutton,.tiny-pill,.linkish,.orb-open-btn,.orb-mini-btn,.review-actions button,.primarybtn,.textbtn,.nav button) svg {
+ stroke:currentColor!important;
+ fill:none;
+ filter:none!important;
+}
+.phone .quick-icon svg,.phone .cat-symbol svg{color:var(--glyph-ink,#F8FBF8)!important}
+.phone :is(.iconbutton,.tiny-pill,.linkish,.orb-open-btn,.orb-mini-btn,.review-actions button,.textbtn) {
+ color:#F5FAF6!important;
+}
+.phone .iconbutton,.phone .tiny-pill{
+ background:rgba(10,30,30,.48)!important;
+ border-color:rgba(222,240,233,.15)!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.08)!important;
+}
+.phone .quick-board strong,.phone .category-board strong{color:#F5F8F5!important}
+.phone .category-board :is(.category-percent,.category-value){
+ color:#F0F6F3!important;
+}
+.phone .category-board small,.phone .quick-board small{color:#B2C9C0!important}
+.phone .category-detail .cat-symbol{--glyph-ink:#F8FBF8}
+/* Four hues in the visual system, but all icon strokes black/white. */
+.phone .metric-income .small-icon{--accent:var(--nexa-forest);--glyph-ink:#fff}
+.phone .metric-refund .small-icon{--accent:var(--nexa-lime);--glyph-ink:var(--nexa-ink)}
+.phone .txn-icon{--glyph-ink:#fff!important}
+.phone .shop-mark{--glyph-ink:var(--nexa-ink)}
+.phone .insight-symbol{--accent:var(--nexa-leaf);--glyph-ink:var(--nexa-ink)}
+/* Monochrome navigation. One active sage tab, no scrolling prism or colored icon ink. */
+.phone .nav-wrap {
+ -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+ background:linear-gradient(0deg,rgba(4,20,22,.985),rgba(4,19,21,.91) 70%,transparent)!important;
+}
+.phone .nav{
+ background:linear-gradient(150deg,rgba(11,33,34,.91),rgba(5,23,27,.95))!important;
+ border:1px solid rgba(228,246,234,.20)!important;
+ box-shadow:0 15px 31px -17px rgba(0,5,8,.72),inset 0 1px 0 rgba(255,255,255,.085)!important;
+ -webkit-backdrop-filter:blur(15px) saturate(.89)!important;
+ backdrop-filter:blur(15px) saturate(.89)!important;
+}
+.phone .nav button{color:#C6D4CE!important;background:transparent!important;border:1px solid transparent!important}
+.phone .nav button .icon svg{stroke:#EFF7F2!important}
+.phone .nav button.active{
+ background:linear-gradient(155deg,#DFEABF,#C6DF86 70%,#A8D95E)!important;
+ color:var(--nexa-ink)!important;
+ border-color:rgba(243,255,230,.42)!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.51),0 6px 16px -10px rgba(0,4,6,.62)!important;
+}
+.phone .nav button.active .icon svg{stroke:var(--nexa-ink)!important}
+.phone .nav button.active::after{background:var(--nexa-ink)!important;opacity:.65!important}
+.phone .nav button:not(.active):hover{color:#FFF!important;background:rgba(255,255,255,.055)!important}
+/* Action buttons are either dark acrylic+white ink or sage+black ink. */
+.phone :is(.overview-period button.active,.segmented button.selected,.filters button.selected,.profile-buttons button[aria-pressed="true"]){
+ background:linear-gradient(155deg,rgba(37,95,68,.88),rgba(14,69,67,.93))!important;
+ border-color:rgba(222,243,222,.26)!important;
+ color:#F7FBF8!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.15)!important;
+}
+.phone .primarybtn{
+ background:linear-gradient(130deg,#DFEABF,#B3DA76 44%,#80BD47)!important;
+ border:1px solid rgba(245,255,235,.52)!important;
+ color:var(--nexa-ink)!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.42),0 11px 20px -13px rgba(0,8,10,.55)!important;
+}
+.phone .primarybtn svg{stroke:var(--nexa-ink)!important}
+.phone .orb-mini-btn.primary,.phone .review-actions button:not(.secondary){
+ color:#F5FBF5!important;
+ background:linear-gradient(160deg,rgba(27,103,76,.94),rgba(12,75,76,.92))!important;
+}
+.phone .shop{
+ background:linear-gradient(151deg,rgba(242,255,248,.035),transparent 45%),rgba(8,28,29,.57)!important;
+ border-color:rgba(222,243,233,.16)!important;
+}
+.phone .shop.selected{
+ background:linear-gradient(153deg,rgba(213,230,168,.10),transparent 65%),rgba(10,34,31,.71)!important;
+ border-color:rgba(213,230,168,.46)!important;
+}
+.phone .shop-mark{background:linear-gradient(140deg,#CADF98,#95BD70)!important}
+/* Preserve functional red/green/yellow for financial amounts; glyphs remain monochrome. */
+.phone .txn-amount,.phone .tag{filter:none!important}
+/* Avoid one decorative shader/canvas effect obscuring another. */
+.phone .finance-insight,.phone .integrations,.phone .day-detail,.phone .callout{
+ background:linear-gradient(155deg,rgba(237,253,243,.035),transparent 70%),rgba(10,28,29,.56)!important;
+ -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+ border-color:rgba(218,241,231,.14)!important;
+}
+.phone :is(.quick-board,.category-board,.nav button,.primarybtn,.shop){
+ transition:background-color .22s var(--nexa-motion),border-color .22s var(--nexa-motion),box-shadow .22s var(--nexa-motion),transform .22s var(--nexa-motion)!important;
+}
+@media(prefers-reduced-motion:reduce){
+ .phone :is(.quick-board,.category-board,.nav button,.primarybtn,.shop){transition:none!important}
+ .phone .ambient::before,.phone .ambient::after{animation:none!important}
+}
+@media(forced-colors:active){
+ .phone :is(.quick-board,.category-board,.nav button,.primarybtn,.shop){forced-color-adjust:auto!important}
+}
