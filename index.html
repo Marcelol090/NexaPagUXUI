@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0b1915">
   <meta name="description" content="Laboratório interativo do design NexaPag: Dark Matte Forest, Glassmorphism, Liquid Orb física e pigmentos de categorias.">
-  <title>NexaPag UX/UI · Visualize 9.17 · Controls Fidelity</title>
+  <title>NexaPag UX/UI · Visualize 9.18 · Global Geometry</title>
   <link rel="stylesheet" href="./src/styles.css">
   <link rel="stylesheet" href="./src/reference-fidelity.css">
   <link rel="stylesheet" href="./src/pigment-fidelity.css">
@@ -676,6 +676,8 @@ body>.studio>#workspaceStage>.workspace-inspector .inspector-scroll{
 
 </style>
   <link rel="stylesheet" href="./src/control-fidelity-917.css">
+  <link rel="stylesheet" href="./src/geometry-system-918.css">
+  <link rel="stylesheet" href="./src/workbench-material-918.css">
 </head>
 <body>
 
@@ -695,17 +697,17 @@ body>.studio>#workspaceStage>.workspace-inspector .inspector-scroll{
     </div>
     <div class="geo-hint" id="geoHint">Selecione um componente para ajustar sua geometria.</div>
     <div class="geo-controls">
-      <div class="geo-control"><label for="geo-radius">Arredondamento<output data-geo-out="radius">22 px</output></label><input type="range" id="geo-radius" data-geo-prop="radius" min="8" max="42" step="1" value="22"></div>
-      <div class="geo-control"><label for="geo-gap">Espaçamento · gap<output data-geo-out="gap">14 px</output></label><input type="range" id="geo-gap" data-geo-prop="gap" min="0" max="28" step="1" value="14"></div>
-      <div class="geo-control"><label for="geo-padding">Espaço interno<output data-geo-out="padding">18 px</output></label><input type="range" id="geo-padding" data-geo-prop="padding" min="4" max="30" step="1" value="18"></div>
-      <div class="geo-control"><label for="geo-border">Espessura da borda<output data-geo-out="border">1 px</output></label><input type="range" id="geo-border" data-geo-prop="border" min="0" max="3" step=".5" value="1"></div>
+      <div class="geo-control"><label for="geo-radius">Arredondamento<output data-geo-out="radius">22 px</output></label><input type="range" id="geo-radius" data-geo-prop="radius" min="8" max="42" step="0.25" value="22"></div>
+      <div class="geo-control"><label for="geo-gap">Espaçamento · gap<output data-geo-out="gap">14 px</output></label><input type="range" id="geo-gap" data-geo-prop="gap" min="0" max="28" step="0.25" value="14"></div>
+      <div class="geo-control"><label for="geo-padding">Espaço interno<output data-geo-out="padding">18 px</output></label><input type="range" id="geo-padding" data-geo-prop="padding" min="4" max="30" step="0.25" value="18"></div>
+      <div class="geo-control"><label for="geo-border">Espessura da borda<output data-geo-out="border">1 px</output></label><input type="range" id="geo-border" data-geo-prop="border" min="0" max="3" step="0.25" value="1"></div>
     </div>
     <details id="geoAdvanced" class="geo-advanced">
       <summary>Dimensões avançadas <span>+</span></summary>
-      <div class="geo-control"><label for="geo-height">Altura mínima<output data-geo-out="height">224 px</output></label><input type="range" id="geo-height" data-geo-prop="height" min="28" max="260" step="1" value="224"></div>
-      <div class="geo-control"><label for="geo-icon">Radius dos glyphs<output data-geo-out="icon">12 px</output></label><input type="range" id="geo-icon" data-geo-prop="icon" min="6" max="26" step="1" value="12"></div>
+      <div class="geo-control"><label for="geo-height">Altura mínima<output data-geo-out="height">224 px</output></label><input type="range" id="geo-height" data-geo-prop="height" min="28" max="260" step="0.5" value="224"></div>
+      <div class="geo-control"><label for="geo-icon">Radius dos glyphs<output data-geo-out="icon">12 px</output></label><input type="range" id="geo-icon" data-geo-prop="icon" min="6" max="26" step="0.25" value="12"></div>
     </details>
-    <div class="geo-actions"><button type="button" id="geoReset">Restaurar original</button><button type="button" id="geoCopy">Copiar CSS</button></div>
+    <div class="geo-actions"><button type="button" id="geoReset">Restaurar componente</button><button type="button" id="geoCopy">Copiar CSS</button></div>
     <output id="geoStatus" aria-live="polite"></output>
   </section>
   <section class="geo-specimen" aria-label="Indicador do material editado">
