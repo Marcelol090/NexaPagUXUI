@@ -21,8 +21,8 @@ export function paintStackedLiquid({ctx,w,center,r,entries,cumulative,xvals,surf
  ctx.save();ctx.beginPath();ctx.arc(center,center,r,0,Math.PI*2);ctx.clip();
  // Neutral optical chamber. It has no category pigment until the liquid begins.
  const chamber=ctx.createRadialGradient(w*.32,w*.15,w*.01,w*.56,w*.56,w*.7);
- chamber.addColorStop(0,'#5f827e');chamber.addColorStop(.31,'#2d5552');
- chamber.addColorStop(.75,'#142d2e');chamber.addColorStop(1,'#0b1a1e');
+ chamber.addColorStop(0,'#516b62');chamber.addColorStop(.31,'#2b4c43');
+ chamber.addColorStop(.75,'#152f31');chamber.addColorStop(1,'#091b22');
  ctx.fillStyle=chamber;ctx.fillRect(0,0,w,w);
  let low=()=>w;
  for(let k=0;k<L;k++){
@@ -31,13 +31,13 @@ export function paintStackedLiquid({ctx,w,center,r,entries,cumulative,xvals,surf
    // Pigment is a liquid body, not a rainbow overlay on the spherical glass.
    const y0=w*(1-cumulative[k]),y1=w*(1-cumulative[k+1]);
    const gradient=ctx.createLinearGradient(0,y1,0,y0);
-   gradient.addColorStop(0,lift(hex,.13));
-   gradient.addColorStop(.34,hex);
-   gradient.addColorStop(1,lift(hex,-.18));
+   gradient.addColorStop(0,lift(hex,.085));
+   gradient.addColorStop(.38,hex);
+   gradient.addColorStop(1,lift(hex,-.115));
    ctx.fillStyle=gradient;ctx.fillRect(0,0,w,w);
    // Localized lighting is modulated by this pigment, not by unrelated hues.
    const spot=ctx.createRadialGradient(w*.27,y1+(y0-y1)*.26,0,w*.27,y1+(y0-y1)*.26,w*.47);
-   spot.addColorStop(0,'rgba(253,255,251,.11)');spot.addColorStop(.52,'rgba(246,255,251,.038)');spot.addColorStop(1,'rgba(255,255,255,0)');
+   spot.addColorStop(0,'rgba(246,255,245,.08)');spot.addColorStop(.52,'rgba(242,255,248,.025)');spot.addColorStop(1,'rgba(255,255,255,0)');
    ctx.fillStyle=spot;ctx.fillRect(0,0,w,w);
    ctx.restore();
    low=up;
@@ -58,7 +58,7 @@ export function paintStackedLiquid({ctx,w,center,r,entries,cumulative,xvals,surf
      ctx.beginPath();ctx.moveTo(xvals[0],a(xvals[0]));
      for(let i=1;i<xvals.length;i++)ctx.lineTo(xvals[i],a(xvals[i]));
      for(let i=xvals.length-1;i>=0;i--)ctx.lineTo(xvals[i],b(xvals[i]));
-     ctx.closePath();ctx.fillStyle=mix(hiColor,loColor,t);ctx.globalAlpha=.82;ctx.fill();
+     ctx.closePath();ctx.fillStyle=mix(hiColor,loColor,t);ctx.globalAlpha=.64;ctx.fill();
    }
    ctx.globalAlpha=1;
    if(large){
@@ -69,17 +69,17 @@ export function paintStackedLiquid({ctx,w,center,r,entries,cumulative,xvals,surf
  // One real meniscus, at the top of the highest liquid layer.
  ctx.beginPath();xvals.forEach((x,i)=>i?ctx.lineTo(x,surfaceY(L-1,x)):ctx.moveTo(x,surfaceY(L-1,x)));
  ctx.lineWidth=Math.max(.85,w*(large?.0032:.0025));
- ctx.strokeStyle='rgba(244,255,248,.53)';ctx.stroke();
+ ctx.strokeStyle='rgba(231,249,236,.49)';ctx.stroke();
  // Refractive thickness belongs to the glass boundary, not to the layers.
  const rim=ctx.createRadialGradient(center,center,r*.64,center,center,r);
  rim.addColorStop(0,'rgba(255,255,255,0)');
  rim.addColorStop(.61,'rgba(3,14,18,.025)');
  rim.addColorStop(.89,'rgba(1,10,15,.20)');
- rim.addColorStop(1,'rgba(207,245,235,.25)');
+ rim.addColorStop(1,'rgba(220,242,222,.21)');
  ctx.fillStyle=rim;ctx.fillRect(0,0,w,w);
  // Subtle environmental caustics are confined to the curvature of the lens.
  if(large&&iridescence>.02){
-   ctx.save();ctx.globalAlpha=Math.min(.20,iridescence*.20);
+   ctx.save();ctx.globalAlpha=Math.min(.11,iridescence*.13);
    const edge=ctx.createLinearGradient(w*.15,0,w*.85,w);
    edge.addColorStop(0,'rgba(203,245,239,0)');edge.addColorStop(.24,'#c8f4ed');
    edge.addColorStop(.52,'#e4e9f1');edge.addColorStop(.78,'#c6efd9');edge.addColorStop(1,'rgba(204,237,226,0)');
