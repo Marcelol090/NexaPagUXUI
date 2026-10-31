@@ -33,7 +33,8 @@ test('Latest cascade, readable defaults, and working JS',()=>{
  assert.ok(js.includes('exportCSS'));
 });
 test('Mobile access and relevant accessibility labels',()=>{
- assert.match(html,/id="geoMobileToggle"/);
+ assert.doesNotMatch(html,/id="geoMobileToggle"/);
+ assert.ok(entry.includes("import './workspace-913.js'"));
  assert.match(html,/aria-controls="geometryHub"/);
  assert.match(css,/body\.geo-mobile-open \.rail\.left\.geometry-left/);
  assert.match(js,/aria-expanded/);
