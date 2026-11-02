@@ -84,8 +84,7 @@ test('Glass density affects the actual hero, metric and board, not just a slider
         const expected=.11+(Number(next)/100)*.56;
         const token=Number(phone.style.getPropertyValue('--live-glass-board'));
         const computed=getComputedStyle(board).backgroundColor;
-        const match=computed.match(/rgba?\\([^)]*,\\s*([\\d.]+)\\)$/);
-        const alpha=match?Number(match[1]):NaN;
+        const alpha=computed.startsWith('rgba(') ? Number(computed.slice(computed.lastIndexOf(',')+1).replace(')','').trim()) : NaN;
         return Number.isFinite(alpha)&&Math.abs(token-expected)<.005&&Math.abs(alpha-expected)<.035;
       },value,{timeout:6000});
     }else await page.waitForTimeout(60);
