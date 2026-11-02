@@ -1,17 +1,19 @@
-/* NexaPag 9.20 | Live motion controls, scoped to the real financial UI. */
+/* NexaPag 9.21 | Purpose-led motion. Retain original Workbench controls and legacy saved settings. */
 (function(){
  'use strict';
  const phone=document.getElementById('phone');
  const panel=document.getElementById('inspector-panel-motion');
  const content=document.getElementById('content');
  if(!phone||!panel||!content)return;
- const defaults=Object.freeze({duration:260,stagger:38,travel:10,lift:2,press:2,shadow:48,ambient:100,ease:'silk',auto:true});
- const ranges={duration:[100,620,10],stagger:[0,140,1],travel:[0,26,1],lift:[0,8,.5],press:[0,5,.5],shadow:[0,100,1],ambient:[40,180,5]};
+ const defaults=Object.freeze({duration:220,stagger:18,travel:6,lift:1,press:1.5,shadow:48,ambient:100,ease:'silk',auto:true});
+ const MAX_SEQUENCE_MS=500;
+ const MAX_STAGE_ITEMS=6;
+ const ranges={duration:[90,400,10],stagger:[0,50,1],travel:[0,12,1],lift:[0,4,.5],press:[0,3,.5],shadow:[0,100,1],ambient:[40,180,5]};
  const curves={silk:'cubic-bezier(.22,1,.36,1)',precise:'cubic-bezier(.2,.7,.2,1)',spring:'cubic-bezier(.16,1.35,.36,1)',standard:'cubic-bezier(.4,0,.2,1)'};
  const presets={
-  suave:{duration:210,stagger:25,travel:5,lift:1,press:1.5,shadow:37,ambient:135,ease:'silk'},
+  suave:{duration:160,stagger:12,travel:3,lift:.5,press:1,shadow:37,ambient:135,ease:'silk'},
   equilibrado:{...defaults},
-  editorial:{duration:380,stagger:65,travel:15,lift:3,press:2.5,shadow:63,ambient:80,ease:'spring'}
+  editorial:{duration:300,stagger:28,travel:8,lift:2,press:2,shadow:58,ambient:90,ease:'silk'}
  };
  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
  const normalize=(key,value)=>{
@@ -34,19 +36,20 @@
  studio.className='nm-studio';studio.id='nexaMotionStudio';
  studio.setAttribute('aria-label','Motion Studio configurável');
  studio.innerHTML=
- '<div class="nm-topline"><span>NEXAPAG / MOTION SYSTEM</span><small>9.20</small></div>'+
+ '<div class="nm-topline"><span>NEXAPAG / MOTION SYSTEM</span><small>9.21</small></div>'+
  '<div class="nm-titleline"><strong>Ritmo &amp; resposta</strong><span class="nm-live">● Live</span></div>'+
- '<p class="nm-description">Motion aplicado aos componentes reais. Sem deformar a tela, sem recriar os gráficos.</p>'+
+ '<p class="nm-description">Movimento para orientar: estados, seleção e foco. Gráficos e Liquid Glass preservados.</p>'+
  '<div class="nm-presetbar" role="group" aria-label="Presets de movimento"><button type="button" data-nm-preset="suave">Sutil</button><button type="button" data-nm-preset="equilibrado">Equilibrado</button><button type="button" data-nm-preset="editorial">Expressivo</button></div>'+
+ '<p class="nm-principle">Sem cascatas de transações, loops em cards ou animações que atrasem a leitura. Sequência máxima de 500 ms.</p>'+ 
  '<div class="nm-preview" aria-hidden="true"><div class="nm-preview-title"><span>Curva de movimento</span><b id="nmCurveName">Silk ease</b></div><div class="nm-motion-track"><i></i><i></i><i></i></div><div class="nm-time-axis"><span>0 ms</span><span id="nmTimeEnd">260 ms</span></div></div>'+
  '<details class="nm-group" open><summary>01 · Coreografia <small>Entrada, ritmo, easing</small></summary><div class="nm-inner">'+
- '<label class="nm-control"><span>Duração <output data-nm-output="duration"></output></span><input type="range" data-nm-key="duration" min="100" max="620" step="10"></label>'+
- '<label class="nm-control"><span>Intervalo entre cards <output data-nm-output="stagger"></output></span><input type="range" data-nm-key="stagger" min="0" max="140" step="1"></label>'+
- '<label class="nm-control"><span>Deslocamento vertical <output data-nm-output="travel"></output></span><input type="range" data-nm-key="travel" min="0" max="26" step="1"></label>'+
+ '<label class="nm-control"><span>Duração <output data-nm-output="duration"></output></span><input type="range" data-nm-key="duration" min="90" max="400" step="10"></label>'+
+ '<label class="nm-control"><span>Intervalo entre cards <output data-nm-output="stagger"></output></span><input type="range" data-nm-key="stagger" min="0" max="50" step="1"></label>'+
+ '<label class="nm-control"><span>Deslocamento vertical <output data-nm-output="travel"></output></span><input type="range" data-nm-key="travel" min="0" max="12" step="1"></label>'+
  '<label class="nm-select-control">Curva de easing<select data-nm-key="ease" id="nmEase"><option value="silk">Silk · saída suave</option><option value="precise">Precise · natural</option><option value="spring">Spring · resposta física</option><option value="standard">Standard · material</option></select></label></div></details>'+
  '<details class="nm-group" open><summary>02 · Interação e profundidade <small>Toque, sombra, ambiente</small></summary><div class="nm-inner">'+
- '<label class="nm-control"><span>Elevação ao apontar <output data-nm-output="lift"></output></span><input type="range" data-nm-key="lift" min="0" max="8" step="0.5"></label>'+
- '<label class="nm-control"><span>Compressão ao toque <output data-nm-output="press"></output></span><input type="range" data-nm-key="press" min="0" max="5" step="0.5"></label>'+
+ '<label class="nm-control"><span>Elevação ao apontar <output data-nm-output="lift"></output></span><input type="range" data-nm-key="lift" min="0" max="4" step="0.5"></label>'+
+ '<label class="nm-control"><span>Compressão ao toque <output data-nm-output="press"></output></span><input type="range" data-nm-key="press" min="0" max="3" step="0.5"></label>'+
  '<label class="nm-control"><span>Profundidade da sombra <output data-nm-output="shadow"></output></span><input type="range" data-nm-key="shadow" min="0" max="100" step="1"></label>'+
  '<p class="nm-assist">A sombra original permanece até mudar este controle. Restaurar reverte o acabamento.</p>'+
  '<label class="nm-control"><span>Tempo Silk Folds <output data-nm-output="ambient"></output></span><input type="range" data-nm-key="ambient" min="40" max="180" step="5"></label></div></details>'+
@@ -58,8 +61,13 @@
  const q=selector=>studio.querySelector(selector);
  const qa=selector=>Array.from(studio.querySelectorAll(selector));
  const fmt=(key,value)=>['duration','stagger'].includes(key)?value+' ms':['travel','lift'].includes(key)?value+' px':value+'%';
- const targets=()=>Array.from(content.querySelectorAll('.glass-site>.panel,.glass-site>.metric,.quick-board,.category-board,.transaction,.bankcard'))
-   .filter((el,i,all)=>all.indexOf(el)===i&&el.isConnected&&el.getClientRects().length>0).slice(0,12);
+ // Choreography follows information hierarchy, not every element in the feed.
+ // Never replay transactions, bank details, navigation or a live financial chart.
+ const targets=()=>Array.from(content.querySelectorAll(
+   '.glass-site>.panel.fiduciary-hero,.glass-site>.metric,.quick-board,.category-board,.glass-site>.panel:not(.fiduciary-hero)'
+ ))
+   .filter((el,i,all)=>all.indexOf(el)===i&&el.isConnected&&el.getClientRects().length>0)
+   .slice(0,MAX_STAGE_ITEMS);
  const inactive=()=>reduced.matches||phone.classList.contains('no-motion')||document.hidden||paused;
  const announce=message=>{q('#nmStatus').textContent=message};
  function stop(){
@@ -95,6 +103,7 @@
   q('#nmTimeEnd').textContent=state.duration+' ms';
   q('#nmCurveName').textContent={silk:'Silk ease',precise:'Precise',spring:'Spring',standard:'Standard'}[state.ease];
   studio.style.setProperty('--nm-preview-duration',state.duration+'ms');
+  studio.dataset.motionBudget='500';
   studio.style.setProperty('--nm-preview-delay',state.stagger+'ms');
   studio.style.setProperty('--nm-preview-ease',curves[state.ease]);
   const element=content.querySelector('.quick-board,.category-board')||phone.querySelector('.nav button');
@@ -112,12 +121,13 @@
   const items=targets();
   if(!items.length){announce('Abra uma aba com componentes.');return false}
   items.forEach((el,i)=>{
+   const delay=i*Math.min(state.stagger,Math.floor(Math.max(0,MAX_SEQUENCE_MS-state.duration)/Math.max(1,items.length-1)));
    animations.push(el.animate(
-    [{opacity:.65,translate:'0 '+state.travel+'px'},{opacity:1,translate:'0 0px'}],
-    {duration:state.duration,delay:i*state.stagger,easing:curves[state.ease],fill:'none'}
+    [{opacity:.86,translate:'0 '+state.travel+'px'},{opacity:1,translate:'0 0px'}],
+    {duration:state.duration,delay,easing:curves[state.ease],fill:'none'}
    ));
   });
-  announce('Prévia em '+items.length+' componentes · '+state.duration+'ms · '+state.ease);
+  announce('Prévia intencional em '+items.length+' superfícies · duração '+state.duration+'ms · conclusão até '+MAX_SEQUENCE_MS+'ms');
   return true;
  }
  qa('[data-nm-key]').forEach(input=>{
