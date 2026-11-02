@@ -90,9 +90,9 @@ test('Glass density affects the actual hero, metric and board, not just a slider
     }else await page.waitForTimeout(60);
   }
 
-  await change('filmRange', 12);
+  await change('filmRange', 48);
   const low = await measure();
-  await change('filmRange', 92);
+  await change('filmRange', 86);
   const high = await measure();
   console.log('GLASS DIAGNOSTIC', JSON.stringify(await page.evaluate(() => {
     const el=document.querySelector('#phone .fiduciary-hero'),phone=document.querySelector('#phone');
@@ -124,7 +124,7 @@ test('Glass density affects the actual hero, metric and board, not just a slider
       .not.toEqual(low[name].background);
   }
 
-  await change('blurRange', 4);
+  await change('blurRange', 12);
   const blurLow = await measure();
   await change('blurRange', 35);
   const blurHigh = await measure();
