@@ -24,22 +24,22 @@
   const diffusion=clamp(val('diffuseRange',20),4,55);
   const beam=pigment*light;
   return {
-   '--live-glass-panel':rgbaAlpha(.16+f*.76),
-   '--live-glass-hero':rgbaAlpha(.08+f*.79),
-   '--live-glass-metric':rgbaAlpha(.14+f*.76),
-   '--live-glass-board':rgbaAlpha(.11+f*.56),
-   '--live-glass-nav':rgbaAlpha(.62+f*.37),
+   '--live-glass-panel':rgbaAlpha(.44+f*.45),
+   '--live-glass-hero':rgbaAlpha(.47+f*.44),
+   '--live-glass-metric':rgbaAlpha(.43+f*.47),
+   '--live-glass-board':rgbaAlpha(.42+f*.46),
+   '--live-glass-nav':rgbaAlpha(.63+f*.34),
    '--live-glass-rim':rgbaAlpha(.08+rim*.22),
    '--live-glass-select-rim':rgbaAlpha(.29+rim*.29),
    '--live-glass-highlight':rgbaAlpha(.035+rim*.20),
    '--live-glass-mini-highlight':rgbaAlpha(.017+rim*.09),
-   '--live-glass-sheen':rgbaAlpha(.13+rim*.70),
+   '--live-glass-sheen':rgbaAlpha(.10+rim*.36),
    '--live-glass-blur':px(b),
    '--live-glass-board-blur':px(b*.43),
    '--live-glass-nav-blur':px(b*.70),
-   '--live-light-sage':rgbaAlpha(beam*(.60+.35*tint)),
-   '--live-light-sky':rgbaAlpha(beam*(.36+.35*tint)),
-   '--live-light-mist':rgbaAlpha(beam*(.35+.55*tint)),
+   '--live-light-sage':rgbaAlpha(beam*(.44+.20*tint)),
+   '--live-light-sky':rgbaAlpha(beam*(.27+.25*tint)),
+   '--live-light-mist':rgbaAlpha(beam*(.30+.28*tint)),
    '--live-light-diffusion':px(diffusion)
   };
  };
