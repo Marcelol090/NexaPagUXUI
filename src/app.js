@@ -1,4 +1,5 @@
 import { paintStackedLiquid } from './stacked-liquid.js';
+import { financialMood, financialFace } from './finance-expression-922.js';
 
 (()=>{
 const $=s=>document.querySelector(s);
@@ -36,12 +37,16 @@ const inkFor=(hex)=>{
 function quickBoards(){const actions=[{label:'Gastos',hint:'Analisar',icon:'spending',tone:'#0D6372',action:'spending'},{label:'Metas',hint:'Esta semana',icon:'target',tone:'#A8D95E',action:'goal'},{label:'Cartões',hint:'3 cartões',icon:'wallet',tone:'#5FA9D8',action:'cards'},{label:'Revisar',hint:'Pendências',icon:'receipt',tone:'#6FB81E',action:'review'}];return `<div class="quick-grid">${actions.map(a=>`<button class="quick-board" data-action="shortcut" data-value="${a.action}" style="--accent:${a.tone};--tone-rgb:${toRgb(a.tone)};--glyph-ink:${inkFor(a.tone)}" aria-label="${a.label}, ${a.hint}"><span class="quick-icon">${icon(a.icon)}</span><strong>${a.label}</strong><small>${a.hint}</small></button>`).join('')}</div>`}
 function home(){
  const currentMonth=state.period==='month';
- const net=currentMonth?'R$ 3.468,20':'R$ 270,00';
- const subtitle=currentMonth?'R$ 3.818,10 em compras · R$ 349,90 em estornos':'22,5% da meta semanal de R$ 1.200,00';
+ const net=currentMonth?money(3818.1-349.9):money(weeklySpend);
+ const mood=financialMood(currentMonth
+  ?{period:'month',income:1950,expenses:3818.1,refunds:349.9}
+  :{period:'week',spent:weeklySpend,budget:weeklyBudget});
+ const subtitle=currentMonth?'R$ 3.818,10 em compras · R$ 349,90 em estornos':
+  `${(weeklySpend/weeklyBudget*100).toFixed(1).replace('.',',')}% da meta semanal de ${money(weeklyBudget)}`;
  return `<div class="tab-title homepage-title"><div><div class="eyebrow">Seu panorama financeiro</div><div class="t">Bom dia<span class="title-punct">.</span></div></div><span class="home-date">31 out 2026</span></div>
-  <section class="panel hero glass-panel fiduciary-hero" aria-label="Visão financeira do período">
+  <section class="panel hero glass-panel fiduciary-hero" data-flow-mood="${mood.tone}" aria-label="Visão financeira do período">
    <div class="hero-head"><span class="label">${currentMonth?'Saídas líquidas':'Gastos da semana'}</span><span class="hero-period-badge">${icon('calendar')} ${currentMonth?'Outubro 2026':'Semana atual'}</span></div>
-   <div class="hero-value">${net}</div>
+   <div class="hero-value-line"><div class="hero-value">${net}</div>${financialFace(mood)}</div>
    <div class="hero-meta">${subtitle}</div>
    <div class="hero-graph-frame">${graph()}</div>
    <div class="hero-bottom"><span><i class="dot" style="background:var(--red)"></i>Saídas</span><span><i class="dot" style="background:var(--green)"></i>Entradas</span><span class="hero-caption">Fluxo demonstrativo</span></div>
