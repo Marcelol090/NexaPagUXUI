@@ -7,7 +7,7 @@
     "dev": "vite --host 0.0.0.0",
     "build": "npm run check:css && npm run test:geometry && npm run test:material && npm run test:motion && npm run check:impact && vite build && npm run check:bundle",
     "preview": "vite preview --host 0.0.0.0",
-    "check:syntax": "node --check src/app.js && node --check src/workbench.js && node --check src/main.js && node --check src/geometry-system-918.js && node --check src/material-engine-919.js && node --check src/workspace-913.js && node --check src/motion-studio-920.js",
+    "check:syntax": "node --check src/app.js && node --check src/workbench.js && node --check src/main.js && node --check src/geometry-system-918.js && node --check src/material-engine-919.js && node --check src/workspace-913.js && node --check src/motion-studio-920.js && node --check src/finance-expression-922.js",
     "test:design": "node --test tests/*.test.mjs",
     "test:geometry": "node --test tests/geometry-system-918.test.mjs tests/geometry-system-918.runtime.test.mjs tests/workbench-material-918.test.mjs",
     "test:material": "node --test tests/material-engine-919.test.mjs",
