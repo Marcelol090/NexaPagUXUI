@@ -1,9 +1,10 @@
-# NexaPag UX/UI Live Design Lab 9.21
+# NexaPag UX/UI Live Design Lab 9.22
 
 Prévia interativa independente do aplicativo Android. Preserva o Dark Matte Forest, glassmorphism, pigmentos, heatmap e LiquidOrb com física amortecida.
 
 ## Design system e Graphify
 
+- **Visualize 9.22:** [Forest Acrylic, tabs editoriais e expressões financeiras](docs/design-system/FOREST-ACRYLIC-922.md). Shader atrás de acrílico matte e sinal vermelho/verde/âmbar no hero ligado a dados demonstrativos.
 - **Motion 9.21:** [contrato de direção de arte e movimento](docs/design-system/MOTION-ART-DIRECTION-921.md). Workbench conserva os controles; a coreografia de entrada usa até 6 superfícies por no máximo 500ms.
 - **Graphify:** [guia de autorização e indexação](docs/graphify/README.md). O conector não possui workspace selecionado nesta sessão; não há monitoramento Graphify ativo.
 - **Mapa local sempre no CI:** `npm run check:impact` gera `test-results/design-impact.json`, com origem declarada, imports e contratos de mudança, sem fingir que é um grafo indexado no Graphify.

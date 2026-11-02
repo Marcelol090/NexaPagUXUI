@@ -81,7 +81,7 @@ test('Glass density affects the actual hero, metric and board, not just a slider
         const board=document.querySelector('#phone .quick-board');
         const phone=document.querySelector('#phone');
         if(!board||!phone)return false;
-        const expected=.11+(Number(next)/100)*.56;
+        const expected=.42+(Number(next)/100)*.46;
         const token=Number(phone.style.getPropertyValue('--live-glass-board'));
         const computed=getComputedStyle(board).backgroundColor;
         const alpha=computed.startsWith('rgba(') ? Number(computed.slice(computed.lastIndexOf(',')+1).replace(')','').trim()) : NaN;

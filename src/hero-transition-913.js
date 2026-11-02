@@ -21,7 +21,7 @@ function settle(hero){
 function replay(){
  const hero=mounted;
  if(!hero||!hero.isConnected||reduced.matches||document.hidden||document.getElementById('phone')?.classList.contains('no-motion'))return false;
- if(!hero.querySelector('.hero-head')?.textContent.includes('Saídas líquidas'))return false;
+ if(!hero.dataset.flowMood)return false;
  cancelTimers();settle(hero);
  if(!hero.querySelector('.liquid-intro-light')){
   const glow=document.createElement('div');
@@ -38,11 +38,11 @@ function replay(){
    if(!hero.isConnected)return;
    hero.classList.add('intro-return');
    hero.classList.remove('intro-active');
-  },2200);
+  },1120);
   cleanupTimer=window.setTimeout(()=>{
    if(!hero.isConnected)return;
    settle(hero);
-  },2550);
+  },1480);
  });
  return true;
 }
@@ -52,7 +52,7 @@ function refresh(){
  if(hero===mounted)return;
  cancelTimers();settle(mounted);mounted=hero;
  if(!hero){homeVisited=false;return}
- if(!hero.querySelector('.hero-head')?.textContent.includes('Saídas líquidas'))return;
+ if(!hero.dataset.flowMood)return;
  if(!hero.querySelector('.liquid-replay')){
   const button=document.createElement('button');
   button.type='button';button.className='liquid-replay';

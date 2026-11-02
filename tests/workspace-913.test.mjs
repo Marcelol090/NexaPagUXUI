@@ -44,8 +44,8 @@ test('liquid-hero intro is finite, respects reduced motion and restores analytic
  assert.match(motion,/prefers-reduced-motion: reduce/);
  assert.match(motion,/if\(!homeVisited && !reduced.matches\)/);
  assert.match(motion,/setTimeout\(\(\)=>\{/);
- assert.match(motion,/2200/);
- assert.match(motion,/2550/);
+ assert.match(motion,/1120/);
+ assert.match(motion,/1480/);
  assert.match(motion,/hero\.classList\.add\('intro-return'\)/);
  assert.match(motion,/function settle\(hero\)/);
  assert.match(motion,/MutationObserver\(refresh\)/);
@@ -54,8 +54,9 @@ test('liquid-hero intro is finite, respects reduced motion and restores analytic
  assert.doesNotMatch(motion,/setInterval/);
 });
 test('finance data, charts and nav remain in the existing application',()=>{
- for(const label of ['Saídas líquidas','R$ 3.468,20','R$ 3.818,10','R$ 349,90','R$ 270,00'])
+ for(const label of ['Saídas líquidas','R$ 3.818,10','R$ 349,90','R$ 270,00'])
   assert.ok(original.includes(label),label);
+ assert.match(original,/money\(3818\.1-349\.9\)/);
  assert.ok(original.includes("function graph("));
  assert.ok(original.includes("function nav()"));
  for(const tab of ["'Início'","'Gastos'","'Anúncios'","'Cartões'","'Revisar'"])
