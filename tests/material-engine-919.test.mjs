@@ -85,7 +85,8 @@ test('rim and underlying illumination have independent, visible parameters',()=>
  s.set('lightRange',0);
  assert.equal(Number(s.vars.get('--live-light-sage')),0);
  s.set('lightRange',100);
- assert.ok(Number(s.vars.get('--live-light-sage'))>.4);
+ const restrained=Number(s.vars.get('--live-light-sage'));
+ assert.ok(restrained>.30 && restrained<.45,'ambient light must remain adjustable but not wash the acrylic');
 });
 test('real readback and one-click audit compare rendered styles, restore input',()=>{
  assert.match(js,/getComputedStyle\(el\)/);
