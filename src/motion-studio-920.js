@@ -103,7 +103,6 @@
   q('#nmTimeEnd').textContent=state.duration+' ms';
   q('#nmCurveName').textContent={silk:'Silk ease',precise:'Precise',spring:'Spring',standard:'Standard'}[state.ease];
   studio.style.setProperty('--nm-preview-duration',state.duration+'ms');
-  studio.dataset.motionBudget='500';
   studio.style.setProperty('--nm-preview-delay',state.stagger+'ms');
   studio.style.setProperty('--nm-preview-ease',curves[state.ease]);
   const element=content.querySelector('.quick-board,.category-board')||phone.querySelector('.nav button');
