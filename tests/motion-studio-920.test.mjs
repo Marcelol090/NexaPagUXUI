@@ -8,7 +8,7 @@ const css=read('src/motion-studio-920.css');
 const entry=read('src/main.js');
 const pkg=JSON.parse(read('package.json'));
 
-function mount({reduced=false}={}){
+function mount({reduced=false,count=1}={}){
  const variables=new Map(),attributes=new Set(),events=new Map();
  class FakeElement{
   constructor(){this.isConnected=true;this.cancelled=0}
@@ -18,7 +18,8 @@ function mount({reduced=false}={}){
    return this.animation;
   }
  }
- const sample=new FakeElement();
+ const samples=Array.from({length:count},()=>new FakeElement());
+ const sample=samples[0];
  const phone={
   style:{setProperty:(key,value)=>variables.set(key,value)},
   dataset:{},classList:{contains:()=>false},
@@ -44,7 +45,7 @@ function mount({reduced=false}={}){
     selector==='[data-nm-output]'?outputs:selector==='[data-nm-preset]'?presets:[]
  };
  const panel={querySelector:()=>null,insertBefore(){}};
- const content={querySelector:()=>sample,querySelectorAll:()=>[sample]};
+ const content={querySelector:()=>sample,querySelectorAll:()=>samples};
  const document={
   createElement:()=>studio,
   getElementById:id=>id==='phone'?phone:id==='inspector-panel-motion'?panel:id==='content'?content:null,
@@ -65,7 +66,7 @@ function mount({reduced=false}={}){
   if(input.type==='checkbox')input.checked=value;else input.value=String(value);
   events.get(key)();
  };
- return {api:context.window.NexaPagMotionStudio,variables,attributes,buttons,controls,sample,set,watcher};
+ return {api:context.window.NexaPagMotionStudio,variables,attributes,buttons,controls,sample,samples,set,watcher};
 }
 test('Vite loads motion stylesheet and script AFTER shared Material Engine 9.19',()=>{
  assert.ok(entry.indexOf("import './motion-studio-920.css';")>entry.indexOf("import './material-engine-919.css';"));
@@ -75,9 +76,9 @@ test('Vite loads motion stylesheet and script AFTER shared Material Engine 9.19'
 });
 test('exact motion variables update in original phone, without scaling or width changes',()=>{
  const {api,variables}=mount();
- assert.equal(variables.get('--nm-duration'),'260ms');
- assert.equal(api.apply('duration',410),true);
- assert.equal(variables.get('--nm-duration'),'410ms');
+ assert.equal(variables.get('--nm-duration'),'220ms');
+ assert.equal(api.apply('duration',390),true);
+ assert.equal(variables.get('--nm-duration'),'390ms');
  assert.equal(api.apply('lift',3.5),true);
  assert.equal(variables.get('--nm-lift'),'3.5px');
  assert.equal(api.apply('press',3),true);
@@ -106,6 +107,27 @@ test('finite choreography uses real component, correct easing and timing',()=>{
  assert.equal(sample.animation.frames[1].opacity,1);
  api.stop();
  assert.equal(sample.cancelled,1);
+});
+test('choreography is limited to six surfaces and completes within 500ms',()=>{
+ const {api,samples}=mount({count:12});
+ api.apply('duration',400);
+ api.apply('stagger',50);
+ assert.equal(api.inspect().targets,6);
+ assert.equal(api.preview(),true);
+ assert.ok(samples.slice(0,6).every(el=>!!el.animation));
+ assert.ok(samples.slice(6).every(el=>!el.animation));
+ const finish=Math.max(...samples.slice(0,6).map(el=>el.animation.options.duration+el.animation.options.delay));
+ assert.ok(finish<=500,'Actual choreography budget exceeded: '+finish);
+ assert.ok(samples[0].animation.frames[0].opacity>=.85);
+});
+test('stored control ranges remain inspectable without allowing oversized gestures',()=>{
+ const {api}=mount();
+ api.apply('travel',90);
+ api.apply('duration',600);
+ api.apply('stagger',140);
+ assert.equal(api.inspect().values.travel,12);
+ assert.equal(api.inspect().values.duration,400);
+ assert.equal(api.inspect().values.stagger,50);
 });
 test('system reduced motion bypasses choreography',()=>{
  const {api}=mount({reduced:true});

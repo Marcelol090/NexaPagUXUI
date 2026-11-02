@@ -75,12 +75,24 @@ test('Glass density affects the actual hero, metric and board, not just a slider
       input.dispatchEvent(new Event('input', { bubbles: true }));
       input.dispatchEvent(new Event('change', { bubbles: true }));
     }, value);
-    await page.waitForTimeout(60);
+    // Wait for computed CSS on the REAL board, not merely for the slider or token.
+    if(id==='filmRange'){
+      await page.waitForFunction(next=>{
+        const board=document.querySelector('#phone .quick-board');
+        const phone=document.querySelector('#phone');
+        if(!board||!phone)return false;
+        const expected=.11+(Number(next)/100)*.56;
+        const token=Number(phone.style.getPropertyValue('--live-glass-board'));
+        const computed=getComputedStyle(board).backgroundColor;
+        const alpha=computed.startsWith('rgba(') ? Number(computed.slice(computed.lastIndexOf(',')+1).replace(')','').trim()) : NaN;
+        return Number.isFinite(alpha)&&Math.abs(token-expected)<.005&&Math.abs(alpha-expected)<.035;
+      },value,{timeout:6000});
+    }else await page.waitForTimeout(60);
   }
 
-  await change('filmRange', 12);
+  await change('filmRange', 48);
   const low = await measure();
-  await change('filmRange', 92);
+  await change('filmRange', 86);
   const high = await measure();
   console.log('GLASS DIAGNOSTIC', JSON.stringify(await page.evaluate(() => {
     const el=document.querySelector('#phone .fiduciary-hero'),phone=document.querySelector('#phone');
@@ -112,7 +124,7 @@ test('Glass density affects the actual hero, metric and board, not just a slider
       .not.toEqual(low[name].background);
   }
 
-  await change('blurRange', 4);
+  await change('blurRange', 12);
   const blurLow = await measure();
   await change('blurRange', 35);
   const blurHigh = await measure();

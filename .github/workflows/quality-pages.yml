@@ -36,6 +36,8 @@ jobs:
         run: npm run check:css
       - name: Run design and component regression tests
         run: npm run test:design
+      - name: Map design dependencies and validate motion contracts
+        run: npm run check:impact
       - name: Build production preview
         run: npm run build
       - name: Install Playwright Chromium
@@ -50,6 +52,7 @@ jobs:
           path: |
             test-results/
             playwright-report/
+            test-results/design-impact.json
           if-no-files-found: ignore
           retention-days: 14
       - name: Configure GitHub Pages

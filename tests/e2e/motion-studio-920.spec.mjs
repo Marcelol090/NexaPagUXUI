@@ -8,22 +8,22 @@ test('Motion Studio controls the real cards and respects rigid desktop geometry'
  await page.locator('#inspector-tab-motion').click();
  await expect(page.locator('#nexaMotionStudio')).toBeVisible();
  await page.locator('[data-nm-key="duration"]').evaluate(input=>{
-  input.value='430';input.dispatchEvent(new Event('input',{bubbles:true}));
+  input.value='390';input.dispatchEvent(new Event('input',{bubbles:true}));
  });
- await expect(page.locator('[data-nm-output="duration"]')).toHaveText('430 ms');
- expect(await page.locator('#phone').evaluate(el=>el.style.getPropertyValue('--nm-duration'))).toBe('430ms');
+ await expect(page.locator('[data-nm-output="duration"]')).toHaveText('390 ms');
+ expect(await page.locator('#phone').evaluate(el=>el.style.getPropertyValue('--nm-duration'))).toBe('390ms');
  await page.locator('[data-nm-key="shadow"]').evaluate(input=>{
   input.value='75';input.dispatchEvent(new Event('input',{bubbles:true}));
  });
  await expect(page.locator('#phone')).toHaveAttribute('data-nm-shadow','');
  await page.locator('#nmReplay').click();
- await expect(page.locator('#nmStatus')).toContainText('componentes');
+ await expect(page.locator('#nmStatus')).toContainText('superfícies');
  const after=await page.locator('#phone').boundingBox();
  expect(Math.abs(before.width-after.width)).toBeLessThan(1);
  expect(Math.abs(before.height-after.height)).toBeLessThan(1);
  await page.locator('#nmReset').click();
  await expect(page.locator('#phone')).not.toHaveAttribute('data-nm-shadow');
- await expect(page.locator('[data-nm-output="duration"]')).toHaveText('260 ms');
+ await expect(page.locator('[data-nm-output="duration"]')).toHaveText('220 ms');
 });
 
 test('320px device retains accessible Motion Workbench controls',async({page})=>{
@@ -36,7 +36,7 @@ test('320px device retains accessible Motion Workbench controls',async({page})=>
  await expect(page.locator('#nexaMotionStudio')).toBeVisible();
  await expect(page.locator('#nmReplay')).toBeVisible();
  await page.locator('[data-nm-preset="suave"]').click();
- await expect(page.locator('[data-nm-output="duration"]')).toHaveText('210 ms');
+ await expect(page.locator('[data-nm-output="duration"]')).toHaveText('160 ms');
  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-window.innerWidth);
  expect(overflow).toBeLessThanOrEqual(1);
 });
@@ -49,5 +49,5 @@ test('prefers-reduced-motion blocks playback but keeps the design adjustable',as
  await expect(page.locator('#nmStatus')).toContainText('reduzido');
  expect(await page.evaluate(()=>window.NexaPagMotionStudio.inspect().enabled)).toBe(false);
  await page.locator('[data-nm-preset="editorial"]').click();
- await expect(page.locator('[data-nm-output="duration"]')).toHaveText('380 ms');
+ await expect(page.locator('[data-nm-output="duration"]')).toHaveText('300 ms');
 });
