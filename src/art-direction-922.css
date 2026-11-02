@@ -1,0 +1,185 @@
+/* NexaPag 9.22 | Art direction: Forest is atmosphere; acrylic is foreground.
+   The painterly field must not bleach the information-bearing surfaces.
+   One matte material, category pigment limited to the category source. */
+
+/* Financial color is local to the signal, never a permanent global red shader. */
+#phone .fiduciary-hero[data-flow-mood="negative"] {
+  --flow-ink:#f28b91;--flow-glow:rgba(219,91,108,.41);--flow-glow-sub:rgba(157,48,72,.16);
+}
+#phone .fiduciary-hero[data-flow-mood="positive"] {
+  --flow-ink:#89dfb0;--flow-glow:rgba(81,193,127,.39);--flow-glow-sub:rgba(37,120,95,.16);
+}
+#phone .fiduciary-hero[data-flow-mood="warning"] {
+  --flow-ink:#eac883;--flow-glow:rgba(208,168,76,.34);--flow-glow-sub:rgba(137,92,46,.14);
+}
+#phone .fiduciary-hero[data-flow-mood="neutral"] {
+  --flow-ink:#c6d7cc;--flow-glow:rgba(154,176,161,.24);--flow-glow-sub:rgba(52,79,73,.12);
+}
+
+/* The original ambient shader stays visible in the margins, beneath a real matte lens. */
+#phone[data-live-glass]:not(.no-optics) .glass-site > .panel:not(.orb-dialog):not(.orb-specimen) {
+  background:linear-gradient(156deg,rgba(229,250,234,.037),transparent 38%,rgba(2,9,14,.095)),
+    rgba(9,23,24,var(--live-glass-panel,.78))!important;
+  -webkit-backdrop-filter:blur(var(--live-glass-blur,23px)) saturate(.76) brightness(.85)!important;
+  backdrop-filter:blur(var(--live-glass-blur,23px)) saturate(.76) brightness(.85)!important;
+  border-color:rgba(203,231,215,var(--live-glass-rim,.18))!important;
+  box-shadow:0 17px 34px -21px rgba(0,6,10,.76),inset 0 1px rgba(245,255,248,.068)!important;
+}
+#phone[data-live-glass]:not(.no-optics) .glass-site > .panel.fiduciary-hero {
+  background:linear-gradient(151deg,rgba(231,249,237,.044),transparent 36%,rgba(5,12,17,.13)),
+    rgba(8,23,27,var(--live-glass-hero,.81))!important;
+  border-color:rgba(227,245,234,var(--live-glass-rim,.18))!important;
+}
+#phone[data-live-glass]:not(.no-optics) .glass-site[data-optic="metric"] > .metric {
+  background:linear-gradient(153deg,rgba(232,252,240,.045),transparent 60%),
+    rgba(9,27,26,var(--live-glass-metric,.81))!important;
+  -webkit-backdrop-filter:blur(var(--live-glass-blur,23px)) saturate(.76) brightness(.85)!important;
+  backdrop-filter:blur(var(--live-glass-blur,23px)) saturate(.76) brightness(.85)!important;
+}
+#phone[data-live-glass]:not(.no-optics) :is(.quick-board,.category-board,.shop,.transaction,.finance-insight,.review-item,.integrations,.callout,.day-detail,.category-detail) {
+  background:linear-gradient(153deg,rgba(232,251,238,.029),transparent 49%),
+    rgba(11,27,27,var(--live-glass-board,.77))!important;
+  -webkit-backdrop-filter:blur(var(--live-glass-board-blur,10px)) saturate(.80) brightness(.90)!important;
+  backdrop-filter:blur(var(--live-glass-board-blur,10px)) saturate(.80) brightness(.90)!important;
+  border-color:rgba(208,237,222,var(--live-glass-rim,.18))!important;
+}
+/* Each category gets a single localized pigment on the glass well, not an entire second shader. */
+#phone[data-live-glass]:not(.no-optics) :is(.quick-board,.category-board) {
+  background:radial-gradient(ellipse 78% 55% at 0% 0%,rgba(var(--tone-rgb),.13),transparent 88%),
+    linear-gradient(153deg,rgba(232,251,238,.035),transparent 49%),
+    rgba(10,25,27,var(--live-glass-board,.77))!important;
+  border-color:rgba(var(--tone-rgb),.26)!important;
+}
+#phone[data-live-glass]:not(.no-optics) .category-board.selected{
+  background:radial-gradient(ellipse 84% 69% at 0% 0%,rgba(var(--tone-rgb),.19),transparent 84%),
+    rgba(10,25,27,var(--live-glass-board,.77))!important;
+  border-color:rgba(var(--tone-rgb),.48)!important;
+}
+#phone[data-live-glass].no-shader:not(.no-optics) .glass-site > .panel.fiduciary-hero{
+  background:rgba(9,24,25,var(--live-glass-hero,.81))!important;
+}
+
+/* Editorial tabs: one pale selected lens, neutral inactive glyphs, no nested gradient prizes. */
+#phone .nav{
+  display:flex!important;align-items:stretch;gap:4px!important;
+  background:rgba(8,24,23,var(--live-glass-nav,.92))!important;
+  border-color:rgba(210,231,219,.16)!important;
+  box-shadow:0 12px 27px -17px rgba(0,3,6,.87),inset 0 1px rgba(239,251,240,.06)!important;
+  -webkit-backdrop-filter:blur(var(--live-glass-nav-blur,15px)) saturate(.79)!important;
+  backdrop-filter:blur(var(--live-glass-nav-blur,15px)) saturate(.79)!important;
+}
+#phone .nav button{
+  flex:1 1 0;min-width:0;min-height:48px;
+  background:transparent!important;box-shadow:none!important;border-color:transparent!important;
+  color:#b4cbc0!important;gap:0!important;padding:6px 3px;
+  transition:flex-grow var(--nm-duration,220ms) cubic-bezier(.22,1,.36,1),
+    background-color 160ms ease, color 160ms ease!important;
+}
+#phone .nav button .icon svg{stroke:#c8ddd0!important;width:19px;height:19px;stroke-width:2.05!important;transform:none!important}
+#phone .nav button:not(.active) span:not(.icon){display:none}
+#phone .nav button.active{
+  flex:1.88 1 0;flex-direction:row;gap:6px!important;padding:6px 8px;
+  background:#e4eee6!important;color:#19362a!important;
+  border-color:rgba(245,255,245,.64)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.73)!important;
+}
+#phone .nav button.active .icon svg{stroke:#19362a!important;transform:none!important}
+#phone .nav button.active > span:not(.icon){font-size:10px;letter-spacing:-.01em;font-weight:760;white-space:nowrap}
+#phone .nav button.active::after{display:none!important}
+#phone .nav button:focus-visible{outline:2px solid #d5ebc7;outline-offset:2px}
+
+/* Secondary tabs look editorial, not like a line of promotional CTAs. */
+#phone :is(.overview-period,.segmented,.filters){
+  border-radius:12px;
+  background:rgba(7,25,24,.37)!important;
+  border:1px solid rgba(209,232,217,.10)!important;
+  padding:3px!important;gap:3px;
+  box-shadow:none!important;
+}
+#phone .filters{overflow-x:auto}
+#phone :is(.overview-period,.segmented,.filters) button{
+  position:relative;
+  background:transparent!important;
+  border-color:transparent!important;
+  color:#a6c0b3!important;
+  box-shadow:none!important;
+  transition:color 160ms ease,background-color 160ms ease!important;
+}
+#phone :is(.overview-period button.active,.segmented button.selected,.filters button.selected){
+  color:#e7f3eb!important;background:rgba(229,246,232,.075)!important;
+  border-color:transparent!important;box-shadow:none!important;
+}
+#phone :is(.overview-period button.active,.segmented button.selected,.filters button.selected)::after{
+  content:"";position:absolute;bottom:1px;left:21%;width:58%;height:2px;
+  border-radius:999px;background:#c7dbc9;
+}
+.workspace-inspector .inspector-tab{
+  background:transparent!important;border-color:transparent!important;
+  border-radius:7px!important;box-shadow:none!important;color:#a6beb2!important;
+  transition:color 150ms ease,background-color 150ms ease!important;
+}
+.workspace-inspector .inspector-tab[aria-selected="true"]{
+  background:rgba(227,245,229,.085)!important;color:#e6f3e7!important;
+  border-color:transparent!important;box-shadow:inset 0 -2px #c7ddc9!important;
+}
+
+/* The expression follows the financial balance. It is a vector signal, not a decoration loop. */
+#phone .fiduciary-hero .hero-value-line{
+  display:flex;align-items:center;justify-content:space-between;gap:9px;
+  position:relative;z-index:3;min-width:0;margin-top:13px;
+}
+#phone .fiduciary-hero .hero-value-line .hero-value{
+  font-variant-numeric:tabular-nums;margin:0 0 6px;min-width:0;
+  font-size:clamp(24px,7vw,36px);letter-spacing:-.047em;
+}
+#phone .fiduciary-hero .flow-expression{
+  display:grid;justify-items:center;align-items:center;gap:1px;
+  width:95px;flex:0 0 95px;margin-top:0;color:var(--flow-ink);
+}
+#phone .fiduciary-hero .flow-expression-icon{
+  display:block;width:35px;height:35px;stroke:currentColor;filter:none;
+}
+#phone .fiduciary-hero .flow-expression-copy{
+  font-size:9px;line-height:1.25;font-weight:690;text-align:center;
+  max-width:98px;min-height:22px;color:var(--flow-ink);
+}
+#phone .fiduciary-hero .hero-meta{margin-top:4px;position:relative;z-index:3}
+
+/* Existing liquid light gets its true sign from the current result. */
+#phone .fiduciary-hero .liquid-intro-light::before{
+  background:radial-gradient(ellipse at center,var(--flow-glow),var(--flow-glow-sub) 52%,transparent 76%)!important;
+}
+#phone .fiduciary-hero .liquid-intro-light::after{
+  background:radial-gradient(ellipse at center,var(--flow-glow-sub),transparent 76%)!important;
+}
+#phone .fiduciary-hero.intro-active .liquid-intro-light,
+#phone .fiduciary-hero.intro-active .liquid-intro-light::before,
+#phone .fiduciary-hero.intro-active .liquid-intro-light::after{
+  animation-duration:1.45s!important;
+}
+#phone .fiduciary-hero.intro-active .hero-graph-frame{opacity:.26!important;transform:translateY(2px)}
+#phone .fiduciary-hero.intro-active .flow-expression-icon{
+  animation:nexa-financial-face-in 620ms cubic-bezier(.2,.8,.2,1) 1 both;
+}
+@keyframes nexa-financial-face-in{
+  from{opacity:.48;transform:translateY(3px) scale(.92)}
+  to{opacity:1;transform:none}
+}
+@media(max-width:350px){
+  #phone .fiduciary-hero .flow-expression{width:78px;flex-basis:78px}
+  #phone .fiduciary-hero .flow-expression-copy{font-size:8px;max-width:78px}
+  #phone .fiduciary-hero .hero-value-line .hero-value{font-size:25px}
+  #phone .nav button.active{flex-grow:1.72;padding-inline:5px}
+}
+@media(prefers-reduced-motion:reduce){
+  #phone .fiduciary-hero.intro-active .flow-expression-icon{animation:none!important}
+  #phone .fiduciary-hero .hero-graph-frame{transition:none!important}
+  #phone .nav button,.workspace-inspector .inspector-tab{transition:none!important}
+}
+@media(prefers-reduced-transparency:reduce),(forced-colors:active){
+  #phone[data-live-glass]:not(.no-optics) :is(.glass-site > .panel,.glass-site > .metric,.quick-board,.category-board){
+    -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+    background:#102621!important;
+  }
+  #phone .nav{background:#0a211c!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+}
