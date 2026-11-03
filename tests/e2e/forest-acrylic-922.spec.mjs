@@ -23,7 +23,7 @@ test('9.22 expression follows monthly loss and weekly budget, including user edi
  expect(overflowing).toBeLessThanOrEqual(2);
 });
 
-test('9.22 matte separates acrylic from active Forest shader and keeps navigation quiet',async({page})=>{
+test('9.37 matte glass retains Forest and five equal labeled tabs',async({page})=>{
  await page.setViewportSize({width:390,height:844});
  await page.goto('/');
  const state=await page.evaluate(()=>{
@@ -37,16 +37,23 @@ test('9.22 matte separates acrylic from active Forest shader and keeps navigatio
   const ambient=getComputedStyle(phone.querySelector('.ambient'),'::before');
   return {hasGlass:phone.hasAttribute('data-live-glass'),shader:!phone.classList.contains('no-shader'),
     materialAlpha:css.backgroundColor,blur:css.backdropFilter||css.webkitBackdropFilter,
-    navDisplay:getComputedStyle(nav).display,navActiveColor:getComputedStyle(active).backgroundColor,
-    inactiveLabel:getComputedStyle(inactive.querySelector('span:not(.icon)')).display,
+    navDisplay:getComputedStyle(nav).display,
+    navColumns:getComputedStyle(nav).gridTemplateColumns,
+    navActiveBackground:getComputedStyle(active).backgroundImage,
+    labels:[...nav.querySelectorAll('button span:not(.icon)')].map(label=>getComputedStyle(label).display),
+    widths:[...nav.querySelectorAll('button')].map(button=>button.getBoundingClientRect().width),
     faceColor:face.color,ambientDisplay:ambient.display,navCount:nav.children.length};
  });
  expect(state.hasGlass).toBe(true);
  expect(state.shader).toBe(true);
  expect(state.blur).toContain('blur(');
  expect(state.materialAlpha).toMatch(/rgba/);
- expect(state.navDisplay).toBe('flex');
- expect(state.inactiveLabel).toBe('none');
+ expect(state.navDisplay).toBe('grid');
+ expect(state.navColumns.trim().split(/\\s+/)).toHaveLength(5);
+ expect(state.labels).toHaveLength(5);
+ expect(state.labels.every(display=>display!=='none')).toBe(true);
+ expect(Math.max(...state.widths)-Math.min(...state.widths)).toBeLessThanOrEqual(1);
+ expect(state.navActiveBackground).toContain('gradient');
  expect(state.navCount).toBe(5);
  expect(state.faceColor).toBe('rgb(242, 139, 145)');
  expect(state.ambientDisplay).not.toBe('none');
