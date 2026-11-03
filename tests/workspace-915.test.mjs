@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 const get=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
-const html=get('index.html'),css=get('src/workspace-915.css'),js=get('src/workspace-915.js'),main=get('src/main.js');
+const html=get('lab.html'),css=get('src/workspace-915.css'),js=get('src/workspace-915.js'),main=get('src/main.js');
 const ui=get('src/workspace-913.js');
 
 test('Visualize 9.15 loads only final desktop geometry layer, no obsolete 9.14 cascade',()=>{
