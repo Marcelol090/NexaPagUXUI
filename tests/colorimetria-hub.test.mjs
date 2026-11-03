@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 const read = path => readFileSync(new URL('../' + path, import.meta.url), 'utf8');
 const hub = read('public/colorimetria.html');
-const app = read('index.html');
+const app = read('lab.html');
 const study = read('materials.html');
 
 test('colorimetria hub is self-contained and linked from all design workspaces', () => {

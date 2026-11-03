@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 const at=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
-const html=at('index.html'),app=at('src/app.js'),css=at('src/color-discipline.css'),material=at('materials.html'),js=at('src/materials.js'),vite=at('vite.config.js');
+const html=at('lab.html'),app=at('src/app.js'),css=at('src/color-discipline.css'),material=at('materials.html'),js=at('src/materials.js'),vite=at('vite.config.js');
 test('9.07u1 imports the chromatic discipline layer after earlier material layers',()=>{
  const a=html.indexOf('src/pigment-fidelity.css'),b=html.indexOf('src/color-discipline.css');
  assert.ok(a>=0&&b>a);

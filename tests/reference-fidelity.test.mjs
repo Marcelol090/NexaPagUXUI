@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 const app=readFileSync(new URL('../src/app.js',import.meta.url),'utf8');
-const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
+const html=readFileSync(new URL('../lab.html',import.meta.url),'utf8');
 const css=readFileSync(new URL('../src/styles.css',import.meta.url),'utf8');
 const workbench=readFileSync(new URL('../src/workbench.js',import.meta.url),'utf8');
 test('five functional NexaPag routes stay present',()=>{

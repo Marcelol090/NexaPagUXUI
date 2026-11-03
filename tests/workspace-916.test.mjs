@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
-const html=read('index.html'),entry=read('src/main.js');
+const html=read('lab.html'),entry=read('src/main.js');
 const start=html.indexOf('<style id="nexa-workspace-contract">');
 const end=html.indexOf('</style>',start);
 const critical=html.slice(start,end);

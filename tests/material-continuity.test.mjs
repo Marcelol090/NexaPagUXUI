@@ -2,7 +2,7 @@ import {readFileSync} from 'node:fs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 const src=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
-const app=src('src/app.js'),css=src('src/material-continuity.css'),html=src('index.html');
+const app=src('src/app.js'),css=src('src/material-continuity.css'),html=src('lab.html');
 test('cards share app shader, never render their own pigment lights',()=>{
  assert.ok(html.includes('src/material-continuity.css'));
  assert.ok(!app.includes("document.createElement('div');light.className='glass-scene'"));

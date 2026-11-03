@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 const read=path=>readFileSync(new URL('../'+path,import.meta.url),'utf8');
-const html=read('index.html'),css=read('src/geometry-911.css'),js=read('src/geometry-911.js');
+const html=read('lab.html'),css=read('src/geometry-911.css'),js=read('src/geometry-911.js');
 test('9.12 geometry is a compact left-rail editor, no leftover editorial copy',()=>{
  assert.ok(html.indexOf('id="geometryHub"')<html.indexOf('id="phone"'));
  assert.ok(html.indexOf('id="phone"')<html.indexOf('rail right'));

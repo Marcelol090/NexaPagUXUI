@@ -5,7 +5,7 @@ import {readFileSync} from 'node:fs';
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const css=read('src/geometry-system-918.css');
 const js=read('src/geometry-system-918.js');
-const html=read('index.html');
+const html=read('lab.html');
 const main=read('src/main.js');
 
 test('9.18 is loaded after existing Workbench and Sage optical calibration',()=>{
