@@ -5,7 +5,7 @@ import vm from 'node:vm';
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const script=read('src/control-fidelity-917.js');
 const css=read('src/control-fidelity-917.css');
-const html=read('index.html');
+const html=read('lab.html');
 const entry=read('src/main.js');
 
 function sandboxControls(){
