@@ -1,0 +1,247 @@
+/* NexaPag Visualize 9.38u2 — UX quality pass.
+   Preserve the Forest acrylic identity and orb.
+   Clarify date semantics, promote financial hierarchy and touch accessibility.
+   Fewer competing borders / duplicated headings; no new shaders. */
+
+#device {
+  --qa-focus:#D3F6B9;
+  --qa-secondary:#C4D7CA;
+  --qa-border:rgba(232,247,235,.15);
+}
+
+/* The calendar is a period badge, not a false navigation action. */
+#device .screen-title .date-chip{
+  cursor:default;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  min-height:36px;
+  padding:7px 11px;
+  border-radius:12px!important;
+  color:#E0EDE2!important;
+  background:linear-gradient(170deg,rgba(254,255,254,.07),transparent 48%),rgba(12,28,24,.76)!important;
+  border:1px solid rgba(226,246,231,.15)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.06)!important;
+}
+
+/* Heading leads with context. Controls are separated from data. */
+#device .screen-title{
+  align-items:center;
+  min-height:68px;
+  gap:10px;
+  padding:7px 0 13px!important;
+}
+#device .screen-title h2{
+  line-height:1.12!important;
+  letter-spacing:-.043em!important;
+  font-weight:700!important;
+  text-wrap:balance;
+}
+#device .screen-title .kicker{
+  color:var(--qa-secondary)!important;
+  font-size:11px!important;
+  font-weight:550!important;
+  line-height:1.3!important;
+  letter-spacing:.006em!important;
+}
+#device .hero{
+  padding:15px 16px 14px!important;
+  border-radius:20px!important;
+  margin-bottom:10px!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.09),0 12px 34px -27px rgba(0,0,0,.87)!important;
+}
+#device .hero .main-money{
+  font-variant-numeric:tabular-nums;
+  line-height:1.12!important;
+}
+#device .hero .label{font-size:11px!important;line-height:1.32!important}
+#device .hero .small-help{font-size:11px!important;line-height:1.45!important;color:#C1D5C7!important}
+#device .hero .hero-footer{color:#C5DACB!important}
+#device .period{
+  padding:3px!important;
+  border-radius:12px!important;
+  flex-shrink:0;
+}
+#device .period button{
+  min-height:38px!important;
+  min-width:46px;
+  padding:7px 10px!important;
+  border-radius:9px!important;
+  font-size:11px!important;
+  font-weight:650!important;
+  transition:color 150ms ease,background-color 150ms ease!important;
+}
+#device .period button.selected,
+#device .period button[aria-pressed="true"]{
+  background:linear-gradient(160deg,rgba(240,254,238,.22),rgba(176,223,181,.08)),rgba(61,99,74,.38)!important;
+  border:1px solid rgba(229,252,231,.30)!important;
+  color:#F7FCF8!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.19)!important;
+}
+#device .metric strong{font-variant-numeric:tabular-nums}
+#device .metrics{gap:10px}
+#device .metric{
+  min-width:0;
+  padding:13px 12px 14px!important;
+  border-radius:17px!important;
+}
+#device .metric-head{
+  color:#C2D5C6!important;
+  font-size:11px!important;
+  line-height:1.35!important;
+  white-space:normal!important;
+}
+#device .metric strong{
+  display:block;
+  font-size:clamp(17px,4.9vw,20px)!important;
+  font-weight:760!important;
+  letter-spacing:-.038em!important;
+  line-height:1.25;
+  white-space:nowrap;
+}
+#device .section-heading{
+  margin-top:22px;
+  margin-bottom:11px;
+}
+#device .section-heading strong{
+  font-size:15px!important;
+  font-weight:690!important;
+  letter-spacing:-.02em!important;
+}
+#device .section-heading .textlink{
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  gap:4px;
+  min-height:40px;
+  padding:6px 4px 6px 10px;
+  border-radius:10px!important;
+  font-size:11px!important;
+  font-weight:650!important;
+  text-decoration:none;
+  color:#D3EFD9!important;
+}
+#device .section-heading .textlink:focus-visible{
+  outline:2px solid var(--qa-focus)!important;
+  outline-offset:2px!important;
+}
+/* Distinguish month-long illustrative distribution from weekly spending. */
+#device .goal-card{
+  border-radius:20px!important;
+  padding-bottom:16px!important;
+}
+#device .goal-top strong{
+  color:#F0FAF0!important;
+  font-weight:700!important;
+}
+#device .goal-top .label{
+  color:#C7DDCC!important;
+  font-size:11px!important;
+  font-variant-numeric:tabular-nums;
+}
+#device .goal-info{
+  border-top:1px solid rgba(227,245,229,.10);
+  padding-top:13px;
+  margin-top:14px;
+  gap:8px;
+}
+#device .goal-info > span{color:#D9EADB}
+#device .goal-info > strong{
+  color:#BFD4C5!important;
+  font-size:10.5px!important;
+  font-weight:560!important;
+}
+#device .goal-composition-note{
+  margin:8px 0 0;
+  font-size:10.5px;
+  line-height:1.4;
+  color:#AFC6B7;
+}
+#device .stack-bar{
+  display:flex;
+  overflow:hidden;
+  border-radius:999px;
+  height:8px!important;
+  background:#102B22!important;
+  border:1px solid rgba(223,244,229,.10);
+}
+#device .stack-bar > span{
+  display:block;
+  flex-shrink:0;
+  min-width:0;
+  height:100%;
+}
+#device .stack-labels{
+  gap:6px 11px;
+  flex-wrap:wrap;
+  font-size:10.5px!important;
+  color:#D0E0D4!important;
+}
+#device .stack-labels span{white-space:nowrap}
+#device .stack-labels i{width:7px;height:7px;display:inline-block;margin-right:4px;vertical-align:middle;border-radius:50%}
+
+/* Daily pearls are interactive: make the invisible touch region forgiving. */
+#device .week-pearls{
+  display:grid!important;
+  grid-template-columns:repeat(7,minmax(0,1fr))!important;
+  align-items:center;
+  gap:2px!important;
+}
+#device .week-pearls button{
+  display:grid!important;
+  place-items:center!important;
+  gap:4px;
+  min-width:0;
+  min-height:44px;
+  padding:6px 1px!important;
+  border-radius:12px!important;
+}
+#device .week-pearls button[aria-pressed="true"]{
+  background:linear-gradient(180deg,rgba(188,237,192,.10),rgba(104,176,126,.025));
+  box-shadow:inset 0 0 0 1px rgba(211,246,211,.18);
+}
+#device .week-pearls button:focus-visible{
+  outline:2px solid var(--qa-focus)!important;
+  outline-offset:1px;
+}
+#device .week-activity-head{font-size:12px!important}
+
+/* Inputs, selections and cards should have visible keyboard focus. */
+#device :is(.period button,.filters button,.bank-card,.partner-card,.catalog-chips button,.review-line button,.category-board,.quick-card.dash-card):focus-visible{
+  outline:2px solid var(--qa-focus)!important;
+  outline-offset:2px!important;
+}
+#device .filters button{
+  min-height:38px;
+  padding-inline:13px!important;
+}
+#device .filters button[aria-pressed="true"]{
+  box-shadow:inset 0 1px rgba(255,255,255,.16),0 0 0 1px rgba(156,223,162,.22)!important;
+  color:#F0FCF3!important;
+}
+#device .bank-card[aria-pressed="true"]{
+  outline:1px solid rgba(219,245,220,.68);
+  outline-offset:2px;
+}
+
+/* Touch targets are now 44px without making the top bar any taller. */
+#device .app-header--compact :is(.iconbtn,.workbench-mobile){
+  flex:0 0 44px!important;
+  width:44px!important;
+  min-width:44px!important;
+  height:44px!important;
+  min-height:44px!important;
+}
+@media(max-width:350px){
+  #device .app-header--compact :is(.iconbtn,.workbench-mobile){
+    flex:0 0 44px!important;
+    width:44px!important;min-width:44px!important;
+    height:44px!important;min-height:44px!important;
+  }
+  #device .metric{padding-inline:10px!important}
+  #device .metric strong{font-size:17px!important}
+  #device .hero .main-money{font-size:30px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #device .period button{transition:none!important}
+}
