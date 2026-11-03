@@ -2,7 +2,7 @@ import {test,expect} from '@playwright/test';
 
 test('9.22 expression follows monthly loss and weekly budget, including user edits',async({page})=>{
  await page.setViewportSize({width:390,height:844});
- await page.goto('/');
+ await page.goto('/lab.html');
  const hero=page.locator('#phone .fiduciary-hero');
  const expression=hero.locator('.flow-expression');
  await expect(hero).toHaveAttribute('data-flow-mood','negative');
@@ -25,7 +25,7 @@ test('9.22 expression follows monthly loss and weekly budget, including user edi
 
 test('9.37 matte glass retains Forest and five equal labeled tabs',async({page})=>{
  await page.setViewportSize({width:390,height:844});
- await page.goto('/');
+ await page.goto('/lab.html');
  const state=await page.evaluate(()=>{
   const phone=document.querySelector('#phone');
   const hero=document.querySelector('#phone .fiduciary-hero');
