@@ -108,8 +108,11 @@ test('summary period controls explain their state',async({page})=>{
  await page.goto('/');
  const month=page.locator('#hero [data-period="month"]');
  const week=page.locator('#hero [data-period="week"]');
- await expect(week).toHaveAttribute('aria-pressed','true');
- await month.click();
+ await expect(month).toHaveAttribute('aria-pressed','true');
+ await week.click();
+ await expect(page.locator('#hero [data-period="week"]')).toHaveAttribute('aria-pressed','true');
+ await expect(page.locator('#hero')).toContainText('Disponível na meta');
+ await page.locator('#hero [data-period="month"]').click();
  await expect(page.locator('#hero [data-period="month"]')).toHaveAttribute('aria-pressed','true');
  await expect(page.locator('#hero [data-period="week"]')).toHaveAttribute('aria-pressed','false');
  await expect(page.locator('#hero')).toContainText('Resultado do fluxo');
