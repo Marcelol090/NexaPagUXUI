@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<meta name="description" content="NexaPag Visualize 9.38 Mobile Gradients. Orb fluido, navegação mobile por ícones, grid de categorias e Workbench com glassmorphism.">
-<title>NexaPag · Visualize 9.38 · Mobile Gradients</title>
+<meta name="description" content="NexaPag Visualize 9.38u1 Compact Header. Navegação por ícones, cabeçalho mobile enxuto, orb fluido e Workbench.">
+<title>NexaPag · Visualize 9.38u1 · Compact Header</title>
 <!-- Visual direction inspired by Unslop, by Damir Sokolovsky / heydamir.
   Source https://github.com/heydamir/unslop | CC BY 4.0
   NexaPag's layout, code, and data presentation are independent adaptations. -->
@@ -1696,6 +1696,7 @@ body,button,input,select,textarea,.type-reference{font-family:var(--ui-font)!imp
 
 </style>
 <link rel="stylesheet" href="./src/gradient-system-938.css">
+<link rel="stylesheet" href="./src/compact-mobile-header-938u1.css">
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
@@ -1760,11 +1761,11 @@ body,button,input,select,textarea,.type-reference{font-family:var(--ui-font)!imp
   </g>
 </svg><div class="mist" aria-hidden="true"></div><div class="grain" aria-hidden="true"></div>
 <div class="statusbar"><span>09:41</span><span class="status-icons"><svg viewBox="0 0 20 16" fill="none"><path d="M1 5Q10-3 19 5M4 9Q10 4 16 9M8 13Q10 11 12 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="battery"></span></span></div>
-<header class="app-header"><div class="brand"><div class="brandmark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.7" stroke-linejoin="round"><path d="M4 19V5l7 9.5L20 5v14"/></svg></div><div><div class="brandname">NexaPag</div><div class="brandsub">Seu dinheiro, com clareza.</div></div></div><div class="headerbuttons"><button type="button" class="iconbtn notify" id="notifications" aria-label="Notificações"><svg><use href="#i-bell"/></svg></button><button type="button" class="iconbtn" id="summaryShortcut" aria-label="Acessar gastos"><svg><use href="#i-filter"/></svg></button><button class="workbench-mobile" id="openDrawer" type="button" aria-label="Abrir Workbench de design" title="Workbench"><svg><use href="#i-sliders"/></svg></button></div></header>
+<header class="app-header app-header--compact" aria-label="Ações rápidas"><div class="headerbuttons"><button type="button" class="iconbtn notify" id="notifications" aria-label="Notificações" title="Notificações"><svg><use href="#i-bell"/></svg></button><button class="workbench-mobile" id="openDrawer" type="button" aria-label="Abrir Workbench de design" title="Personalizar interface"><svg><use href="#i-sliders"/></svg></button></div></header>
 <div class="screen" id="screen"><div class="screen-inner" id="screenContent"></div></div>
 <div class="nav-back"><nav class="bottom-nav" id="navigation" aria-label="Navegação principal"></nav></div><div class="home-indicator"></div><div id="toastLayer" aria-live="polite"></div>
 </main>
-<aside class="inspector" id="inspector" aria-label="Workbench de personalização visual"><header class="inspector-head"><div class="headtop"><span class="eyebrow">Design control center</span><div style="display:flex;gap:6px;align-items:center"><span class="edition">V 9.38</span><button class="inspector-close" id="closeDrawer" aria-label="Fechar personalização"><svg><use href="#i-x"/></svg></button></div></div><h2>Workbench<span style="color:#b9dba8">.</span></h2><p>Material, pigmentação, movimento e geometria aplicados aos componentes reais da prévia.</p></header>
+<aside class="inspector" id="inspector" aria-label="Workbench de personalização visual"><header class="inspector-head"><div class="headtop"><span class="eyebrow">Design control center</span><div style="display:flex;gap:6px;align-items:center"><span class="edition">V 9.38u1</span><button class="inspector-close" id="closeDrawer" aria-label="Fechar personalização"><svg><use href="#i-x"/></svg></button></div></div><h2>Workbench<span style="color:#b9dba8">.</span></h2><p>Material, pigmentação, movimento e geometria aplicados aos componentes reais da prévia.</p></header>
 <nav class="inspector-nav" id="inspectorNav" aria-label="Áreas de personalização"><button type="button" data-panel="material" class="active">Material</button><button type="button" data-panel="pigment">Cor</button><button type="button" data-panel="motion">Motion</button><button type="button" data-panel="geometry">Forma</button><button type="button" data-panel="type">Tipo</button><button type="button" data-panel="orb">Bolha</button><button type="button" data-panel="data">Dados</button></nav>
 <div class="inspector-scroll">
 <section class="inspector-section active" data-section="material">
@@ -2135,7 +2136,7 @@ function choosePalette(name){const preset=palettePresets[name];if(!preset)return
 for(const inp of document.querySelectorAll('[data-palette-color]'))inp.addEventListener('input',()=>{applyPalette();document.querySelectorAll('[data-palette-preset]').forEach(b=>b.classList.remove('active'))});
 for(const btn of document.querySelectorAll('[data-palette-preset]'))btn.addEventListener('click',()=>choosePalette(btn.dataset.palettePreset));
 applyPalette();setTypeFamily('jakarta');
-$('#openDrawer').addEventListener('click',()=>document.body.classList.add('drawer-open'));$('#closeDrawer').addEventListener('click',()=>document.body.classList.remove('drawer-open'));$('#mobileScrim').addEventListener('click',()=>document.body.classList.remove('drawer-open'));$('#resetAll').addEventListener('click',reset);$('#exportTokens').addEventListener('click',exportConfig);$('#replayOrb').addEventListener('click',()=>{if(window.matchMedia('(max-width: 940px)').matches)document.body.classList.remove('drawer-open');agitateOrb()});$('#replayMotion').addEventListener('click',()=>{if(window.matchMedia('(max-width: 940px)').matches)document.body.classList.remove('drawer-open');replay()});$('#notifications').addEventListener('click',()=>showToast('Notificações · prévia ilustrativa'));$('#summaryShortcut').addEventListener('click',()=>{model.tab='chart';render(true)});document.querySelectorAll('input[data-token]').forEach(el=>{applyRange(el);el.addEventListener('input',()=>applyRange(el))});['incomeField','expensesField','refundsField','budgetField','weekSpent'].forEach(id=>$('#'+id).addEventListener('input',updateNumber));
+$('#openDrawer').addEventListener('click',()=>document.body.classList.add('drawer-open'));$('#closeDrawer').addEventListener('click',()=>document.body.classList.remove('drawer-open'));$('#mobileScrim').addEventListener('click',()=>document.body.classList.remove('drawer-open'));$('#resetAll').addEventListener('click',reset);$('#exportTokens').addEventListener('click',exportConfig);$('#replayOrb').addEventListener('click',()=>{if(window.matchMedia('(max-width: 940px)').matches)document.body.classList.remove('drawer-open');agitateOrb()});$('#replayMotion').addEventListener('click',()=>{if(window.matchMedia('(max-width: 940px)').matches)document.body.classList.remove('drawer-open');replay()});$('#notifications').addEventListener('click',()=>showToast('Notificações · prévia ilustrativa'));document.querySelectorAll('input[data-token]').forEach(el=>{applyRange(el);el.addEventListener('input',()=>applyRange(el))});['incomeField','expensesField','refundsField','budgetField','weekSpent'].forEach(id=>$('#'+id).addEventListener('input',updateNumber));
 /* ───── Fluid Optics renderer | two moving bodies + soft refractive seam ─────
    Source study: 4.245s orb video. No external assets, shader, WebGL or dependencies.
    Throttled Canvas 2D: adaptive DPR, steady 30fps, requestAnimationFrame.
