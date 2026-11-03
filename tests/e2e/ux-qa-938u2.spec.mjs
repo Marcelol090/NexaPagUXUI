@@ -6,7 +6,7 @@ test('public 9.38u2 Home: one title, clear mock period and no misleading calenda
  page.on('pageerror',error=>errors.push(error.message));
  await page.setViewportSize({width:390,height:844});
  await page.goto('/');
- await expect(page).toHaveTitle(/9\\.38u2 UX QA/);
+ await expect(page).toHaveTitle(/9\.38u2 UX QA/);
  await expect(page.locator('#screenContent .screen-title h2')).toHaveText('Seu dinheiro');
  await expect(page.locator('#screenContent .screen-title .kicker')).toHaveText('Dados demonstrativos');
  await expect(page.locator('#screenContent .screen-title .date-chip')).toHaveCount(1);
