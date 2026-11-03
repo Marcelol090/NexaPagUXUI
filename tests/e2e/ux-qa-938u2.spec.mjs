@@ -8,6 +8,8 @@ test('public 9.38u2 Home: one title, clear mock period and no misleading calenda
  await page.goto('/');
  await expect(page).toHaveTitle(/9\.38u2 UX QA/);
  await expect(page.locator('#screenContent .screen-title h2')).toHaveText('Seu dinheiro');
+ await expect(page.locator('.topline h1')).toContainText('Visualize 9.38u2');
+ await expect(page.locator('.topline h1')).not.toContainText('9.36');
  await expect(page.locator('#screenContent .screen-title .kicker')).toHaveText('Dados demonstrativos');
  await expect(page.locator('#screenContent .screen-title .date-chip')).toHaveCount(1);
  await expect(page.locator('#screenContent button[data-action="calendar"]')).toHaveCount(0);
@@ -111,9 +113,9 @@ test('summary period controls explain their state',async({page})=>{
  await expect(month).toHaveAttribute('aria-pressed','true');
  await week.click();
  await expect(page.locator('#hero [data-period="week"]')).toHaveAttribute('aria-pressed','true');
- await expect(page.locator('#hero')).toContainText('Disponível na meta');
+ await expect(page.locator('#hero')).toContainText('Disponível na semana');
  await page.locator('#hero [data-period="month"]').click();
  await expect(page.locator('#hero [data-period="month"]')).toHaveAttribute('aria-pressed','true');
  await expect(page.locator('#hero [data-period="week"]')).toHaveAttribute('aria-pressed','false');
- await expect(page.locator('#hero')).toContainText('Resultado do fluxo');
+ await expect(page.locator('#hero')).toContainText('Resultado mensal');
 });
