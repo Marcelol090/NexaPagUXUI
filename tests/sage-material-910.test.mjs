@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 const source = path => readFileSync(new URL('../'+path, import.meta.url), 'utf8');
-const html=source('index.html'),css=source('src/sage-material-910.css'),app=source('src/app.js');
+const html=source('lab.html'),css=source('src/sage-material-910.css'),app=source('src/app.js');
 
 test('9.10 runs the approved material last, in the real app rather than a separate Hub',()=>{
  const original=html.indexOf('src/material-continuity.css'),last=html.indexOf('src/sage-material-910.css');
