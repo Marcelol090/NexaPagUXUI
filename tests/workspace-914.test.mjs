@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 
 const read = p => readFileSync(new URL('../'+p, import.meta.url),'utf8');
-const html=read('index.html');
+const html=read('lab.html');
 const css=read('src/workspace-914.css');
 const ui=read('src/workspace-913.js');
 
