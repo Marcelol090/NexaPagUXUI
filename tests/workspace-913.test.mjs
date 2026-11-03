@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 const get=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
-const html=get('index.html'),main=get('src/main.js'),css=get('src/workspace-913.css');
+const html=get('lab.html'),main=get('src/main.js'),css=get('src/workspace-913.css');
 const ui=get('src/workspace-913.js'),motion=get('src/hero-transition-913.js');
 const original=get('src/app.js');
 const geometry=get('src/geometry-911.js');
