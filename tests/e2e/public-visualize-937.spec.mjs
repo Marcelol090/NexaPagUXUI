@@ -105,3 +105,38 @@ test('narrow phone 320px shows only icons with 44px targets',async({page})=>{
  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-window.innerWidth);
  expect(overflow).toBeLessThanOrEqual(2);
 });
+
+
+test('9.38u1 compact mobile header removes branding and preserves toolbar actions',async({page})=>{
+ const failures=[];
+ page.on('pageerror',error=>failures.push(error.message));
+ for(const width of [320,390,1920]){
+  await page.setViewportSize({width,height:844});
+  await page.goto('/');
+  const header=page.locator('#device .app-header');
+  await expect(header).toHaveClass(/app-header--compact/);
+  await expect(header.locator('.brand')).toHaveCount(0);
+  await expect(header).not.toContainText('NexaPag');
+  await expect(header).not.toContainText('Seu dinheiro, com clareza');
+  await expect(page.locator('#screenContent .screen-title h2')).toContainText('Seu dinheiro');
+  await expect(header.locator('button')).toHaveCount(2);
+  await expect(page.locator('#summaryShortcut')).toHaveCount(0);
+  const geometry=await page.evaluate(()=>{
+    const bar=document.querySelector('#device .app-header');
+    const screen=document.querySelector('#device #screen');
+    const buttons=[...bar.querySelectorAll('button')];
+    return {height:bar.getBoundingClientRect().height,screenHeight:screen.getBoundingClientRect().height,
+      widths:buttons.map(el=>el.getBoundingClientRect().width),
+      overflow:document.documentElement.scrollWidth-window.innerWidth};
+  });
+  expect(geometry.height).toBeLessThanOrEqual(51);
+  expect(geometry.screenHeight).toBeGreaterThan(400);
+  expect(Math.min(...geometry.widths)).toBeGreaterThanOrEqual(42);
+  expect(geometry.overflow).toBeLessThanOrEqual(2);
+ }
+ await page.setViewportSize({width:390,height:844});
+ await page.goto('/');
+ await page.getByRole('button',{name:'Abrir Workbench de design'}).click();
+ await expect(page.locator('body')).toHaveClass(/drawer-open/);
+ expect(failures).toEqual([]);
+});
