@@ -1,0 +1,100 @@
+/* NexaPag v9.38u1 | Compact mobile top actions
+   Mobile content, not repeated branding, leads the hierarchy.
+   The small action toolbar is deliberate: notifications and prototype controls.
+   The current page title is rendered once inside the scroll content.
+*/
+#device .app-header.app-header--compact{
+  height:49px!important;
+  min-height:49px!important;
+  flex:0 0 49px;
+  justify-content:flex-end!important;
+  align-items:center!important;
+  padding:2px 16px 3px!important;
+  background:linear-gradient(180deg,rgba(5,17,13,.62),rgba(6,22,17,.06) 93%)!important;
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+#device .app-header--compact .brand,
+#device .app-header--compact .brandname,
+#device .app-header--compact .brandsub,
+#device .app-header--compact .brandmark{
+  display:none!important;
+}
+#device .app-header--compact .headerbuttons{
+  display:flex!important;
+  flex-direction:row!important;
+  justify-content:flex-end!important;
+  align-items:center!important;
+  gap:8px!important;
+  width:auto;
+  margin-left:auto!important;
+}
+#device .app-header--compact :is(.iconbtn,.workbench-mobile){
+  display:grid!important;
+  place-items:center!important;
+  flex:0 0 42px!important;
+  width:42px!important;
+  min-width:42px!important;
+  height:42px!important;
+  min-height:42px!important;
+  border-radius:13px!important;
+  border:1px solid rgba(229,248,232,.13)!important;
+  background:linear-gradient(154deg,rgba(240,255,241,.075),rgba(240,255,241,0) 54%),rgba(12,28,23,.62)!important;
+  color:#E1EEE4!important;
+  -webkit-backdrop-filter:blur(10px) saturate(1.05)!important;
+  backdrop-filter:blur(10px) saturate(1.05)!important;
+  box-shadow:inset 0 1px rgba(253,255,251,.075)!important;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+  transition:background-color 150ms ease,transform 150ms cubic-bezier(.2,.7,.2,1),border-color 150ms ease!important;
+}
+#device .app-header--compact :is(.iconbtn,.workbench-mobile) svg{
+  display:block!important;
+  width:19px!important;
+  height:19px!important;
+  stroke-width:1.9!important;
+}
+#device .app-header--compact :is(.iconbtn,.workbench-mobile):focus-visible{
+  outline:2px solid #BDF09E!important;
+  outline-offset:2px!important;
+}
+#device .app-header--compact :is(.iconbtn,.workbench-mobile):active{
+  transform:scale(.96)!important;
+}
+#device .app-header--compact .notify::after{
+  top:8px;right:9px;
+}
+/* Account for actual 49px toolbar so content has more room to breathe. */
+#device .screen{
+  height:calc(100% - 32px - 49px - 89px)!important;
+  padding-top:5px!important;
+}
+/* Existing heading is the only page title: it remains readable and free
+   of a competing app name or slogan. */
+#device .screen-title{
+  padding-top:7px!important;
+}
+@media(max-width:350px){
+  #device .app-header.app-header--compact{
+    padding-inline:14px!important;
+  }
+  #device .app-header--compact .headerbuttons{gap:7px!important}
+  #device .app-header--compact :is(.iconbtn,.workbench-mobile){
+    flex-basis:42px!important;
+    width:42px!important;min-width:42px!important;
+    height:42px!important;min-height:42px!important;
+  }
+}
+@media(hover:hover) and (pointer:fine){
+  #device .app-header--compact :is(.iconbtn,.workbench-mobile):hover{
+    border-color:rgba(216,245,220,.24)!important;
+    background-color:rgba(28,57,39,.76)!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #device .app-header--compact :is(.iconbtn,.workbench-mobile){
+    transition:none!important;
+  }
+}
