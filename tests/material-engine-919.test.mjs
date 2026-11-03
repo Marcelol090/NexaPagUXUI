@@ -6,7 +6,7 @@ const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const css=read('src/material-engine-919.css');
 const js=read('src/material-engine-919.js');
 const main=read('src/main.js');
-const html=read('index.html');
+const html=read('lab.html');
 const names=['filmRange','blurRange','rimRange','lightRange','pigmentRange','diffuseRange','blendRange'];
 
 function fakeMaterial(){
