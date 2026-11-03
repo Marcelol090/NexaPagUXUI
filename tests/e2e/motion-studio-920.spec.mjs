@@ -2,7 +2,7 @@ import {test,expect} from '@playwright/test';
 
 test('Motion Studio controls the real cards and respects rigid desktop geometry',async({page})=>{
  await page.setViewportSize({width:1440,height:900});
- await page.goto('/');
+ await page.goto('/lab.html');
  await expect(page.locator('#nexaMotionStudio')).toHaveCount(1);
  const before=await page.locator('#phone').boundingBox();
  await page.locator('#inspector-tab-motion').click();
@@ -28,7 +28,7 @@ test('Motion Studio controls the real cards and respects rigid desktop geometry'
 
 test('320px device retains accessible Motion Workbench controls',async({page})=>{
  await page.setViewportSize({width:320,height:700});
- await page.goto('/');
+ await page.goto('/lab.html');
  const open=page.locator('.inspector-open-button');
  await expect(open).toBeVisible();
  await open.click();
@@ -43,7 +43,7 @@ test('320px device retains accessible Motion Workbench controls',async({page})=>
 
 test('prefers-reduced-motion blocks playback but keeps the design adjustable',async({page})=>{
  await page.emulateMedia({reducedMotion:'reduce'});
- await page.goto('/');
+ await page.goto('/lab.html');
  await page.locator('#inspector-tab-motion').click();
  await page.locator('#nmReplay').click();
  await expect(page.locator('#nmStatus')).toContainText('reduzido');
