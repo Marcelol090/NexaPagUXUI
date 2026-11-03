@@ -49,7 +49,7 @@ test('9.37 matte glass retains Forest and five equal labeled tabs',async({page})
  expect(state.blur).toContain('blur(');
  expect(state.materialAlpha).toMatch(/rgba/);
  expect(state.navDisplay).toBe('grid');
- expect(state.navColumns.trim().split(/\\s+/)).toHaveLength(5);
+ expect(state.navColumns.trim().split(/\s+/)).toHaveLength(5);
  expect(state.labels).toHaveLength(5);
  expect(state.labels.every(display=>display!=='none')).toBe(true);
  expect(Math.max(...state.widths)-Math.min(...state.widths)).toBeLessThanOrEqual(1);
