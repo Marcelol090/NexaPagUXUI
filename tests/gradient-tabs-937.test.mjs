@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 const css = readFileSync(new URL('../src/gradient-tabs-937.css', import.meta.url), 'utf8');
 const main = readFileSync(new URL('../src/main.js', import.meta.url), 'utf8');
 const app = readFileSync(new URL('../src/app.js', import.meta.url), 'utf8');
-const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+const html = readFileSync(new URL('../lab.html', import.meta.url), 'utf8');
 
 test('9.37 CSS is actually bundled by Vite', () => {
   assert.match(main, /import '\.\/gradient-tabs-937\.css'/);
