@@ -5,7 +5,7 @@ import { join } from 'node:path';
 const SCREENSHOTS = 'test-results/screenshots';
 
 async function appReady(page) {
-  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await page.goto('/lab.html', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('#phone')).toBeVisible();
   await expect(page.locator('.workspace-inspector')).toHaveCount(1);
   await page.waitForFunction(() =>
