@@ -1,0 +1,277 @@
+/* NexaPag Visualize 9.37 | Integrated Gradient Tabs
+ * Ported to the existing Kotlin-facing UX/UI lab, not a standalone replacement.
+ * Workbench optical tokens remain authoritative. Forest shader is a BACKDROP;
+ * gradients are local to component meaning. No new blur roots around containers.
+ */
+
+:root{
+  --n937-forest:#081713;
+  --n937-paper:#F3FAF3;
+  --n937-mist:#B7CFC0;
+  --n937-hairline:rgba(226,247,233,.14);
+  --n937-ease:cubic-bezier(.2,.78,.24,1);
+  --n937-tab-duration:190ms;
+  --n937-lime:#A8DC7B;
+}
+#phone{
+  --primary:var(--n937-paper);
+  --muted:var(--n937-mist);
+  font-family:"Plus Jakarta Sans",Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:var(--n937-forest);
+}
+#phone :is(button,input,select){font-family:inherit}
+#phone .tab-title .t{font-weight:700;letter-spacing:-.045em}
+#phone :is(.hero-value,.metric strong,.goal-side .big,.category-value){font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+#phone .label,#phone .metric-top,#phone .micro-label,#phone .caption{letter-spacing:0}
+
+/* Ambient forest: put illumination behind the cards, not inside each card. */
+#phone:not(.no-shader) .ambient{
+  background:
+    radial-gradient(ellipse 82% 43% at 44% 14%,rgba(78,170,94,.27),transparent 78%),
+    radial-gradient(ellipse 72% 48% at 112% 82%,rgba(19,105,88,.18),transparent 78%),
+    linear-gradient(151deg,#07110e 1%,#10251c 43%,#071916 71%,#0a1410 100%);
+}
+#phone:not(.no-shader) .ambient::before{
+  width:460px;height:420px;left:-170px;top:-115px;
+  background:radial-gradient(ellipse at center,rgba(98,194,94,.46),rgba(55,128,74,.15) 45%,transparent 71%);
+  border-radius:50%;
+}
+#phone:not(.no-shader) .ambient::after{
+  width:410px;height:390px;right:-160px;bottom:-110px;
+  background:radial-gradient(ellipse at center,rgba(35,123,104,.32),rgba(20,72,75,.1) 46%,transparent 73%);
+  border-radius:50%;
+}
+#phone .mist{
+  background:radial-gradient(circle at 94% 14%,rgba(129,192,110,.13),transparent 40%),
+    radial-gradient(circle at 4% 65%,rgba(44,145,112,.12),transparent 40%);
+}
+#phone .grain{opacity:.055}
+
+/* One shared actual-acrylic material. Note: preserve live glass controls. */
+#phone[data-live-glass]:not(.no-optics) .glass-site > :is(.panel,.metric){
+  background:linear-gradient(155deg,rgba(245,255,247,.055),transparent 37%,rgba(1,11,13,.08)),
+     rgba(8,23,21,var(--live-glass-panel,.78))!important;
+  -webkit-backdrop-filter:blur(var(--live-glass-blur,23px)) saturate(.93) brightness(.89)!important;
+  backdrop-filter:blur(var(--live-glass-blur,23px)) saturate(.93) brightness(.89)!important;
+  border-color:rgba(227,248,232,var(--live-glass-rim,.18))!important;
+  box-shadow:0 16px 34px -25px rgba(0,0,0,.82),inset 0 1px rgba(255,255,255,.075)!important;
+}
+#phone[data-live-glass]:not(.no-optics) .glass-site > .panel.fiduciary-hero{
+  background:linear-gradient(158deg,rgba(241,255,242,.06),transparent 40%,rgba(4,13,13,.08)),
+    rgba(7,23,22,var(--live-glass-hero,.81))!important;
+}
+#phone[data-live-glass]:not(.no-optics) .glass-site[data-optic="metric"] > .metric{
+  background:linear-gradient(160deg,rgba(243,254,244,.05),transparent 43%),
+    rgba(8,24,22,var(--live-glass-metric,.81))!important;
+}
+/* Standalone boards filter real backdrop, nested boards only tint their parent. */
+#phone[data-live-glass]:not(.no-optics) :is(.quick-board,.category-board){
+  -webkit-backdrop-filter:blur(var(--live-glass-board-blur,10px)) saturate(1.08) brightness(.94)!important;
+  backdrop-filter:blur(var(--live-glass-board-blur,10px)) saturate(1.08) brightness(.94)!important;
+}
+#phone[data-live-glass]:not(.no-optics) .glass-site > .panel :is(.category-board,.quick-board){
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+}
+#phone .panel :is(.category-board,.quick-board)::before{filter:none!important}
+#phone .panel :is(.category-board,.quick-board)::after{filter:none!important}
+
+/* Stable five-column bottom navigation, with all labels visible.
+ * No flex-grow transition: changing tabs cannot move siblings. */
+#phone .nav{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  align-items:stretch;
+  gap:5px!important;
+  padding:6px!important;
+  min-height:66px;
+  background:linear-gradient(180deg,rgba(19,34,28,.95),rgba(8,20,19,.95))!important;
+  border:1px solid rgba(229,248,235,.16)!important;
+  border-radius:21px!important;
+  -webkit-backdrop-filter:blur(var(--live-glass-nav-blur,15px)) saturate(.93)!important;
+  backdrop-filter:blur(var(--live-glass-nav-blur,15px)) saturate(.93)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.06),0 15px 27px -21px rgba(0,0,0,.88)!important;
+}
+#phone .nav button,
+#phone .nav button.active{
+  min-width:0;min-height:52px;flex:initial!important;
+  display:flex!important;flex-direction:column!important;
+  align-items:center;justify-content:center;gap:4px!important;
+  padding:6px 1px!important;border-radius:15px!important;
+  border:1px solid transparent!important;
+  background:transparent!important;box-shadow:none!important;
+  color:#B9D0C1!important;transform:none!important;
+  transition:background-color var(--n937-tab-duration) var(--n937-ease),
+    color var(--n937-tab-duration) var(--n937-ease),
+    border-color var(--n937-tab-duration) var(--n937-ease)!important;
+}
+#phone .nav button span:not(.icon),
+#phone .nav button:not(.active) span:not(.icon),
+#phone .nav button.active > span:not(.icon){
+  display:block!important;
+  font-size:9.3px!important;font-weight:650!important;
+  line-height:1.14;letter-spacing:0!important;
+  max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+#phone .nav button .icon{width:20px;height:20px;display:grid;place-items:center}
+#phone .nav button .icon svg{width:19px;height:19px;stroke:#B9D0C1!important;stroke-width:1.85!important;transform:none!important}
+#phone .nav button.active,
+#phone .nav button[aria-current="page"]{
+  color:#133324!important;
+  border-color:rgba(233,250,231,.73)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.31),rgba(255,255,255,.07) 45%),
+    linear-gradient(134deg,#B7E1A9,#DAEED1 64%,#F0F8EA)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.55),0 9px 18px -15px rgba(167,222,156,.65)!important;
+}
+#phone .nav button.active .icon svg,
+#phone .nav button[aria-current="page"] .icon svg{stroke:#133324!important}
+#phone .nav button.active::after{display:none!important}
+#phone .nav button:hover:not(.active){background:rgba(231,248,234,.055)!important}
+#phone .nav button:active{transform:scale(.98)!important}
+#phone .nav button:focus-visible{outline:2px solid #D6EFCA;outline-offset:2px}
+
+/* Quick grid: four 2x2 navigation tiles, with coherent optical geometry. */
+#phone .quick-grid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:10px!important;
+}
+#phone .quick-board{
+  min-width:0;min-height:125px;padding:12px 13px!important;
+  display:flex!important;flex-direction:column!important;
+  align-items:flex-start!important;text-align:left!important;
+  gap:4px!important;border-radius:17px!important;
+  color:#F4FAF4!important;
+  background:
+    radial-gradient(140px 92px at 100% 0%,rgba(var(--tone-rgb),.22),transparent 72%),
+    radial-gradient(115px 80px at 0% 0%,rgba(255,255,255,.095),transparent 72%),
+    linear-gradient(152deg,rgba(var(--tone-rgb),.16),rgba(7,23,21,.12) 55%,rgba(5,14,16,.66)),
+    rgba(7,23,21,var(--live-glass-board,.77))!important;
+  border:1px solid rgba(232,249,238,.14)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.11),0 16px 28px -24px rgba(0,0,0,.8)!important;
+  transition:transform 150ms var(--n937-ease),border-color 160ms var(--n937-ease)!important;
+}
+#phone .quick-board::before{
+  background:linear-gradient(180deg,rgba(250,255,251,.035),transparent 37%)!important;
+  inset:0!important;border-radius:inherit;filter:none!important;
+}
+#phone .quick-board .quick-icon{
+  width:31px;height:31px;align-self:flex-end!important;
+  border:1px solid rgba(var(--tone-rgb),.25);
+  background:linear-gradient(150deg,rgba(255,255,255,.15),rgba(255,255,255,.015)),
+    rgba(var(--tone-rgb),.13);
+  border-radius:10px;box-shadow:inset 0 1px rgba(255,255,255,.08);
+  color:#F5FFF5;
+}
+#phone .quick-board .quick-icon svg{width:17px;height:17px;stroke-width:1.9}
+#phone .quick-board strong{font-size:14px;font-weight:730;letter-spacing:-.026em;margin-top:auto}
+#phone .quick-board small{font-size:11px;font-weight:500;color:#D2E4D7;line-height:1.3}
+#phone .quick-board:hover{border-color:rgba(var(--tone-rgb),.35)!important;transform:translateY(-1px)}
+#phone .quick-board:active{transform:scale(.986)!important}
+
+/* Categories: value led, pigment confined to its own top-right corner. */
+#phone .category-board-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;margin-top:12px;
+}
+#phone .category-board{
+  min-width:0;min-height:141px;padding:12px!important;
+  display:flex;flex-direction:column;gap:6px;
+  background:
+    radial-gradient(125px 94px at 100% 0%,rgba(var(--tone-rgb),.22),transparent 70%),
+    linear-gradient(180deg,rgba(255,255,255,.065),transparent 39%),
+    linear-gradient(145deg,rgba(var(--tone-rgb),.095),rgba(7,21,20,.08) 54%,rgba(4,17,20,.67)),
+    rgba(8,25,22,var(--live-glass-board,.77))!important;
+  border-color:rgba(239,252,240,.13)!important;
+  border-radius:17px!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.10),0 15px 28px -24px rgba(0,0,0,.84)!important;
+  transition:transform 160ms var(--n937-ease),border-color 160ms var(--n937-ease)!important;
+}
+#phone .category-board::before{
+  background:linear-gradient(180deg,rgba(255,255,255,.035),transparent 40%)!important;
+  filter:none!important;
+}
+#phone .category-board-top{width:100%;display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+#phone .category-board .cat-symbol{
+  width:28px;height:28px;display:grid;place-items:center;
+  border-radius:9px;background:rgba(var(--tone-rgb),.19);
+  border:1px solid rgba(var(--tone-rgb),.23);color:#F2F9F3;
+}
+#phone .category-board .cat-symbol svg{width:16px;height:16px;stroke-width:1.9}
+#phone .category-board .category-percent{font-size:10px;font-weight:650;color:#DEE9DE}
+#phone .category-board strong{margin-top:auto;font-size:12px;font-weight:680;line-height:1.22;letter-spacing:-.018em}
+#phone .category-board .category-value{font-size:17px;font-weight:730;line-height:1.12;letter-spacing:-.035em;color:#F5FBF6}
+#phone .category-board small{font-size:10px;line-height:1.28;color:#C0D5C8}
+#phone .category-board.selected,
+#phone .category-board[aria-pressed="true"]{
+  border-color:rgba(var(--tone-rgb),.56)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.11),0 0 0 1px rgba(var(--tone-rgb),.16)!important;
+}
+#phone .category-board:active{transform:scale(.987)}
+
+/* Secondary segmented controls use a shared pale-green active lens. */
+#phone :is(.overview-period,.segmented,.filters){
+  gap:4px;padding:3px!important;
+  border:1px solid rgba(229,245,235,.10)!important;
+  border-radius:12px;
+  background:rgba(7,24,23,.40)!important;
+}
+#phone .filters{overflow-x:auto;scrollbar-width:none}
+#phone :is(.overview-period,.segmented,.filters) button{
+  min-height:33px;flex-shrink:0;
+  padding:8px 11px;border-radius:9px!important;
+  border:1px solid transparent!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.025),transparent)!important;
+  color:#BBCFC1!important;font-size:11px;font-weight:600;
+  box-shadow:none!important;
+  transition:background-color 150ms var(--n937-ease),color 150ms var(--n937-ease)!important;
+}
+#phone :is(.overview-period button.active,.segmented button.selected,.filters button.selected){
+  background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.045) 45%),
+    linear-gradient(135deg,rgba(104,174,111,.20),rgba(169,211,154,.07)),
+    rgba(16,45,35,.64)!important;
+  color:#F1FCF1!important;
+  border-color:rgba(202,237,209,.25)!important;
+}
+#phone :is(.overview-period button.active,.segmented button.selected,.filters button.selected)::after{display:none!important}
+#phone .tiny-pill,
+#phone .primarybtn{
+  border-radius:11px!important;
+  border:1px solid rgba(232,249,235,.17)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.015)),rgba(11,30,26,.78)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.07)!important;
+}
+#phone .primarybtn{background:linear-gradient(135deg,#A6DC91,#D5EDC7)!important;color:#123021!important}
+#phone .shops{gap:10px}
+#phone .shop{
+  border:1px solid rgba(230,249,237,.14)!important;border-radius:16px!important;
+  background:linear-gradient(152deg,rgba(244,255,245,.07),transparent 42%),
+    radial-gradient(ellipse at 96% 5%,rgba(98,182,105,.09),transparent 62%),
+    rgba(9,27,25,.80)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.075),0 15px 26px -24px rgba(0,0,0,.76);
+}
+#phone .shop.selected{border-color:rgba(162,220,172,.47)!important;
+  background:linear-gradient(155deg,rgba(125,194,115,.16),transparent 65%),rgba(13,37,30,.82)!important}
+#phone .shop:active{transform:scale(.988)}
+
+/* Preserve accessibility and the tested responsive geometry. */
+@media(max-width:350px){
+  #phone .nav{gap:3px!important;padding:5px!important}
+  #phone .nav button{min-height:49px;padding:5px 0!important}
+  #phone .nav button span:not(.icon){font-size:8.5px!important}
+  #phone .quick-grid,#phone .category-board-grid{gap:8px!important}
+  #phone .quick-board{min-height:117px;padding:10px!important}
+  #phone .category-board{padding:10px!important;min-height:136px}
+  #phone .category-board .category-value{font-size:15px}
+}
+@media(prefers-reduced-motion:reduce){
+  #phone :is(.nav button,.quick-board,.category-board,.shop,.filters button){transition:none!important}
+  #phone :is(.quick-board,.category-board,.shop):active{transform:none!important}
+}
+@media(prefers-reduced-transparency:reduce),(forced-colors:active){
+  #phone .nav,#phone :is(.quick-board,.category-board,.shop){
+    -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+    background:#112822!important;
+  }
+  #phone .nav button.active{background:#D8EFD2!important;color:#122B21!important}
+}
