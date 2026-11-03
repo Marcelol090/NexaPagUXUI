@@ -1,0 +1,337 @@
+/* NexaPag Visualize 9.38 | Mobile Gradients
+ * Reference adaptation: dark floating icon dock, lime selected lens and
+ * semantically tinted acrylic cards. One field behind all glass surfaces.
+ *
+ * The #device preview always represents a 320-408px PHONE, even when its
+ * Workbench is displayed on desktop. Thus icon-only nav is scoped to #device
+ * rather than the desktop browser viewport.
+ */
+:root{
+  --n938-lime:#6ED85C;
+  --n938-lime-top:#AFF18D;
+  --n938-lime-bottom:#54BD47;
+  --n938-lime-ink:#112917;
+  --n938-forest:#07130F;
+  --n938-charcoal:#171A18;
+  --n938-matte:#0C1412;
+  --n938-pearl:#F4F9F3;
+  --n938-red:#D4454F;
+  --n938-amber:#E4A22F;
+  --n938-white:#F4F9F3;
+  --n938-gradient:.24;
+  --n938-press:cubic-bezier(.22,.78,.22,1);
+}
+
+#device {
+  --n938-optic-border:rgba(245,255,247,.12);
+  --n938-optic-rim:rgba(255,255,255,.075);
+}
+#device :is(.bottom-nav button,.quick-card,.filters button,.catalog-chips button,.date-chip,.primary){
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+
+/* Bottom dock
+   The icons are still labelled semantically by aria-label and aria-current.
+   Hide visual text only, without removing the accessible name. */
+#device[data-bg-theme] .bottom-nav,
+#device .bottom-nav {
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  align-items:center!important;
+  justify-items:center!important;
+  width:100%;
+  gap:4px!important;
+  min-height:66px!important;
+  height:66px!important;
+  padding:7px 9px!important;
+  border-radius:999px!important;
+  border:1px solid rgba(229,247,231,.14)!important;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.065),transparent 43%),
+    radial-gradient(ellipse 55% 110% at 48% 116%,rgba(80,118,86,.12),transparent 75%),
+    rgba(15,19,17,.92)!important;
+  -webkit-backdrop-filter:blur(22px) saturate(1.05) brightness(.88)!important;
+  backdrop-filter:blur(22px) saturate(1.05) brightness(.88)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.085),
+    inset 0 -1px rgba(0,0,0,.43),
+    0 20px 30px -22px rgba(0,0,0,.88)!important;
+}
+
+/* Equal, stable hit targets; the selected state does not resize siblings. */
+#device .bottom-nav button,
+#device .bottom-nav button.active {
+  appearance:none!important;
+  position:relative;
+  display:grid!important;
+  place-items:center!important;
+  align-self:center!important;
+  justify-self:center!important;
+  min-width:44px!important;
+  width:clamp(44px,12cqw,48px)!important;
+  max-width:48px!important;
+  height:48px!important;
+  min-height:48px!important;
+  padding:0!important;
+  flex:none!important;
+  margin:0!important;
+  gap:0!important;
+  border-radius:50%!important;
+  transform:none!important;
+  border:1px solid transparent!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:#C1CFC4!important;
+  transition:background-color 170ms var(--n938-press),
+    color 170ms var(--n938-press),box-shadow 170ms var(--n938-press),
+    transform 160ms var(--n938-press)!important;
+}
+#device .bottom-nav button > span {
+  display:none!important;
+}
+/* Do not hide labels in assistive technology: aria-label is on the button. */
+#device .bottom-nav button svg {
+  display:block!important;
+  position:relative;
+  z-index:2;
+  margin:0!important;
+  width:22px!important;
+  height:22px!important;
+  stroke:#C5D3CA!important;
+  fill:none!important;
+  stroke-width:1.9!important;
+  opacity:.9;
+  transition:stroke 170ms ease,transform 170ms ease!important;
+}
+#device .bottom-nav button::before,
+#device .bottom-nav button::after{
+  content:none!important;
+}
+#device .bottom-nav button.active,
+#device .bottom-nav button[aria-current="page"] {
+  color:var(--n938-lime-ink)!important;
+  background:
+    radial-gradient(ellipse at 34% 17%,rgba(255,255,255,.48),transparent 49%),
+    linear-gradient(140deg,var(--n938-lime-top) 0%,var(--n938-lime) 48%,var(--n938-lime-bottom) 100%)!important;
+  border-color:rgba(230,255,226,.58)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.55),
+    inset 0 -3px 6px rgba(20,90,28,.12),
+    0 10px 23px -12px rgba(69,214,85,.58)!important;
+}
+#device .bottom-nav button.active svg,
+#device .bottom-nav button[aria-current="page"] svg {
+  stroke:var(--n938-lime-ink)!important;
+  opacity:1!important;
+  transform:translateY(-.5px);
+}
+@media(hover:hover) and (pointer:fine){
+  #device .bottom-nav button:not(.active):hover{
+    background:rgba(236,250,235,.08)!important;
+    color:#EEF8F0!important;
+  }
+}
+#device .bottom-nav button:active{transform:scale(.94)!important}
+#device .bottom-nav button:focus-visible{outline:2px solid var(--n938-lime-top)!important;outline-offset:3px!important}
+#device .nav-back{pointer-events:none}
+#device .nav-back .bottom-nav{pointer-events:auto}
+
+/* Responsive card grid: two true, equal columns with compact but readable type. */
+#device .quick-grid.category-tiles {
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  column-gap:10px!important;
+  row-gap:10px!important;
+  width:100%;
+  margin:3px 0 11px!important;
+}
+#device[data-bg-theme] .quick-card.dash-card,
+#device .quick-card.dash-card{
+  --n938-tint:calc(.10 + var(--n938-gradient) * .70);
+  appearance:none;
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  min-width:0;
+  min-height:142px!important;
+  height:142px!important;
+  padding:13px!important;
+  border-radius:19px!important;
+  border:1px solid rgba(235,251,240,.145)!important;
+  color:var(--n938-pearl)!important;
+  background:
+    radial-gradient(ellipse 94% 92% at 105% -12%,
+      rgba(var(--tile-rgb),var(--n938-tint)),transparent 72%),
+    radial-gradient(ellipse 105% 82% at -20% 125%,
+      rgba(var(--tile-rgb),calc(var(--n938-gradient) * .44)),transparent 79%),
+    linear-gradient(168deg,rgba(255,255,255,.10),rgba(255,255,255,.012) 42%,rgba(0,0,0,.12)),
+    rgba(10,22,20,calc(var(--glass-opacity) * .96))!important;
+  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--color-saturation,1.10)) brightness(.91)!important;
+  backdrop-filter:blur(var(--glass-blur)) saturate(var(--color-saturation,1.10)) brightness(.91)!important;
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.12),
+    inset 0 -18px 26px rgba(0,0,0,.13),
+    0 18px 28px -25px rgba(0,0,0,.83)!important;
+  transition:transform 180ms var(--n938-press),
+    border-color 160ms var(--n938-press),
+    box-shadow 180ms var(--n938-press),
+    background-color 180ms var(--n938-press)!important;
+}
+#device .quick-card.dash-card::before{
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  inset:1px!important;
+  z-index:0!important;
+  border-radius:18px!important;
+  background:linear-gradient(147deg,rgba(251,255,252,.105),transparent 36%)!important;
+  opacity:.6!important;
+  filter:none!important;
+}
+#device .quick-card.dash-card::after{
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  inset:auto 12px 8px!important;
+  height:23px!important;
+  z-index:0!important;
+  border-radius:99px;
+  background:radial-gradient(ellipse at center,rgba(var(--tile-rgb),.11),transparent 75%)!important;
+  filter:blur(14px)!important;
+}
+#device .quick-card.dash-card > *{position:relative;z-index:1}
+#device .quick-card.dash-card .card-top{align-items:flex-start;gap:9px;min-width:0}
+#device .quick-card.dash-card .card-label{gap:4px;min-width:0}
+#device .quick-card.dash-card .card-label b{
+  font-family:var(--ui-font,"Plus Jakarta Sans",system-ui,sans-serif);
+  font-size:12.3px!important;
+  font-weight:720!important;
+  letter-spacing:-.025em!important;
+  line-height:1.28!important;
+  color:#F6FCF5!important;
+}
+#device .quick-card.dash-card .card-label small{
+  font-size:10.4px!important;
+  font-weight:480!important;
+  color:#C3D3C6!important;
+  min-height:auto!important;
+  white-space:normal!important;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  line-height:1.25!important;
+}
+#device .quick-card.dash-card .quick-icon{
+  display:grid;place-items:center;
+  width:31px!important;height:31px!important;flex:0 0 31px;
+  border-radius:11px!important;
+  background:
+    radial-gradient(circle at 24% 10%,rgba(255,255,255,.19),transparent 70%),
+    rgba(var(--tile-rgb),calc(var(--n938-gradient) * .8))!important;
+  border:1px solid rgba(var(--tile-rgb),.35)!important;
+  color:#F5FAF3!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.12)!important;
+}
+#device .quick-card.dash-card .quick-icon svg{width:17px;height:17px;stroke-width:2}
+#device .quick-card.dash-card .card-amount{
+  font-size:19px!important;
+  font-weight:760!important;
+  letter-spacing:-.046em!important;
+  line-height:1.08!important;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+  color:#F8FCF6!important;
+}
+#device .quick-card.dash-card .dash-arrow{
+  font-size:17px;
+  font-weight:550;
+  color:#E1EFE3!important;
+  opacity:.87;
+}
+#device .quick-card.dash-card .card-share{font-size:10px!important;color:#CCDCCF!important;line-height:1.2!important}
+#device .quick-card.dash-card .card-share i{
+  background:linear-gradient(90deg,rgba(var(--tile-rgb),.98) 0 var(--tile-share),rgba(232,251,235,.15) var(--tile-share) 100%)!important;
+  height:3px!important;
+  border-radius:999px!important;
+}
+#device .quick-card.dash-card[aria-pressed="true"]{
+  border-color:rgba(var(--tile-rgb),.68)!important;
+  box-shadow:
+    inset 0 1px rgba(255,255,255,.17),
+    0 0 0 1px rgba(var(--tile-rgb),.20),
+    0 16px 26px -20px rgba(var(--tile-rgb),.44)!important;
+}
+#device .quick-card.dash-card[aria-pressed="true"]::before{
+  background:linear-gradient(145deg,rgba(var(--tile-rgb),.16),transparent 55%)!important;
+  opacity:.8!important;
+}
+#device .quick-card.dash-card:focus-visible{outline:2px solid var(--n938-lime-top)!important;outline-offset:2px}
+#device .quick-card.dash-card:active{transform:scale(.979)!important}
+@media(hover:hover) and (pointer:fine){
+  #device .quick-card.dash-card:hover{transform:translateY(-2px);border-color:rgba(var(--tile-rgb),.45)!important}
+}
+
+/* Chips and tab-like filters: one coherent inner lens instead of heavy pills. */
+#device .filters button,
+#device .catalog-chips button,
+#device .period button,
+#device .date-chip{
+  border-radius:12px!important;
+  border:1px solid rgba(236,254,240,.14)!important;
+  background:linear-gradient(160deg,rgba(255,255,255,.085),transparent 46%),
+    rgba(10,24,21,.73)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.065)!important;
+  color:#CBDDD0!important;
+  -webkit-backdrop-filter:blur(9px) saturate(1.07)!important;
+  backdrop-filter:blur(9px) saturate(1.07)!important;
+  transition:background-color 160ms var(--n938-press),
+    color 160ms var(--n938-press),transform 160ms var(--n938-press)!important;
+}
+#device .filters button.active,
+#device .catalog-chips button.active,
+#device .period button.selected{
+  border-color:rgba(165,230,149,.43)!important;
+  color:#EAFCEC!important;
+  background:
+    radial-gradient(circle at 5% 0%,rgba(160,232,150,.22),transparent 70%),
+    linear-gradient(145deg,rgba(70,149,82,.20),rgba(5,25,18,.84))!important;
+  box-shadow:inset 0 1px rgba(245,255,246,.13),
+    0 9px 18px -17px rgba(93,187,92,.55)!important;
+}
+#device .filters button:active,
+#device .catalog-chips button:active{transform:scale(.977)!important}
+
+/* Pure semantic finance. Gradients have separate, controllable purposes. */
+#device :is(.metric,.transaction,.review-line) .positive{color:var(--green-ink,var(--n938-lime))!important}
+#device :is(.metric,.transaction,.review-line) .negative{color:var(--red-ink,var(--n938-red))!important}
+#device .warning{color:var(--gold-ink,var(--n938-amber))}
+#device .quick-grid.category-tiles .quick-card[data-variant="green"]{
+  --tile-rgb:34,160,104;
+  --tile-ink:#BAF7CA;
+}
+#device .quick-grid.category-tiles .quick-card[data-variant="amber"]{
+  --tile-rgb:205,125,29;
+  --tile-ink:#FFDCA4;
+}
+
+/* Normal mobile viewport and compact screen geometry. */
+@media(max-width:390px){
+  #device .bottom-nav{padding:7px 5px!important;gap:2px!important}
+  #device .bottom-nav button{width:44px!important;height:44px!important;min-height:44px!important}
+  #device .quick-grid.category-tiles{gap:9px!important}
+  #device .quick-card.dash-card{padding:11px!important;min-height:136px!important;height:136px!important}
+  #device .quick-card.dash-card .card-amount{font-size:17px!important}
+  #device .quick-card.dash-card .card-label b{font-size:11.6px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #device .bottom-nav button,
+  #device .quick-card.dash-card,
+  #device .filters button,
+  #device .catalog-chips button{transition:none!important}
+  #device .quick-card.dash-card:active,#device .bottom-nav button:active{transform:none!important}
+}
+@media(prefers-reduced-transparency:reduce),(forced-colors:active){
+  #device .bottom-nav{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:#111917!important}
+  #device .quick-card.dash-card{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:#14251F!important}
+  #device .bottom-nav button.active{background:#B2E9A4!important;color:#142B1F!important}
+}
