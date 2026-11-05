@@ -1698,6 +1698,7 @@ body,button,input,select,textarea,.type-reference{font-family:var(--ui-font)!imp
 <link rel="stylesheet" href="./src/gradient-system-938.css">
 <link rel="stylesheet" href="./src/compact-mobile-header-938u1.css">
 <link rel="stylesheet" href="./src/ux-qa-polish-938u2.css">
+<link rel="stylesheet" href="./src/expressive-analytics-939.css">
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
@@ -1864,6 +1865,7 @@ body,button,input,select,textarea,.type-reference{font-family:var(--ui-font)!imp
 </div><p class="footnote">NexaPagUXUI 9.38u2: prévia web publicada na Vercel, com dados demonstrativos e sem conexão às instituições financeiras ou ao aplicativo Android. Direção de arte influenciada pelo <a href="https://github.com/heydamir/unslop" target="_blank" rel="noopener noreferrer">Unslop de Damir Sokolovsky</a> (CC BY 4.0).</p>
 </div>
 <div class="mobile-scrim" id="mobileScrim"></div>
+<script src="./expressive-analytics-939.js"></script>
 <script>
 (()=>{'use strict';
 const $=s=>document.querySelector(s); const icon=(n,sz=18)=>`<svg width="${sz}" height="${sz}" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#i-${n}"/></svg>`;
@@ -1891,8 +1893,8 @@ function flowStatus(m){
 }
 
 function mood(){if(model.period==='week'){if(model.budget<=0)return{tone:'neutral',label:'Meta indisponível',value:0};const remaining=model.budget-model.weekly;if(remaining<0)return{tone:'negative',label:'Acima da meta',value:remaining};if(model.weekly>=model.budget*.8)return{tone:'warning',label:'Próximo ao limite',value:remaining};return{tone:'positive',label:'Dentro da meta',value:remaining}}let val=model.income-Math.max(0,model.expenses-model.refunds);return{tone:val<0?'negative':val>0?'positive':'neutral',label:val<0?'Saídas acima das entradas':val>0?'Entradas acima das saídas':'Fluxo equilibrado',value:val}}
-function graph(tone){let c=tone==='negative'?'var(--red)':tone==='positive'?'var(--green)':tone==='warning'?'var(--gold)':'var(--muted)';return `<svg class="trend" viewBox="0 0 338 88" preserveAspectRatio="none" aria-label="Gráfico de tendência ilustrativo" role="img"><defs><linearGradient id="trendFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c}" stop-opacity=".24"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></linearGradient></defs><path d="M0 62C22 59 30 21 53 35S90 72 115 48S160 18 183 42S226 61 249 32S296 43 338 15V88H0Z" fill="url(#trendFill)" stroke="none"/><path d="M0 62C22 59 30 21 53 35S90 72 115 48S160 18 183 42S226 61 249 32S296 43 338 15" stroke="${c}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" fill="none"/><circle cx="338" cy="15" r="3.7" fill="${c}" stroke="#18342d" stroke-width="1.5"/></svg>`}
-function financialScene(){return `<div class="finance-scene" aria-hidden="true"><div class="finance-layers"><div class="finance-light finance-light-back"></div><div class="finance-light finance-light-core"></div><div class="finance-light finance-light-wisp"></div><div class="finance-light finance-light-ribbon"></div></div><svg class="finance-eyes" viewBox="0 0 90 60" xmlns="http://www.w3.org/2000/svg" fill="none"><path data-eye="left" d="M32 18 C32 21.7 32 25.3 32 29"/><path data-eye="right" d="M58 18 C58 21.7 58 25.3 58 29"/><path class="finance-mouth" data-mouth d="M34 45 Q45 35 56 45"/></svg></div>`}
+function graph(tone){return window.Nexa939.graph(model,tone)}
+function financialScene(){return `<div class="finance-scene" aria-hidden="true"><div class="finance-layers"><div class="finance-light finance-light-back"></div><div class="finance-light finance-light-core"></div><div class="finance-light finance-light-wisp"></div><div class="finance-light finance-light-ribbon"></div></div><svg class="finance-eyes" viewBox="0 0 90 60" xmlns="http://www.w3.org/2000/svg" fill="none"><path class="finance-brow" data-brow="left" d="M26 14 Q32 14 38 14"/><path class="finance-brow" data-brow="right" d="M52 14 Q58 14 64 14"/><path data-eye="left" d="M32 18 C32 21.7 32 25.3 32 29"/><path data-eye="right" d="M58 18 C58 21.7 58 25.3 58 29"/><path class="finance-mouth" data-mouth d="M34 45 Q45 35 56 45"/></svg></div>`}
 function hero(){const m=mood();return `<div class="ui-card hero" id="hero" data-mood="${m.tone}">${financialScene()}<div class="hero-row"><span class="label">${model.period==='month'?'Resultado mensal':'Disponível na semana'}</span><div class="period" role="group" aria-label="Período do resumo"><button type="button" data-period="month" aria-pressed="${model.period==='month'}" class="${model.period==='month'?'selected':''}">Mês</button><button type="button" data-period="week" aria-pressed="${model.period==='week'}" class="${model.period==='week'?'selected':''}">Semana</button></div></div><div class="value-row"><div class="main-money" data-rolling-money data-final="${m.value}" aria-label="${moneySigned(m.value)}">${moneySigned(m.value)}</div></div>${flowStatus(m)}<div class="small-help">${model.period==='month'?'Entradas menos saídas líquidas · não é saldo bancário.':'Limite semanal menos o total utilizado.'}</div>${graph(m.tone)}<div class="hero-footer"><span><b>${model.period==='month'?'Fluxo de novembro':'Meta semanal'}</b> · dados ilustrativos</span><button class="replaybtn" data-action="replay" aria-label="Reproduzir efeito líquido">${icon('repeat',14)}</button></div></div>`}
 function transactions(n=4){return `<div class="transaction-list">${entries.slice(0,n).map(([title,desc,amount,ic])=>`<div class="transaction"><span class="tx-icon">${icon(ic,17)}</span><div class="tx-main"><b>${title}</b><small>${desc}</small></div><div class="tx-value ${amount<0?'red':'green'}">${moneySigned(amount)}</div></div>`).join('')}</div>`}
 function goalComposition(){
@@ -1935,7 +1937,7 @@ function distributionGraphic(){
  const total=model.expenses;
  const largest=categories.reduce((best,c)=>c.value>best.value?c:best,categories[0]);
  const pct=(total>0?100*categoryAmount(largest)/total:0).toLocaleString('pt-BR',{maximumFractionDigits:1,minimumFractionDigits:1});
- return `<div class="distribution"><div class="distribution-track" role="group" aria-label="Participação de cada categoria nos gastos">${categories.map(c=>`<button type="button" data-category="${c.name}" style="width:${((total>0?100*categoryAmount(c)/total:0)).toFixed(4)}%;--segment:${c.color}" aria-label="${c.name}: ${cash(categoryAmount(c))}" title="${c.name} · ${cash(categoryAmount(c))}"></button>`).join('')}</div><div class="distribution-detail"><span>Maior categoria</span><strong>${largest.name} · ${pct}%</strong></div></div>`;
+ return `<div class="distribution"><div class="distribution-track" role="group" aria-label="Participação de cada categoria nos gastos">${categories.map(c=>`<button type="button" data-category="${c.name}" style="width:${((total>0?100*categoryAmount(c)/total:0)).toFixed(4)}%;--segment:${c.color}" aria-label="${c.name}: ${cash(categoryAmount(c))}" title="${c.name} · ${cash(categoryAmount(c))}"></button>`).join('')}</div><div class="distribution-detail"><span>Maior categoria</span><strong>${largest.name} · ${pct}%</strong></div>${window.Nexa939.categoryRanking(categories,categoryAmount,model.category,cash)}</div>`;
 }
 function expenses(){let display=model.expenseFilter==='in'?model.income:model.expenseFilter==='refunds'?model.refunds:model.expenses;return header('Gastos e fluxos','Análise financeira')+`<div class="filters" role="group" aria-label="Tipo de movimentação"><button type="button" data-filter="all" aria-pressed="${model.expenseFilter==='all'}" class="${model.expenseFilter==='all'?'active':''}">Compras</button><button type="button" data-filter="in" aria-pressed="${model.expenseFilter==='in'}" class="${model.expenseFilter==='in'?'active':''}">Recebidos</button><button type="button" data-filter="refunds" aria-pressed="${model.expenseFilter==='refunds'}" class="${model.expenseFilter==='refunds'?'active':''}">Estornos</button></div><div class="ui-card"><div class="chart-top"><div><div class="label">${model.expenseFilter==='in'?'Total recebido':model.expenseFilter==='refunds'?'Total estornado':'Despesas por categoria'}</div><div class="chart-total">${cash(display)}</div></div><div class="date-chip">Novembro</div></div>${distributionGraphic()}<p class="info-note" style="margin:12px 0 0">Participações calculadas sobre as compras demonstrativas. Selecione uma faixa para analisar a categoria.</p></div>${model.expenseFilter==='all'?`<div class="section-heading"><strong>Categorias</strong><span class="label">6 grupos</span></div><div class="quick-grid category-tiles category-page-grid">${categories.map((c,i)=>tileMarkup(c,i)).join('')}</div>${categorySelection()}`:transactions(4)}<div class="section-heading"><strong>Calendário financeiro</strong><span class="label">Novembro de 2026</span></div>${heatmap()}`}
 function heatmap(){const levels=[0,1,2,1,3,2,4,1,0,3,2,1,2,4,3,1,0,1,2,3,1,4,3,2,0,1,2,3,1,2];let heat='<div class="ui-card"><div class="weekday">'+['D','S','T','Q','Q','S','S'].map(s=>`<span>${s}</span>`).join('')+'</div><div class="heatmap">';for(let i=0;i<30;i++)heat+=`<button data-day="${i+1}" data-level="${levels[i]}" class="${model.heatDay===i+1?'selected':''}" aria-label="Dia ${i+1}, intensidade ${levels[i]}">${i+1}</button>`;heat+='</div><div class="heat-selection"><span>Dia '+model.heatDay+' · atividade demonstrativa</span><strong>'+cash(levels[model.heatDay-1]*37.5)+'</strong></div></div>';return heat}
@@ -1990,42 +1992,7 @@ const easeOut=(t)=>1-Math.pow(1-t,4);
 const smoothStep=t=>t*t*(3-2*t);
 // Reference timing: value settles, upright light capsules hold, then the
 // same strokes morph. Negative is visibly concerned, without an emoji badge.
-function morphSignal(hero,t){
- const left=hero.querySelector('[data-eye="left"]');
- const right=hero.querySelector('[data-eye="right"]');
- const mouth=hero.querySelector('[data-mouth]');
- if(!left||!right||!mouth)return;
- const tone=hero.dataset.mood||'neutral';
- const clamp=x=>Math.max(0,Math.min(1,x));
- const q=smoothStep(clamp((t-.27)/.20));
- const startEye=x=>[[x,18],[x,21.7],[x,25.3],[x,29]];
- // Inner corners lift while outer corners droop to convey sadness, not anger.
- // Positive mimics the video: two upward arching, smiling eyelids.
- const target={
-  negative:[[[22,29],[28,23],[34,18],[38,20]],[[52,20],[56,18],[62,23],[68,29]]],
-  positive:[[[23,28],[28,17],[34,17],[39,28]],[[51,28],[56,17],[62,17],[67,28]]],
-  warning:[[[24,23],[28,25],[34,25],[38,23]],[[52,23],[56,25],[62,25],[66,23]]],
-  neutral:[[[26,22],[30,22],[34,22],[38,22]],[[52,22],[56,22],[60,22],[64,22]]]
- }[tone]||[];
- const curve=(x,end)=>{
-  const orig=startEye(x);
-  const out=orig.map((a,i)=>[lerp(a[0],end[i][0],q),lerp(a[1],end[i][1],q)]);
-  return `M${out[0][0].toFixed(2)} ${out[0][1].toFixed(2)} C${out[1][0].toFixed(2)} ${out[1][1].toFixed(2)} ${out[2][0].toFixed(2)} ${out[2][1].toFixed(2)} ${out[3][0].toFixed(2)} ${out[3][1].toFixed(2)}`;
- };
- left.setAttribute('d',curve(32,target[0]));
- right.setAttribute('d',curve(58,target[1]));
- if(tone==='negative'){
-  // The frown is drawn from a neutral center, then gently settles downward.
-  const p=smoothStep(clamp((t-.40)/.12));
-  const frownDepth=lerp(44,34,p);
-  mouth.setAttribute('d',`M33 45 Q45 ${frownDepth.toFixed(2)} 57 45`);
-  mouth.style.opacity=String(Math.min(.92,p*.92));
- }else if(tone==='warning'){  mouth.setAttribute('d','M37 45 Q45 46 53 45');
-  mouth.style.opacity=String(smoothStep(clamp((t-.43)/.13))*.72);
- }else {
-  mouth.style.opacity='0';
- }
-}
+function morphSignal(hero,t){window.Nexa939.morphSignal(hero,t)}
 function replay(){
  if(model.tab!=='home'){model.tab='home';render(true)}
  clearTimeout(flowTimer);cancelAnimationFrame(flowFrame);++flowGeneration;
