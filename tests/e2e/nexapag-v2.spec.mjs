@@ -119,52 +119,38 @@ test('V2.2 compact and reduced-motion spending card remains readable', async ({ 
   const values = await page.locator('#dock button').evaluateAll(elements => elements.map(el => Math.round(el.getBoundingClientRect().height)));
   expect(Math.min(...values)).toBeGreaterThanOrEqual(44);
   await page.locator('[data-graph="0"]').click();
-  await expect(page.locator('#chartAmount')).toContainText('18,00');
+  await expect(page.locator('#chartAmount')).toContainText('126,80');
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(2);
 });
 
-test("V2.3 uses the user's 60fps transparent motion for each filled orb", async ({ page, request }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  const errors = [];
-  page.on('pageerror', error => errors.push(error.message));
-  const [video, poster] = await Promise.all([
-    request.get('/assets/nexapag-orb-ultrasmooth-60fps-alpha-224.webm'),
-    request.get('/assets/nexapag-orb-poster-224.png')
-  ]);
-  expect(video.ok()).toBe(true);
-  expect(poster.ok()).toBe(true);
-  expect((await video.body()).length).toBeGreaterThan(250000);
-  await page.goto('/v2.html');
-  await expect(page).toHaveTitle(/V2\.(3|4)/);
-  await expect(page.locator('.day-cell')).toHaveCount(7);
-  await expect(page.locator('.day-cell .jelly.ghost')).toHaveCount(2);
-  await expect(page.locator('.day-cell .orb-media')).toHaveCount(5);
-  await expect(page.locator('#screen .orb-media')).toHaveCount(10);
-  await expect(page.locator('.day-cell .day-num')).toHaveCount(5);
-  await expect(page.locator('.day-cell.selected')).toHaveCount(1);
-  await page.locator('.day-cell[data-day="5"]').click();
-  await expect(page.locator('.day-cell[data-day="5"]')).toHaveAttribute('aria-pressed','true');
-  await expect(page.locator('#screen .orb-media').first().locator('source')).toHaveAttribute('type','video/webm');
-  for (const tab of ['expenses','home']) {
-    await page.locator('#dock button[data-tab="' + tab + '"]').click();
-    await expect(page.locator('#dock button[data-tab="' + tab + '"]')).toHaveAttribute('aria-current','page');
-  }
-  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(2);
-  expect(errors).toEqual([]);
+test('V2.7 weekly liquid orbs are weighted by actual demo category amounts',async({page})=>{
+ const errors=[];page.on('pageerror',err=>errors.push(err.message));
+ await page.setViewportSize({width:390,height:844});await page.goto('/v2.html');
+ await expect(page.locator('.day-cell')).toHaveCount(7);
+ await expect(page.locator('.day-cell .week-orb-canvas')).toHaveCount(4);
+ await expect(page.locator('.day-cell .jelly.ghost')).toHaveCount(3);
+ await expect(page.locator('.day-cell.selected')).toHaveCount(1);
+ await page.locator('[data-day="1"]').click();
+ await expect(page.locator('#weekDayDetail')).toContainText('74,00');
+ await expect(page.locator('#weekDayDetail')).toContainText('Compras');
+ await expect(page.locator('#weekDayDetail')).toContainText('Transporte');
+ await page.locator('[data-day="5"]').click();
+ await expect(page.locator('#weekDayDetail')).toContainText('Dia futuro');
+ await expect(page.locator('[data-day="5"]')).toHaveAttribute('aria-pressed','true');
+ for(const tab of ['expenses','home']){await page.locator('#dock button[data-tab="'+tab+'"]').click();await expect(page.locator('#dock button[data-tab="'+tab+'"]')).toHaveAttribute('aria-current','page');}
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth)).toBeLessThanOrEqual(2);expect(errors).toEqual([]);
 });
 
-test('V2.3 provides a static, colored orb poster when reduced motion is requested', async ({ page }) => {
-  await page.setViewportSize({ width: 320, height: 700 });
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/v2.html');
-  await expect(page.locator('.day-cell .jelly.ghost')).toHaveCount(2);
-  const states = await page.locator('.day-cell .orb-media').evaluateAll(videos =>
-    videos.map(v => ({ paused: v.paused, display: getComputedStyle(v).display }))
-  );
-  expect(states).toHaveLength(5);
-  expect(states.every(state => state.display === 'none' && state.paused)).toBe(true);
-  await expect(page.locator('.day-cell .orb-poster')).toHaveCount(5);
-  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(2);
+test('V2.7 reduced motion shows static category compositions with paused legacy videos',async({page})=>{
+ await page.setViewportSize({width:320,height:700});await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/v2.html');
+ await expect(page.locator('.day-cell .jelly.ghost')).toHaveCount(3);
+ await expect(page.locator('.day-cell .week-orb-canvas')).toHaveCount(4);
+ await expect(page.locator('.day-cell .orb-media')).toHaveCount(0);
+ const isPainted=await page.locator('[data-week-orb="1"]').evaluate(c=>[...c.getContext('2d').getImageData(0,0,c.width,c.height).data].some(x=>x!==0));
+ expect(isPainted).toBe(true);
+ const pauses=await page.locator('#screen .orb-media').evaluateAll(vs=>vs.map(v=>v.paused));
+ expect(pauses.every(Boolean)).toBe(true);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth)).toBeLessThanOrEqual(2);
 });
 
 test('V2.3.1 liquid card fits its buttons and reveals in-card rhythm after expression', async ({ page }) => {
@@ -194,17 +180,19 @@ test('V2.3.1 liquid card fits its buttons and reveals in-card rhythm after expre
   }
   expect(errors).toEqual([]);
 });
-test('V2.3.1 uses generated orb fill frames without losing original liquid video and reduced motion', async ({ page }) => {
- await page.setViewportSize({width:390,height:844});
- await page.goto('/v2.html');
- await expect(page.locator('#screen .orb-fill-media')).toHaveCount(10);
- await expect(page.locator('#screen .orb-media')).toHaveCount(10);
- await expect(page.locator('.day-cell .jelly.ghost')).toHaveCount(2);
- await expect(page.locator('#screen .orb-fill-media').first()).toHaveAttribute('class','orb-fill-media');
- await page.emulateMedia({reducedMotion:'reduce'});
- await page.reload();
- await expect(page.locator('.day-cell .orb-fill-media')).toHaveCount(5);
- const disabled=await page.locator('.day-cell .orb-fill-media').first().evaluate(el=>getComputedStyle(el).display==='none');
- expect(disabled).toBe(true);
+test('V2.7 6.4-second liquid cycle is identical at both boundaries',async({page})=>{
+ await page.setViewportSize({width:390,height:844});await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/v2.html');
+ const result=await page.evaluate(()=>{
+  const api=window.NexaLiquidDebug, canvas=document.querySelector('[data-week-orb="1"]'),items=api.WEEK_LEDGER[1].items;
+  api.paintLiquid(canvas,items,0);
+  const a=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data.slice();
+  api.paintLiquid(canvas,items,api.TWO_PI);
+  const b=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;
+  let diff=0;for(let i=0;i<a.length;i++)diff+=Math.abs(a[i]-b[i]);
+  return {diff,spent:api.WEEK_SPENT,remaining:api.WEEK_REMAINING,totals:api.WEEK_LEDGER.map(x=>x.total)};
+ });
+ expect(result.diff).toBeLessThanOrEqual(60);
+ expect(result.spent).toBe(270);expect(result.remaining).toBe(930);
+ expect(result.totals).toEqual([126.8,74,39.2,30,0,0,0]);
 });
 
