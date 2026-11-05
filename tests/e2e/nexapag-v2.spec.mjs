@@ -123,7 +123,7 @@ test('V2.2 compact and reduced-motion spending card remains readable', async ({ 
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(2);
 });
 
-test('V2.3 uses the user's 60fps transparent motion for each filled orb', async ({ page, request }) => {
+test("V2.3 uses the user's 60fps transparent motion for each filled orb", async ({ page, request }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
