@@ -1,0 +1,7 @@
+# NexaPag V2.9 | Categories & Liquid Calendar
+Sources: user-provided 05/11/2026 screenshots, including neon-green upper Gastos zone, financial category cards and monthly calendar.
+This is an isolated web prototype in v2.html. Does not update Android, database, inbox parsing or production financial data.
+Demo categories reconcile to net historical R$3,468.20: Alimentação 1240 (Mercados 710, Restaurantes 365, Delivery 165); Compras 965 (Marketplace 495, Moda 300, Eletrônicos 170); Transporte 714 (Aplicativos 318, Combustível 270, Estacionamento 126); Casa 549.20 (Contas e serviços 264.20, Decoração 185, Manutenção 100).
+November demo ledger, week 2–5 only: 126.80 + 74.00 + 39.20 + 30.00 = R$270.00. The remainder of November is **unknown**, not asserted zero. Future days distinguished using reference date 2026-11-05.
+Each category card keeps its microbot icon, has a segmented palette by subcategory, and offers a keyboard-accessible expansion for the breakdown. Calendar shows per-day proportional line and integer preview, exact amounts and categories in a selectable detail panel. Liquid corner is decorative and disabled via prefers-reduced-motion.
+Repaint-safe motion primarily uses transforms/opacity; deep scrolling neutralizes the header chrome to avoid a fixed vivid backdrop under all content. Tests cover 320/390px, 30 actual date buttons in a 42-slot grid, totals, expanded details, reduced motion and the persistent five-tab flow.
