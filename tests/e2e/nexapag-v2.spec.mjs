@@ -166,3 +166,44 @@ test('V2.3 provides a static, colored orb poster when reduced motion is requeste
   await expect(page.locator('.day-cell .orb-poster')).toHaveCount(5);
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(2);
 });
+
+test('V2.3.1 liquid card fits its buttons and reveals in-card rhythm after expression', async ({ page }) => {
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  for(const width of [320,390]){
+    await page.setViewportSize({width,height:844});
+    await page.goto('/v2.html');
+    await page.locator('#dock button[data-tab="expenses"]').click();
+    await expect(page.locator('#expenseExpression')).toBeVisible();
+    await expect(page.locator('#expressionRhythm')).toHaveCount(1);
+    await expect.poll(async () => page.locator('#expenseExpression').evaluate(el => el.classList.contains('rhythm-visible')), {timeout:6000}).toBe(true);
+    const position = await page.locator('#expenseExpression').evaluate(el=>{
+      const c=el.getBoundingClientRect(), b=[...el.querySelectorAll('.expression-actions button')].map(x=>x.getBoundingClientRect());
+      return {centered:Math.abs(b[0].height-b[1].height)<1,
+        equalWidths:Math.abs(b[0].width-b[1].width)<1,
+        inside:b.every(x=>x.bottom<=c.bottom-8 && x.left>=c.left && x.right<=c.right),
+        minHeight:Math.min(...b.map(x=>x.height))};
+    });
+    expect(position.centered).toBe(true);
+    expect(position.equalWidths).toBe(true);
+    expect(position.inside).toBe(true);
+    expect(position.minHeight).toBeGreaterThanOrEqual(44);
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth)).toBeLessThanOrEqual(2);
+    await page.locator('[data-action="expenseReplay"]').click();
+    await expect.poll(async () => page.locator('#expenseExpression').evaluate(el=>el.classList.contains('rhythm-visible')), {timeout:6000}).toBe(true);
+  }
+  expect(errors).toEqual([]);
+});
+test('V2.3.1 uses generated orb fill frames without losing original liquid video and reduced motion', async ({ page }) => {
+ await page.setViewportSize({width:390,height:844});
+ await page.goto('/v2.html');
+ await expect(page.locator('#screen .orb-fill-media')).toHaveCount(10);
+ await expect(page.locator('#screen .orb-media')).toHaveCount(10);
+ await expect(page.locator('.day-cell .jelly.ghost')).toHaveCount(2);
+ await expect(page.locator('#screen .orb-fill-media').first()).toHaveAttribute('class','orb-fill-media');
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.reload();
+ await expect(page.locator('.day-cell .orb-fill-media')).toHaveCount(5);
+ const disabled=await page.locator('.day-cell .orb-fill-media').first().evaluate(el=>getComputedStyle(el).display==='none');
+ expect(disabled).toBe(true);
+});
