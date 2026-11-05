@@ -590,10 +590,16 @@ function paintLiquid(canvas,items,phase){
    }
    shape.lineTo(85,85);shape.closePath();
    const g=ctx.createLinearGradient(6,y0-17,76,y0+60);g.addColorStop(0,color.light);g.addColorStop(.49,color.color);g.addColorStop(1,color.deep);
-   ctx.fillStyle=g;ctx.fill(shape);
-   // A faint color diffusion across the fluid seam, without replacing the proportional split.
-   const mist=ctx.createLinearGradient(0,y0-7,0,y0+9);mist.addColorStop(0,rgba(color.color,0));mist.addColorStop(.48,rgba(color.light,.29));mist.addColorStop(1,rgba(color.color,0));
-   ctx.fillStyle=mist;ctx.fillRect(0,y0-9,80,20);
+   // Colored dye diffuses through the moving seam, with a quieter layered core.
+   ctx.save();ctx.filter='blur(5px)';ctx.globalAlpha=.92;ctx.fillStyle=g;ctx.fill(shape);ctx.restore();
+   ctx.save();ctx.globalAlpha=.74;ctx.fillStyle=g;ctx.fill(shape);ctx.restore();
+   const mist=ctx.createLinearGradient(0,y0-10,0,y0+13);
+   mist.addColorStop(0,rgba(color.color,0));mist.addColorStop(.48,rgba(color.light,.24));mist.addColorStop(1,rgba(color.color,0));
+   ctx.fillStyle=mist;ctx.fillRect(0,y0-11,80,25);
+   const sx=30+18*Math.sin(phase+j*1.3),sy=y0+7+6*Math.cos(phase+j*.8);
+   const dye=ctx.createRadialGradient(sx,sy,1,sx,sy,21);
+   dye.addColorStop(0,rgba(color.light,.26));dye.addColorStop(1,rgba(color.color,0));
+   ctx.fillStyle=dye;ctx.fillRect(0,0,80,80);
  }
  // Shared, circular and cyclical specular flow. All harmonics have integer periods.
  const cx=31+12*Math.cos(phase),cy=20+8*Math.sin(phase);
