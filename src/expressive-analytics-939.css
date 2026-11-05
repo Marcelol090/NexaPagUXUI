@@ -1,0 +1,87 @@
+/* NexaPag Visualize 9.39 | expressive motion + honest financial graphics
+   Only composited motion, no extra shader over acrylic cards.
+   Keeps pre-existing geometry, five-tab navigation and Workbench tokens. */
+#device .hero .trend.analytics-chart {
+  display:block;
+  height:130px!important;
+  margin:12px 0 1px!important;
+  overflow:visible;
+  width:100%;
+}
+#device .hero .trend.analytics-chart .chart-grid{
+  stroke:rgba(224,243,229,.15);stroke-width:.7;stroke-dasharray:2 4;
+  vector-effect:non-scaling-stroke;
+}
+#device .hero .trend.analytics-chart .chart-track{fill:rgba(4,21,17,.65);stroke:rgba(217,246,223,.13);stroke-width:.6}
+#device .hero .trend.analytics-chart .chart-fill{transform-box:fill-box;transform-origin:left center;animation:nexa-chart-reveal-939 530ms cubic-bezier(.18,.75,.24,1) both}
+#device .hero .trend.analytics-chart .chart-axis{fill:#9CB5A5;font-size:9px;font-family:var(--ui-font,system-ui,sans-serif)}
+#device .hero .trend.analytics-chart .chart-label{fill:#D6E6DA;font-size:10px;font-weight:630;font-family:var(--ui-font,system-ui,sans-serif)}
+#device .hero .trend.analytics-chart .chart-value{fill:#F2FBF2;font-size:10px;font-weight:720;font-family:var(--ui-font,system-ui,sans-serif);font-variant-numeric:tabular-nums}
+#device .hero .chart-caption{font-size:10.5px;color:#B5CDC0;line-height:1.45;margin-top:4px}
+#device .hero .chart-caption b{color:#E8F5E8;font-weight:650}
+#device .hero .finance-eyes{width:100px;height:67px;filter:drop-shadow(0 3px 10px rgba(var(--finance-rgb),.18))}
+#device .hero .finance-eyes path.finance-brow{
+  stroke:rgba(248,255,248,.84);stroke-width:2.5;opacity:0;filter:none;
+}
+#device .hero .finance-eyes path.finance-mouth,
+#device .hero[data-mood="positive"] .finance-eyes path.finance-mouth,
+#device .hero[data-mood="neutral"] .finance-eyes path.finance-mouth{
+  display:block!important;stroke-width:3.1;stroke:rgba(250,255,250,.94);opacity:0;filter:none
+}
+#device .hero[data-mood="negative"] .finance-eyes path.finance-mouth{stroke:#FFE4E8}
+#device .hero[data-mood="warning"] .finance-eyes path.finance-mouth{stroke:#FFEDC9}
+#device .hero .finance-eyes path[data-eye]{stroke-width:6.3}
+#device .hero.replaying .finance-eyes{animation:nexa-expression-939 var(--signal-stage,2100ms) cubic-bezier(.18,.75,.25,1) both!important}
+#device .hero.replaying .finance-light-core{animation:nexa-liquid-core-939 var(--signal-stage,2100ms) cubic-bezier(.2,.66,.25,1) both!important}
+#device .hero[data-mood="negative"].replaying .finance-light-core{animation:nexa-liquid-negative-939 var(--signal-stage,2100ms) cubic-bezier(.22,.7,.26,1) both!important}
+#device .hero .finance-scene{mix-blend-mode:normal}
+@keyframes nexa-chart-reveal-939{from{opacity:.65;transform:scaleX(.07)}to{opacity:1;transform:scaleX(1)}}
+@keyframes nexa-expression-939{
+  0%,7%{opacity:0;transform:translate(-50%,-46%) scale(.95)}
+  16%{opacity:1;transform:translate(-50%,-48%) scale(1)}
+  42%{opacity:1;transform:translate(-50%,-52%) scale(1.012)}
+  70%{opacity:1;transform:translate(-50%,-53%) scale(1)}
+  84%{opacity:.85;transform:translate(-50%,-53%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-56%) scale(.99)}
+}
+@keyframes nexa-liquid-core-939{
+  0%{opacity:0;transform:translate3d(-9px,21px,0) scale(.76)}
+  24%{opacity:.68;transform:translate3d(-5px,9px,0) scale(.93)}
+  48%{opacity:.86;transform:translate3d(4px,-2px,0) scale(1.03)}
+  70%{opacity:.76;transform:translate3d(2px,-7px,0) scale(1.065)}
+  100%{opacity:0;transform:translate3d(1px,-13px,0) scale(.99)}
+}
+@keyframes nexa-liquid-negative-939{
+  0%{opacity:0;transform:translate3d(-6px,-8px,0) scale(.7)}
+  24%{opacity:.63;transform:translate3d(-3px,2px,0) scale(.92)}
+  48%{opacity:.82;transform:translate3d(1px,12px,0) scale(1.055)}
+  71%{opacity:.72;transform:translate3d(2px,17px,0) scale(1.07)}
+  100%{opacity:0;transform:translate3d(2px,20px,0) scale(.98)}
+}
+#device .distribution .category-ranking{display:grid;gap:11px;margin-top:17px;padding-top:14px;border-top:1px solid rgba(232,248,235,.10)}
+#device .category-ranking .ranking-title{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#E8F3E8;font-size:11px;font-weight:680}
+#device .category-ranking .ranking-title span:last-child{font-size:10px;color:#A8C3B1;font-weight:500}
+#device .category-ranking button{
+  appearance:none;display:grid;grid-template-columns:minmax(0,1fr) 56px;gap:5px 9px;
+  width:100%;min-height:42px;padding:3px 2px;border:0;border-radius:9px;
+  text-align:left;background:none;color:#D7E9DD;transition:background-color 160ms ease,transform 160ms ease;
+}
+#device .category-ranking button:hover{background:rgba(232,250,235,.045)}
+#device .category-ranking button:focus-visible{outline:2px solid #D3F6B9;outline-offset:2px}
+#device .category-ranking button[aria-pressed="true"]{background:rgba(179,232,194,.09)}
+#device .category-ranking .ranking-label{display:flex;align-items:center;gap:7px;min-width:0;font-size:11px;font-weight:600}
+#device .category-ranking .ranking-swatch{display:inline-block;width:7px;height:7px;border-radius:50%;flex:none;background:rgb(var(--ranking-color))}
+#device .category-ranking .ranking-amount{text-align:right;white-space:nowrap;font-size:10px;font-variant-numeric:tabular-nums;color:#CFDFD2}
+#device .category-ranking .ranking-track{display:block;height:6px;border-radius:99px;overflow:hidden;background:rgba(149,189,159,.13);grid-column:1 / 2}
+#device .category-ranking .ranking-fill{display:block;height:100%;width:var(--ranking-share);border-radius:inherit;background:linear-gradient(90deg,rgba(var(--ranking-color),.52),rgb(var(--ranking-color)));transform-origin:left center;animation:nexa-chart-reveal-939 500ms cubic-bezier(.18,.75,.24,1) both}
+#device .category-ranking .ranking-percent{text-align:right;line-height:9px;font-size:10px;font-variant-numeric:tabular-nums;color:#A9C4B2}
+@media(max-width:350px){
+  #device .hero .trend.analytics-chart{height:121px!important}
+  #device .category-ranking button{gap:4px 7px}
+}
+@media(prefers-reduced-motion:reduce){
+  #device .hero .trend.analytics-chart .chart-fill,#device .category-ranking .ranking-fill{animation:none!important}
+  #device .hero.replaying .finance-eyes,#device .hero.replaying .finance-light-core{animation:none!important}
+}
+#device.no-motion .trend.analytics-chart .chart-fill,#device.no-motion .ranking-fill{animation:none!important}
+#device.no-motion .hero.replaying .finance-eyes,#device.no-motion .hero.replaying .finance-light-core{animation:none!important}
