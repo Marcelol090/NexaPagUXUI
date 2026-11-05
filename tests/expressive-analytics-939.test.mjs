@@ -59,5 +59,5 @@ test('facial rig gives distinct emotional mouth and brows without emoji',()=>{
   assert.notEqual(sad.brow,cautious.brow);
   assert.ok(Number(happy.opacity)>0.5);
   assert.ok(Number(sad.opacity)>0.5);
-  assert.doesNotMatch(sad.mouth+happy.mouth,'🫤');
+  assert.doesNotMatch(sad.mouth+happy.mouth,/🫤/);
 });
