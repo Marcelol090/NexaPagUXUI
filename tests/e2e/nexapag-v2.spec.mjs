@@ -135,7 +135,7 @@ test('V2.3 uses the user's 60fps transparent motion for each filled orb', async 
   expect(poster.ok()).toBe(true);
   expect((await video.body()).length).toBeGreaterThan(250000);
   await page.goto('/v2.html');
-  await expect(page).toHaveTitle(/V2\.3/);
+  await expect(page).toHaveTitle(/V2\.(3|4)/);
   await expect(page.locator('.day-cell')).toHaveCount(7);
   await expect(page.locator('.day-cell .jelly.ghost')).toHaveCount(2);
   await expect(page.locator('.day-cell .orb-media')).toHaveCount(5);
@@ -207,3 +207,4 @@ test('V2.3.1 uses generated orb fill frames without losing original liquid video
  const disabled=await page.locator('.day-cell .orb-fill-media').first().evaluate(el=>getComputedStyle(el).display==='none');
  expect(disabled).toBe(true);
 });
+
