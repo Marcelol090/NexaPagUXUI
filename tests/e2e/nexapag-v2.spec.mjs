@@ -122,3 +122,47 @@ test('V2.2 compact and reduced-motion spending card remains readable', async ({ 
   await expect(page.locator('#chartAmount')).toContainText('18,00');
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(2);
 });
+
+test('V2.3 uses the user's 60fps transparent motion for each filled orb', async ({ page, request }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  const [video, poster] = await Promise.all([
+    request.get('/assets/nexapag-orb-ultrasmooth-60fps-alpha-224.webm'),
+    request.get('/assets/nexapag-orb-poster-224.png')
+  ]);
+  expect(video.ok()).toBe(true);
+  expect(poster.ok()).toBe(true);
+  expect((await video.body()).length).toBeGreaterThan(250000);
+  await page.goto('/v2.html');
+  await expect(page).toHaveTitle(/V2\.3/);
+  await expect(page.locator('.day-cell')).toHaveCount(7);
+  await expect(page.locator('.day-cell .jelly.ghost')).toHaveCount(2);
+  await expect(page.locator('.day-cell .orb-media')).toHaveCount(5);
+  await expect(page.locator('#screen .orb-media')).toHaveCount(10);
+  await expect(page.locator('.day-cell .day-num')).toHaveCount(5);
+  await expect(page.locator('.day-cell.selected')).toHaveCount(1);
+  await page.locator('.day-cell[data-day="5"]').click();
+  await expect(page.locator('.day-cell[data-day="5"]')).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('#screen .orb-media').first().locator('source')).toHaveAttribute('type','video/webm');
+  for (const tab of ['expenses','home']) {
+    await page.locator('#dock button[data-tab="' + tab + '"]').click();
+    await expect(page.locator('#dock button[data-tab="' + tab + '"]')).toHaveAttribute('aria-current','page');
+  }
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(2);
+  expect(errors).toEqual([]);
+});
+
+test('V2.3 provides a static, colored orb poster when reduced motion is requested', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/v2.html');
+  await expect(page.locator('.day-cell .jelly.ghost')).toHaveCount(2);
+  const states = await page.locator('.day-cell .orb-media').evaluateAll(videos =>
+    videos.map(v => ({ paused: v.paused, display: getComputedStyle(v).display }))
+  );
+  expect(states).toHaveLength(5);
+  expect(states.every(state => state.display === 'none' && state.paused)).toBe(true);
+  await expect(page.locator('.day-cell .orb-poster')).toHaveCount(5);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(2);
+});

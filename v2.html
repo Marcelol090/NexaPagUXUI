@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#111211">
-<meta name="description" content="NexaPag V2.2 · motion expressivo nas saídas, gráfico responsivo e iconografia refinada.">
-<title>NexaPag V2.2 · Expressive Finance</title>
+<meta name="description" content="NexaPag V2.3 · motion expressivo nas saídas, gráfico responsivo e iconografia refinada.">
+<title>NexaPag V2.3 · Expressive Finance</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -98,7 +98,7 @@
 @media(prefers-reduced-motion:reduce){.carousel-track,.carousel-slide,.expanded-hero,.compact-hero,.greeting,.bottom-dock button{transition:none!important}.jelly{animation:none!important}}
 
 
-/* NexaPag V2.2 / crafted glyphs, grounded controls, fixed-grid navigation */
+/* NexaPag V2.3 / crafted glyphs, grounded controls, fixed-grid navigation */
 :root{--control-ink:#252923;--button-ease:cubic-bezier(.2,.8,.2,1);--touch-size:44px;--warm-tint:#f4b578}
 button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 button:focus-visible{outline:2px solid #70658f;outline-offset:3px}
@@ -162,6 +162,36 @@ button:focus-visible{outline:2px solid #70658f;outline-offset:3px}
 @media(min-width:681px){.bottom-dock{width:min(315px,95%)}.expression-money strong{font-size:39px!important}}
 @media(prefers-reduced-motion:reduce){.bottom-dock .dock-indicator,.bottom-dock button,.bottom-dock button svg,.bottom-dock button span,.expression-face g,.expression-wash,.chart-hit span{animation:none!important;transition:none!important}.expression-wash{transform:translate(-50%,-50%)}}
 
+
+/* V2.3 | Motion original do usuário, VP9 alpha 60fps, otimizado a 224px.
+   O líquido não é recriado em CSS. Cada esfera mostra o mesmo vídeo,
+   com deslocamento de fase e correção cromática específica por categoria. */
+.jelly.orb-cinema{isolation:isolate;overflow:hidden;contain:paint;transform:translateZ(0);border:1px solid rgba(255,255,255,.78);background:radial-gradient(circle at 29% 17%,rgba(255,255,255,.72),transparent 47%),radial-gradient(circle at 76% 82%,color-mix(in srgb,var(--orb) 28%,transparent),transparent 65%),color-mix(in srgb,var(--orb) 12%,rgba(255,255,255,.7));box-shadow:inset 0 1px 3px #fff,inset -2px -3px 9px color-mix(in srgb,var(--orb) 18%,transparent),0 5px 12px color-mix(in srgb,var(--orb) 17%,transparent);--orb-film-filter:hue-rotate(27deg) saturate(.91) contrast(1.03)}
+.jelly.orb-cinema.lilac{--orb-film-filter:hue-rotate(290deg) saturate(.88) contrast(1.01)}
+.jelly.orb-cinema.lime{--orb-film-filter:hue-rotate(105deg) saturate(.77) contrast(1.05)}
+.jelly.orb-cinema.red{--orb-film-filter:saturate(.85) contrast(1.04)}
+.jelly.orb-cinema.orange{--orb-film-filter:hue-rotate(27deg) saturate(.87) contrast(1.02)}
+.jelly.orb-cinema .orb-poster,.jelly.orb-cinema .orb-media{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:contain;pointer-events:none;filter:var(--orb-film-filter);transform:scale(1.06);-webkit-transform:scale(1.06);background:transparent;mix-blend-mode:normal}
+.jelly.orb-cinema .orb-poster{opacity:1;transition:opacity .25s ease}
+.jelly.orb-cinema .orb-media{opacity:0;transition:opacity .25s ease}
+.jelly.orb-cinema.motion-playing .orb-media{opacity:1}
+.jelly.orb-cinema.motion-playing .orb-poster{opacity:0}
+.jelly.orb-cinema:before{z-index:2;opacity:.6;pointer-events:none}
+.jelly.orb-cinema:after{z-index:2;pointer-events:none;opacity:.35}
+.jelly.orb-cinema .day-num,.jelly.orb-cinema .value{position:relative;z-index:4;isolation:isolate}
+.jelly.orb-cinema .day-num{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(35,23,35,.5)}
+.jelly.orb-cinema .value{text-shadow:0 1px 8px rgba(33,19,28,.38),0 0 1px rgba(255,255,255,.4)}
+.day-cell .jelly{width:35px;height:35px;transition:transform .24s var(--ease),box-shadow .24s ease}
+.day-cell .jelly.ghost,.day-cell.inactive .jelly{background:transparent;border:1.4px dashed #d8d4cd;box-shadow:none;overflow:visible}
+.day-cell .jelly.ghost:before,.day-cell .jelly.ghost:after,.day-cell.inactive .jelly:before,.day-cell.inactive .jelly:after{content:none}
+.day-cell.selected .jelly{outline:1.7px solid #e9a95a;outline-offset:3px;box-shadow:0 3px 12px rgba(192,116,48,.18),inset 0 1px 2px #fff}
+.day-cell.selected .weekday{color:#9b714e;font-weight:780}
+.day-cell .weekday{font-size:10px;margin-top:1px}
+.day-cell{gap:8px;min-height:55px;touch-action:manipulation}
+.days{margin-top:13px;gap:1px}
+@media(hover:hover){.day-cell:hover .orb-cinema{transform:translateY(-2px) scale(1.04)}.milestone:hover .orb-cinema{transform:scale(1.04)}}
+@media(max-width:355px){.day-cell .jelly{width:30px;height:30px}.days{gap:0}.day-cell{gap:7px}}
+@media(prefers-reduced-motion:reduce){.jelly.orb-cinema .orb-poster{opacity:1!important}.jelly.orb-cinema .orb-media{display:none!important}.jelly.orb-cinema{animation:none!important}}
 </style>
 </head>
 <body>
@@ -186,7 +216,7 @@ button:focus-visible{outline:2px solid #70658f;outline-offset:3px}
 <symbol id="i-circle-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.7 9a2.5 2.5 0 0 1 4.8 1c0 1.7-2.5 2-2.5 3.4M12 17h.01"/></symbol>
 </svg>
 <main class="studio">
-<div class="studio-mark"><div class="studio-logo">N</div><div><strong>NexaPag</strong><small>UI/UX · V2 Motion Study</small></div></div><div class="studio-tag">Reference-driven design / 2026</div>
+<div class="studio-mark"><div class="studio-logo">N</div><div><strong>NexaPag</strong><small>UI/UX · V2.3 Motion Study</small></div></div><div class="studio-tag">Reference-driven design / 2026</div>
 <div class="handset" id="handset"><div class="phone">
 <div class="status" aria-label="Barra de status ilustrativa"><span class="status-time">9:41</span><span class="dynamic-island"></span><div class="status-right"><svg viewBox="0 0 18 13"><path d="M1 12h2V9H1Zm4 0h2V7H5Zm4 0h2V4H9Zm4 0h2V1h-2Z" fill="currentColor"/></svg><svg viewBox="0 0 18 13"><path d="M2 4a12 12 0 0 1 14 0M5 7a7 7 0 0 1 8 0M8 10a2 2 0 0 1 2 0" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span class="battery"></span></div></div>
 <header class="topbar" id="topbar"><strong class="brand-short">nexapag.</strong><div class="top-actions"><button class="round-action notice" type="button" id="notifications" aria-label="Notificações"><svg><use href="#i-bell"/></svg></button><button class="round-action avatar" type="button" id="avatar" aria-label="Perfil de demonstração">N</button></div></header>
@@ -208,9 +238,13 @@ const state={tab:'home',expanded:false,slide:0,day:6,period:'Semana',category:'T
 const labels=['S','T','Q','Q','S','S','D'];const data=[{name:'Mercado',kind:'Alimentação',amount:126.8,icon:'bag',color:'red'},{name:'Pix recebido',kind:'Transferência',amount:1950,icon:'trend',color:'green'},{name:'Estorno de compra',kind:'Reembolso',amount:349.9,icon:'refresh',color:'purple'}];
 const stars=[{title:'Visão do dia',kicker:'Hoje',value:'R$ 270',headline:'Seu ritmo, seu controle.',hint:'Acompanhe as saídas da semana',theme:'sun',ruler:['Seg','Qua','Sex']},{title:'Meta semanal',kicker:'Planejamento',value:'78%',headline:'Ainda há espaço.',hint:'R$ 930 disponíveis no limite',theme:'moon',ruler:['Gasto','Meta','Livre']},{title:'Cartões',kicker:'Organização',value:'3 ativos',headline:'Tudo em um lugar.',hint:'Concilie os seus lançamentos',theme:'forest',ruler:['Nubank','Itaú','Inter']}];
 let autoClose=null,autoAdvance=null,toastTimeout=null;
-function jelly(cls='',contents=''){return `<span class="jelly ${cls}">${contents}</span>`}
+function jelly(cls='',contents=''){
+  const empty=cls.split(/\s+/).includes('ghost');
+  if(empty)return `<span class="jelly ghost" aria-hidden="true"></span>`;
+  return `<span class="jelly orb-cinema ${cls}" data-orb-tone="${cls}"><img class="orb-poster" src="./assets/nexapag-orb-poster-224.png" alt="" aria-hidden="true" decoding="async"><video class="orb-media" muted loop playsinline preload="metadata" aria-hidden="true" disablepictureinpicture><source src="./assets/nexapag-orb-ultrasmooth-60fps-alpha-224.webm" type="video/webm"></video>${contents}</span>`;
+}
 function heroMarkup(){return `<div class="hero-region" id="heroRegion"><div class="compact-hero" id="compactHero"><button class="milestone" data-open="1" aria-label="Abrir resumo de receitas">${jelly('lime',`<span class="value">1,9k</span>`)}<span>Entradas</span></button><button class="milestone is-main" data-open="1" aria-label="Abrir carrossel financeiro">${jelly('orange',`<span class="value">3,4k</span>`)}<span>Saídas</span></button><button class="milestone" data-open="1" aria-label="Abrir resumo de estornos">${jelly('lilac',`<span class="value">350</span>`)}<span>Estornos</span></button></div><div class="expanded-hero" id="expandedHero"><div class="carousel-viewport" id="carouselViewport" role="region" aria-roledescription="carrossel" aria-label="Panorama financeiro" tabindex="0"><div class="carousel-track" id="carouselTrack">${stars.map((s,i)=>`<article class="carousel-slide ${s.theme}" data-slide="${i}" aria-label="${s.title}"><div class="slide-top"><span class="slide-chip">${icon(i===0?'trend':i===1?'sparkle':'card')} ${s.kicker}</span><button class="slide-play" aria-label="Ver detalhes de ${s.title}" data-action="slideAction">${icon('play')}</button></div><div class="slide-timer" aria-label="${s.title}: ${s.value}">${s.value}</div><div class="slide-text"><h3>${s.headline}</h3><p>${s.hint}</p></div><div class="ruler" aria-hidden="true">${Array.from({length:47},()=>'<i></i>').join('')}</div><div class="ruler-labels">${s.ruler.map(k=>`<span>${k}</span>`).join('')}</div></article>`).join('')}</div><button class="carousel-prev" data-action="prev" aria-label="Card anterior">${icon('chevron-left')}</button><button class="carousel-next" data-action="next" aria-label="Próximo card">${icon('arrow')}</button></div><div class="carousel-dots" aria-label="Escolher um cartão financeiro">${stars.map((s,i)=>`<button aria-label="Ir para ${s.title}" aria-pressed="${i===state.slide}" data-index="${i}"></button>`).join('')}</div><button class="collapse-carousel" data-action="collapse" type="button" aria-label="Recolher os cartões" title="Recolher cartões"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 14 7-7 7 7"/></svg></button></div><div class="greeting"><h1>bom dia, <span>seu dinheiro</span></h1><p>Um olhar mais leve para cada escolha.</p></div></div>`}
-function weekMarkup(){return `<section class="surface week"><div class="week-head"><span>Esta semana</span><small>${icon('sparkle')} <b>4</b> de 7 dias</small></div><div class="days">${labels.map((d,i)=>`<button type="button" class="day-cell ${[2,4].includes(i)?'inactive':i>6?'future':''} ${state.day===i?'selected':''}" data-day="${i}" aria-label="${['Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'][i]}" aria-pressed="${state.day===i}">${jelly([0,3,6].includes(i)?'orange':[1,5].includes(i)?'lilac':'lime',`<span class="day-num">${[0,1,3,6].includes(i)?'✓':''}</span>`)}<span class="weekday">${d}</span></button>`).join('')}</div></section>`}
+function weekMarkup(){return `<section class="surface week"><div class="week-head"><span>Esta semana</span><small>${icon('sparkle')} <b>4</b> de 7 dias</small></div><div class="days">${labels.map((d,i)=>`<button type="button" class="day-cell ${[2,4].includes(i)?'inactive':i>6?'future':''} ${state.day===i?'selected':''}" data-day="${i}" aria-label="${['Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'][i]}" aria-pressed="${state.day===i}">${[2,4].includes(i)?jelly('ghost'):jelly([0,3,6].includes(i)?'orange':[1,5].includes(i)?'lilac':'lime',`<span class="day-num">${[0,1,3,6].includes(i)?'✓':''}</span>`)}<span class="weekday">${d}</span></button>`).join('')}</div></section>`}
 function winsMarkup(){return `<div class="section-title"><h2>Pequenas conquistas</h2><button data-action="wins">Ver tudo</button></div><div class="wins"><button type="button" class="win surface" data-action="goal"><span class="win-label">${icon('sparkle')} Meta</span>${jelly('lilac')}<small>Disponível na semana</small><strong>930 <span class="suffix">reais</span></strong></button><button type="button" class="win surface" data-action="refund"><span class="win-label">${icon('refresh')} Estornos</span>${jelly('lime')}<small>Valor recuperado</small><strong>349,90 <span class="suffix">R$</span></strong></button></div>`}
 function transactionMarkup(t){return `<div class="transaction"><div class="transaction-symbol ${t.color}">${icon(t.icon)}</div><div class="transaction-name"><b>${t.name}</b><small>${t.kind}</small></div><strong class="transaction-amount ${t.color==='green'?'in':'out'}">${t.color==='green'?'+':t.color==='purple'?'+':'−'} ${money(t.amount)}</strong></div>`}
 function home(){return `<div class="screen-page" id="homePage">${heroMarkup()}${weekMarkup()}${winsMarkup()}<section class="surface daily-note"><div class="note-label">${icon('sparkle')} Uma ideia para hoje</div><h3>Qual pequena escolha pode fazer diferença esta semana?</h3><div class="note-foot"><button class="tiny-dark" data-action="tip">Explorar</button><button class="tiny-icon" aria-label="Próxima ideia" data-action="tip">${icon('arrow')}</button></div></section><div class="section-title"><h2>Movimentações</h2><button data-tab-go="expenses">Ver todas</button></div><div class="surface transactions">${data.map(transactionMarkup).join('')}</div></div>`}
@@ -245,7 +279,44 @@ function expenses(){const categories=[{n:'Alimentação',v:1240,c:'orange',sub:'
 function ads(){return `<div class="screen-page">${heading('Benefícios','Anúncios','Encontre oportunidades sem comprometer o orçamento.')}<div class="surface overview"><small>Seu espaço de descobertas</small><strong>Escolhas mais leves.</strong><div class="highlight">Catálogos ainda não conectados · demonstração</div></div><div class="section-title"><h2>Explorar</h2><button data-action="adInfo">Como funciona?</button></div><div class="surface offer-card"><div class="offer-icon">${icon('bag')}</div><h3>Ofertas com propósito</h3><p>Conecte os programas de afiliados para exibir produtos reais e acompanhar descontos verificados.</p><button data-action="adDemo">Ver integrações</button></div><div class="surface offer-card green"><div class="offer-icon">${icon('sparkle')}</div><h3>Priorize a sua meta</h3><p>Compare qualquer compra planejada com o saldo disponível na semana antes de decidir.</p><button data-action="goal">Consultar meta</button></div></div>`}
 function cards(){const banks=[{n:'Nubank Ultravioleta',last:'4821',s:'Compras e lançamentos',kind:'purple'},{n:'Itaú Personnalité',last:'7310',s:'Acompanhamento financeiro',kind:'gold'},{n:'Inter Black',last:'2044',s:'Cartão vinculado',kind:'coral'}];return `<div class="screen-page">${heading('Seus cartões','Cartões','Três cartões de demonstração organizados.')}<div class="card-stack">${banks.map((b,i)=>`<button class="bank-card ${b.kind} ${state.card===i?'selected':''}" data-card="${i}" aria-pressed="${state.card===i}"><div><b>${b.n}</b><small style="display:block;margin-top:5px">${b.s}</small></div><span class="card-last">•••• &nbsp; ${b.last}</span></button>`).join('')}</div><div class="section-title"><h2>Cartão selecionado</h2></div><div class="surface overview"><small>Consolidação</small><strong>${banks[state.card].n}</strong><div class="highlight">Os valores detalhados serão exibidos após a integração.</div></div></div>`}
 function review(){const names=['Compra sem categoria','Pix aguardando identificação','Notificação duplicada'];return `<div class="screen-page">${heading('Sua atenção','Revisar','Só o que precisa de você, sem excesso de ruído.')}<div class="surface overview"><small>Eventos a revisar</small><strong>${3-state.reviewed.length}</strong><span class="highlight">Revisões neste protótipo não alteram dados reais</span></div><div class="section-title"><h2>Pendências</h2><button data-action="reviewInfo">Sobre a captura</button></div>${names.map((name,i)=>`<div class="surface review-item ${state.reviewed.includes(i)?'is-done':''}">${jelly(i===1?'lilac':i===2?'lime':'orange','')}<div class="review-copy"><b>${name}</b><p>${['Confira a categoria para manter as análises precisas.','Verifique o titular da transferência antes de confirmar.','Compare o evento com os registros anteriores.'][i]}</p><button data-review="${i}" ${state.reviewed.includes(i)?'disabled':''}>${state.reviewed.includes(i)?'Revisado ✓':'Marcar revisado'}</button></div></div>`).join('')}${state.reviewed.length===3?'<div class="surface empty-state">Tudo revisado. Seu painel está em dia.</div>':''}</div>`}
-function render(){const tab=state.tab;cancelAnimationFrame(expenseMotionFrame);cancelAnimationFrame(graphMotionFrame);$('#screen').innerHTML=({home,expenses,ads,cards,review})[tab]();$('#dock').style.setProperty('--active-tab',String(['home','expenses','ads','cards','review'].indexOf(tab)));$$('#dock button').forEach(b=>{const selected=b.dataset.tab===tab;b.classList.toggle('active',selected);b.setAttribute('aria-current',selected?'page':'false')});if(tab==='home'){const root=$('#homePage');root.classList.toggle('hero-expanded',state.expanded);if(state.expanded)requestAnimationFrame(updateCarousel)}if(tab==='expenses'){requestAnimationFrame(()=>{animateExpense();animateChart();})}$('#topbar').classList.toggle('is-scrolled',false)}
+
+// Each instance runs the user's original transparent liquid motion. All instances
+// reuse one cached small asset; the observer pauses offscreen video decoders.
+let motionObserver=null;
+const orbReduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+function prepareMotionOrbs(){
+  if(motionObserver)motionObserver.disconnect();
+  motionObserver=null;
+  const videos=[...document.querySelectorAll('#screen .orb-cinema .orb-media')];
+  if(orbReduceMotion.matches){videos.forEach(v=>{v.pause();v.removeAttribute('autoplay')});return;}
+  if(!videos.length)return;
+  motionObserver=new IntersectionObserver(entries=>{
+    for(const entry of entries){
+      const video=entry.target;
+      if(entry.isIntersecting && document.visibilityState==='visible'){
+        const promise=video.play();if(promise?.catch)promise.catch(()=>{video.parentElement?.classList.remove('motion-playing')});
+      } else {video.pause();video.parentElement?.classList.remove('motion-playing');}
+    }
+  },{root:document.getElementById('scroller'),threshold:.05,rootMargin:'80px 0px 80px 0px'});
+  videos.forEach((video,index)=>{
+    video.addEventListener('playing',()=>video.parentElement?.classList.add('motion-playing'));
+    video.addEventListener('error',()=>video.parentElement?.classList.remove('motion-playing'));
+    video.addEventListener('loadedmetadata',()=>{
+      if(Number.isFinite(video.duration)&&video.duration>1){try{video.currentTime=(index*.53)%video.duration;}catch{}}
+    },{once:true});
+    motionObserver.observe(video);
+  });
+}
+document.addEventListener('visibilitychange',()=>{
+  const videos=document.querySelectorAll('#screen .orb-media');
+  if(document.hidden){videos.forEach(v=>v.pause());return;}
+  if(!orbReduceMotion.matches)videos.forEach(v=>{
+    if(v.getBoundingClientRect().bottom>0 && v.getBoundingClientRect().top<innerHeight){v.play().catch(()=>{});}
+  });
+});
+orbReduceMotion.addEventListener?.('change',()=>prepareMotionOrbs());
+
+function render(){const tab=state.tab;cancelAnimationFrame(expenseMotionFrame);cancelAnimationFrame(graphMotionFrame);$('#screen').innerHTML=({home,expenses,ads,cards,review})[tab]();$('#dock').style.setProperty('--active-tab',String(['home','expenses','ads','cards','review'].indexOf(tab)));$$('#dock button').forEach(b=>{const selected=b.dataset.tab===tab;b.classList.toggle('active',selected);b.setAttribute('aria-current',selected?'page':'false')});if(tab==='home'){const root=$('#homePage');root.classList.toggle('hero-expanded',state.expanded);if(state.expanded)requestAnimationFrame(updateCarousel)}if(tab==='expenses'){requestAnimationFrame(()=>{animateExpense();animateChart();})}prepareMotionOrbs();$('#topbar').classList.toggle('is-scrolled',false)}
 function $$(s,r=document){return [...r.querySelectorAll(s)]}
 function updateCarousel(options={}){const track=$('#carouselTrack'),vp=$('#carouselViewport');if(!track||!vp)return;const first=track.querySelector('.carousel-slide');if(!first)return;const width=first.offsetWidth,gap=parseFloat(getComputedStyle(track).columnGap)||12,offset=(vp.clientWidth-width)/2-state.slide*(width+gap)+(options.dragOffset||0);track.style.transform=`translate3d(${offset}px,0,0)`;$$('.carousel-slide',vp).forEach((el,i)=>{el.classList.toggle('current',i===state.slide);el.setAttribute('aria-hidden',i!==state.slide?'true':'false');el.querySelectorAll('button').forEach(b=>b.tabIndex=i===state.slide?0:-1);el.classList.toggle('side-prev',i<state.slide);el.classList.toggle('side-next',i>state.slide)});$$('.carousel-dots button').forEach((el,i)=>{el.classList.toggle('active',i===state.slide);el.setAttribute('aria-pressed',i===state.slide?'true':'false')})}
 function expand(play=true){if(state.tab!=='home')return;clearTimeout(autoClose);clearInterval(autoAdvance);state.expanded=true;$('#homePage')?.classList.add('hero-expanded');requestAnimationFrame(()=>requestAnimationFrame(updateCarousel));if(play&&!matchMedia('(prefers-reduced-motion: reduce)').matches){autoAdvance=setInterval(()=>{state.slide=(state.slide+1)%3;updateCarousel()},2700);autoClose=setTimeout(()=>collapse(),8200)}}
