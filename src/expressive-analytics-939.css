@@ -62,8 +62,8 @@
 #device .category-ranking .ranking-title{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#E8F3E8;font-size:11px;font-weight:680}
 #device .category-ranking .ranking-title span:last-child{font-size:10px;color:#A8C3B1;font-weight:500}
 #device .category-ranking button{
-  appearance:none;display:grid;grid-template-columns:minmax(0,1fr) 56px;gap:5px 9px;
-  width:100%;min-height:42px;padding:3px 2px;border:0;border-radius:9px;
+  appearance:none;display:grid;grid-template-columns:minmax(0,1fr) 96px;gap:5px 9px;
+  width:100%;min-height:44px;padding:3px 2px;border:0;border-radius:9px;
   text-align:left;background:none;color:#D7E9DD;transition:background-color 160ms ease,transform 160ms ease;
 }
 #device .category-ranking button:hover{background:rgba(232,250,235,.045)}
