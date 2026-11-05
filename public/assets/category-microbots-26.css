@@ -1,0 +1,38 @@
+/* NexaPag 2.6: compact morph assets, one-shot playback with preserved 44px targets. */
+.category{min-height:70px;gap:10px;overflow:visible}
+.category-morph,.category-morph--lilac,.category-morph--lime,.category-morph--red{
+  width:44px;height:44px;min-width:44px;min-height:44px;border-radius:14px;
+  overflow:visible;transform:translateZ(0);background:none;border:0;isolation:isolate;
+}
+.category-morph:focus-visible{outline:2px solid #594b72;outline-offset:3px}
+.category-morph .category-morph-orb,.category-morph .category-morph-eyes{display:none!important;animation:none!important}
+.category-morph .category-morph-glyph{display:none!important;animation:none!important}
+.category-morph .category-morph-glyph::after{display:none!important}
+.category-morph .category-morph-film,.category-morph .category-morph-final{
+  position:absolute;inset:0;display:block;width:44px;height:44px;
+  object-fit:contain;image-rendering:auto;pointer-events:none;
+  filter:drop-shadow(0 3px 5px rgba(40,30,55,.065));
+  transform-origin:50% 52%;
+}
+.category-morph .category-morph-final{
+  z-index:1;opacity:1;transform:scale(1);transition:opacity .16s linear,transform .20s cubic-bezier(.2,.8,.2,1);
+}
+.category-morph .category-morph-film{z-index:2;opacity:0;visibility:hidden;transition:opacity .16s ease}
+.category-morph.is-playing .category-morph-film{opacity:1;visibility:visible}
+.category-morph.is-playing .category-morph-final{opacity:0;transform:scale(.95)}
+.category-morph.is-playing.is-finishing .category-morph-film{opacity:0}
+.category-morph.is-playing.is-finishing .category-morph-final{opacity:1;transform:scale(1)}
+.category-morph.has-fallback .category-morph-final,.category-morph.has-fallback .category-morph-film{display:none!important}
+.category-morph.has-fallback .category-morph-glyph{display:grid!important;opacity:1!important;transform:none!important;position:relative;z-index:3}
+.category-morph.has-fallback .category-morph-glyph svg{width:23px;height:23px}
+.category-morph[data-shape="droplet"]{--cat-accent:#dc7653}
+.category-morph[data-shape="rectangle"]{--cat-accent:#8f67d3}
+.category-morph[data-shape="triangle"]{--cat-accent:#319b81}
+.category-morph[data-shape="pentagon"]{--cat-accent:#df6e9f}
+.category-morph:active{transform:scale(.94)}
+@media(max-width:360px){.category-morph,.category-morph--lilac,.category-morph--lime,.category-morph--red{width:44px;height:44px}.category{gap:9px}}
+@media(prefers-reduced-motion:reduce){
+  .category-morph,.category-morph *{animation:none!important;transition:none!important}
+  .category-morph .category-morph-film{display:none!important}
+  .category-morph .category-morph-final{opacity:1!important;transform:none!important}
+}

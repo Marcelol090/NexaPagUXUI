@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#111211">
-<meta name="description" content="NexaPag V2.5 · refração glass da carteira e categorias com expressão que se transforma em ícone.">
-<title>NexaPag V2.5 · Glass & Category Morph</title>
+<meta name="description" content="NexaPag V2.6 · bots líquidos com formas próprias transformados em ícones por categoria.">
+<title>NexaPag V2.6 · Liquid Morph Icons</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -383,6 +383,7 @@ button:focus-visible{outline:2px solid #70658f;outline-offset:3px}
 @media (max-width:360px){.wallet-grid{gap:13px 9px}.wallet-folder-name{font-size:11px}.category-morph{width:47px;height:47px}.category-morph-orb{inset:1px}.category-morph-glyph svg{width:25px;height:25px}.category{gap:8px}}
 
 </style>
+<link rel="stylesheet" href="./assets/category-microbots-26.css">
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
@@ -406,7 +407,7 @@ button:focus-visible{outline:2px solid #70658f;outline-offset:3px}
 <symbol id="i-circle-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.7 9a2.5 2.5 0 0 1 4.8 1c0 1.7-2.5 2-2.5 3.4M12 17h.01"/></symbol>
 </svg>
 <main class="studio">
-<div class="studio-mark"><div class="studio-logo">N</div><div><strong>NexaPag</strong><small>UI/UX · V2.5 Motion Studio</small></div></div><div class="studio-tag">Reference-driven design / 2026</div>
+<div class="studio-mark"><div class="studio-logo">N</div><div><strong>NexaPag</strong><small>UI/UX · V2.6 Motion Studio</small></div></div><div class="studio-tag">Reference-driven design / 2026</div>
 <div class="handset" id="handset"><div class="phone">
 <div class="status" aria-label="Barra de status ilustrativa"><span class="status-time">9:41</span><span class="dynamic-island"></span><div class="status-right"><svg viewBox="0 0 18 13"><path d="M1 12h2V9H1Zm4 0h2V7H5Zm4 0h2V4H9Zm4 0h2V1h-2Z" fill="currentColor"/></svg><svg viewBox="0 0 18 13"><path d="M2 4a12 12 0 0 1 14 0M5 7a7 7 0 0 1 8 0M8 10a2 2 0 0 1 2 0" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span class="battery"></span></div></div>
 <header class="topbar" id="topbar"><strong class="brand-short">nexapag.</strong><div class="top-actions"><button class="round-action notice" type="button" id="notifications" aria-label="Notificações"><svg><use href="#i-bell"/></svg></button><button class="round-action avatar" type="button" id="avatar" aria-label="Perfil de demonstração">N</button></div></header>
@@ -489,7 +490,7 @@ const categoryGlyphs={
   'Transporte':'<path d="m5 15 1.5-7.6A2 2 0 0 1 8.5 6h7a2 2 0 0 1 2 1.4L19 15"/><rect x="3" y="12" width="18" height="8" rx="2"/><path d="M6.5 16.5h1m8 0h1M6 20v1m12-1v1"/>',
   'Casa':'<path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9Z"/><path d="M9 21v-7h6v7"/>'
 };
-function categoryMotionMarkup(item){return `<button type="button" class="category-morph category-morph--${item.c}" data-category-motion="${item.n}" aria-label="Reproduzir expressão da categoria ${item.n}" title="Reproduzir animação de ${item.n}"><span class="category-morph-orb" aria-hidden="true"></span><span class="category-morph-eyes" aria-hidden="true"><i></i><i></i></span><span class="category-morph-glyph" aria-hidden="true"><svg viewBox="0 0 24 24">${categoryGlyphs[item.n]}</svg></span></button>`}
+function categoryMotionMarkup(item){if(window.NexaPagMicrobots)return window.NexaPagMicrobots.markup(item,categoryGlyphs[item.n]);return `<button type="button" class="category-morph category-morph--${item.c}" data-category-motion="${item.n}" aria-label="Reproduzir expressão da categoria ${item.n}" title="Reproduzir animação de ${item.n}"><span class="category-morph-orb" aria-hidden="true"></span><span class="category-morph-eyes" aria-hidden="true"><i></i><i></i></span><span class="category-morph-glyph" aria-hidden="true"><svg viewBox="0 0 24 24">${categoryGlyphs[item.n]}</svg></span></button>`}
 function expenses(){const categories=[{n:'Alimentação',v:1240,c:'orange',sub:'Mercados e restaurantes'},{n:'Compras',v:965,c:'lilac',sub:'Lojas e marketplace'},{n:'Transporte',v:714,c:'lime',sub:'Mobilidade'},{n:'Casa',v:549.2,c:'red',sub:'Despesas domésticas'}];return `<div class="screen-page expenses-page">${heading('Seu panorama','Gastos','Acompanhe os números sem perder os detalhes.')}${expressionMarkup()}<div class="chips expense-periods" aria-label="Selecionar período">${['Semana','Mês','Tudo'].map(p=>`<button class="chip ${p===state.period?'on':''}" data-period="${p}" aria-pressed="${state.period===p}">${p}</button>`).join('')}</div>${graphMarkup()}<div class="section-title"><h2>Categorias <span class="section-context">· total demonstrativo</span></h2><button data-action="category">Detalhes</button></div>${categories.map(c=>`<div class="surface category">${categoryMotionMarkup(c)}<div class="copy"><strong>${c.n}</strong><small>${c.sub}</small><div class="bar"><i style="width:${c.v/1240*100}%"></i></div></div><b class="amount">${money(c.v)}</b></div>`).join('')}<div class="section-title"><h2>Calendário</h2><button data-action="calendar">Novembro</button></div><div class="surface"><div class="heatmap">${Array.from({length:35},(_,i)=>{let d=i-5;return `<button ${d<1||d>30?'disabled':''} class="${d>0&&d<=5?'lv'+(d%4+1):''} ${state.heatDay===d?'sel':''}" data-heat="${d}" aria-label="Dia ${d}">${d>0&&d<=30?d:''}</button>`}).join('')}</div><div class="heatmap-detail">Dia ${state.heatDay} · ${state.heatDay<=5?'Há movimentações':'Sem dados de demonstração para este dia'}</div></div></div>`;}
 
 function ads(){return `<div class="screen-page">${heading('Benefícios','Anúncios','Encontre oportunidades sem comprometer o orçamento.')}<div class="surface overview"><small>Seu espaço de descobertas</small><strong>Escolhas mais leves.</strong><div class="highlight">Catálogos ainda não conectados · demonstração</div></div><div class="section-title"><h2>Explorar</h2><button data-action="adInfo">Como funciona?</button></div><div class="surface offer-card"><div class="offer-icon">${icon('bag')}</div><h3>Ofertas com propósito</h3><p>Conecte os programas de afiliados para exibir produtos reais e acompanhar descontos verificados.</p><button data-action="adDemo">Ver integrações</button></div><div class="surface offer-card green"><div class="offer-icon">${icon('sparkle')}</div><h3>Priorize a sua meta</h3><p>Compare qualquer compra planejada com o saldo disponível na semana antes de decidir.</p><button data-action="goal">Consultar meta</button></div></div>`}
@@ -569,6 +570,7 @@ orbReduceMotion.addEventListener?.('change',()=>prepareMotionOrbs());
 
 let categoryMotionObserver;
 function playCategoryMotion(button){
+  if(window.NexaPagMicrobots)return window.NexaPagMicrobots.play(button);
   if(!button||!button.isConnected)return;
   button.classList.remove('is-playing');
   if(reducedMotion())return;
@@ -652,5 +654,6 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInter
 $('#scroller').addEventListener('scroll',()=>{$('#topbar').classList.toggle('is-scrolled',$('#scroller').scrollTop>25)},{passive:true});$('#notifications').addEventListener('click',()=>notify('Não há novas notificações nesta demonstração.'));$('#avatar').addEventListener('click',()=>{if(state.tab==='home')state.expanded?collapse():expand(false);else notify('Perfil de demonstração NexaPag V2.')});window.addEventListener('resize',()=>{if(state.expanded)updateCarousel()});
 render();if(!matchMedia('(prefers-reduced-motion: reduce)').matches){setTimeout(()=>{if(state.tab==='home'&&state.firstShow){state.firstShow=false;expand(true)}},1900)}
 </script>
+<script defer src="./assets/category-microbots-26.js"></script>
 </body>
 </html>
