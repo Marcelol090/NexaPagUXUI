@@ -125,7 +125,10 @@ test('V2.2 compact and reduced-motion spending card remains readable', async ({ 
 
 test('V2.7 weekly liquid orbs are weighted by actual demo category amounts',async({page})=>{
  const errors=[];page.on('pageerror',err=>errors.push(err.message));
- await page.setViewportSize({width:390,height:844});await page.goto('/v2.html');
+ await page.setViewportSize({width:390,height:844});
+ // Avoid the autonomous hero expansion racing the ledger interaction test.
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.goto('/v2.html');
  await expect(page.locator('.day-cell')).toHaveCount(7);
  await expect(page.locator('.day-cell .week-orb-canvas')).toHaveCount(4);
  await expect(page.locator('.day-cell .jelly.ghost')).toHaveCount(3);
