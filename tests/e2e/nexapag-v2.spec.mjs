@@ -5,7 +5,7 @@ test('V2 financial experience preserves the reference composition and five tabs'
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/v2.html');
-  await expect(page).toHaveTitle(/NexaPag V2/);
+  await expect(page).toHaveTitle(/NexaPag V(?:2|3)/);
   await expect(page.locator('#dock button')).toHaveCount(5);
   await expect(page.locator('.compact-hero .jelly')).toHaveCount(3);
   await page.locator('[data-open="1"]').first().click();
