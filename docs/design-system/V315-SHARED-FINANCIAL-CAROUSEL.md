@@ -1,0 +1,3 @@
+# NexaPag V3.15 · Shared financial carousel and typography
+Based on user MP4 20261106-2159-33.0363757.mp4.
+Entradas and Estornos stay as inline components with shared orb navigation arrows and a three-label rail. Saídas retains its original three-slide carousel and adds a compact category rail. Switching financial categories performs a direct card-to-card liquid shared-element morph, without resetting to the three orbs or opening a popup. Swiping summary cards navigates categories; Saídas retains its existing slide gestures. Amounts use tabular figures, headlines are visually separate from descriptive copy, CTA and financial rulers follow one rhythm. Dark/light and reduced motion stay supported.
