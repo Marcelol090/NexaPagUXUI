@@ -186,7 +186,7 @@ document.addEventListener('keydown',event=>{
  const first=buttons[0],last=buttons.at(-1);
  if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
  else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
-});
+},true);
 phone.addEventListener('click',event=>{
  if(event.target.closest('#dock [data-tab]')&&(active||busy)){
   if(active){active.layer.remove();active=null;}stopFlight();restoreOrigin();busy=false;

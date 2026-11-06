@@ -36,6 +36,14 @@ test('V3.6 matches twelve-frame story: equal responsive orbs with reversible GPU
  await expect(page.locator('#homePage')).not.toHaveClass(/hero-expanded/);
  await expect(page.locator('.orb-fluid-ghost')).toHaveCount(0,{timeout:3600});
  await expect(page.locator('[data-open="1"]')).toHaveAttribute('aria-expanded','false');
+ // Keyboard closing must use the same reverse morph; no instant CSS collapse.
+ await page.locator('[data-open="1"]').click();
+ await expect(page.locator('.orb-fluid-ghost[data-kind="spending"]')).toHaveCount(0,{timeout:3600});
+ await page.locator('#carouselViewport').focus();
+ await page.keyboard.press('Escape');
+ await expect(page.locator('.orb-fluid-ghost[data-kind="spending"]')).toHaveCount(1);
+ await expect(page.locator('.orb-fluid-ghost')).toHaveCount(0,{timeout:3600});
+ await expect(page.locator('#homePage')).not.toHaveClass(/hero-expanded/);
  expect(errors).toEqual([]);
 });
 test('V3.6 reduced-motion keeps all three cards functional, without ghost',async({page})=>{
