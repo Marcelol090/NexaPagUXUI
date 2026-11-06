@@ -92,7 +92,7 @@ test('V2.2 expressive expenses preserves animated value, warm glow, three moods 
   await expect(page.locator('#expressionInteger')).toHaveText('270');
   const widths = await page.locator('#dock button').evaluateAll(elements => elements.map(el => el.getBoundingClientRect().width));
   expect(Math.max(...widths) - Math.min(...widths)).toBeLessThan(1);
-  await page.locator('[data-action="expenseReplay"]').click();
+  await page.locator('.expression-replay[data-action="expenseReplay"]').click();
   await expect(page.locator('#expenseExpression')).toHaveClass(/expression-counting/);
   await page.locator('[data-period="Mês"]').click();
   await expect.poll(async () => page.locator('#expressionInteger').innerText()).toBe('3.468');
@@ -178,7 +178,7 @@ test('V2.3.1 liquid card fits its buttons and reveals in-card rhythm after expre
     expect(position.inside).toBe(true);
     expect(position.minHeight).toBeGreaterThanOrEqual(44);
     expect(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth)).toBeLessThanOrEqual(2);
-    await page.locator('[data-action="expenseReplay"]').click();
+    await page.locator('.expression-replay[data-action="expenseReplay"]').click();
     await expect.poll(async () => page.locator('#expenseExpression').evaluate(el=>el.classList.contains('rhythm-visible')), {timeout:6000}).toBe(true);
   }
   expect(errors).toEqual([]);

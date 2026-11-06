@@ -4,7 +4,7 @@ for(const width of [320,390]){
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.setViewportSize({width,height:844});await page.goto('/v2.html');
   await page.locator('#dock button[data-tab="expenses"]').click();
-  await expect(page.locator('.phone.expenses-theme')).toHaveCount(1);
+  await expect(page.locator('.phone[data-page-theme="expenses"]')).toHaveCount(1);
   await expect(page.locator('.category-v29')).toHaveCount(4);
   await expect(page.locator('.expense-category-note')).toContainText('3.468,20');
   await expect(page.locator('.calendar-heatmap > *')).toHaveCount(42);

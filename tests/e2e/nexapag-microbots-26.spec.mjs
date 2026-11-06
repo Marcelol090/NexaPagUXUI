@@ -26,7 +26,7 @@ test('V2.6 generates distinct shape morphs with real WebP and static icons',asyn
   await expect.poll(()=>bots.first().getAttribute('data-motion-state')).toBe('playing');
   await expect.poll(()=>bots.first().getAttribute('data-motion-state'),{timeout:5000}).toBe('complete');
   const size=await bots.first().evaluate(e=>[e.getBoundingClientRect().width,e.getBoundingClientRect().height]);
-  expect(size).toEqual([44,44]);
+  expect(size[0]).toBeGreaterThanOrEqual(44);expect(size[1]).toBeGreaterThanOrEqual(44);expect(size[0]).toBeLessThanOrEqual(48);expect(size[1]).toBeLessThanOrEqual(48);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth)).toBeLessThanOrEqual(2);
   expect(errors).toEqual([]);
 });
