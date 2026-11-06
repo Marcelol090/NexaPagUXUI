@@ -71,3 +71,91 @@
  #homePage .compact-hero{gap:8px;padding-inline:3px}
  #homePage .milestone .jelly,#homePage .milestone.is-main .jelly,#homePage .milestone:not(.is-main) .jelly{width:66px;height:66px}
 }
+
+
+/* V3.6 · Original 12-frame storyboard, fluid motion on each financial orb.
+   Larger, optically centered elements; preserves V2.8 five-tab composition. */
+#homePage .compact-hero{
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ width:min(100%,353px);margin-inline:auto;gap:clamp(6px,2.6cqw,14px);
+ padding:8px 4px 3px;height:155px;max-height:155px;align-items:start;
+}
+#homePage .milestone,#homePage .milestone.is-main,#homePage .milestone:not(.is-main){
+ width:100%;min-width:0;min-height:129px;gap:10px;
+ display:flex;align-items:center;justify-content:flex-start;
+}
+#homePage .milestone .jelly,#homePage .milestone.is-main .jelly,
+#homePage .milestone:not(.is-main) .jelly{
+ width:clamp(76px,24cqw,90px);height:clamp(76px,24cqw,90px);
+ aspect-ratio:1;border:1.5px solid rgba(255,255,255,.83);
+ box-shadow:inset 2px 5px 11px #ffffffb0,inset -4px -7px 12px #163e2639,
+ 0 9px 23px color-mix(in srgb,var(--orb) 36%,transparent),
+ 0 0 0 3px rgba(255,255,255,.28);
+ overflow:visible;transform:translateZ(0);
+}
+#homePage .milestone .value,#homePage .milestone:not(.is-main) .value{
+ font:780 clamp(17px,5cqw,20px)/1.04 Manrope,Inter,system-ui,sans-serif;
+ letter-spacing:-.055em;color:#fff;text-shadow:0 2px 5px rgba(27,57,40,.38);
+}
+#homePage .milestone>span:last-child{
+ font:690 clamp(11px,3.5cqw,12px)/1.2 Manrope,Inter,system-ui,sans-serif;
+ letter-spacing:-.012em;opacity:1;
+}
+#homePage .milestone .jelly::before{content:"";position:absolute;inset:1px;
+ border-radius:50%;pointer-events:none;z-index:2;
+ background:radial-gradient(ellipse at 32% 15%,rgba(255,255,255,.5),transparent 36%);
+ animation:orbMicroShimmer 5.6s linear infinite;mix-blend-mode:screen}
+#homePage .milestone:not(.is-morph-origin) .jelly{
+ animation:orbMicroBreath 5.6s ease-in-out infinite;
+}
+#homePage .milestone:nth-child(2) .jelly{animation-delay:-1.5s}
+#homePage .milestone:nth-child(3) .jelly{animation-delay:-3.1s}
+#homePage .milestone:hover .jelly{animation-play-state:paused;filter:saturate(1.16)}
+#homePage .milestone:focus-visible{outline:2px solid #9acb96;outline-offset:4px;border-radius:20px}
+#homePage .milestone.is-morph-origin .jelly{opacity:0!important;animation:none!important;transition:none!important}
+.orb-fluid-ghost{transform-origin:0 0;contain:layout style;
+ will-change:transform,border-radius;backface-visibility:hidden;
+ box-shadow:inset 2px 4px 9px rgba(255,255,255,.72),
+ inset -5px -7px 14px rgba(33,73,49,.17),
+ 0 14px 30px color-mix(in srgb,var(--fluid-base) 35%,transparent),
+ 0 0 0 2px rgba(255,255,255,.22);
+}
+.orb-fluid-ghost::before{
+ background:radial-gradient(ellipse at 23% 9%,rgba(255,255,255,.9),transparent 41%),
+ radial-gradient(ellipse at 71% 83%,rgba(255,255,255,.4),transparent 54%);
+ animation:orbGhostRefraction 3.4s linear infinite;
+}
+.orb-fluid-ghost::after{
+ left:36%;bottom:-3%;height:26%;width:28%;
+ border-radius:41% 59% 48% 52%;
+ animation:orbLiquidTail 620ms cubic-bezier(.3,.77,.3,1) infinite alternate;
+}
+.orb-story-layer[data-kind="income"] .orb-story-card,
+.orb-story-layer[data-kind="refund"] .orb-story-card{
+ backdrop-filter:blur(6px) saturate(1.08);
+ -webkit-backdrop-filter:blur(6px) saturate(1.08);
+ border:1px solid rgba(255,255,255,.85);
+}
+.orb-story-layer.is-content-ready .orb-story-content{transition:opacity .35s ease,transform .48s cubic-bezier(.2,.9,.19,1)}
+@keyframes orbMicroBreath{
+ 0%,100%{transform:translate3d(0,0,0) scale(1);filter:saturate(1)}
+ 50%{transform:translate3d(0,-1.4px,0) scale(1.027);filter:saturate(1.07)}
+}
+@keyframes orbMicroShimmer{
+ 0%,100%{transform:rotate(0deg);opacity:.56}
+ 50%{transform:rotate(180deg);opacity:.79}
+}
+@keyframes orbGhostRefraction{
+ 0%,100%{transform:rotate(0deg) scale(1);opacity:.78}
+ 50%{transform:rotate(180deg) scale(1.055);opacity:.91}
+}
+@media(max-width:350px){
+ #homePage .compact-hero{height:148px;max-height:148px;gap:5px;padding-inline:2px}
+ #homePage .milestone .jelly,#homePage .milestone.is-main .jelly,
+ #homePage .milestone:not(.is-main) .jelly{width:76px;height:76px}
+ #homePage .milestone .value,#homePage .milestone:not(.is-main) .value{font-size:17px}
+}
+@media(prefers-reduced-motion:reduce){
+ #homePage .milestone .jelly,#homePage .milestone .jelly::before,
+ .orb-fluid-ghost::before,.orb-fluid-ghost::after{animation:none!important}
+}

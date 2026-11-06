@@ -22,38 +22,55 @@ const home=()=>document.getElementById('homePage');
 const orbFor=kind=>{const index=KINDS.indexOf(kind);return document.querySelectorAll('#compactHero .milestone')[index]||null;};
 const cleanupFlight=()=>{if(flight){flight.remove();flight=null;}};
 const ease='cubic-bezier(.23,.78,.18,1)';
+// Frame-authored liquid morph. Only transform/border radius/opacity animate:
+// no left/top/width/height layout interpolation, no animation restart at its midpoint.
+let flightAnimation=null;
 function fluidFlight(start,end,kind,reverse=false){
  cleanupFlight();
  if(reduce()||!Element.prototype.animate)return Promise.resolve();
+ if(!start||!end||start.w<=0||start.h<=0||end.w<=0||end.h<=0)return Promise.resolve();
  const el=document.createElement('div');
- el.className='orb-fluid-ghost';el.dataset.kind=kind;
- const initial=reverse?end:start;
- const final=reverse?start:end;
- // Arguments are always source orb and target card. Reverse uses card -> source orb.
- const a=reverse?end:start, b=reverse?start:end;
- Object.assign(el.style,{left:a.x+'px',top:a.y+'px',width:a.w+'px',height:a.h+'px',borderRadius:reverse?'29px':'50%'});
+ el.className='orb-fluid-ghost';el.dataset.kind=kind;el.setAttribute('aria-hidden','true');
+ Object.assign(el.style,{left:start.x+'px',top:start.y+'px',width:start.w+'px',height:start.h+'px',
+  borderRadius:'50%',transformOrigin:'0 0',transform:'translate3d(0,0,0)'});
  phone.append(el);flight=el;
- const key=(t,rx,ry,round,opacity,offset)=>({
-  left:lerp(a.x,b.x,t)+'px',top:lerp(a.y,b.y,t)+'px',
-  width:lerp(a.w,b.w,rx)+'px',height:lerp(a.h,b.h,ry)+'px',
-  borderRadius:round,opacity,offset
- });
- const frames=[
-  key(0,0,0,reverse?'29px':'50% 49% 54% 46% / 49% 54% 46% 51%',1,0),
-  key(.17,.12,.26,'47% 51% 42% 57% / 59% 41% 54% 46%',1,.18),
-  key(.43,.52,.45,'43% 37% 40% 49% / 47% 54% 42% 51%',1,.46),
-  key(.78,.91,.86,reverse?'48% 52% 46% 54%':'37% 39% 31% 34%',.96,.79),
-  key(1,1,1,reverse?'50%':'29px',.75,1)
+ const source={x:start.x+start.w/2,y:start.y+start.h/2};
+ const target={x:end.x+end.w/2,y:end.y+end.h/2};
+ const stops=[
+  {t:0,p:0,sx:0,sy:0,lift:0,rad:'50% 50% 50% 50%'},
+  {t:.09,p:.015,sx:-.02,sy:.09,lift:4,rad:'46% 54% 50% 50% / 49% 45% 55% 51%'},
+  {t:.20,p:.09,sx:.13,sy:.22,lift:15,rad:'46% 56% 37% 58% / 35% 46% 62% 50%'},
+  {t:.32,p:.27,sx:.36,sy:.35,lift:24,rad:'36% 46% 34% 52% / 35% 41% 66% 53%'},
+  {t:.47,p:.50,sx:.61,sy:.57,lift:15,rad:'26% 38% 28% 47% / 41% 39% 53% 47%'},
+  {t:.65,p:.79,sx:.86,sy:.82,lift:5,rad:'32% 26% 30% 37% / 39% 41% 43% 46%'},
+  {t:.83,p:.98,sx:1.026,sy:1.026,lift:0,rad:'30px 29px 35px 28px'},
+  {t:.93,p:1,sx:.994,sy:.99,lift:0,rad:'27px 28px 29px 27px'},
+  {t:1,p:1,sx:1,sy:1,lift:0,rad:'28px'}
  ];
- const seq=reverse?frames:frames;
+ const frame=(s,offset)=>{
+  const width=Math.max(start.w*.62,lerp(start.w,end.w,s.sx));
+  const height=Math.max(start.h*.63,lerp(start.h,end.h,s.sy));
+  const x=lerp(source.x,target.x,s.p)-width/2-start.x;
+  const y=lerp(source.y,target.y,s.p)-height/2-start.y-s.lift;
+  return {offset,transform:'translate3d('+x.toFixed(3)+'px,'+y.toFixed(3)+'px,0) scale3d('+
+   (width/start.w).toFixed(5)+','+(height/start.h).toFixed(5)+',1)',
+   borderRadius:s.rad,opacity:1};
+ };
+ const points=reverse?stops.slice().reverse():stops;
+ const frames=points.map(s=>frame(s,reverse?1-s.t:s.t));
  const id=++flightGeneration;
- const animation=el.animate(seq,{duration:reverse?760:870,easing:ease,fill:'forwards'});
+ el.dataset.phase=reverse?'closing':'opening';
+ const animation=el.animate(frames,{duration:reverse?830:940,easing:'cubic-bezier(.18,.78,.17,1)',fill:'forwards'});
+ flightAnimation=animation;
  return animation.finished.catch(()=>{}).then(()=>{
-  if(id===flightGeneration){cleanupFlight();}
- }).finally(()=>{animation.cancel();if(el.isConnected)el.remove();});
+  if(id===flightGeneration)cleanupFlight();
+ }).finally(()=>{
+  if(flightAnimation===animation)flightAnimation=null;
+  animation.cancel();if(el.isConnected)el.remove();
+ });
 }
-function stopFlight(){flightGeneration++;cleanupFlight();}
-function restoreOrigin(){if(restoreFocus?.isConnected)restoreFocus.classList.remove('is-morph-origin');}
+function stopFlight(){flightGeneration++;flightAnimation?.cancel();flightAnimation=null;cleanupFlight();}
+function restoreOrigin(){if(restoreFocus?.isConnected){restoreFocus.classList.remove('is-morph-origin');restoreFocus.setAttribute('aria-expanded','false');}}
 function showLayer(kind,button){
  if(busy||active||!STORIES[kind])return;
  busy=true;
@@ -74,7 +91,7 @@ function showLayer(kind,button){
  '<button type="button" class="orb-story-go" data-orb-follow="'+kind+'">'+v.cta+'</button></div></div></article>';
  phone.append(layer);active={kind,layer,card:layer.querySelector('.orb-story-card'),from};
  const target=rect(active.card);active.card.style.opacity='0';
- button.classList.add('is-morph-origin');
+ button.classList.add('is-morph-origin');button.setAttribute('aria-expanded','true');
  requestAnimationFrame(()=>layer.classList.add('is-open'));
  fluidFlight(from,target,kind).then(()=>{
   if(active?.layer!==layer)return;
@@ -106,13 +123,14 @@ async function openSpending(button){
  busy=true;bridge()?.stopAutoplay?.();
  if(bridge()?.state){bridge().state.firstShow=false;bridge().state.slide=0;}
  restoreFocus=button;
+ button.classList.add('is-morph-origin');button.setAttribute('aria-expanded','true');
  originalPosition=rect(button.querySelector('.jelly')||button);
  scrollAtOpen=document.getElementById('scroller')?.scrollTop||0;
  home()?.classList.add('orb-choreo-running','orb-flight-cover');
  bridge()?.expand?.(false);
  await waitFrames();
  const target=document.querySelector('.carousel-slide.current');
- if(!target){home()?.classList.remove('orb-choreo-running','orb-flight-cover');busy=false;return;}
+ if(!target){home()?.classList.remove('orb-choreo-running','orb-flight-cover');restoreOrigin();busy=false;return;}
  await fluidFlight(originalPosition,rect(target),'spending');
  home()?.classList.remove('orb-flight-cover','orb-choreo-running');
  busy=false;
@@ -137,7 +155,7 @@ async function closeSpending(){
  const to=destination|| (fallback?rect(fallback):null);
  if(fromCard&&to)await fluidFlight(to,fromCard,'spending',true);
  home()?.classList.remove('orb-flight-cover','orb-choreo-running');
- busy=false;
+ restoreOrigin();busy=false;
  if(restoreFocus?.isConnected)restoreFocus.focus({preventScroll:true});
 }
 phone.addEventListener('click',event=>{
@@ -160,6 +178,7 @@ phone.addEventListener('click',event=>{
  if(cta){event.preventDefault();closeLayer(cta.dataset.orbFollow);return;}
 },true);
 document.addEventListener('keydown',event=>{
+ if(!active&&event.key==='Escape'&&bridge()?.state?.expanded&&bridge()?.state?.tab==='home'){event.preventDefault();event.stopImmediatePropagation();if(!busy)closeSpending();return;}
  if(!active)return;
  if(event.key==='Escape'){event.preventDefault();if(!busy)closeLayer();return;}
  if(event.key!=='Tab'||busy)return;
