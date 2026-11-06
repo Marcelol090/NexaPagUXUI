@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#111211">
-<meta name="description" content="NexaPag V2.9 · subcategorias com gradientes próprios, cabeçalho verde e calendário com gastos por dia.">
-<title>NexaPag V3.0 · Unified Editorial Masthead</title>
+<meta name="description" content="NexaPag V3.1 · estrutura V2.8, fundo verde-floresta e modo dark.">
+<title>NexaPag V3.1 · Forest Background & Dark</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -512,50 +512,124 @@ button:focus-visible{outline:2px solid #70658f;outline-offset:3px}
 .phone.expenses-theme.scrolled-deep .avatar{background:linear-gradient(135deg,#bfa4ef,#f7b46d 70%,#da7db9);border-color:white}
 @media(prefers-reduced-motion:reduce){.phone.expenses-theme::before{transition:none}}
 
-/* NexaPag V3.0 · shared editorial masthead, five intentional pigments */
-.phone[data-page-theme]{--head-base:#f4e3d6;--head-ink:#272e28;--head-muted:#687065;--head-dot:#a56550;--head-edge:rgba(77,74,62,.18);--head-action:rgba(255,255,255,.66);--head-action-edge:rgba(255,255,255,.86)}
-.phone[data-page-theme="home"]{--head-base:#f4e1d2;--head-dot:#b87552;--head-muted:#716157;--head-edge:rgba(120,79,64,.14)}
-.phone[data-page-theme="expenses"]{--head-base:#9aec60;--head-dot:#2a7637;--head-ink:#203025;--head-muted:#456246;--head-edge:rgba(41,103,44,.18);--head-action:rgba(255,255,255,.52)}
-.phone[data-page-theme="ads"]{--head-base:#e2d9f5;--head-dot:#7864b9;--head-muted:#776981;--head-edge:rgba(104,75,139,.17)}
-.phone[data-page-theme="cards"]{--head-base:#cfe6da;--head-dot:#497d67;--head-muted:#507567;--head-edge:rgba(54,110,85,.16)}
-.phone[data-page-theme="review"]{--head-base:#f5e0c9;--head-dot:#be8055;--head-muted:#7e6b57;--head-edge:rgba(134,97,58,.18)}
-.phone[data-page-theme]::before{content:"";position:absolute;inset:0 0 auto;height:255px;background:var(--head-base);z-index:0;pointer-events:none;transition:height .32s cubic-bezier(.2,.8,.2,1),background-color .32s ease}
-.phone[data-page-theme] .status,.phone[data-page-theme] .topbar{z-index:4;color:var(--head-ink)}
-.phone[data-page-theme] .topbar{height:46px;padding-left:23px;padding-right:22px}
-.phone[data-page-theme] .topbar .brand-short{opacity:1;font-size:14px;font-weight:800;color:var(--head-ink);letter-spacing:-.065em}
-.phone[data-page-theme] .topbar .top-actions{gap:8px}
-.phone[data-page-theme] .topbar .round-action{width:36px;height:36px;display:grid;place-items:center;background:var(--head-action);color:var(--head-ink);border:1px solid var(--head-action-edge);border-radius:50%;box-shadow:0 2px 7px rgba(37,53,34,.05),inset 0 1px 0 rgba(255,255,255,.75);backdrop-filter:blur(12px) saturate(1.12);-webkit-backdrop-filter:blur(12px) saturate(1.12)}
-.phone[data-page-theme] .topbar .round-action.notice{background:var(--head-action);border:1px solid var(--head-action-edge);box-shadow:0 2px 7px rgba(37,53,34,.05)}
-.phone[data-page-theme] .topbar .avatar{font-weight:800;font-size:13px;background:rgba(40,66,45,.11);border-color:rgba(255,255,255,.64);color:var(--head-ink)}
-.phone[data-page-theme] .topbar .round-action:focus-visible{outline:2px solid #2c3b2b;outline-offset:3px}
-.nexa-masthead{position:relative;margin:0 -17px 34px;padding:14px 25px 17px;min-height:130px;background:var(--head-base);color:var(--head-ink);isolation:isolate;z-index:1;display:flex;flex-direction:column;justify-content:center}
-.nexa-masthead:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 60% 60% at 91% 0%,rgba(255,255,255,.11),transparent 92%)}
-.nexa-masthead__overline{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:9px;min-height:15px}
-.nexa-masthead__eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:9px;letter-spacing:.115em;text-transform:uppercase;font-weight:800;color:var(--head-muted)}
-.nexa-masthead__eyebrow:before{content:"";display:block;width:6px;height:6px;background:var(--head-dot);border-radius:2px;box-shadow:0 0 0 3px rgba(255,255,255,.24)}
-.nexa-masthead__meta{font-size:9px;font-weight:800;color:var(--head-muted);white-space:nowrap;letter-spacing:.02em}
-.nexa-masthead__title-row{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:36px}
-.nexa-masthead__title{font-family:Manrope,'DM Sans',system-ui,sans-serif;max-width:100%;font-size:27px;font-weight:790;letter-spacing:-.072em;line-height:1.08;margin:0;color:var(--head-ink)}
-.nexa-masthead__desc{font-size:11px;font-weight:570;line-height:1.45;letter-spacing:-.013em;color:var(--head-muted);margin:7px 0 0;max-width:295px}
-.nexa-masthead__action{appearance:none;flex-shrink:0;min-height:37px;padding:0 12px;border:1px solid var(--head-action-edge);border-radius:18px;background:var(--head-action);color:var(--head-ink);font-family:inherit;font-weight:780;font-size:10px;letter-spacing:-.012em;display:inline-flex;align-items:center;justify-content:center;gap:5px;box-shadow:0 3px 10px rgba(55,55,38,.055),inset 0 1px 0 rgba(255,255,255,.45);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:background .22s ease,transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s ease}
-.nexa-masthead__action svg{width:13px;height:13px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
-.nexa-masthead__action:hover{background:rgba(255,255,255,.85);transform:translateY(-1px);box-shadow:0 5px 14px rgba(55,55,38,.09)}
-.nexa-masthead__action:active{transform:scale(.96)}
-.nexa-masthead__action:focus-visible{outline:2px solid #263e2b;outline-offset:3px}
-.nexa-masthead__endmark{width:22px;height:22px;border-radius:50%;border:1px solid rgba(255,255,255,.43);background:radial-gradient(circle at 37% 35%,rgba(255,255,255,.72),rgba(255,255,255,.04) 66%);box-shadow:inset 0 1px 1px rgba(255,255,255,.4)}
-.nexa-masthead__contour{position:absolute;z-index:1;left:0;top:calc(100% - 1px);width:100%;height:25px;overflow:visible;pointer-events:none;filter:drop-shadow(0 5px 7px rgba(57,58,42,.045))}
-.nexa-masthead__contour-fill{fill:var(--head-base)}
-.nexa-masthead__contour-stroke{stroke:var(--head-edge);stroke-width:1;fill:none;vector-effect:non-scaling-stroke;stroke-linejoin:round}
-.nexa-masthead--home{min-height:112px;padding-top:12px;padding-bottom:13px;margin-bottom:47px}
-.nexa-masthead--home .nexa-masthead__title{font-size:24px}
-.nexa-masthead--home .nexa-masthead__desc{margin-top:4px}
-.phone[data-page-theme].scrolled-deep::before{background:#faf9f6;height:89px}
-.phone[data-page-theme].scrolled-deep .topbar .brand-short{color:#303630}
-.phone[data-page-theme].scrolled-deep .topbar .round-action{background:rgba(255,255,255,.93);box-shadow:0 3px 10px #313d2b10}
-.phone[data-page-theme].scrolled-deep .topbar .avatar{color:#3c443b;background:#eeeee8}
-.phone[data-page-theme].scrolled-deep .status{color:#2d342d}
-@media(max-width:360px){.nexa-masthead{padding-left:21px;padding-right:21px;min-height:124px}.nexa-masthead__title{font-size:24px}.nexa-masthead__desc{font-size:10px;max-width:250px}.nexa-masthead__action{min-height:36px;padding:0 10px;font-size:9.5px}.nexa-masthead__eyebrow,.nexa-masthead__meta{font-size:8.5px}.nexa-masthead--home{min-height:111px}}
-@media(prefers-reduced-motion:reduce){.phone[data-page-theme]::before,.nexa-masthead__action{transition:none!important}}
+/* NexaPag V3.1: V2.8 component geometry preserved. Forest pigment is only a backdrop. */
+:root{--nexa-forest:#184f35;--nexa-forest-deep:#103b2a;--nexa-leaf:#a4d88e;--nexa-lime:#c5e7a4}
+.phone[data-page-theme]{--bg-green:#daebd1;--bg-green-soft:#eaf3e5;--bg-light:rgba(255,255,255,.85)}
+.phone[data-page-theme="home"]{--bg-green:#cfe4c4;--bg-green-soft:#f0f5e9}
+.phone[data-page-theme="expenses"]{--bg-green:#c5e9bb;--bg-green-soft:#eff8e9}
+.phone[data-page-theme="ads"]{--bg-green:#daead6;--bg-green-soft:#f2ebf4}
+.phone[data-page-theme="cards"]{--bg-green:#c5dccc;--bg-green-soft:#ebf1e5}
+.phone[data-page-theme="review"]{--bg-green:#dce7c7;--bg-green-soft:#f1eee0}
+.phone[data-page-theme]::before{
+ content:"";position:absolute;inset:0 0 auto;height:245px;z-index:0;pointer-events:none;
+ background:radial-gradient(ellipse 98% 100% at 66% 0%,var(--bg-green) 0%,var(--bg-green-soft) 75%,transparent 100%);
+ opacity:.92;transition:opacity .3s ease;
+}
+.phone[data-page-theme].scrolled-deep::before{opacity:.22}
+.phone[data-page-theme] .status,.phone[data-page-theme] .topbar{color:#203d2a}
+.phone[data-page-theme] .topbar .brand-short{color:var(--nexa-forest)}
+.phone[data-page-theme] .topbar .round-action.theme-switch{
+ background:rgba(255,255,255,.74);border:1px solid rgba(37,88,56,.13);
+ color:var(--nexa-forest);box-shadow:0 3px 10px rgba(36,64,44,.08);
+ width:35px;height:35px;border-radius:50%;display:grid;place-items:center
+}
+.phone[data-page-theme] .round-action.theme-switch svg{width:17px;height:17px;stroke-width:1.9}
+.phone[data-page-theme] .page-header{position:relative;padding-top:15px;color:#25382a}
+.phone[data-page-theme] .page-header h1{color:#26392d}
+.phone[data-page-theme] .page-header small{color:#42634b}
+.phone[data-page-theme] .page-header p{color:#647569}
+.phone[data-page-theme] .page-header-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.phone[data-page-theme] .page-header-row h1{margin-bottom:4px}
+.page-header-action{border:1px solid rgba(31,83,53,.12);color:var(--nexa-forest);background:rgba(255,255,255,.72);padding:9px 12px;border-radius:15px;font-size:10px;font-weight:750;min-height:36px;flex-shrink:0;box-shadow:0 3px 10px rgba(32,80,46,.05)}
+.phone[data-page-theme] .section-title button,.phone[data-page-theme] .expense-category-note strong{color:var(--nexa-forest)}
+.phone[data-page-theme] .chip.on{background:#20583d;color:#f1fff1;border-color:#20583d;box-shadow:0 2px 9px rgba(25,67,38,.15)}
+.phone[data-page-theme] .bottom-dock button.active{background:#d9f2ce;color:#173b28}
+.phone[data-page-theme] .tiny-dark,.phone[data-page-theme] .offer-card button{background:#235139;color:#fff}
+.phone[data-page-theme] .round-action:focus-visible,.phone[data-page-theme] button:focus-visible{outline-color:#1d7446}
+/* Neutralize V2.9 full-bleed category header while retaining cards, subcategories and calendar. */
+.phone[data-page-theme] .expenses-page .expense-design-head{display:none}
+/* Dark matte: every surface tinted green charcoal; informative category gradients stay intact. */
+.phone[data-ui-theme="dark"]{
+ --paper:#111b16;--ivory:#15211b;--ink:#edf4e8;--muted:#a9b8aa;
+ --shadow-card:0 12px 32px rgba(0,0,0,.23),0 2px 8px rgba(0,0,0,.12);
+ background:radial-gradient(ellipse at 73% 0%,#284a35 0%,#15231b 39%,#101913 88%);color:var(--ink);
+}
+.phone[data-ui-theme="dark"][data-page-theme]{--bg-green:#285238;--bg-green-soft:#15291d}
+.phone[data-ui-theme="dark"][data-page-theme="ads"]{--bg-green:#304b41;--bg-green-soft:#1a2421}
+.phone[data-ui-theme="dark"][data-page-theme="cards"]{--bg-green:#315643;--bg-green-soft:#162b21}
+.phone[data-ui-theme="dark"][data-page-theme="review"]{--bg-green:#324b32;--bg-green-soft:#20281b}
+.phone[data-ui-theme="dark"]::after{opacity:.08}
+.phone[data-ui-theme="dark"] .status,.phone[data-ui-theme="dark"] .topbar{color:#d6f1d5}
+.phone[data-ui-theme="dark"] .status-right,.phone[data-ui-theme="dark"] .topbar .brand-short{color:#d5f0cc}
+.phone[data-ui-theme="dark"] .dynamic-island{background:#07100a}
+.phone[data-ui-theme="dark"] .round-action,.phone[data-ui-theme="dark"] .topbar .round-action.theme-switch{background:rgba(28,53,39,.88);border:1px solid rgba(194,233,188,.2);color:#deeedb;box-shadow:inset 0 1px 0 rgba(255,255,255,.09)}
+.phone[data-ui-theme="dark"] .avatar{color:#d8f1d6;background:#315d42}
+.phone[data-ui-theme="dark"] .scroller,.phone[data-ui-theme="dark"] .screen-page{color:var(--ink)}
+.phone[data-ui-theme="dark"] .page-header,.phone[data-ui-theme="dark"] .page-header h1{color:#f0f6ec}
+.phone[data-ui-theme="dark"] .page-header small{color:#abd6a7}
+.phone[data-ui-theme="dark"] .page-header p{color:#acbdaf}
+.phone[data-ui-theme="dark"] .page-header-action{color:#daf0d1;background:rgba(29,65,43,.72);border-color:rgba(183,224,172,.23)}
+.phone[data-ui-theme="dark"] :is(.surface,.category-v29,.category-row,.category-details,.calendar-heatmap,.calendar-detail-panel,.category-stack-card,.expense-expression,.wallet-selected-summary,.wallet-folder,.offer-card,.review-item,.overview,.transaction,.daily-note,.week-summary,.day-detail,.money-insight,.card-panel,.category-detail){
+ background-color:#1d2b22;border-color:rgba(211,245,206,.105);color:#edf4e8;box-shadow:var(--shadow-card),inset 0 1px 0 rgba(255,255,255,.038);
+}
+.phone[data-ui-theme="dark"] .surface{background:linear-gradient(145deg,#223229,#18281f 72%,#18241c)}
+.phone[data-ui-theme="dark"] :is(.section-title h2,.win-label,.overview strong,.page-header h1,.review-copy b,.w-summary-bank b,.wallet-intro strong,.category-open strong,.category-title,.category-details strong,.calendar-heatmap h2,.calendar-title,.expense-category-note strong,.greeting h1){color:#edf6e9}
+.phone[data-ui-theme="dark"] :is(.greeting p,.greeting h1 span,.page-header p,.category-open small,.category-subtitle,.category-details small,.calendar-detail-note,.review-copy p,.overview small,.transaction small,.wallet-intro span,.section-context,.daily-note p){color:#a9baa9}
+.phone[data-ui-theme="dark"] :is(.section-title button,.expense-category-note strong){color:#b2dbac}
+.phone[data-ui-theme="dark"] .bottom-area{background:linear-gradient(0deg,#111b16 65%,transparent)}
+.phone[data-ui-theme="dark"] .bottom-dock{background:#24372b;border:1px solid rgba(204,235,193,.1);box-shadow:0 9px 25px rgba(0,0,0,.43),inset 0 1px 0 rgba(255,255,255,.08)}
+.phone[data-ui-theme="dark"] .bottom-dock button{color:#b8c7b4}
+.phone[data-ui-theme="dark"] .bottom-dock button.active{background:#afdd9a;color:#13341d;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+.phone[data-ui-theme="dark"] .home-indicator{background:#b3c8b0}
+.phone[data-ui-theme="dark"] :is(.chip,.tiny-icon,.week-pill,.calendar-heatmap .heat-day,.calendar-heatmap .heat-day.is-future,.calendar-heatmap .heat-day.is-unknown,.offer-icon,.wallet-count,.w-summary-chip,.category-open,.category-expand,.category-subitem,.category-detail-split,.calendar-detail-split){background-color:#27372c;color:#d4e6d0;border-color:rgba(191,230,182,.1)}
+.phone[data-ui-theme="dark"] .chip.on{background:#b2de9d;color:#153420;border-color:#b2de9d}
+.phone[data-ui-theme="dark"] :is(.calendar-heatmap .heat-day.selected,.day-cell.selected){outline-color:#add59a;box-shadow:inset 0 0 0 2px rgba(23,47,30,.7)}
+.phone[data-ui-theme="dark"] :is(.category-stack-card,.calendar-heatmap,.category-v29,.wallet-selected-summary){background:linear-gradient(145deg,#203027,#19271e)}
+.phone[data-ui-theme="dark"] :is(.offer-card button,.tiny-dark){background:#326648;color:#f0ffee}
+.phone[data-ui-theme="dark"] :is(.expression-primary,.expression-secondary,.small-action){border-color:rgba(191,223,184,.16)}
+.phone[data-ui-theme="dark"] .expression-primary{background:#b4df9f;color:#173722}
+.phone[data-ui-theme="dark"] .expression-secondary{background:#283c2e;color:#e7f7e4}
+.phone[data-ui-theme="dark"] :is(.slide-text h3,.slide-timer,.slide-chip){color:#f9faf5}
+.phone[data-ui-theme="dark"] .phone-frame{background:#101913}
+.phone[data-ui-theme="dark"] .toast{background:#d2edd1;color:#133d25}
+@media(prefers-reduced-motion:reduce){.phone[data-page-theme]::before,.phone[data-page-theme] .topbar .round-action.theme-switch{transition:none!important}}
+
+/* V3.1 dark polish: respect original card radii and keep dark on every information layer. */
+.phone[data-ui-theme="dark"] .expenses-page .category.category-v29{
+ border-radius:27px!important;background:linear-gradient(145deg,#26392d,#1b2b21 80%)!important;
+ border:1px solid rgba(198,232,184,.10);overflow:hidden;
+}
+.phone[data-ui-theme="dark"] .category-v29 .category-row{background:transparent!important;box-shadow:none!important;border:0!important}
+.phone[data-ui-theme="dark"] .category-v29 .category-open{background:transparent!important;color:#e9f2e7!important}
+.phone[data-ui-theme="dark"] .week-title strong,.phone[data-ui-theme="dark"] .week-head strong,.phone[data-ui-theme="dark"] .week-head .week-title{color:#f1f8ef}
+.phone[data-ui-theme="dark"] .week-title em,.phone[data-ui-theme="dark"] .week-source,.phone[data-ui-theme="dark"] .week-counter{color:#b5c8b4}
+.phone[data-ui-theme="dark"] .week-counter{background:#2c4533;border:1px solid rgba(197,234,189,.13)}
+.phone[data-ui-theme="dark"] .weekday{color:#b7cbb5}
+.phone[data-ui-theme="dark"] .week-day-detail{background:linear-gradient(118deg,#24382a,#202f24);border-color:rgba(201,237,196,.15);color:#eaf3e7}
+.phone[data-ui-theme="dark"] .week-day-head span,.phone[data-ui-theme="dark"] .week-day-cats span,.phone[data-ui-theme="dark"] .week-day-empty{color:#adbeae}
+.phone[data-ui-theme="dark"] .week-day-head strong{color:#ecf7e7}
+.phone[data-ui-theme="dark"] .week-day-split{background:#354638}
+.phone[data-ui-theme="dark"] .day-cell.selected{background:transparent}
+.phone[data-ui-theme="dark"] .money-insight .insight-head,.phone[data-ui-theme="dark"] .money-insight .insight-head span,.phone[data-ui-theme="dark"] .money-insight .insight-amount{color:#f2f7e9}
+.phone[data-ui-theme="dark"] .money-insight .insight-explain,.phone[data-ui-theme="dark"] .money-insight .insight-footer{color:#b1c3b0}
+.phone[data-ui-theme="dark"] .money-insight--goal .insight-mark{background:#3d4a46;color:#cfdeea}
+.phone[data-ui-theme="dark"] .money-insight--refund .insight-mark{background:#315342;color:#c5edca}
+.phone[data-ui-theme="dark"] .money-insight .insight-track{background:#3c4f3e}
+.phone[data-ui-theme="dark"] .week .week-source{color:#9db19f}
+.phone[data-ui-theme="dark"] .section-title button{background:rgba(37,65,43,.66)!important;color:#d6ebce!important;border:1px solid rgba(196,235,188,.12);border-radius:13px;padding:8px 12px}
+.phone[data-ui-theme="dark"] .calendar-heatmap .heat-day{background:#26362b;border-color:#3a4c40;color:#b3c4b0}
+.phone[data-ui-theme="dark"] .calendar-heatmap .heat-day.is-future,.phone[data-ui-theme="dark"] .calendar-heatmap .heat-day.is-unknown{background:#202e25;border-color:#304033;color:#8ca391}
+.phone[data-ui-theme="dark"] .calendar-detail-panel{border-top-color:#354537}
+.phone[data-ui-theme="dark"] .calendar-detail-head,.phone[data-ui-theme="dark"] .calendar-detail-categories{color:#adc0b0}
+.phone[data-ui-theme="dark"] .calendar-detail-head strong{color:#f3f8ec}
+.phone[data-ui-theme="dark"] .calendar-detail-split{background:#354537}
+.phone[data-ui-theme="dark"] .calendar-panel,.phone[data-ui-theme="dark"] .calendar-card{background:#1b2920;color:#eff6eb;border-color:rgba(202,234,192,.12)}
+.phone[data-ui-theme="dark"] .calendar-month-button,.phone[data-ui-theme="dark"] .calendar-month,.phone[data-ui-theme="dark"] .month-switch{background:#2b4231;color:#d7eacc;border:1px solid rgba(181,226,177,.12)}
+.phone[data-ui-theme="dark"] .daily-note .note-label{color:#b9cbb8}
+.phone[data-ui-theme="dark"] .daily-note h3{color:#ebf4e7}
+.phone[data-ui-theme="dark"] .wallet-intro strong,.phone[data-ui-theme="dark"] .wallet-selected-summary strong{color:#ecf4ec}
+.phone[data-ui-theme="dark"] .wallet-grid .wallet-folder{background:transparent!important;box-shadow:none!important}
+.phone[data-ui-theme="dark"] .calendar-heatmap .heat-day .heat-day-amount{color:#ecbd99}
 
 </style>
 <link rel="stylesheet" href="./assets/category-microbots-26.css">
@@ -583,10 +657,10 @@ button:focus-visible{outline:2px solid #70658f;outline-offset:3px}
 <symbol id="i-circle-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.7 9a2.5 2.5 0 0 1 4.8 1c0 1.7-2.5 2-2.5 3.4M12 17h.01"/></symbol>
 </svg>
 <main class="studio">
-<div class="studio-mark"><div class="studio-logo">N</div><div><strong>NexaPag</strong><small>UI/UX · V3.0 Design Studio</small></div></div><div class="studio-tag">Reference-driven design / 2026</div>
+<div class="studio-mark"><div class="studio-logo">N</div><div><strong>NexaPag</strong><small>UI/UX · V3.1 · V2.8 Layout</small></div></div><div class="studio-tag">Reference-driven design / 2026</div>
 <div class="handset" id="handset"><div class="phone">
 <div class="status" aria-label="Barra de status ilustrativa"><span class="status-time">9:41</span><span class="dynamic-island"></span><div class="status-right"><svg viewBox="0 0 18 13"><path d="M1 12h2V9H1Zm4 0h2V7H5Zm4 0h2V4H9Zm4 0h2V1h-2Z" fill="currentColor"/></svg><svg viewBox="0 0 18 13"><path d="M2 4a12 12 0 0 1 14 0M5 7a7 7 0 0 1 8 0M8 10a2 2 0 0 1 2 0" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span class="battery"></span></div></div>
-<header class="topbar" id="topbar"><strong class="brand-short">nexapag.</strong><div class="top-actions"><button class="round-action notice" type="button" id="notifications" aria-label="Notificações"><svg><use href="#i-bell"/></svg></button><button class="round-action avatar" type="button" id="avatar" aria-label="Perfil de demonstração">N</button></div></header>
+<header class="topbar" id="topbar"><strong class="brand-short">nexapag.</strong><div class="top-actions"><button class="round-action theme-switch" type="button" id="themeToggle" aria-label="Ativar modo escuro" aria-pressed="false" title="Alternar tema claro e escuro"><svg aria-hidden="true"><use href="#i-moon"/></svg></button><button class="round-action notice" type="button" id="notifications" aria-label="Notificações"><svg><use href="#i-bell"/></svg></button><button class="round-action avatar" type="button" id="avatar" aria-label="Perfil de demonstração">N</button></div></header>
 <div class="scroller" id="scroller"><div id="screen" aria-live="polite"></div></div>
 <footer class="bottom-area"><nav class="bottom-dock" id="dock" aria-label="Navegação principal" style="--active-tab:0"><span class="dock-indicator" aria-hidden="true"></span>
 <button type="button" class="active" data-tab="home" aria-label="Início" title="Início" aria-current="page"><svg><use href="#i-home"/></svg><span>Início</span></button>
@@ -645,20 +719,8 @@ function weekDetailMarkup(i){
 function weekMarkup(){return `<section class="surface week" id="weekSection"><div class="week-head"><div class="week-title"><strong>Esta semana</strong><em>2–8 nov · composição por categoria</em></div><span class="week-counter">${icon('sparkle')} ${WEEK_LEDGER.filter(d=>d.items.length).length} dias registrados</span></div><div class="days">${labels.map((d,i)=>{const day=WEEK_LEDGER[i],filled=day.items.length>0;const desc=filled?day.items.map(it=>`${it.category}: ${money(it.value)}`).join('; '):'sem lançamentos, dia futuro';return `<button type="button" class="day-cell ${filled?'has-spend':'inactive'} ${state.day===i?'selected':''}" data-day="${i}" aria-label="${day.date}: ${filled?money(day.total)+'; '+desc:desc}" aria-pressed="${state.day===i}"><span class="jelly week-liquid ${filled?'has-spend':'ghost'}" aria-hidden="true">${filled?`<canvas class="week-orb-canvas" width="112" height="112" data-week-orb="${i}" aria-hidden="true"></canvas>`:''}</span><span class="weekday">${d}</span></button>`}).join('')}</div><div class="week-day-detail" id="weekDayDetail" role="status" aria-live="polite">${weekDetailMarkup(state.day)}</div><div class="week-source">Cores e proporções refletem gastos por categoria · dados demonstrativos</div></section>`}
 function winsMarkup(){return `<div class="section-title"><h2>Seu dinheiro em contexto</h2><button data-action="wins">Entender</button></div><div class="money-insights"><button type="button" class="money-insight money-insight--goal surface" data-action="goal" aria-label="Abrir detalhes da meta semanal: ${money(WEEK_REMAINING)} disponíveis, ${WEEK_PERCENT}% utilizado"><span class="insight-head"><span>Meta semanal</span><span class="insight-mark">${icon('sparkle')}</span></span><strong class="insight-amount">${money(WEEK_REMAINING)}</strong><span class="insight-explain">Ainda disponíveis de ${money(WEEK_LIMIT)}</span><span class="insight-track" aria-hidden="true"><i style="width:${WEEK_PERCENT}%"></i></span><span class="insight-footer">${WEEK_PERCENT.toLocaleString('pt-BR')}% usado <span>Detalhes ${icon('arrow')}</span></span></button><button type="button" class="money-insight money-insight--refund surface" data-action="refund" aria-label="Ver estorno confirmado de ${money(REFUND_TOTAL)} no histórico"><span class="insight-head"><span>Estornos</span><span class="insight-mark">${icon('refresh')}</span></span><strong class="insight-amount">${money(REFUND_TOTAL)}</strong><span class="insight-explain">1 reembolso registrado no histórico</span><span class="insight-footer">Não é nova entrada <span>Consultar ${icon('arrow')}</span></span></button></div>`}
 function transactionMarkup(t){return `<div class="transaction"><div class="transaction-symbol ${t.color}">${icon(t.icon)}</div><div class="transaction-name"><b>${t.name}</b><small>${t.kind}</small></div><strong class="transaction-amount ${t.color==='green'?'in':'out'}">${t.color==='green'?'+':t.color==='purple'?'+':'−'} ${money(t.amount)}</strong></div>`}
-function home(){return `<div class="screen-page" id="homePage">${masthead('home','SEU PAINEL','Visão geral','Gastos, metas e movimentos em equilíbrio.','ESTA SEMANA','Gastos','data-tab-go="expenses"')}${heroMarkup()}${weekMarkup()}${winsMarkup()}<section class="surface daily-note"><div class="note-label">${icon('sparkle')} Uma ideia para hoje</div><h3>Qual pequena escolha pode fazer diferença esta semana?</h3><div class="note-foot"><button class="tiny-dark" data-action="tip">Explorar</button><button class="tiny-icon" aria-label="Próxima ideia" data-action="tip">${icon('arrow')}</button></div></section><div class="section-title" id="transactionsSection"><h2>Movimentações</h2><button data-tab-go="expenses">Ver todas</button></div><div class="surface transactions">${data.map(transactionMarkup).join('')}</div></div>`}
-
-function masthead(variant,eyebrow,title,desc,meta,actionLabel='',actionData=''){
- const icon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13m-5-5 5 5-5 5"/></svg>';
- const extra=actionLabel?'<button type="button" class="nexa-masthead__action" '+actionData+'>'+actionLabel+icon+'</button>':'<span class="nexa-masthead__endmark" aria-hidden="true"></span>';
- const contour='<svg class="nexa-masthead__contour" viewBox="0 0 390 25" preserveAspectRatio="none" aria-hidden="true"><path class="nexa-masthead__contour-fill" d="M0 0H390V11C350 12 325 13 294 12C274 12 269 12 266 9C262 5 260 4 253 4H247C240 4 238 8 236 12C232 18 221 18 202 18C144 22 65 20 0 13Z"/><path class="nexa-masthead__contour-stroke" d="M0 13C65 20 144 22 202 18C221 18 232 18 236 12C238 8 240 4 247 4H253C260 4 262 5 266 9C269 12 274 12 294 12C325 13 350 12 390 11"/></svg>';
- return '<header class="nexa-masthead nexa-masthead--'+variant+'" aria-labelledby="masthead-title-'+variant+'"><div class="nexa-masthead__overline"><span class="nexa-masthead__eyebrow">'+eyebrow+'</span><span class="nexa-masthead__meta">'+meta+'</span></div><div class="nexa-masthead__title-row"><h1 id="masthead-title-'+variant+'" class="nexa-masthead__title">'+title+'</h1>'+extra+'</div><p class="nexa-masthead__desc">'+desc+'</p>'+contour+'</header>';
-}
-function heading(tag,title,desc){
- if(title==='Anúncios')return masthead('ads','DESCOBERTAS',title,desc,'PARA VOCÊ','Sobre','data-action="adInfo"');
- if(title==='Cartões')return masthead('cards','SUA CARTEIRA',title,desc,'3 VINCULADOS');
- if(title==='Revisar')return masthead('review','PENDÊNCIAS',title,desc,(3-state.reviewed.length)+' EVENTOS','Entenda','data-action="reviewInfo"');
- return masthead('home',tag,title,desc,'VISÃO GERAL');
-}
+function home(){return `<div class="screen-page" id="homePage">${heroMarkup()}${weekMarkup()}${winsMarkup()}<section class="surface daily-note"><div class="note-label">${icon('sparkle')} Uma ideia para hoje</div><h3>Qual pequena escolha pode fazer diferença esta semana?</h3><div class="note-foot"><button class="tiny-dark" data-action="tip">Explorar</button><button class="tiny-icon" aria-label="Próxima ideia" data-action="tip">${icon('arrow')}</button></div></section><div class="section-title" id="transactionsSection"><h2>Movimentações</h2><button data-tab-go="expenses">Ver todas</button></div><div class="surface transactions">${data.map(transactionMarkup).join('')}</div></div>`}
+function heading(tag,title,desc){return `<header class="page-header"><small>${tag}</small><h1>${title}</h1><p>${desc}</p></header>`}
 const chartWeeks={Semana:{values:WEEK_LEDGER.map(d=>d.total),labels:['Seg','Ter','Qua','Qui','Sex','Sáb','Dom']},Mês:{values:[230,410,480,525,750,525,548.2],labels:['1','2','3','4','5','6','7']},Tudo:{values:[230,410,480,525,750,525,548.2],labels:['1','2','3','4','5','6','7']}};
 let expenseMotionFrame=0,expenseMotionTimer=0,graphMotionFrame=0;
 const reducedMotion=()=>window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -755,7 +817,7 @@ function expenseCalendarMarkup(){
  });
  return `<div class="section-title calendar-title" id="calendarSection"><h2>Calendário</h2><button type="button" data-action="calendar">Novembro <span aria-hidden="true">⌄</span></button></div><section class="surface calendar-surface" aria-label="Calendário financeiro, novembro de 2026"><div class="calendar-intro"><span>Toque em um dia para ver os lançamentos</span><strong>Valores em R$</strong></div><div class="calendar-weekdays" aria-hidden="true">${['S','T','Q','Q','S','S','D'].map(t=>`<span>${t}</span>`).join('')}</div><div class="calendar-heatmap">${slots.join('')}</div><div class="calendar-detail-panel" id="calendarDetail" role="status" aria-live="polite">${calendarDetailMarkup(state.heatDay)}</div></section>`;
 }
-function expenseHeaderMarkup(){return masthead('expenses','GASTOS POR CATEGORIA','Categorias','Suas compras, organizadas por tipo de gasto.','NOVEMBRO 2026','Detalhes','data-action="category"');}
+function expenseHeaderMarkup(){return `<header class="page-header page-header-expenses"><small>GASTOS POR CATEGORIA · NOVEMBRO</small><div class="page-header-row"><h1>Categorias</h1><button type="button" class="page-header-action" data-action="category">Detalhes</button></div><p>Suas compras, organizadas por tipo de gasto.</p></header>`;}
 function expenses(){
  return `<div class="screen-page expenses-page">${expenseHeaderMarkup()}<div class="category-stack-list">${EXPENSE_CATEGORY_DETAIL.map(categoryCardMarkup).join('')}</div><div class="expense-category-note"><span>Gradientes por subcategoria · valores demonstrativos</span><strong>Total ${money(EXPENSE_CATEGORY_TOTAL)}</strong></div>${expenseCalendarMarkup()}<div class="section-title expense-analytics-title"><h2>Análise das saídas</h2><button type="button" data-action="expenseReplay">Reproduzir motion</button></div>${expressionMarkup()}<div class="chips expense-periods" aria-label="Selecionar período">${['Semana','Mês','Tudo'].map(p=>`<button class="chip ${p===state.period?'on':''}" data-period="${p}" aria-pressed="${state.period===p}">${p}</button>`).join('')}</div>${graphMarkup()}</div>`;
 }
@@ -934,7 +996,7 @@ function syncSlideBackdropMedia(){
 document.addEventListener('visibilitychange',syncSlideBackdropMedia);
 window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener?.('change',syncSlideBackdropMedia);
 
-function render(){stopLiquid();hideMoneyInsight(false);categoryMotionObserver?.disconnect();const walletOverlay=document.getElementById('walletLayer');if(walletOverlay)walletOverlay.remove();walletClosing=false;const tab=state.tab;const phone=document.querySelector('.phone');if(phone){phone.dataset.pageTheme=tab;phone.classList.toggle('expenses-theme',tab==='expenses');phone.classList.toggle('scrolled-deep',$('#scroller').scrollTop>112)}cancelAnimationFrame(expenseMotionFrame);cancelAnimationFrame(graphMotionFrame);$('#screen').innerHTML=({home,expenses,ads,cards,review})[tab]();$('#dock').style.setProperty('--active-tab',String(['home','expenses','ads','cards','review'].indexOf(tab)));$$('#dock button').forEach(b=>{const selected=b.dataset.tab===tab;b.classList.toggle('active',selected);b.setAttribute('aria-current',selected?'page':'false')});if(tab==='home'){const root=$('#homePage');root.classList.toggle('hero-expanded',state.expanded);if(state.expanded)requestAnimationFrame(updateCarousel)}if(tab==='expenses'){requestAnimationFrame(()=>{animateExpense();animateChart();})}prepareMotionOrbs();syncSlideBackdropMedia();if(tab==='expenses')requestAnimationFrame(setupCategoryMotions);$('#topbar').classList.toggle('is-scrolled',false)}
+function render(){stopLiquid();hideMoneyInsight(false);categoryMotionObserver?.disconnect();const walletOverlay=document.getElementById('walletLayer');if(walletOverlay)walletOverlay.remove();walletClosing=false;const tab=state.tab;const phone=document.querySelector('.phone');if(phone){phone.dataset.pageTheme=tab;phone.classList.remove('expenses-theme');phone.classList.toggle('scrolled-deep',$('#scroller').scrollTop>112)}cancelAnimationFrame(expenseMotionFrame);cancelAnimationFrame(graphMotionFrame);$('#screen').innerHTML=({home,expenses,ads,cards,review})[tab]();$('#dock').style.setProperty('--active-tab',String(['home','expenses','ads','cards','review'].indexOf(tab)));$$('#dock button').forEach(b=>{const selected=b.dataset.tab===tab;b.classList.toggle('active',selected);b.setAttribute('aria-current',selected?'page':'false')});if(tab==='home'){const root=$('#homePage');root.classList.toggle('hero-expanded',state.expanded);if(state.expanded)requestAnimationFrame(updateCarousel)}if(tab==='expenses'){requestAnimationFrame(()=>{animateExpense();animateChart();})}prepareMotionOrbs();syncSlideBackdropMedia();if(tab==='expenses')requestAnimationFrame(setupCategoryMotions);$('#topbar').classList.toggle('is-scrolled',false)}
 function $$(s,r=document){return [...r.querySelectorAll(s)]}
 function updateCarousel(options={}){const track=$('#carouselTrack'),vp=$('#carouselViewport');if(!track||!vp)return;const first=track.querySelector('.carousel-slide');if(!first)return;const width=first.offsetWidth,gap=parseFloat(getComputedStyle(track).columnGap)||12,offset=(vp.clientWidth-width)/2-state.slide*(width+gap)+(options.dragOffset||0);track.style.transform=`translate3d(${offset}px,0,0)`;$$('.carousel-slide',vp).forEach((el,i)=>{el.classList.toggle('current',i===state.slide);el.setAttribute('aria-hidden',i!==state.slide?'true':'false');el.querySelectorAll('button').forEach(b=>b.tabIndex=i===state.slide?0:-1);el.classList.toggle('side-prev',i<state.slide);el.classList.toggle('side-next',i>state.slide)});$$('.carousel-dots button').forEach((el,i)=>{el.classList.toggle('active',i===state.slide);el.setAttribute('aria-pressed',i===state.slide?'true':'false')})}
 function expand(play=true){if(state.tab!=='home')return;clearTimeout(autoClose);clearInterval(autoAdvance);state.expanded=true;$('#homePage')?.classList.add('hero-expanded');syncSlideBackdropMedia();requestAnimationFrame(()=>requestAnimationFrame(updateCarousel));if(play&&!matchMedia('(prefers-reduced-motion: reduce)').matches){autoAdvance=setInterval(()=>{state.slide=(state.slide+1)%3;updateCarousel()},2700);autoClose=setTimeout(()=>collapse(),8200)}}
@@ -989,7 +1051,21 @@ $('#screen').addEventListener('click',e=>{if(suppressCarouselClick&&e.target.clo
 $('#screen').addEventListener('keydown',e=>{const point=e.target.closest('[data-graph]');if(point&&(e.key==='ArrowRight'||e.key==='ArrowLeft')){e.preventDefault();const ix=(Number(point.dataset.graph)+(e.key==='ArrowRight'?1:6))%7;activateGraph(ix);$(`[data-graph="${ix}"]`)?.focus();}});
 $('#screen').addEventListener('keydown',e=>{if(!e.target.closest('#carouselViewport'))return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();stopAutoplay();state.slide=Math.max(0,Math.min(2,state.slide+(e.key==='ArrowRight'?1:-1)));updateCarousel()}if(e.key==='Escape')collapse()});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInterval(autoAdvance);clearTimeout(autoClose)}});
-$('#scroller').addEventListener('scroll',()=>{$('#topbar').classList.toggle('is-scrolled',$('#scroller').scrollTop>25);document.querySelector('.phone')?.classList.toggle('scrolled-deep',$('#scroller').scrollTop>112)},{passive:true});$('#notifications').addEventListener('click',()=>notify('Não há novas notificações nesta demonstração.'));$('#avatar').addEventListener('click',()=>{if(state.tab==='home')state.expanded?collapse():expand(false);else notify('Perfil de demonstração NexaPag V2.')});window.addEventListener('resize',()=>{if(state.expanded)updateCarousel()});
+$('#scroller').addEventListener('scroll',()=>{$('#topbar').classList.toggle('is-scrolled',$('#scroller').scrollTop>25);document.querySelector('.phone')?.classList.toggle('scrolled-deep',$('#scroller').scrollTop>112)},{passive:true});const THEME_KEY='nexapag-ui-theme';
+let nexaTheme='light';
+try{if(localStorage.getItem(THEME_KEY)==='dark')nexaTheme='dark'}catch(_e){}
+function applyNexaTheme(next){
+ nexaTheme=next==='dark'?'dark':'light';
+ const phone=document.querySelector('.phone');
+ if(phone)phone.dataset.uiTheme=nexaTheme;
+ const btn=document.getElementById('themeToggle');
+ if(btn){const dark=nexaTheme==='dark';btn.setAttribute('aria-pressed',String(dark));btn.setAttribute('aria-label',dark?'Ativar modo claro':'Ativar modo escuro');btn.title=dark?'Ativar modo claro':'Ativar modo escuro';const use=btn.querySelector('use');if(use)use.setAttribute('href',dark?'#i-sparkle':'#i-moon')}
+ const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute('content',nexaTheme==='dark'?'#111c17':'#e6f1de');
+ try{localStorage.setItem(THEME_KEY,nexaTheme)}catch(_e){}
+}
+applyNexaTheme(nexaTheme);
+document.getElementById('themeToggle')?.addEventListener('click',()=>applyNexaTheme(nexaTheme==='dark'?'light':'dark'));
+$('#notifications').addEventListener('click',()=>notify('Não há novas notificações nesta demonstração.'));$('#avatar').addEventListener('click',()=>{if(state.tab==='home')state.expanded?collapse():expand(false);else notify('Perfil de demonstração NexaPag V2.')});window.addEventListener('resize',()=>{if(state.expanded)updateCarousel()});
 render();if(!matchMedia('(prefers-reduced-motion: reduce)').matches){setTimeout(()=>{if(state.tab==='home'&&state.firstShow){state.firstShow=false;expand(true)}},1900)}
 </script>
 <script defer src="./assets/category-microbots-26.js"></script>
