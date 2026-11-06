@@ -105,9 +105,11 @@
  border-radius:50%;pointer-events:none;z-index:2;
  background:radial-gradient(ellipse at 32% 15%,rgba(255,255,255,.5),transparent 36%);
  animation:orbMicroShimmer 5.6s linear infinite;mix-blend-mode:screen}
-#homePage .milestone:not(.is-morph-origin) .jelly{
- animation:orbMicroBreath 5.6s ease-in-out infinite;
-}
+/* Keep outer geometry pixel-stable for the FLIP start and evenly aligned orbs.
+   Internal refraction continues; scaling the entire orb caused 2px size wobble. */
+#homePage .milestone:not(.is-morph-origin) .jelly{animation:none}
+#homePage .milestone:nth-child(2) .jelly::before{animation-delay:-1.5s}
+#homePage .milestone:nth-child(3) .jelly::before{animation-delay:-3.1s}
 #homePage .milestone:nth-child(2) .jelly{animation-delay:-1.5s}
 #homePage .milestone:nth-child(3) .jelly{animation-delay:-3.1s}
 #homePage .milestone:hover .jelly{animation-play-state:paused;filter:saturate(1.16)}

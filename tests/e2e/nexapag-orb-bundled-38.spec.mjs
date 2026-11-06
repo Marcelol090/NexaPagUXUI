@@ -1,0 +1,28 @@
+import {test,expect} from '@playwright/test';
+test('V3.8 motion controller is present in the production Vite build, not just source',async({page})=>{
+ const errors=[];page.on('pageerror',err=>errors.push(err.message));
+ const responses=[];page.on('response',res=>{if(res.url().includes('nexapag-orb'))responses.push({status:res.status(),url:res.url()})});
+ await page.setViewportSize({width:390,height:844});
+ await page.goto('/v2.html');
+ await expect.poll(()=>page.evaluate(()=>Boolean(window.NexaOrbFlowV35)),{timeout:5000}).toBe(true);
+ await expect(page.locator('#compactHero .milestone')).toHaveCount(3);
+ const w=await page.locator('#compactHero .jelly').evaluateAll(list=>list.map(el=>el.getBoundingClientRect().width));
+ expect(Math.max(...w)-Math.min(...w)).toBeLessThanOrEqual(1);
+ await page.locator('[data-orb-story="income"]').click();
+ await expect(page.locator('.orb-fluid-ghost[data-kind="income"]')).toHaveCount(1,{timeout:2500});
+ const frames=await page.locator('.orb-fluid-ghost[data-kind="income"]').evaluate(el=>el.getAnimations()[0]?.effect?.getKeyframes()||[]);
+ expect(frames).toHaveLength(16);
+ await expect(page.getByRole('dialog',{name:'Dinheiro que entrou.'})).toBeVisible();
+ await expect(page.locator('.orb-fluid-ghost')).toHaveCount(0,{timeout:3500});
+ await page.keyboard.press('Escape');
+ await expect(page.getByRole('dialog')).toHaveCount(0,{timeout:3500});
+ await page.locator('[data-open="1"]').click();
+ await expect(page.locator('.orb-fluid-ghost[data-kind="spending"]')).toHaveCount(1);
+ await expect(page.locator('#homePage')).toHaveClass(/hero-expanded/);
+ await page.getByRole('button',{name:'Recolher os cartões'}).click();
+ await expect(page.locator('#homePage')).not.toHaveClass(/hero-expanded/);
+ await page.locator('[data-orb-story="refund"]').click();
+ await expect(page.locator('.orb-fluid-ghost[data-kind="refund"]')).toHaveCount(1);
+ await expect(page.getByRole('dialog',{name:'Valor recuperado.'})).toBeVisible();
+ expect(errors).toEqual([]);
+});

@@ -22,4 +22,14 @@ if (!html.includes('src="./assets/') && !html.includes('href="./assets/')) {
 for (const file of ['dist/materials.html','dist/colorimetria.html']) {
   if (!existsSync(file)) throw new Error('Missing Pages route: ' + file);
 }
+
+const builtV2 = readFileSync('dist/v2.html','utf8');
+const emittedJS = readdirSync(assetDir).filter(name=>name.endsWith('.js'));
+const orbScript = emittedJS.find(name=>readFileSync(join(assetDir,name),'utf8').includes('NexaOrbFlowV35'));
+if(!orbScript)throw new Error('ORB MISSING: liquid motion controller absent from built Vite JS assets');
+if(!builtV2.includes('assets/'))throw new Error('v2.html does not point to bundled assets');
+const orbHtmlReference = emittedJS.some(name=>builtV2.includes(name));
+if(!orbHtmlReference)throw new Error('ORB UNREACHABLE: no bundled Vite entry script linked by v2.html');
+console.log('Orb-to-card motion controller bundled and linked:',orbScript);
+
 console.log('Compiled CSS contract OK: Visualize 9.37 root, legacy lab and relative assets.');
