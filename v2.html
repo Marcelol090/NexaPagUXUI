@@ -631,6 +631,41 @@ button:focus-visible{outline:2px solid #70658f;outline-offset:3px}
 .phone[data-ui-theme="dark"] .wallet-grid .wallet-folder{background:transparent!important;box-shadow:none!important}
 .phone[data-ui-theme="dark"] .calendar-heatmap .heat-day .heat-day-amount{color:#ecbd99}
 
+
+/* V3.2 / Category typography · preserve V2.8 card anatomy and V3.1 dark mode. */
+.expenses-page .category-v29 .category-row{display:grid;grid-template-columns:46px minmax(0,1fr);gap:clamp(9px,2.6vw,13px);align-items:center;padding:clamp(12px,3.5vw,16px) clamp(12px,3.5vw,16px);min-height:88px}
+.expenses-page .category-v29 .category-open{display:grid;grid-template-columns:minmax(0,1fr) max-content 14px;gap:clamp(6px,2vw,10px);width:100%;min-width:0;min-height:52px;align-items:center}
+.expenses-page .category-v29 .category-open .copy{min-width:0;display:flex;flex-direction:column;justify-content:center;align-items:stretch}
+.expenses-page .category-v29 .category-open .copy>strong{display:block;font-family:Manrope,Inter,system-ui,sans-serif;font-size:clamp(13.5px,3.65vw,15px);font-weight:760;letter-spacing:-.025em;line-height:1.28;color:#242c28;text-wrap:pretty}
+.expenses-page .category-v29 .category-open .copy>small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-clamp:2;overflow:hidden;font-family:Inter,Manrope,system-ui,sans-serif;font-size:clamp(10.5px,2.9vw,11.5px);font-weight:480;line-height:1.4;color:#737c73;letter-spacing:-.005em;margin-top:4px;overflow-wrap:anywhere}
+.expenses-page .category-v29 .category-open .amount{font:750 clamp(11.5px,3.25vw,13.5px)/1.3 Manrope,Inter,system-ui,sans-serif;letter-spacing:-.025em;color:#28342b;white-space:nowrap;font-variant-numeric:tabular-nums lining-nums;justify-self:end;align-self:center}
+.expenses-page .category-v29 .category-chevron{width:14px;height:14px;justify-self:end;align-self:center}
+.expenses-page .category-v29 .category-stack{height:5px;margin-top:8px}
+.expenses-page .category-v29 .category-detail-content{padding:11px clamp(13px,3.5vw,17px) 15px}
+.expenses-page .category-v29 .subcategory-heading{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:5px 12px;margin:3px 0 9px;padding-bottom:9px;border-bottom:1px solid #edf0eb;font-family:Inter,Manrope,system-ui,sans-serif}
+.expenses-page .category-v29 .subcategory-heading-label{font-size:10px;font-weight:780;line-height:1.3;letter-spacing:.06em;text-transform:uppercase;color:#677368}
+.expenses-page .category-v29 .subcategory-heading-summary{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:flex-end;gap:2px 7px;color:#7d8a7e;font-size:10px;line-height:1.35;font-weight:540}
+.expenses-page .category-v29 .subcategory-heading-summary strong{font:760 11px/1.35 Manrope,Inter,system-ui,sans-serif;color:#38463c;white-space:nowrap;font-variant-numeric:tabular-nums}
+.expenses-page .category-v29 .subcategory-entry{padding:8px 0 9px}
+.expenses-page .category-v29 .subcategory-main{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:baseline;font-family:Inter,Manrope,system-ui,sans-serif;font-size:11.5px;line-height:1.4}
+.expenses-page .category-v29 .subcategory-name{min-width:0;display:flex;align-items:baseline;gap:8px;color:#424d44;font-weight:640;overflow-wrap:anywhere}
+.expenses-page .category-v29 .subcategory-swatch{flex:none;align-self:center}
+.expenses-page .category-v29 .subcategory-value{font:735 11.5px/1.4 Manrope,Inter,system-ui,sans-serif;color:#354238;white-space:nowrap;font-variant-numeric:tabular-nums}
+.expenses-page .category-v29 .subcategory-track{height:4px;margin-top:6px}
+.phone[data-ui-theme="dark"] .expenses-page .category-v29 .category-open .copy>strong,.phone[data-ui-theme="dark"] .expenses-page .category-v29 .category-open .amount{color:#ecf5e9}
+.phone[data-ui-theme="dark"] .expenses-page .category-v29 .category-open .copy>small,.phone[data-ui-theme="dark"] .expenses-page .category-v29 .subcategory-heading-summary{color:#b0c2af}
+.phone[data-ui-theme="dark"] .expenses-page .category-v29 .subcategory-heading{border-bottom-color:rgba(216,243,208,.14)}
+.phone[data-ui-theme="dark"] .expenses-page .category-v29 .subcategory-heading-label{color:#b7c9b3}
+.phone[data-ui-theme="dark"] .expenses-page .category-v29 .subcategory-heading-summary strong,.phone[data-ui-theme="dark"] .expenses-page .category-v29 .subcategory-name,.phone[data-ui-theme="dark"] .expenses-page .category-v29 .subcategory-value{color:#e6f2e2}
+@media(max-width:359px){
+.expenses-page .category-v29 .category-row{grid-template-columns:44px minmax(0,1fr);gap:9px;padding:12px 11px}
+.expenses-page .category-v29 .category-open{grid-template-columns:minmax(0,1fr) max-content 14px;grid-template-rows:auto auto;align-items:start;gap:7px 6px}
+.expenses-page .category-v29 .category-open .copy{grid-column:1/-1;grid-row:1}
+.expenses-page .category-v29 .category-open .amount{grid-column:2;grid-row:2}
+.expenses-page .category-v29 .category-chevron{grid-column:3;grid-row:2}
+.expenses-page .category-v29 .subcategory-heading-summary{justify-content:flex-start}
+}
+
 </style>
 <link rel="stylesheet" href="./assets/category-microbots-26.css">
 </head>
@@ -787,7 +822,7 @@ function categoryCardMarkup(c){
  const isOpen=state.expandedCategory===c.n,maximum=Math.max(...EXPENSE_CATEGORY_DETAIL.map(x=>x.total));
  const slug={'Alimentação':'alimentacao','Compras':'compras','Transporte':'transporte','Casa':'casa'}[c.n];
  const segments=c.subs.map((sub,i)=>`<i title="${sub.n}: ${money(sub.v)}" style="width:${sub.v/c.total*100}%;background:linear-gradient(90deg,${c.colors[i]},${c.colors[Math.min(i+1,2)]})"></i>`).join('');
- return `<article class="surface category category-v29 ${isOpen?'is-open':''}" data-category-card="${c.n}"><div class="category-row">${categoryMotionMarkup(c)}<button type="button" class="category-open" data-category-toggle="${c.n}" aria-expanded="${isOpen}" aria-controls="sub-${slug}" aria-label="${isOpen?'Ocultar':'Mostrar'} subcategorias de ${c.n}"><span class="copy"><strong>${c.n}</strong><small>${c.desc}</small><span class="bar category-stack" role="img" aria-label="Composição de ${c.n}: ${c.subs.map(s=>`${s.n} ${money(s.v)}`).join(', ')}" style="width:${Math.max(38,c.total/maximum*100)}%">${segments}</span></span><b class="amount">${money(c.total)}</b><svg class="category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></div><div class="category-detail" id="sub-${slug}" ${isOpen?'':'inert'}><div class="category-detail-clip"><div class="category-detail-content"><div class="subcategory-heading"><span>SUBCATEGORIAS</span><span>Novembro · total ${money(c.total)}</span></div>${c.subs.map((s,i)=>`<div class="subcategory-entry"><div class="subcategory-main"><span class="subcategory-name"><i class="subcategory-swatch" style="--sub-color:${c.colors[i]}"></i>${s.n}</span><strong class="subcategory-value">${money(s.v)}</strong></div><div class="subcategory-track"><span style="--sub-share:${s.v/c.total*100}%;--sub-gradient:linear-gradient(90deg,${c.colors[i]},${c.colors[Math.min(i+1,2)]})"></span></div></div>`).join('')}</div></div></div></article>`;
+ return `<article class="surface category category-v29 ${isOpen?'is-open':''}" data-category-card="${c.n}"><div class="category-row">${categoryMotionMarkup(c)}<button type="button" class="category-open" data-category-toggle="${c.n}" aria-expanded="${isOpen}" aria-controls="sub-${slug}" aria-label="${isOpen?'Ocultar':'Mostrar'} subcategorias de ${c.n}"><span class="copy"><strong>${c.n}</strong><small>${c.desc}</small><span class="bar category-stack" role="img" aria-label="Composição de ${c.n}: ${c.subs.map(s=>`${s.n} ${money(s.v)}`).join(', ')}" style="width:${Math.max(38,c.total/maximum*100)}%">${segments}</span></span><b class="amount">${money(c.total)}</b><svg class="category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></div><div class="category-detail" id="sub-${slug}" ${isOpen?'':'inert'}><div class="category-detail-clip"><div class="category-detail-content"><div class="subcategory-heading"><span class="subcategory-heading-label">Subcategorias</span><span class="subcategory-heading-summary"><span>Novembro · total</span><strong>${money(c.total)}</strong></span></div>${c.subs.map((s,i)=>`<div class="subcategory-entry"><div class="subcategory-main"><span class="subcategory-name"><i class="subcategory-swatch" style="--sub-color:${c.colors[i]}"></i>${s.n}</span><strong class="subcategory-value">${money(s.v)}</strong></div><div class="subcategory-track"><span style="--sub-share:${s.v/c.total*100}%;--sub-gradient:linear-gradient(90deg,${c.colors[i]},${c.colors[Math.min(i+1,2)]})"></span></div></div>`).join('')}</div></div></div></article>`;
 }
 function calendarDetailMarkup(day){
  const record=calendarDay(day);
