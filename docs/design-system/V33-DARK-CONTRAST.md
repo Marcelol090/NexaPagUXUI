@@ -1,0 +1,2 @@
+# V3.3 Dark Contrast
+Keep V2.8 geometry and source MP4 material. Dark mode uses forest-matte ink on its dark surfaces but dark ink on the still-bright pastel carousel slides. Raise secondary text contrast in Home, Expenses, Ads, Cards and Review. No changes to financial data, animation timeline or Android. Playwright coverage compares sampled computed colors against conservative background shades and requires normal-text WCAG ratio >=4.5:1.

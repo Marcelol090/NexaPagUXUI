@@ -666,6 +666,62 @@ button:focus-visible{outline:2px solid #70658f;outline-offset:3px}
 .expenses-page .category-v29 .subcategory-heading-summary{justify-content:flex-start}
 }
 
+
+/* V3.3 Dark Contrast: dark is a shell, not a white-text filter over bright videos. */
+.phone[data-ui-theme="dark"]{
+ --on-light-motion:#1b3328;
+ --on-light-motion-secondary:#314639;
+ --on-forest-matte:#edf7e9;
+ --on-forest-matte-secondary:#c7dac4;
+}
+.phone[data-ui-theme="dark"] .carousel-slide :is(.slide-timer,.slide-text h3){
+ color:var(--on-light-motion);
+ text-shadow:0 1px 0 rgba(255,255,255,.32),0 3px 14px rgba(255,255,255,.40);
+}
+.phone[data-ui-theme="dark"] .carousel-slide :is(.slide-text p,.ruler-labels,.ruler-labels span){color:var(--on-light-motion-secondary)}
+.phone[data-ui-theme="dark"] .carousel-slide .slide-chip{
+ color:var(--on-light-motion);background:rgba(255,255,255,.72);
+ border:1px solid rgba(255,255,255,.82);box-shadow:0 2px 10px rgba(31,51,39,.10);
+}
+.phone[data-ui-theme="dark"] .carousel-slide .slide-chip svg{color:currentColor}
+.phone[data-ui-theme="dark"] .carousel-slide .ruler i{background:rgba(43,70,52,.28)}
+.phone[data-ui-theme="dark"] .carousel-slide .ruler i:nth-child(5n){background:rgba(34,63,49,.52)}
+.phone[data-ui-theme="dark"] .carousel-slide .ruler i:nth-child(13){background:#254532}
+.phone[data-ui-theme="dark"] .greeting h1 span{color:#d5e6d1}
+.phone[data-ui-theme="dark"] .greeting p{color:var(--on-forest-matte-secondary)}
+.phone[data-ui-theme="dark"] .week{
+ background:linear-gradient(152deg,#274331 0%,#203629 54%,#1b2d23 100%);
+ border:1px solid rgba(210,244,204,.22);
+ box-shadow:0 9px 28px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.07);
+}
+.phone[data-ui-theme="dark"] .week .week-title strong{color:var(--on-forest-matte)}
+.phone[data-ui-theme="dark"] .week :is(.week-title em,.week-source){color:var(--on-forest-matte-secondary)}
+.phone[data-ui-theme="dark"] .week .week-counter{
+ color:#e4f3df;background:rgba(77,112,81,.42);border:1px solid rgba(213,242,206,.24);
+}
+.phone[data-ui-theme="dark"] .week .weekday{color:#cee0ca}
+.phone[data-ui-theme="dark"] .week .week-day-detail{
+ color:var(--on-forest-matte);background:linear-gradient(125deg,#2b4533,#23392b);
+ border:1px solid rgba(207,238,199,.22);
+}
+.phone[data-ui-theme="dark"] .week :is(.week-day-head span,.week-day-cats span,.week-day-empty){color:#c7dbc4}
+.phone[data-ui-theme="dark"] .week .week-day-head strong{color:#f5faef}
+.phone[data-ui-theme="dark"] .week .day-cell.inactive .jelly{
+ border-color:rgba(209,231,205,.50);background:rgba(178,213,168,.06);
+}
+.phone[data-ui-theme="dark"] :is(.win-label,.win strong){color:var(--on-forest-matte)}
+.phone[data-ui-theme="dark"] :is(.win small,.win .suffix,.overview small,.offer-card p,.review-item p,.transaction small,.calendar-intro,.calendar-weekdays){color:var(--on-forest-matte-secondary)}
+.phone[data-ui-theme="dark"] :is(.overview .highlight,.calendar-intro strong){color:#d5ebc9}
+.phone[data-ui-theme="dark"] .wallet-folder .wallet-folder-name{color:#22362b}
+.phone[data-ui-theme="dark"] .wallet-folder .wallet-folder-sub{color:#475647}
+.phone[data-ui-theme="dark"] .review-item button{
+ background:#31563b;color:#effaeb;border:1px solid rgba(220,249,214,.16);
+}
+@media(prefers-contrast:more){
+ .phone[data-ui-theme="dark"] .week{border-color:rgba(233,255,226,.5)}
+ .phone[data-ui-theme="dark"] .carousel-slide .slide-chip{background:rgba(255,255,255,.92)}
+}
+
 </style>
 <link rel="stylesheet" href="./assets/category-microbots-26.css">
 </head>
