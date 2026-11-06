@@ -14,7 +14,9 @@ const STORIES={
  refund:{label:'Estornos',value:349.9,title:'Valor recuperado.',description:'Um estorno confirmado. Esse valor reduz suas saídas líquidas, mas não é contado novamente como entrada.',note:'1 estorno · histórico',cta:'Consultar estorno',labels:['Compra','Estorno','Confirmado']}
 };
 let active=null,flight=null,busy=false,originalPosition=null,scrollAtOpen=0,restoreFocus=null,flightGeneration=0;
-let pendingClose=null,transitionDirection='idle';
+let pendingClose=null,pendingOpen=null,transitionDirection='idle';
+function launchPendingOpen(){const req=pendingOpen;pendingOpen=null;if(!req?.button?.isConnected||bridge()?.state?.tab!=='home')return;
+ if(req.kind==='spending')openSpending(req.button);else showLayer(req.kind,req.button);}
 const rect=(el)=>{const o=phone.getBoundingClientRect(),b=el.getBoundingClientRect();return {x:b.left-o.left,y:b.top-o.top,w:b.width,h:b.height};};
 const inPhone=b=>({x:b.x,y:b.y,w:b.w,h:b.h});
 const lerp=(a,b,t)=>a+(b-a)*t;
@@ -155,6 +157,7 @@ function closeLayer(follow){
  fluidFlight(destination,fromCard,kind,true).then(()=>{
   if(active?.layer!==layer)return;
   layer.remove();active=null;restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;
+  const next=pendingOpen;if(next)queueMicrotask(launchPendingOpen);
   if(follow==='refund')bridge()?.showMoneyInsight?.('refund',restoreFocus);
   else if(follow==='income'){
     bridge()?.go?.('home');
@@ -205,15 +208,17 @@ async function closeSpending(){
  if(fromCard&&to)await fluidFlight(to,fromCard,'spending',true);
  home()?.classList.remove('orb-flight-cover','orb-flight-reveal','orb-choreo-running');
  restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;
- if(restoreFocus?.isConnected)restoreFocus.focus({preventScroll:true});
+ const next=pendingOpen;
+ if(next)queueMicrotask(launchPendingOpen);
+ else if(restoreFocus?.isConnected)restoreFocus.focus({preventScroll:true});
 }
 phone.addEventListener('click',event=>{
  const orb=event.target.closest('#compactHero .milestone');
  if(orb){
   event.preventDefault();event.stopImmediatePropagation();
-  if(busy||active)return;
   const all=[...document.querySelectorAll('#compactHero .milestone')];
   const kind=KINDS[all.indexOf(orb)];
+  if(busy||active){if(busy&&transitionDirection==='closing'&&kind)pendingOpen={kind,button:orb};return;}
   if(kind==='spending')openSpending(orb);else if(kind)showLayer(kind,orb);
   return;
  }
@@ -227,6 +232,7 @@ phone.addEventListener('click',event=>{
  if(cta){event.preventDefault();closeLayer(cta.dataset.orbFollow);return;}
 },true);
 document.addEventListener('keydown',event=>{
+ if(event.key==='Escape'&&busy&&transitionDirection==='closing'){pendingOpen=null;event.preventDefault();return;}
  if(!active&&event.key==='Escape'&&bridge()?.state?.expanded&&bridge()?.state?.tab==='home'){event.preventDefault();event.stopImmediatePropagation();closeSpending();return;}
  if(!active)return;
  if(event.key==='Escape'){event.preventDefault();closeLayer();return;}
@@ -238,7 +244,7 @@ document.addEventListener('keydown',event=>{
 },true);
 phone.addEventListener('click',event=>{
  if(event.target.closest('#dock [data-tab]')&&(active||busy)){
-  if(active){active.layer.remove();active=null;}stopFlight();restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;
+  if(active){active.layer.remove();active=null;}stopFlight();restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;pendingOpen=null;
   home()?.classList.remove('orb-choreo-running','orb-flight-cover','orb-flight-reveal');
  }
 },true);

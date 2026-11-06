@@ -1,0 +1,34 @@
+import {test,expect} from '@playwright/test';
+test('V3.10 immediately queues another orb tapped during liquid reverse',async({page})=>{
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.setViewportSize({width:390,height:844});await page.goto('/v2.html');
+ await expect.poll(()=>page.evaluate(()=>Boolean(window.NexaOrbFlowV35))).toBe(true);
+ await page.locator('[data-open="1"]').click();
+ await expect(page.locator('.orb-fluid-ghost[data-kind="spending"]')).toHaveCount(0,{timeout:4000});
+ await page.getByRole('button',{name:'Recolher os cartões'}).click();
+ await expect(page.locator('#homePage')).not.toHaveClass(/hero-expanded/);
+ await page.locator('[data-orb-story="refund"]').click();
+ await expect(page.getByRole('dialog',{name:'Valor recuperado.'})).toBeVisible({timeout:5000});
+ await expect(page.locator('.orb-fluid-ghost')).toHaveCount(0,{timeout:5000});
+ await page.keyboard.press('Escape');
+ await expect(page.getByRole('dialog')).toHaveCount(0,{timeout:5000});
+ await page.locator('[data-orb-story="income"]').click();
+ await expect(page.getByRole('dialog',{name:'Dinheiro que entrou.'})).toBeVisible();
+ await page.keyboard.press('Escape');
+ await expect(page.locator('#orbStoryLayer')).toHaveCount(0,{timeout:5000});
+ expect(errors).toEqual([]);
+});
+test('V3.10 Escape cancels queued orb during reverse; reduced-motion follow-up works',async({page})=>{
+ await page.setViewportSize({width:320,height:740});await page.goto('/v2.html');
+ await page.locator('[data-open="1"]').click();await page.keyboard.press('Escape');
+ await expect(page.locator('#homePage')).not.toHaveClass(/hero-expanded/,{timeout:5000});
+ await page.locator('[data-orb-story="income"]').click();
+ await page.keyboard.press('Escape');
+ await expect.poll(()=>page.evaluate(()=>window.NexaOrbFlowV35.phase),{timeout:5000}).toBe('idle');
+ await expect(page.locator('#orbStoryLayer')).toHaveCount(0);
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.locator('[data-orb-story="income"]').click();
+ await expect(page.getByRole('dialog',{name:'Dinheiro que entrou.'})).toBeVisible();
+ await page.keyboard.press('Escape');
+ await expect(page.locator('#orbStoryLayer')).toHaveCount(0);
+});
