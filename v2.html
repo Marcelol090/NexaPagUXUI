@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#111211">
 <meta name="description" content="NexaPag V3.1 · estrutura V2.8, fundo verde-floresta e modo dark.">
-<title>NexaPag V3.4 · Orb Flow</title>
+<title>NexaPag V3.5 · Liquid Orb Flow</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -809,6 +809,7 @@ button:focus-visible{outline:2px solid #70658f;outline-offset:3px}
 
 </style>
 <link rel="stylesheet" href="./assets/category-microbots-26.css">
+<link rel="stylesheet" href="./assets/nexapag-orb-motion-35.css">
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
@@ -1245,118 +1246,7 @@ $('#notifications').addEventListener('click',()=>notify('Não há novas notifica
 render();state.firstShow=false;window.NexaHeroBridge={state,expand,stopAutoplay,go,showMoneyInsight};
 </script>
 <script defer src="./assets/category-microbots-26.js"></script>
-<script>
-/* NexaPag V3.4: independent financial orb flows, native element morph, no framework. */
-(() => {
-  const app=()=>window.NexaHeroBridge;
-  const phone=document.querySelector('.phone');
-  if(!phone)return;
-  let layer=null,closing=false,restoreFocus=null,lastMorph=null;
-  const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const FLUID_EASE='cubic-bezier(.21,.76,.17,1)';
-  const locate=(rect)=>{const origin=phone.getBoundingClientRect();return {x:rect.left-origin.left,y:rect.top-origin.top,width:rect.width,height:rect.height};};
-  const price=(val)=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(val);
-  const STORIES={
-    income:{name:'Entradas',value:1950,eyebrow:'RECEBIMENTOS',title:'Dinheiro que entrou.',description:'Recebimentos e PIX identificados no histórico. Não inclui estornos de compras.',note:'PIX recebido · histórico',cta:'Ver recebimentos',next:'income'},
-    refund:{name:'Estornos',value:349.9,eyebrow:'REEMBOLSOS',title:'Valor recuperado.',description:'Um estorno confirmado. Esse valor reduz suas saídas líquidas, mas não é contado novamente como entrada.',note:'1 estorno no histórico',cta:'Consultar estorno',next:'refund'}
-  };
-  const animateShell=(card,src,to,back=false)=>{
-    if(reduced()||!card.animate)return Promise.resolve();
-    const dx=src.x-to.x,dy=src.y-to.y,sx=Math.max(.08,src.width/to.width),sy=Math.max(.06,src.height/to.height);
-    const frames=[
-      {transform:`translate(${dx}px, ${dy}px) scale(${sx},${sy})`,borderRadius:'50% 50% 48% 52%',filter:'saturate(1.14)',opacity:.90},
-      {transform:`translate(${dx*.20}px, ${dy*.20}px) scale(${1-(1-sx)*.20},${1-(1-sy)*.20})`,borderRadius:'38% 41% 33% 44%',filter:'saturate(1.1)',opacity:1,offset:.7},
-      {transform:'none',borderRadius:'30px',filter:'none',opacity:1}
-    ];
-    const steps=back?[frames[2],{...frames[1],offset:.34},frames[0]]:frames;
-    const animation=card.animate(steps,{duration:back?510:670,easing:FLUID_EASE,fill:'both'});
-    return animation.finished.catch(()=>{}).finally(()=>animation.cancel());
-  };
-  function clearLayer(){if(layer){layer.remove();layer=null} closing=false;}
-  function closeStory(follow){
-    if(!layer||closing)return;
-    closing=true;const active=layer;
-    active.classList.remove('is-content-ready');active.classList.add('is-closing');
-    const orb=restoreFocus?.querySelector('.jelly');
-    const target=orb?.isConnected?locate(orb.getBoundingClientRect()):null;
-    const card=active.querySelector('.orb-story-card');
-    const from=locate(card.getBoundingClientRect());
-    const finish=()=>{clearLayer();if(typeof follow==='function')follow();else if(restoreFocus?.isConnected)restoreFocus.focus({preventScroll:true});};
-    if(target){animateShell(card,target,from,true).then(finish)}else finish();
-  }
-  function openStory(kind,button){
-    if(layer||!STORIES[kind])return;
-    app()?.stopAutoplay?.();
-    if(app()?.state)app().state.firstShow=false;
-    const v=STORIES[kind];restoreFocus=button;
-    const source=button.querySelector('.jelly')||button;
-    const sourceRect=locate(source.getBoundingClientRect());
-    layer=document.createElement('section');
-    layer.id='orbStoryLayer';layer.className='orb-story-layer';layer.dataset.kind=kind;
-    layer.innerHTML=`<div class="orb-story-backdrop" data-orb-close="1"></div><article class="orb-story-card" role="dialog" aria-modal="true" aria-labelledby="orbStoryTitle" aria-describedby="orbStoryDescription"><div class="orb-story-content"><div class="orb-story-top"><span class="orb-story-kicker">${v.eyebrow}</span><button type="button" class="orb-story-close" data-orb-close="1" aria-label="Recolher para o orb ${v.name}">×</button></div><p class="orb-story-value">${price(v.value)}</p><h2 class="orb-story-title" id="orbStoryTitle">${v.title}</h2><p class="orb-story-description" id="orbStoryDescription">${v.description}</p><div class="orb-story-divider"></div><div class="orb-story-foot"><span>${v.note}</span><button type="button" class="orb-story-go" data-orb-follow="${v.next}">${v.cta}</button></div></div></article>`;
-    phone.append(layer);
-    const card=layer.querySelector('.orb-story-card');const dest=locate(card.getBoundingClientRect());
-    requestAnimationFrame(()=>layer?.classList.add('is-open'));
-    animateShell(card,sourceRect,dest).then(()=>{if(layer&&layer.isConnected&&!closing){layer.classList.add('is-content-ready');layer.querySelector('.orb-story-close')?.focus({preventScroll:true});}});
-  }
-  function morphSpending(button){
-    if(app()?.state){app().state.firstShow=false;app().state.slide=0;}
-    const orb=button.querySelector('.jelly')||button;
-    const from=locate(orb.getBoundingClientRect());
-    app()?.expand?.(false);
-    if(reduced())return;
-    lastMorph?.remove();
-    requestAnimationFrame(()=>requestAnimationFrame(()=>{
-      const target=document.querySelector('.carousel-slide.current');if(!target)return;
-      const to=locate(target.getBoundingClientRect());
-      const shell=document.createElement('div');shell.className='orb-morph-flight';
-      shell.style.left=from.x+'px';shell.style.top=from.y+'px';shell.style.width=from.width+'px';shell.style.height=from.height+'px';
-      phone.append(shell);lastMorph=shell;
-      const change=[
-        {left:from.x+'px',top:from.y+'px',width:from.width+'px',height:from.height+'px',borderRadius:'50%',opacity:.95},
-        {left:(from.x+(to.x-from.x)*.65)+'px',top:(from.y+(to.y-from.y)*.65)+'px',width:(from.width+(to.width-from.width)*.65)+'px',height:(from.height+(to.height-from.height)*.65)+'px',borderRadius:'37% 38% 30% 38%',opacity:.90,offset:.66},
-        {left:to.x+'px',top:to.y+'px',width:to.width+'px',height:to.height+'px',borderRadius:'26px',opacity:0}
-      ];
-      shell.animate(change,{duration:660,easing:FLUID_EASE,fill:'forwards'}).finished.catch(()=>{}).finally(()=>{shell.remove();if(lastMorph===shell)lastMorph=null});
-    }));
-  }
-  phone.addEventListener('click',e=>{
-    const button=e.target.closest('#compactHero .milestone');
-    if(!button)return;
-    e.preventDefault();e.stopPropagation();
-    if(layer)return;
-    const all=[...document.querySelectorAll('#compactHero .milestone')];
-    const kind=['income','spending','refund'][all.indexOf(button)];
-    if(kind==='spending')morphSpending(button);
-    else if(kind)openStory(kind,button);
-  },true);
-  phone.addEventListener('click',e=>{
-    if(!layer)return;
-    if(e.target.closest('[data-orb-close]')){e.preventDefault();closeStory();return}
-    const action=e.target.closest('[data-orb-follow]');if(!action)return;
-    e.preventDefault();
-    const kind=action.dataset.orbFollow;
-    closeStory(()=>{
-      if(kind==='refund'){app()?.showMoneyInsight?.('refund',restoreFocus)}
-      else if(kind==='income'){
-        app()?.go?.('home');
-        requestAnimationFrame(()=>document.getElementById('transactionsSection')?.scrollIntoView({behavior:reduced()?'auto':'smooth',block:'center'}));
-      }
-    });
-  });
-  document.addEventListener('keydown',e=>{
-    if(!layer)return;
-    if(e.key==='Escape'){e.preventDefault();closeStory();return}
-    if(e.key!=='Tab')return;
-    const controls=[...layer.querySelectorAll('button')];if(!controls.length)return;
-    const first=controls[0],last=controls[controls.length-1];
-    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
-    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
-  });
-  // Disable the legacy automatic carrousel opening: all three orbs must be tappable first.
-  if(app()?.state)app().state.firstShow=false;
-})();
+<script defer src="./assets/nexapag-orb-motion-35.js"></script>
 
-</script>
 </body>
 </html>

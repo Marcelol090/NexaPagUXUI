@@ -1,0 +1,3 @@
+# V3.5 Liquid Financial Orb Flow
+
+Three equal-sized resting orbs: income (green), spending (coral), refund (lavender). All use a shared browser-interpolated liquid FLIP flight with translucent glass; the generated 12-frame GIF is a visual storyboard only. Native animation is not constrained to 12 frames. Income/refund morph into compact historical cards and reverse on close; spending morphs into the original V2.8 carousel and back on collapse. Keep semantic accounting: R$ 1.950 PIX is history, R$ 270 is weekly spending, R$ 349,90 is historical reversal rather than an additional receipt. Honor reduced motion, focus return, keyboard Escape, dark and light themes. Test on mobile and desktop.
