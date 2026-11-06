@@ -32,6 +32,7 @@ test('V3.15 navigation is inline, readable, dark and reduced-motion resilient',a
  await expect(page.locator('.orb-story-backdrop')).toHaveCount(0);
  await page.locator('#orbStoryLayer [data-orb-nav="1"]').click();
  await expect(page.getByRole('region',{name:'Dinheiro que entrou.'})).toBeVisible();
+ await expect(page.locator('.orb-story-departing')).toHaveCount(0);
  await page.locator('#orbStoryLayer [data-orb-switch="spending"]').click();
  await expect(page.locator('#homePage')).toHaveClass(/hero-expanded/);
  await expect(page.locator('#expandedHero .orb-flow-switcher button')).toHaveCount(3);

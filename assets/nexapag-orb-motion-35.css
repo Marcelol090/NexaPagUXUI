@@ -454,3 +454,18 @@
 @media(prefers-reduced-motion:reduce){
  #homePage .orb-flow-switcher>button,#homePage .orb-flow-arrow,#homePage #heroRegion{transition:none!important}
 }
+
+/* V3.16 · Pigment continuity between full-size cards (mint/coral/lilac). */
+.orb-fluid-ghost[data-from-kind] .orb-fluid-color-mix{
+ position:absolute;inset:0;display:block;
+ background:
+ radial-gradient(ellipse at 25% 12%,rgba(255,255,255,.54),transparent 35%),
+ linear-gradient(155deg,var(--from-fluid-light),var(--from-fluid-base) 52%,var(--from-fluid-light));
+ pointer-events:none;
+ box-shadow:inset 1px 3px 8px rgba(255,255,255,.30);
+}
+.orb-fluid-ghost[data-from-kind="income"]{--from-fluid-light:#def9e0;--from-fluid-base:#91d9b1}
+.orb-fluid-ghost[data-from-kind="spending"]{--from-fluid-light:#ffe1cb;--from-fluid-base:#efaa91}
+.orb-fluid-ghost[data-from-kind="refund"]{--from-fluid-light:#eee2fa;--from-fluid-base:#baa0e5}
+.orb-fluid-ghost::before{z-index:2}
+.orb-fluid-ghost::after{z-index:3}

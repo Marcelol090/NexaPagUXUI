@@ -79,14 +79,20 @@ function fluidOutline(pose,reverse=false){
  }
  return 'polygon('+points.join(',')+')';
 }
-function fluidFlight(start,end,kind,reverse=false,onReveal,onStart){
+function fluidFlight(start,end,kind,reverse=false,onReveal,onStart,fromKind=null){
  cleanupFlight();
- if(reduce()||!Element.prototype.animate){onReveal?.();return Promise.resolve();}
- if(!start||!end||start.w<=0||start.h<=0||end.w<=0||end.h<=0){onReveal?.();return Promise.resolve();}
+ if(reduce()||!Element.prototype.animate){onStart?.();onReveal?.();return Promise.resolve();}
+ if(!start||!end||start.w<=0||start.h<=0||end.w<=0||end.h<=0){onStart?.();onReveal?.();return Promise.resolve();}
  const ghost=document.createElement('div');
  ghost.className='orb-fluid-ghost';ghost.dataset.kind=kind;
  ghost.dataset.phase=reverse?'closing':'opening';
  ghost.setAttribute('aria-hidden','true');
+ let mix=null;
+ if(fromKind&&fromKind!==kind){
+  ghost.dataset.fromKind=fromKind;
+  mix=document.createElement('span');mix.className='orb-fluid-color-mix';
+  ghost.append(mix);
+ }
  Object.assign(ghost.style,{left:start.x+'px',top:start.y+'px',width:start.w+'px',height:start.h+'px',
   transformOrigin:'0 0',transform:'translate3d(0,0,0)'});
  phone.append(ghost);flight=ghost;
@@ -95,6 +101,9 @@ function fluidFlight(start,end,kind,reverse=false,onReveal,onStart){
  const target={x:end.x+end.w/2,y:end.y+end.h/2};
  const poses=reverse?LIQUID_POSES.slice().reverse():LIQUID_POSES;
  const frames=poses.map(p=>{
+  // Card-to-card transfer starts as a softly rounded CARD, not a sudden circle.
+  const outline=fromKind?{...p,super:4.20-.48*Math.sin(Math.PI*p.t),
+    jet:0,ripple:.008*Math.sin(Math.PI*p.t)}:p;
   const w=Math.max(start.w*.66,lerp(start.w,end.w,p.w));
   const h=Math.max(start.h*.65,lerp(start.h,end.h,p.h));
   const x=lerp(source.x,target.x,p.move)-w/2-start.x;
@@ -103,13 +112,15 @@ function fluidFlight(start,end,kind,reverse=false,onReveal,onStart){
    offset:reverse?1-p.t:p.t,
    transform:'translate3d('+x.toFixed(3)+'px,'+y.toFixed(3)+'px,0) scale3d('+
      (w/start.w).toFixed(5)+','+(h/start.h).toFixed(5)+',1)',
-   clipPath:fluidOutline(p),
+   clipPath:fluidOutline(outline),
    opacity:reverse?1:p.opacity
   };
  });
  const gen=++flightGeneration,duration=reverse?CLOSE_DURATION:OPEN_DURATION;
  const animation=ghost.animate(frames,{duration,easing:'linear',fill:'forwards'});
  flightAnimation=animation;
+ if(mix)mix.animate([{opacity:1,offset:0},{opacity:.52,offset:.50},{opacity:0,offset:1}],
+ {duration,easing:'cubic-bezier(.37,.04,.28,.98)',fill:'forwards'});
  if(!reverse&&onReveal){
   morphRevealTimer=setTimeout(()=>{
    morphRevealTimer=null;
@@ -126,7 +137,7 @@ function fluidFlight(start,end,kind,reverse=false,onReveal,onStart){
 }
 function stopFlight(){flightGeneration++;if(morphRevealTimer!==null)clearTimeout(morphRevealTimer);morphRevealTimer=null;flightAnimation?.cancel();flightAnimation=null;cleanupFlight();}
 function restoreOrigin(){if(restoreFocus?.isConnected){restoreFocus.classList.remove('is-morph-origin');restoreFocus.setAttribute('aria-expanded','false');}}
-function showLayer(kind,button,sourceOverride=null,outgoingLayer=null){
+function showLayer(kind,button,sourceOverride=null,outgoingLayer=null,sourceKind=null){
  if(busy||active||!STORIES[kind])return;
  busy=true;transitionDirection='opening';pendingClose=null;
  bridge()?.stopAutoplay?.();
@@ -155,7 +166,7 @@ function showLayer(kind,button,sourceOverride=null,outgoingLayer=null){
  let revealed=false;
  const reveal=()=>{if(revealed||active?.layer!==layer)return;revealed=true;
   active.card.style.opacity='1';layer.classList.add('is-content-ready');};
- fluidFlight(from,target,kind,false,reveal,()=>outgoingLayer?.remove()).then(()=>{
+ fluidFlight(from,target,kind,false,reveal,()=>outgoingLayer?.remove(),sourceKind).then(()=>{
   if(active?.layer!==layer)return;
   reveal();busy=false;transitionDirection='open';home()?.classList.remove('orb-choreo-running','orb-flight-cover');
   if(pendingSwitch){flushPendingSwitch();return;}
@@ -187,7 +198,7 @@ function closeLayer(follow){
   }else if(restoreFocus?.isConnected)restoreFocus.focus({preventScroll:true});
  });
 }
-async function openSpending(button,sourceOverride=null,outgoingLayer=null){
+async function openSpending(button,sourceOverride=null,outgoingLayer=null,sourceKind=null){
  if(busy||active)return;
  busy=true;transitionDirection='opening';pendingClose=null;bridge()?.stopAutoplay?.();
  if(bridge()?.state){bridge().state.firstShow=false;bridge().state.slide=0;}
@@ -202,7 +213,7 @@ async function openSpending(button,sourceOverride=null,outgoingLayer=null){
  if(!target){home()?.classList.remove('orb-choreo-running','orb-flight-cover');restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;return;}
  await fluidFlight(sourceOverride||originalPosition,rect(target),'spending',false,()=>{
   home()?.classList.add('orb-flight-reveal');
- },()=>outgoingLayer?.remove());
+ },()=>outgoingLayer?.remove(),sourceKind);
  home()?.classList.remove('orb-flight-cover','orb-flight-reveal','orb-choreo-running');
  busy=false;transitionDirection='open';
  if(pendingSwitch){flushPendingSwitch();return;}
@@ -265,8 +276,8 @@ function switchKind(kind){
  restoreOrigin();
  const button=orbFor(kind);
  if(!button){outgoing?.remove();return;}
- if(kind==='spending')openSpending(button,sourceRect,outgoing);
- else showLayer(kind,button,sourceRect,outgoing);
+ if(kind==='spending')openSpending(button,sourceRect,outgoing,current);
+ else showLayer(kind,button,sourceRect,outgoing,current);
 }
 let orbSwipe=null;
 phone.addEventListener('pointerdown',e=>{
