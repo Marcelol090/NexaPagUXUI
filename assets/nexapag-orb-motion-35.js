@@ -14,6 +14,7 @@ const STORIES={
  refund:{label:'Estornos',value:349.9,title:'Valor recuperado.',description:'Um estorno confirmado. Esse valor reduz suas saídas líquidas, mas não é contado novamente como entrada.',note:'1 estorno · histórico',cta:'Consultar estorno',labels:['Compra','Estorno','Confirmado']}
 };
 let active=null,flight=null,busy=false,originalPosition=null,scrollAtOpen=0,restoreFocus=null,flightGeneration=0;
+let pendingClose=null,transitionDirection='idle';
 const rect=(el)=>{const o=phone.getBoundingClientRect(),b=el.getBoundingClientRect();return {x:b.left-o.left,y:b.top-o.top,w:b.width,h:b.height};};
 const inPhone=b=>({x:b.x,y:b.y,w:b.w,h:b.h});
 const lerp=(a,b,t)=>a+(b-a)*t;
@@ -111,7 +112,7 @@ function stopFlight(){flightGeneration++;if(morphRevealTimer!==null)clearTimeout
 function restoreOrigin(){if(restoreFocus?.isConnected){restoreFocus.classList.remove('is-morph-origin');restoreFocus.setAttribute('aria-expanded','false');}}
 function showLayer(kind,button){
  if(busy||active||!STORIES[kind])return;
- busy=true;
+ busy=true;transitionDirection='opening';pendingClose=null;
  bridge()?.stopAutoplay?.();
  if(bridge()?.state)bridge().state.firstShow=false;
  restoreFocus=button;
@@ -136,13 +137,16 @@ function showLayer(kind,button){
   active.card.style.opacity='1';layer.classList.add('is-content-ready');};
  fluidFlight(from,target,kind,false,reveal).then(()=>{
   if(active?.layer!==layer)return;
-  reveal();busy=false;
+  reveal();busy=false;transitionDirection='open';
+  const request=pendingClose;pendingClose=null;
+  if(request?.kind==='layer'){queueMicrotask(()=>closeLayer(request.follow));return;}
   layer.querySelector('.orb-story-close')?.focus({preventScroll:true});
  });
 }
 function closeLayer(follow){
- if(!active||busy)return;
- busy=true;
+ if(!active)return;
+ if(busy){if(transitionDirection==='opening')pendingClose={kind:'layer',follow};return;}
+ busy=true;transitionDirection='closing';
  const {kind,layer,card,from}=active;
  const fromCard=rect(card);
  layer.classList.remove('is-content-ready');layer.classList.add('is-closing');
@@ -150,7 +154,7 @@ function closeLayer(follow){
  const destination=restoreFocus?.querySelector('.jelly')?.isConnected?rect(restoreFocus.querySelector('.jelly')):from;
  fluidFlight(destination,fromCard,kind,true).then(()=>{
   if(active?.layer!==layer)return;
-  layer.remove();active=null;restoreOrigin();busy=false;
+  layer.remove();active=null;restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;
   if(follow==='refund')bridge()?.showMoneyInsight?.('refund',restoreFocus);
   else if(follow==='income'){
     bridge()?.go?.('home');
@@ -160,7 +164,7 @@ function closeLayer(follow){
 }
 async function openSpending(button){
  if(busy||active)return;
- busy=true;bridge()?.stopAutoplay?.();
+ busy=true;transitionDirection='opening';pendingClose=null;bridge()?.stopAutoplay?.();
  if(bridge()?.state){bridge().state.firstShow=false;bridge().state.slide=0;}
  restoreFocus=button;
  button.classList.add('is-morph-origin');button.setAttribute('aria-expanded','true');
@@ -170,16 +174,19 @@ async function openSpending(button){
  bridge()?.expand?.(false);
  await waitFrames();
  const target=document.querySelector('.carousel-slide.current');
- if(!target){home()?.classList.remove('orb-choreo-running','orb-flight-cover');restoreOrigin();busy=false;return;}
+ if(!target){home()?.classList.remove('orb-choreo-running','orb-flight-cover');restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;return;}
  await fluidFlight(originalPosition,rect(target),'spending',false,()=>{
   home()?.classList.add('orb-flight-reveal');
  });
  home()?.classList.remove('orb-flight-cover','orb-flight-reveal','orb-choreo-running');
- busy=false;
+ busy=false;transitionDirection='open';
+ const request=pendingClose;pendingClose=null;
+ if(request?.kind==='spending')queueMicrotask(()=>closeSpending());
 }
 async function closeSpending(){
- if(busy||!bridge()?.state?.expanded)return;
- busy=true;
+ if(!bridge()?.state?.expanded)return;
+ if(busy){if(transitionDirection==='opening')pendingClose={kind:'spending'};return;}
+ busy=true;transitionDirection='closing';
  bridge()?.stopAutoplay?.();
  const card=document.querySelector('.carousel-slide.current');
  const fromCard=card?rect(card):null;
@@ -197,7 +204,7 @@ async function closeSpending(){
  const to=destination|| (fallback?rect(fallback):null);
  if(fromCard&&to)await fluidFlight(to,fromCard,'spending',true);
  home()?.classList.remove('orb-flight-cover','orb-flight-reveal','orb-choreo-running');
- restoreOrigin();busy=false;
+ restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;
  if(restoreFocus?.isConnected)restoreFocus.focus({preventScroll:true});
 }
 phone.addEventListener('click',event=>{
@@ -220,9 +227,9 @@ phone.addEventListener('click',event=>{
  if(cta){event.preventDefault();closeLayer(cta.dataset.orbFollow);return;}
 },true);
 document.addEventListener('keydown',event=>{
- if(!active&&event.key==='Escape'&&bridge()?.state?.expanded&&bridge()?.state?.tab==='home'){event.preventDefault();event.stopImmediatePropagation();if(!busy)closeSpending();return;}
+ if(!active&&event.key==='Escape'&&bridge()?.state?.expanded&&bridge()?.state?.tab==='home'){event.preventDefault();event.stopImmediatePropagation();closeSpending();return;}
  if(!active)return;
- if(event.key==='Escape'){event.preventDefault();if(!busy)closeLayer();return;}
+ if(event.key==='Escape'){event.preventDefault();closeLayer();return;}
  if(event.key!=='Tab'||busy)return;
  const buttons=[...active.layer.querySelectorAll('button')];
  const first=buttons[0],last=buttons.at(-1);
@@ -231,7 +238,7 @@ document.addEventListener('keydown',event=>{
 },true);
 phone.addEventListener('click',event=>{
  if(event.target.closest('#dock [data-tab]')&&(active||busy)){
-  if(active){active.layer.remove();active=null;}stopFlight();restoreOrigin();busy=false;
+  if(active){active.layer.remove();active=null;}stopFlight();restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;
   home()?.classList.remove('orb-choreo-running','orb-flight-cover','orb-flight-reveal');
  }
 },true);

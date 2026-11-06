@@ -1,0 +1,2 @@
+# V3.9 · No Lost Close Gestures
+Playwright caught cards remaining open when a close click occurred during the 1120ms opening morph. The previous controller ignored input while busy. `pendingClose` and `transitionDirection` now queue the close request until the morph reaches its destination, then run the corresponding reverse motion. Escape and close buttons work consistently during opening, including on mobile. Navigation clears queued work. This preserves the approved 16-frame fluid sequence without snapping back.
