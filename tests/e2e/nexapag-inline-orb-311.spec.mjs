@@ -24,6 +24,9 @@ for(const width of [320,390,430]){
    expect(poses).toHaveLength(16);
    await expect(ghost).toHaveCount(0,{timeout:3200});
    const during=await page.locator('.greeting').boundingBox();
+   const cardBounds=await page.locator('#orbStoryLayer .orb-story-card').boundingBox();
+   expect(during.y).toBeGreaterThan(cardBounds.y+cardBounds.height-6);
+   expect(await page.locator('.greeting').evaluate(el=>el.parentElement.id)).toBe('homePage');
    expect(during.y).toBeGreaterThan(before.y+55);
    const scrollAfter=await page.locator('#scroller').evaluate(el=>el.scrollTop);
    expect(Math.abs(scrollAfter-scrollBefore)).toBeLessThanOrEqual(3);
