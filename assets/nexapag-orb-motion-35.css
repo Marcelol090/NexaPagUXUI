@@ -473,7 +473,7 @@
 
 /* V3.17 | coherent liquidity: stable expanded canvas, non-repeating tail,
    quieter pigments, editorial alignment and staggered content reveal. */
-#homePage{--orb-stage-height:336px}
+#homePage{--orb-stage-height:360px}
 #homePage #heroRegion{
  transition:height 890ms cubic-bezier(.21,.76,.19,1);
 }
@@ -610,3 +610,6 @@
  #homePage .orb-inline-section .orb-story-content > *,
  .orb-fluid-ghost::before,.orb-fluid-ghost::after{animation:none!important;transition:none!important}
 }
+
+/* Keep card navigation stage aligned on narrow screens without clipping. */
+@media(max-width:350px){#homePage{--orb-stage-height:376px}}

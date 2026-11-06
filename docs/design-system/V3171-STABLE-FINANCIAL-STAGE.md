@@ -1,0 +1,2 @@
+# V3.17.1 — Stable expanded surfaces
+QA run 42306958304: 81 passed; 4 failed. Three failures were historical inline tests still expecting 16 rendered frames (the controller retains 16 authored poses but emits 49 sampled frames). The new stable-height test measured 16px vertical drift between income and refund on 390px. Set expanded stage baseline to 360px (376px under 350px) and share the stage token across all financial components; do not shrink between category switches. Updated the obsolete frame-count assertion.

@@ -204,7 +204,8 @@ function showLayer(kind,button,sourceOverride=null,outgoingLayer=null,sourceKind
  '<button type="button" class="orb-story-go" data-orb-follow="'+kind+'">'+v.cta+'</button></div></div></article>'+orbControlsMarkup(kind);
  host.append(layer);active={kind,layer,card:layer.querySelector('.orb-story-card'),from};
  const expandedHeight=Math.ceil(layer.getBoundingClientRect().height+14);
- const hostHeight=Math.max(Number(home()?.dataset.orbStageHeight)||0,336,expandedHeight);
+ const baseline=phone.getBoundingClientRect().width<=350?376:360;
+ const hostHeight=Math.max(Number(home()?.dataset.orbStageHeight)||0,baseline,expandedHeight);
  home().dataset.orbStageHeight=String(hostHeight);
  home()?.style.setProperty('--orb-stage-height',hostHeight+'px');
  home()?.style.setProperty('--orb-target-height',hostHeight+'px');
@@ -255,7 +256,7 @@ async function openSpending(button,sourceOverride=null,outgoingLayer=null,source
  button.classList.add('is-morph-origin');button.setAttribute('aria-expanded','true');
  originalPosition=rect(button.querySelector('.jelly')||button);
  scrollAtOpen=document.getElementById('scroller')?.scrollTop||0;
- if(home()&&!home().dataset.orbStageHeight){home().dataset.orbStageHeight='336';home().style.setProperty('--orb-stage-height','336px');}
+ if(home()&&!home().dataset.orbStageHeight){const baseline=phone.getBoundingClientRect().width<=350?376:360;home().dataset.orbStageHeight=String(baseline);home().style.setProperty('--orb-stage-height',baseline+'px');}
  home()?.classList.add('orb-choreo-running','orb-flight-cover');
  bridge()?.expand?.(false);
  await waitFrames();

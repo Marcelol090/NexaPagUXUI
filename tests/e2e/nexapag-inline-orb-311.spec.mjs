@@ -21,7 +21,7 @@ for(const width of [320,390,430]){
    const ghost=page.locator('.orb-fluid-ghost[data-kind="'+kind+'"]');
    await expect(ghost).toHaveCount(1);
    const poses=await ghost.evaluate(el=>el.getAnimations()[0]?.effect?.getKeyframes()||[]);
-   expect(poses).toHaveLength(16);
+   expect(poses).toHaveLength(49);
    await expect(ghost).toHaveCount(0,{timeout:3200});
    const during=await page.locator('.greeting').boundingBox();
    const cardBounds=await page.locator('#orbStoryLayer .orb-story-card').boundingBox();
