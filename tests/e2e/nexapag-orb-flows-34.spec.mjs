@@ -29,7 +29,7 @@ test('V3.4 Estornos orb opens proper reconciliation, not income summary',async({
  await page.locator('[data-orb-story="refund"]').click();
  await expect(page.getByRole('region',{name:'Valor recuperado.'})).toBeVisible();
  await expect(page.locator('#orbStoryLayer')).toContainText('349,90');
- await expect(page.locator('#orbStoryLayer')).toContainText('não é contado novamente como entrada');
+ await expect(page.locator('#orbStoryLayer')).toContainText('sem gerar uma nova entrada');
  await page.locator('[data-orb-follow="refund"]').click();
  await expect(page.locator('#orbStoryLayer')).toHaveCount(0);
  await expect(page.locator('#moneyInsightLayer')).toHaveCount(1);
