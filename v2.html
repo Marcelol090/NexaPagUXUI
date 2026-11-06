@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#111211">
 <meta name="description" content="NexaPag V3.1 · estrutura V2.8, fundo verde-floresta e modo dark.">
-<title>NexaPag V3.1 · Forest Background & Dark</title>
+<title>NexaPag V3.4 · Orb Flow</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -632,7 +632,7 @@ button:focus-visible{outline:2px solid #70658f;outline-offset:3px}
 .phone[data-ui-theme="dark"] .calendar-heatmap .heat-day .heat-day-amount{color:#ecbd99}
 
 
-/* V3.2 / Category typography · preserve V2.8 card anatomy and V3.1 dark mode. */
+/* V3.2 · Financial card typography and compact layout */
 .expenses-page .category-v29 .category-row{display:grid;grid-template-columns:46px minmax(0,1fr);gap:clamp(9px,2.6vw,13px);align-items:center;padding:clamp(12px,3.5vw,16px) clamp(12px,3.5vw,16px);min-height:88px}
 .expenses-page .category-v29 .category-open{display:grid;grid-template-columns:minmax(0,1fr) max-content 14px;gap:clamp(6px,2vw,10px);width:100%;min-width:0;min-height:52px;align-items:center}
 .expenses-page .category-v29 .category-open .copy{min-width:0;display:flex;flex-direction:column;justify-content:center;align-items:stretch}
@@ -665,7 +665,6 @@ button:focus-visible{outline:2px solid #70658f;outline-offset:3px}
 .expenses-page .category-v29 .category-chevron{grid-column:3;grid-row:2}
 .expenses-page .category-v29 .subcategory-heading-summary{justify-content:flex-start}
 }
-
 
 /* V3.3 Dark Contrast: dark is a shell, not a white-text filter over bright videos. */
 .phone[data-ui-theme="dark"]{
@@ -721,6 +720,92 @@ button:focus-visible{outline:2px solid #70658f;outline-offset:3px}
  .phone[data-ui-theme="dark"] .week{border-color:rgba(233,255,226,.5)}
  .phone[data-ui-theme="dark"] .carousel-slide .slide-chip{background:rgba(255,255,255,.92)}
 }
+
+
+</style>
+<style>
+/* NexaPag V3.4 · Financial orb choreography. No restructuring of V2.8. */
+#homePage .compact-hero {
+  height: 140px; max-height: 140px; display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(7px,2.5vw,14px);
+  align-items: start; justify-items: stretch; padding: 8px 5px 0; overflow: visible;
+}
+#homePage.hero-expanded .compact-hero {
+  height: 0; max-height: 0; padding: 0; overflow: hidden; opacity: 0; pointer-events: none;
+}
+#homePage .milestone,
+#homePage .milestone.is-main,
+#homePage .milestone:not(.is-main) {
+  width:100%; margin:0; padding:0; border:0; min-width:0; min-height:112px;
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:10px;
+  background:transparent; cursor:pointer; color:var(--ink,#2c382e);
+}
+#homePage .milestone .jelly,
+#homePage .milestone.is-main .jelly,
+#homePage .milestone:not(.is-main) .jelly {
+  width:clamp(62px,18cqw,76px); height:clamp(62px,18cqw,76px);
+  margin:0; flex:none; transition:transform .48s cubic-bezier(.22,.75,.24,1),filter .48s;
+  box-shadow:inset 2px 5px 8px #ffffff8c,inset -4px -6px 11px #263f3530,
+    0 10px 20px color-mix(in srgb,var(--orb) 28%,transparent),0 0 0 2px #ffffff6c;
+}
+#homePage .milestone .value,
+#homePage .milestone:not(.is-main) .value {
+  inset:0; font:770 clamp(15px,4.2cqw,18px)/1.05 Manrope,Inter,system-ui,sans-serif;
+  font-variant-numeric:tabular-nums; letter-spacing:-.05em; color:#fff;
+  text-shadow:0 1px 5px #26433488,0 1px 1px #2b392b4d;
+}
+#homePage .milestone>span:last-child {
+  font:690 clamp(10.5px,3.1cqw,12px)/1.3 Manrope,Inter,system-ui,sans-serif;
+  color:var(--ink,#384438); text-align:center; letter-spacing:-.015em;
+}
+.phone[data-ui-theme="dark"] #homePage .milestone>span:last-child {color:#d7e7d2}
+#homePage .milestone:focus-visible{outline:2px solid #74a787;outline-offset:1px;border-radius:14px}
+#homePage .milestone:active .jelly{transform:translateY(1px) scale(.94)}
+#homePage .milestone:hover .jelly{transform:translateY(-2px) scale(1.04)}
+.orb-story-layer{
+  position:absolute;z-index:16;inset:0;display:grid;align-items:center;justify-items:center;
+  padding:45px 16px 88px;isolation:isolate;
+}
+.orb-story-backdrop{position:absolute;inset:0;background:rgba(8,23,15,.57);backdrop-filter:blur(12px);opacity:0;transition:opacity .38s ease}
+.orb-story-layer.is-open .orb-story-backdrop{opacity:1}
+.orb-story-layer.is-closing .orb-story-backdrop{opacity:0;transition:opacity .24s ease}
+.orb-story-card{
+  --orb-accent:#88d7b7;--orb-high:#e7ffee;--orb-ink:#153629;
+  position:relative;isolation:isolate;overflow:hidden;width:min(100%,340px);min-height:314px;
+  border-radius:30px;padding:21px 21px 19px;
+  border:1px solid rgba(255,255,255,.74);
+  background:radial-gradient(ellipse at 78% -8%,#fff7 0%,transparent 44%),
+    radial-gradient(ellipse at 10% 78%,color-mix(in srgb,var(--orb-accent) 56%,#fff) 0%,transparent 68%),
+    linear-gradient(145deg,var(--orb-high),color-mix(in srgb,var(--orb-accent) 35%,#f4f4e9));
+  box-shadow:0 22px 62px rgba(0,9,3,.25),0 2px 7px #1a37242b,inset 0 1px 0 #fff9;
+  color:var(--orb-ink);
+}
+.orb-story-layer[data-kind="refund"] .orb-story-card{--orb-accent:#a68bdf;--orb-high:#f5e9ff;--orb-ink:#302342}
+.orb-story-layer[data-kind="income"] .orb-story-card{--orb-accent:#83cbb0;--orb-high:#e9fff0;--orb-ink:#173b2c}
+.orb-story-card:before{
+  content:"";position:absolute;inset:-38% -20% -25%;z-index:0;pointer-events:none;
+  border-radius:48% 38% 51% 36%;
+  background:radial-gradient(ellipse at 40% 45%,color-mix(in srgb,var(--orb-accent) 66%,transparent) 0%,transparent 52%);
+  animation:orbStoryFlow 7s ease-in-out infinite alternate;
+}
+@keyframes orbStoryFlow{0%{transform:translate(-6%,1%) rotate(-7deg) scale(1)}50%{transform:translate(4%,-5%) rotate(12deg) scale(1.07)}100%{transform:translate(-3%,3%) rotate(-5deg) scale(1.02)}}
+.orb-story-content{position:relative;z-index:2;opacity:0;transform:translateY(13px) scale(.985);transition:opacity .25s ease,transform .45s cubic-bezier(.21,.76,.2,1)}
+.orb-story-layer.is-content-ready .orb-story-content{opacity:1;transform:none}
+.orb-story-layer.is-closing .orb-story-content{opacity:0;transition-duration:.14s}
+.orb-story-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.orb-story-kicker{font:760 10px/1.2 Inter,system-ui,sans-serif;letter-spacing:.085em;text-transform:uppercase}
+.orb-story-close{border:1px solid color-mix(in srgb,var(--orb-ink) 17%,transparent);border-radius:100%;width:39px;height:39px;display:grid;place-items:center;background:rgba(255,255,255,.54);color:var(--orb-ink);font-size:19px;cursor:pointer}
+.orb-story-value{font:550 clamp(30px,10cqw,43px)/1.08 Manrope,Inter,system-ui,sans-serif;letter-spacing:-.065em;font-variant-numeric:tabular-nums;margin:29px 0 12px}
+.orb-story-title{font:780 19px/1.22 Manrope,Inter,system-ui,sans-serif;letter-spacing:-.045em;margin:0 0 8px}
+.orb-story-description{font:500 12px/1.55 Inter,system-ui,sans-serif;margin:0 0 12px;max-width:30ch;color:color-mix(in srgb,var(--orb-ink) 72%,transparent)}
+.orb-story-divider{height:1px;background:color-mix(in srgb,var(--orb-ink) 14%,transparent);margin:18px 0 13px}
+.orb-story-foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.orb-story-foot span{font:600 10px/1.4 Inter,system-ui,sans-serif;color:color-mix(in srgb,var(--orb-ink) 72%,transparent)}
+.orb-story-go{border:0;border-radius:17px;padding:13px 14px;min-height:45px;background:var(--orb-ink);color:#fff;font:750 11px/1.25 Inter,system-ui,sans-serif;white-space:nowrap;cursor:pointer}
+.orb-story-close:focus-visible,.orb-story-go:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.orb-morph-flight{position:absolute;z-index:12;pointer-events:none;transform-origin:top left;border-radius:50%;background:radial-gradient(ellipse at 30% 18%,#fff8,transparent 35%),radial-gradient(ellipse at 72% 78%,#efa47a 0%,#ffbf9e 45%,#f7eee0 100%);border:1px solid #fff9;box-shadow:inset 0 1px 8px #fff7,0 9px 28px #efaa7a55;overflow:hidden}
+.orb-morph-flight:after{content:"";position:absolute;inset:-30%;background:radial-gradient(circle at 37% 60%,#fff9,transparent 52%);border-radius:42% 50% 39% 46%;animation:orbStoryFlow 3s ease-in-out infinite alternate}
+@media(prefers-reduced-motion:reduce){.orb-story-card:before,.orb-morph-flight:after{animation:none}.orb-story-backdrop,.orb-story-content{transition:none}}
 
 </style>
 <link rel="stylesheet" href="./assets/category-microbots-26.css">
@@ -801,7 +886,7 @@ function jelly(cls='',contents=''){
   if(empty)return `<span class="jelly ghost" aria-hidden="true"></span>`;
   return `<span class="jelly orb-cinema ${cls}" data-orb-tone="${cls}"><img class="orb-poster" src="./assets/nexapag-orb-poster-224.png" alt="" aria-hidden="true" decoding="async"><video class="orb-media" muted loop playsinline preload="metadata" aria-hidden="true" disablepictureinpicture><source src="./assets/nexapag-orb-ultrasmooth-60fps-alpha-224.webm" type="video/webm"></video><img class="orb-fill-media" alt="" aria-hidden="true" decoding="async">${contents}</span>`;
 }
-function heroMarkup(){return `<div class="hero-region" id="heroRegion"><div class="compact-hero" id="compactHero"><button class="milestone" data-open="1" aria-label="Abrir resumo de receitas">${jelly('lime',`<span class="value">1,9k</span>`)}<span>Entradas</span></button><button class="milestone is-main" data-open="1" aria-label="Abrir carrossel financeiro">${jelly('orange',`<span class="value">3,4k</span>`)}<span>Saídas</span></button><button class="milestone" data-open="1" aria-label="Abrir resumo de estornos do histórico">${jelly('lilac',`<span class="value">350</span>`)}<span>Estornos</span></button></div><div class="expanded-hero" id="expandedHero"><div class="carousel-viewport" id="carouselViewport" role="region" aria-roledescription="carrossel" aria-label="Panorama financeiro" tabindex="0"><div class="carousel-track" id="carouselTrack">${stars.map((s,i)=>`<article class="carousel-slide ${s.theme}" data-slide="${i}" aria-label="${s.title}"><div class="slide-motion-media" aria-hidden="true"><div class="slide-motion-poster" style="background-image:url('./assets/nexapag-carousel-${s.theme}-poster.webp')"></div><video class="slide-motion-video" muted playsinline loop preload="none" poster="./assets/nexapag-carousel-${s.theme}-poster.webp"><source src="./assets/nexapag-carousel-${s.theme}-motion.webm" type="video/webm"><source src="./assets/nexapag-carousel-${s.theme}-motion.mp4" type="video/mp4"></video></div><div class="slide-top"><span class="slide-chip">${icon(i===0?'trend':i===1?'sparkle':'card')} ${s.kicker}</span><button class="slide-play" aria-label="Ver detalhes de ${s.title}" data-action="slideAction">${icon('play')}</button></div><div class="slide-timer" aria-label="${s.title}: ${s.value}">${s.value}</div><div class="slide-text"><h3>${s.headline}</h3><p>${s.hint}</p></div><div class="ruler" aria-hidden="true">${Array.from({length:47},()=>'<i></i>').join('')}</div><div class="ruler-labels">${s.ruler.map(k=>`<span>${k}</span>`).join('')}</div></article>`).join('')}</div><button class="carousel-prev" data-action="prev" aria-label="Card anterior">${icon('chevron-left')}</button><button class="carousel-next" data-action="next" aria-label="Próximo card">${icon('arrow')}</button></div><div class="carousel-dots" aria-label="Escolher um cartão financeiro">${stars.map((s,i)=>`<button aria-label="Ir para ${s.title}" aria-pressed="${i===state.slide}" data-index="${i}"></button>`).join('')}</div><button class="collapse-carousel" data-action="collapse" type="button" aria-label="Recolher os cartões" title="Recolher cartões"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 14 7-7 7 7"/></svg></button></div><div class="greeting"><h1>bom dia, <span>seu dinheiro</span></h1><p>Um olhar mais leve para cada escolha.</p></div></div>`}
+function heroMarkup(){return `<div class="hero-region" id="heroRegion"><div class="compact-hero" id="compactHero"><button class="milestone" data-orb-story="income" aria-haspopup="dialog" aria-label="Abrir resumo de receitas">${jelly('lime',`<span class="value">1,9k</span>`)}<span>Entradas</span></button><button class="milestone is-main" data-open="1" aria-label="Abrir carrossel financeiro">${jelly('orange',`<span class="value">3,4k</span>`)}<span>Saídas</span></button><button class="milestone" data-orb-story="refund" aria-haspopup="dialog" aria-label="Abrir resumo de estornos do histórico">${jelly('lilac',`<span class="value">350</span>`)}<span>Estornos</span></button></div><div class="expanded-hero" id="expandedHero"><div class="carousel-viewport" id="carouselViewport" role="region" aria-roledescription="carrossel" aria-label="Panorama financeiro" tabindex="0"><div class="carousel-track" id="carouselTrack">${stars.map((s,i)=>`<article class="carousel-slide ${s.theme}" data-slide="${i}" aria-label="${s.title}"><div class="slide-motion-media" aria-hidden="true"><div class="slide-motion-poster" style="background-image:url('./assets/nexapag-carousel-${s.theme}-poster.webp')"></div><video class="slide-motion-video" muted playsinline loop preload="none" poster="./assets/nexapag-carousel-${s.theme}-poster.webp"><source src="./assets/nexapag-carousel-${s.theme}-motion.webm" type="video/webm"><source src="./assets/nexapag-carousel-${s.theme}-motion.mp4" type="video/mp4"></video></div><div class="slide-top"><span class="slide-chip">${icon(i===0?'trend':i===1?'sparkle':'card')} ${s.kicker}</span><button class="slide-play" aria-label="Ver detalhes de ${s.title}" data-action="slideAction">${icon('play')}</button></div><div class="slide-timer" aria-label="${s.title}: ${s.value}">${s.value}</div><div class="slide-text"><h3>${s.headline}</h3><p>${s.hint}</p></div><div class="ruler" aria-hidden="true">${Array.from({length:47},()=>'<i></i>').join('')}</div><div class="ruler-labels">${s.ruler.map(k=>`<span>${k}</span>`).join('')}</div></article>`).join('')}</div><button class="carousel-prev" data-action="prev" aria-label="Card anterior">${icon('chevron-left')}</button><button class="carousel-next" data-action="next" aria-label="Próximo card">${icon('arrow')}</button></div><div class="carousel-dots" aria-label="Escolher um cartão financeiro">${stars.map((s,i)=>`<button aria-label="Ir para ${s.title}" aria-pressed="${i===state.slide}" data-index="${i}"></button>`).join('')}</div><button class="collapse-carousel" data-action="collapse" type="button" aria-label="Recolher os cartões" title="Recolher cartões"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 14 7-7 7 7"/></svg></button></div><div class="greeting"><h1>bom dia, <span>seu dinheiro</span></h1><p>Um olhar mais leve para cada escolha.</p></div></div>`}
 function weekDetailMarkup(i){
  const d=WEEK_LEDGER[i]||WEEK_LEDGER[3];
  if(!d.items.length)return `<div class="week-day-head"><span>${d.date}</span><strong>Sem lançamentos</strong></div><div class="week-day-empty">${d.future?'Dia futuro, sem gastos registrados.':'Sem movimentações registradas.'}</div>`;
@@ -1157,8 +1242,121 @@ function applyNexaTheme(next){
 applyNexaTheme(nexaTheme);
 document.getElementById('themeToggle')?.addEventListener('click',()=>applyNexaTheme(nexaTheme==='dark'?'light':'dark'));
 $('#notifications').addEventListener('click',()=>notify('Não há novas notificações nesta demonstração.'));$('#avatar').addEventListener('click',()=>{if(state.tab==='home')state.expanded?collapse():expand(false);else notify('Perfil de demonstração NexaPag V2.')});window.addEventListener('resize',()=>{if(state.expanded)updateCarousel()});
-render();if(!matchMedia('(prefers-reduced-motion: reduce)').matches){setTimeout(()=>{if(state.tab==='home'&&state.firstShow){state.firstShow=false;expand(true)}},1900)}
+render();state.firstShow=false;window.NexaHeroBridge={state,expand,stopAutoplay,go,showMoneyInsight};
 </script>
 <script defer src="./assets/category-microbots-26.js"></script>
+<script>
+/* NexaPag V3.4: independent financial orb flows, native element morph, no framework. */
+(() => {
+  const app=()=>window.NexaHeroBridge;
+  const phone=document.querySelector('.phone');
+  if(!phone)return;
+  let layer=null,closing=false,restoreFocus=null,lastMorph=null;
+  const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const FLUID_EASE='cubic-bezier(.21,.76,.17,1)';
+  const locate=(rect)=>{const origin=phone.getBoundingClientRect();return {x:rect.left-origin.left,y:rect.top-origin.top,width:rect.width,height:rect.height};};
+  const price=(val)=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(val);
+  const STORIES={
+    income:{name:'Entradas',value:1950,eyebrow:'RECEBIMENTOS',title:'Dinheiro que entrou.',description:'Recebimentos e PIX identificados no histórico. Não inclui estornos de compras.',note:'PIX recebido · histórico',cta:'Ver recebimentos',next:'income'},
+    refund:{name:'Estornos',value:349.9,eyebrow:'REEMBOLSOS',title:'Valor recuperado.',description:'Um estorno confirmado. Esse valor reduz suas saídas líquidas, mas não é contado novamente como entrada.',note:'1 estorno no histórico',cta:'Consultar estorno',next:'refund'}
+  };
+  const animateShell=(card,src,to,back=false)=>{
+    if(reduced()||!card.animate)return Promise.resolve();
+    const dx=src.x-to.x,dy=src.y-to.y,sx=Math.max(.08,src.width/to.width),sy=Math.max(.06,src.height/to.height);
+    const frames=[
+      {transform:`translate(${dx}px, ${dy}px) scale(${sx},${sy})`,borderRadius:'50% 50% 48% 52%',filter:'saturate(1.14)',opacity:.90},
+      {transform:`translate(${dx*.20}px, ${dy*.20}px) scale(${1-(1-sx)*.20},${1-(1-sy)*.20})`,borderRadius:'38% 41% 33% 44%',filter:'saturate(1.1)',opacity:1,offset:.7},
+      {transform:'none',borderRadius:'30px',filter:'none',opacity:1}
+    ];
+    const steps=back?[frames[2],{...frames[1],offset:.34},frames[0]]:frames;
+    const animation=card.animate(steps,{duration:back?510:670,easing:FLUID_EASE,fill:'both'});
+    return animation.finished.catch(()=>{}).finally(()=>animation.cancel());
+  };
+  function clearLayer(){if(layer){layer.remove();layer=null} closing=false;}
+  function closeStory(follow){
+    if(!layer||closing)return;
+    closing=true;const active=layer;
+    active.classList.remove('is-content-ready');active.classList.add('is-closing');
+    const orb=restoreFocus?.querySelector('.jelly');
+    const target=orb?.isConnected?locate(orb.getBoundingClientRect()):null;
+    const card=active.querySelector('.orb-story-card');
+    const from=locate(card.getBoundingClientRect());
+    const finish=()=>{clearLayer();if(typeof follow==='function')follow();else if(restoreFocus?.isConnected)restoreFocus.focus({preventScroll:true});};
+    if(target){animateShell(card,target,from,true).then(finish)}else finish();
+  }
+  function openStory(kind,button){
+    if(layer||!STORIES[kind])return;
+    app()?.stopAutoplay?.();
+    if(app()?.state)app().state.firstShow=false;
+    const v=STORIES[kind];restoreFocus=button;
+    const source=button.querySelector('.jelly')||button;
+    const sourceRect=locate(source.getBoundingClientRect());
+    layer=document.createElement('section');
+    layer.id='orbStoryLayer';layer.className='orb-story-layer';layer.dataset.kind=kind;
+    layer.innerHTML=`<div class="orb-story-backdrop" data-orb-close="1"></div><article class="orb-story-card" role="dialog" aria-modal="true" aria-labelledby="orbStoryTitle" aria-describedby="orbStoryDescription"><div class="orb-story-content"><div class="orb-story-top"><span class="orb-story-kicker">${v.eyebrow}</span><button type="button" class="orb-story-close" data-orb-close="1" aria-label="Recolher para o orb ${v.name}">×</button></div><p class="orb-story-value">${price(v.value)}</p><h2 class="orb-story-title" id="orbStoryTitle">${v.title}</h2><p class="orb-story-description" id="orbStoryDescription">${v.description}</p><div class="orb-story-divider"></div><div class="orb-story-foot"><span>${v.note}</span><button type="button" class="orb-story-go" data-orb-follow="${v.next}">${v.cta}</button></div></div></article>`;
+    phone.append(layer);
+    const card=layer.querySelector('.orb-story-card');const dest=locate(card.getBoundingClientRect());
+    requestAnimationFrame(()=>layer?.classList.add('is-open'));
+    animateShell(card,sourceRect,dest).then(()=>{if(layer&&layer.isConnected&&!closing){layer.classList.add('is-content-ready');layer.querySelector('.orb-story-close')?.focus({preventScroll:true});}});
+  }
+  function morphSpending(button){
+    if(app()?.state){app().state.firstShow=false;app().state.slide=0;}
+    const orb=button.querySelector('.jelly')||button;
+    const from=locate(orb.getBoundingClientRect());
+    app()?.expand?.(false);
+    if(reduced())return;
+    lastMorph?.remove();
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      const target=document.querySelector('.carousel-slide.current');if(!target)return;
+      const to=locate(target.getBoundingClientRect());
+      const shell=document.createElement('div');shell.className='orb-morph-flight';
+      shell.style.left=from.x+'px';shell.style.top=from.y+'px';shell.style.width=from.width+'px';shell.style.height=from.height+'px';
+      phone.append(shell);lastMorph=shell;
+      const change=[
+        {left:from.x+'px',top:from.y+'px',width:from.width+'px',height:from.height+'px',borderRadius:'50%',opacity:.95},
+        {left:(from.x+(to.x-from.x)*.65)+'px',top:(from.y+(to.y-from.y)*.65)+'px',width:(from.width+(to.width-from.width)*.65)+'px',height:(from.height+(to.height-from.height)*.65)+'px',borderRadius:'37% 38% 30% 38%',opacity:.90,offset:.66},
+        {left:to.x+'px',top:to.y+'px',width:to.width+'px',height:to.height+'px',borderRadius:'26px',opacity:0}
+      ];
+      shell.animate(change,{duration:660,easing:FLUID_EASE,fill:'forwards'}).finished.catch(()=>{}).finally(()=>{shell.remove();if(lastMorph===shell)lastMorph=null});
+    }));
+  }
+  phone.addEventListener('click',e=>{
+    const button=e.target.closest('#compactHero .milestone');
+    if(!button)return;
+    e.preventDefault();e.stopPropagation();
+    if(layer)return;
+    const all=[...document.querySelectorAll('#compactHero .milestone')];
+    const kind=['income','spending','refund'][all.indexOf(button)];
+    if(kind==='spending')morphSpending(button);
+    else if(kind)openStory(kind,button);
+  },true);
+  phone.addEventListener('click',e=>{
+    if(!layer)return;
+    if(e.target.closest('[data-orb-close]')){e.preventDefault();closeStory();return}
+    const action=e.target.closest('[data-orb-follow]');if(!action)return;
+    e.preventDefault();
+    const kind=action.dataset.orbFollow;
+    closeStory(()=>{
+      if(kind==='refund'){app()?.showMoneyInsight?.('refund',restoreFocus)}
+      else if(kind==='income'){
+        app()?.go?.('home');
+        requestAnimationFrame(()=>document.getElementById('transactionsSection')?.scrollIntoView({behavior:reduced()?'auto':'smooth',block:'center'}));
+      }
+    });
+  });
+  document.addEventListener('keydown',e=>{
+    if(!layer)return;
+    if(e.key==='Escape'){e.preventDefault();closeStory();return}
+    if(e.key!=='Tab')return;
+    const controls=[...layer.querySelectorAll('button')];if(!controls.length)return;
+    const first=controls[0],last=controls[controls.length-1];
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
+  });
+  // Disable the legacy automatic carrousel opening: all three orbs must be tappable first.
+  if(app()?.state)app().state.firstShow=false;
+})();
+
+</script>
 </body>
 </html>
