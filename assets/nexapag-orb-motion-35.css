@@ -473,8 +473,8 @@
 
 /* V3.17 | coherent liquidity: stable expanded canvas, non-repeating tail,
    quieter pigments, editorial alignment and staggered content reveal. */
+#homePage{--orb-stage-height:336px}
 #homePage #heroRegion{
- --orb-stage-height:336px;
  transition:height 890ms cubic-bezier(.21,.76,.19,1);
 }
 #homePage.hero-expanded #heroRegion{height:var(--orb-stage-height,336px)}
