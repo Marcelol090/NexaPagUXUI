@@ -62,74 +62,120 @@ const LIQUID_POSES=[
 ];
 const OPEN_DURATION=920,CLOSE_DURATION=770;
 let flightAnimation=null,morphRevealTimer=null;
-function fluidOutline(pose,reverse=false){
- // Superellipse progresses circle -> softly rounded card. 64 equidistant
- // vertices plus two harmonics produce the liquid edge without canvas reflow.
- const points=[];
- const power=2/pose.super;
- for(let i=0;i<64;i++){
-  const a=-Math.PI/2+Math.PI*2*i/64;
-  const c=Math.cos(a),s=Math.sin(a);
-  const bulge=Math.max(0,s*-1)**14*pose.jet*.32;
-  const wave=pose.ripple*(Math.sin(3*a+1.1)+.43*Math.sin(5*a-.6));
-  const scale=Math.min(.998,Math.max(.6,.965*(1+bulge+wave)));
-  const px=50+49.8*Math.sign(c)*Math.pow(Math.abs(c),power)*scale;
-  const py=50+49.8*Math.sign(s)*Math.pow(Math.abs(s),power)*scale;
-  points.push(px.toFixed(3)+'% '+py.toFixed(3)+'%');
+
+/* V3.17: 16 authored poses, continuously interpolated with shape-preserving cubic
+   Hermite sampling. The browser receives 49 evenly spaced animation frames. */
+const RENDER_FRAME_COUNT=49;
+const MOTION_KEYS=['move','w','h','lift','super','ripple','jet','opacity'];
+const clamp=(v,lo,hi)=>Math.min(hi,Math.max(lo,v));
+function slope(a,b,key){
+ return (b[key]-a[key])/(b.t-a.t);
+}
+function smoothSlope(left,a,b,right,key,atEnd){
+ const first=atEnd?slope(a,b,key):left?slope(left,a,key):slope(a,b,key);
+ const second=atEnd?(right?slope(b,right,key):slope(a,b,key)):slope(a,b,key);
+ if(first===0||second===0||Math.sign(first)!==Math.sign(second))return 0;
+ return 2*first*second/(first+second);
+}
+function poseAt(t){
+ const p=clamp(t,0,1),points=LIQUID_POSES;
+ if(p<=0)return {...points[0]};
+ if(p>=1)return {...points.at(-1)};
+ let index=1;while(index<points.length-1&&points[index].t<p)index++;
+ const a=points[index-1],b=points[index],before=points[index-2],after=points[index+1];
+ const span=b.t-a.t,x=(p-a.t)/span,x2=x*x,x3=x2*x;
+ const pose={t:p};
+ for(const key of MOTION_KEYS){
+  const m0=smoothSlope(before,a,b,after,key,false);
+  const m1=smoothSlope(before,a,b,after,key,true);
+  const value=(2*x3-3*x2+1)*a[key]+(x3-2*x2+x)*span*m0+
+    (-2*x3+3*x2)*b[key]+(x3-x2)*span*m1;
+  pose[key]=clamp(value,Math.min(a[key],b[key]),Math.max(a[key],b[key]));
+ }
+ return pose;
+}
+function fluidOutline(pose){
+ // Forty-eight ordered points preserve the soft liquid edge and limit paint cost.
+ const points=[],power=2/pose.super;
+ for(let i=0;i<48;i++){
+  const angle=-Math.PI/2+Math.PI*2*i/48;
+  const cosine=Math.cos(angle),sine=Math.sin(angle);
+  const crown=Math.pow(Math.max(0,-sine),12)*pose.jet*.15;
+  const surface=pose.ripple*(Math.sin(3*angle+1.1)+.32*Math.sin(5*angle-.6));
+  const radius=clamp(.978*(1+crown+surface),.88,.997);
+  const x=50+49.8*Math.sign(cosine)*Math.pow(Math.abs(cosine),power)*radius;
+  const y=50+49.8*Math.sign(sine)*Math.pow(Math.abs(sine),power)*radius;
+  points.push(x.toFixed(3)+'% '+y.toFixed(3)+'%');
  }
  return 'polygon('+points.join(',')+')';
 }
 function fluidFlight(start,end,kind,reverse=false,onReveal,onStart,fromKind=null){
  cleanupFlight();
  if(reduce()||!Element.prototype.animate){onStart?.();onReveal?.();return Promise.resolve();}
- if(!start||!end||start.w<=0||start.h<=0||end.w<=0||end.h<=0){onStart?.();onReveal?.();return Promise.resolve();}
+ if(!start||!end||start.w<=0||start.h<=0||end.w<=0||end.h<=0){
+  onStart?.();onReveal?.();return Promise.resolve();
+ }
  const ghost=document.createElement('div');
  ghost.className='orb-fluid-ghost';ghost.dataset.kind=kind;
  ghost.dataset.phase=reverse?'closing':'opening';
  ghost.setAttribute('aria-hidden','true');
- let mix=null;
- if(fromKind&&fromKind!==kind){
-  ghost.dataset.fromKind=fromKind;
-  mix=document.createElement('span');mix.className='orb-fluid-color-mix';
-  ghost.append(mix);
+ const cardToCard=Boolean(fromKind&&fromKind!==kind);
+ if(cardToCard){
+  ghost.dataset.fromKind=fromKind;ghost.dataset.morphType='card-to-card';
+  const tint=document.createElement('span');tint.className='orb-fluid-color-mix';
+  ghost.append(tint);
  }
- Object.assign(ghost.style,{left:start.x+'px',top:start.y+'px',width:start.w+'px',height:start.h+'px',
-  transformOrigin:'0 0',transform:'translate3d(0,0,0)'});
+ const duration=reverse?CLOSE_DURATION:(cardToCard?720:OPEN_DURATION);
+ Object.assign(ghost.style,{
+  left:start.x+'px',top:start.y+'px',width:start.w+'px',height:start.h+'px',
+  transformOrigin:'0 0',transform:'translate3d(0,0,0)',
+  '--orb-flight-time':duration+'ms'
+ });
  phone.append(ghost);flight=ghost;
- onStart?.();
  const source={x:start.x+start.w/2,y:start.y+start.h/2};
  const target={x:end.x+end.w/2,y:end.y+end.h/2};
- const poses=reverse?LIQUID_POSES.slice().reverse():LIQUID_POSES;
- const frames=poses.map(p=>{
-  // Card-to-card transfer starts as a softly rounded CARD, not a sudden circle.
-  const outline=fromKind?{...p,super:4.20-.48*Math.sin(Math.PI*p.t),
-    jet:0,ripple:.008*Math.sin(Math.PI*p.t)}:p;
-  const w=Math.max(start.w*.66,lerp(start.w,end.w,p.w));
-  const h=Math.max(start.h*.65,lerp(start.h,end.h,p.h));
-  const x=lerp(source.x,target.x,p.move)-w/2-start.x;
-  const y=lerp(source.y,target.y,p.move)-h/2-start.y-p.lift;
+ const frames=Array.from({length:RENDER_FRAME_COUNT},(_,index)=>{
+  const time=index/(RENDER_FRAME_COUNT-1);
+  const p=poseAt(reverse?1-time:time);
+  // Card-to-card is card -> card throughout: no circular flash or shrink.
+  const movement=cardToCard?(p.t*p.t*(3-2*p.t)):p.move;
+  const pulse=cardToCard?1+.008*Math.sin(Math.PI*p.t):1;
+  const w=cardToCard?lerp(start.w,end.w,movement)*pulse:Math.max(start.w*.66,lerp(start.w,end.w,p.w));
+  const h=cardToCard?lerp(start.h,end.h,movement)*pulse:Math.max(start.h*.65,lerp(start.h,end.h,p.h));
+  const lift=cardToCard?0:p.lift;
+  const x=lerp(source.x,target.x,cardToCard?movement:p.move)-w/2-start.x;
+  const y=lerp(source.y,target.y,cardToCard?movement:p.move)-h/2-start.y-lift;
+  const outline=cardToCard?{...p,super:4.15-.24*Math.sin(Math.PI*p.t),
+   jet:0,ripple:.004*Math.sin(Math.PI*p.t)}:p;
   return {
-   offset:reverse?1-p.t:p.t,
+   offset:time,
    transform:'translate3d('+x.toFixed(3)+'px,'+y.toFixed(3)+'px,0) scale3d('+
-     (w/start.w).toFixed(5)+','+(h/start.h).toFixed(5)+',1)',
+    (w/start.w).toFixed(5)+','+(h/start.h).toFixed(5)+',1)',
    clipPath:fluidOutline(outline),
    opacity:reverse?1:p.opacity
   };
  });
- const gen=++flightGeneration,duration=reverse?CLOSE_DURATION:OPEN_DURATION;
+ const gen=++flightGeneration;
+ onStart?.();
  const animation=ghost.animate(frames,{duration,easing:'linear',fill:'forwards'});
  flightAnimation=animation;
- if(mix)mix.animate([{opacity:1,offset:0},{opacity:.52,offset:.50},{opacity:0,offset:1}],
- {duration,easing:'cubic-bezier(.37,.04,.28,.98)',fill:'forwards'});
+ if(cardToCard){
+  ghost.querySelector('.orb-fluid-color-mix')?.animate([
+    {opacity:1,offset:0},{opacity:.80,offset:.18},
+    {opacity:.42,offset:.60},{opacity:0,offset:1}
+  ],{duration,easing:'cubic-bezier(.22,.65,.29,1)',fill:'forwards'});
+ }
  if(!reverse&&onReveal){
   morphRevealTimer=setTimeout(()=>{
    morphRevealTimer=null;
    if(gen===flightGeneration)onReveal();
-  },Math.round(duration*.78));
+  },Math.round(duration*(cardToCard?.70:.73)));
  }
  return animation.finished.catch(()=>{}).then(()=>{
-  if(gen===flightGeneration){if(morphRevealTimer!==null)clearTimeout(morphRevealTimer);morphRevealTimer=null;
-   if(!reverse)onReveal?.();cleanupFlight();}
+  if(gen===flightGeneration){
+   if(morphRevealTimer!==null)clearTimeout(morphRevealTimer);
+   morphRevealTimer=null;if(!reverse)onReveal?.();cleanupFlight();
+  }
  }).finally(()=>{
   if(flightAnimation===animation)flightAnimation=null;
   animation.cancel();if(ghost.isConnected)ghost.remove();
@@ -158,7 +204,10 @@ function showLayer(kind,button,sourceOverride=null,outgoingLayer=null,sourceKind
  '<button type="button" class="orb-story-go" data-orb-follow="'+kind+'">'+v.cta+'</button></div></div></article>'+orbControlsMarkup(kind);
  host.append(layer);active={kind,layer,card:layer.querySelector('.orb-story-card'),from};
  const expandedHeight=Math.ceil(layer.getBoundingClientRect().height+14);
- home()?.style.setProperty('--orb-target-height',Math.max(275,expandedHeight)+'px');
+ const hostHeight=Math.max(Number(home()?.dataset.orbStageHeight)||0,336,expandedHeight);
+ home().dataset.orbStageHeight=String(hostHeight);
+ home()?.style.setProperty('--orb-stage-height',hostHeight+'px');
+ home()?.style.setProperty('--orb-target-height',hostHeight+'px');
  home()?.classList.remove('orb-inline-closing');home()?.classList.add('orb-inline-expanded','orb-choreo-running');
  const target=rect(active.card);active.card.style.opacity='0';
  button.classList.add('is-morph-origin');button.setAttribute('aria-expanded','true');
@@ -188,7 +237,7 @@ function closeLayer(follow){
  fluidFlight(destination,fromCard,kind,true).then(()=>{
   if(active?.layer!==layer)return;
   layer.remove();active=null;
-  home()?.classList.remove('orb-inline-expanded','orb-inline-closing','orb-choreo-running');home()?.style.removeProperty('--orb-target-height');
+  home()?.classList.remove('orb-inline-expanded','orb-inline-closing','orb-choreo-running');home()?.style.removeProperty('--orb-target-height');home()?.style.removeProperty('--orb-stage-height');if(home())delete home().dataset.orbStageHeight;
   restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;
   const next=pendingOpen;if(next)queueMicrotask(launchPendingOpen);
   if(follow==='refund')bridge()?.showMoneyInsight?.('refund',restoreFocus);
@@ -206,6 +255,7 @@ async function openSpending(button,sourceOverride=null,outgoingLayer=null,source
  button.classList.add('is-morph-origin');button.setAttribute('aria-expanded','true');
  originalPosition=rect(button.querySelector('.jelly')||button);
  scrollAtOpen=document.getElementById('scroller')?.scrollTop||0;
+ if(home()&&!home().dataset.orbStageHeight){home().dataset.orbStageHeight='336';home().style.setProperty('--orb-stage-height','336px');}
  home()?.classList.add('orb-choreo-running','orb-flight-cover');
  bridge()?.expand?.(false);
  await waitFrames();
@@ -241,6 +291,7 @@ async function closeSpending(){
  const to=destination|| (fallback?rect(fallback):null);
  if(fromCard&&to)await fluidFlight(to,fromCard,'spending',true);
  home()?.classList.remove('orb-flight-cover','orb-flight-reveal','orb-choreo-running');
+ home()?.style.removeProperty('--orb-stage-height');if(home())delete home().dataset.orbStageHeight;
  restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;
  const next=pendingOpen;
  if(next)queueMicrotask(launchPendingOpen);
@@ -328,11 +379,11 @@ document.addEventListener('keydown',event=>{
 },true);
 phone.addEventListener('click',event=>{
  if(event.target.closest('#dock [data-tab]')&&(active||busy)){
-  if(active){active.layer.remove();active=null;}document.querySelectorAll('.orb-story-departing').forEach(el=>el.remove());stopFlight();restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;pendingOpen=null;pendingSwitch=null;
+  if(active){active.layer.remove();active=null;}document.querySelectorAll('.orb-story-departing').forEach(el=>el.remove());stopFlight();restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;pendingOpen=null;pendingSwitch=null;home()?.style.removeProperty('--orb-stage-height');if(home())delete home().dataset.orbStageHeight;
   home()?.classList.remove('orb-choreo-running','orb-flight-cover','orb-flight-reveal','orb-inline-expanded','orb-inline-closing');home()?.style.removeProperty('--orb-target-height');
  }
 },true);
 // Keep V2.8 collapsed until a user chooses an orb.
 if(bridge()?.state)bridge().state.firstShow=false;
-window.NexaOrbFlowV35={version:'3.15-shared-carousel',switchKind,get phase(){return busy?'morphing':active?.kind||bridge()?.state?.expanded?'expanded':'idle'},get activeKind(){return active?.kind||(bridge()?.state?.expanded?'spending':null)},get inline(){return Boolean(active?.layer?.parentElement?.id==='heroRegion')}};
+window.NexaOrbFlowV35={version:'3.15-shared-carousel',authoredFrames:LIQUID_POSES.length,renderedFrames:RENDER_FRAME_COUNT,switchKind,get phase(){return busy?'morphing':active?.kind||bridge()?.state?.expanded?'expanded':'idle'},get activeKind(){return active?.kind||(bridge()?.state?.expanded?'spending':null)},get inline(){return Boolean(active?.layer?.parentElement?.id==='heroRegion')}};
 })();

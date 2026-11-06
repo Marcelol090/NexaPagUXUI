@@ -11,7 +11,7 @@ test('V3.8 motion controller is present in the production Vite build, not just s
  await page.locator('[data-orb-story="income"]').click();
  await expect(page.locator('.orb-fluid-ghost[data-kind="income"]')).toHaveCount(1,{timeout:2500});
  const frames=await page.locator('.orb-fluid-ghost[data-kind="income"]').evaluate(el=>el.getAnimations()[0]?.effect?.getKeyframes()||[]);
- expect(frames).toHaveLength(16);
+ expect(frames).toHaveLength(49);
  await expect(page.getByRole('region',{name:'Dinheiro que entrou.'})).toBeVisible();
  await expect(page.locator('.orb-fluid-ghost')).toHaveCount(0,{timeout:3500});
  await page.keyboard.press('Escape');

@@ -10,7 +10,7 @@ test('V3.7 animates 16 explicit fluid poses for all 3 financial orbs',async({pag
   const ghost=page.locator('.orb-fluid-ghost[data-kind="'+kind+'"]');
   await expect(ghost).toHaveCount(1);
   const keyframes=await ghost.evaluate(el=>el.getAnimations()[0]?.effect?.getKeyframes()||[]);
-  expect(keyframes).toHaveLength(16);
+  expect(keyframes).toHaveLength(49);
   expect(keyframes.every(f=>f.transform?.includes('translate3d')&&f.transform?.includes('scale3d'))).toBe(true);
   expect(keyframes.every(f=>f.clipPath?.startsWith('polygon('))).toBe(true);
   await expect(page.getByRole('region',{name:dialog})).toBeVisible();
@@ -25,7 +25,7 @@ test('V3.7 animates 16 explicit fluid poses for all 3 financial orbs',async({pag
  const spending=page.locator('.orb-fluid-ghost[data-kind="spending"]');
  await expect(spending).toHaveCount(1);
  const k=await spending.evaluate(el=>el.getAnimations()[0]?.effect?.getKeyframes()||[]);
- expect(k).toHaveLength(16);
+ expect(k).toHaveLength(49);
  await expect(page.locator('#homePage')).toHaveClass(/hero-expanded/);
  await expect(spending).toHaveCount(0,{timeout:3500});
  await page.getByRole('button',{name:'Recolher os cartões'}).click();
