@@ -11,7 +11,7 @@ const money=n=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).
 const KINDS=['income','spending','refund'];
 const STORIES={
  income:{label:'Entradas',value:1950,title:'Dinheiro que entrou.',description:'Recebimentos e PIX identificados no histórico. Não inclui estornos de compras.',note:'PIX recebido · histórico',cta:'Ver recebimentos',labels:['PIX','Recebimentos','Histórico']},
- refund:{label:'Estornos',value:349.9,title:'Valor recuperado.',description:'Um estorno confirmado. Esse valor reduz suas saídas líquidas, mas não é contado novamente como entrada.',note:'1 estorno · histórico',cta:'Consultar estorno',labels:['Compra','Estorno','Confirmado']}
+ refund:{label:'Estornos',value:349.9,title:'Valor recuperado.',description:'Estorno confirmado. Reduz as saídas líquidas sem gerar uma nova entrada.',note:'1 estorno · histórico',cta:'Consultar estorno',labels:['Compra','Estorno','Confirmado']}
 };
 let active=null,flight=null,busy=false,originalPosition=null,scrollAtOpen=0,restoreFocus=null,flightGeneration=0;
 let pendingClose=null,pendingOpen=null,pendingSwitch=null,transitionDirection='idle';

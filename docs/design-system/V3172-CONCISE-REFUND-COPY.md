@@ -1,0 +1,2 @@
+# V3.17.2 · Consistent financial card height through concise copy
+Second browser QA run: 84 passing, one failing. The refund component still measured 13px taller than income because the explanatory sentence wrapped to an extra line. The design fix is not more empty hero-space: simplify the refund description to `Estorno confirmado. Reduz as saídas líquidas sem gerar uma nova entrada.` This retains accounting semantics and uses a similar line count to the income card. The 49-frame spline and navigation remain unchanged.
