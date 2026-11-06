@@ -18,11 +18,11 @@ test('V3.6 matches twelve-frame story: equal responsive orbs with reversible GPU
   expect(frames.length).toBeGreaterThanOrEqual(8);
   expect(frames.every(frame=>frame.transform?.includes('translate3d')&&frame.transform?.includes('scale3d'))).toBe(true);
   expect(frames.every(frame=>!('width' in frame)&&!('height' in frame)&&!('top' in frame)&&!('left' in frame))).toBe(true);
-  await expect(page.getByRole('dialog',{name:title})).toBeVisible();
+  await expect(page.getByRole('region',{name:title})).toBeVisible();
   await expect(ghost).toHaveCount(0,{timeout:3600});
   await page.keyboard.press('Escape');
   await expect(page.locator('.orb-fluid-ghost[data-kind="'+kind+'"]')).toHaveCount(1);
-  await expect(page.getByRole('dialog')).toHaveCount(0,{timeout:3600});
+  await expect(page.locator('#orbStoryLayer')).toHaveCount(0,{timeout:3600});
   await expect(page.locator(button)).toHaveAttribute('aria-expanded','false');
  }
  await page.locator('[data-open="1"]').click();

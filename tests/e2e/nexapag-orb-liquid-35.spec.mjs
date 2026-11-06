@@ -7,12 +7,12 @@ test('V3.5 all three financial orbs morph with one ghost engine and return',asyn
   ['refund','[data-orb-story="refund"]','Valor recuperado.']]){
   await page.locator(selector).click();
   await expect(page.locator('.orb-fluid-ghost[data-kind="'+key+'"]')).toHaveCount(1);
-  await expect(page.getByRole('dialog',{name:title})).toBeVisible();
+  await expect(page.getByRole('region',{name:title})).toBeVisible();
   await expect(page.locator('.orb-fluid-ghost')).toHaveCount(0,{timeout:3200});
   await expect(page.locator('.orb-story-ruler i')).toHaveCount(45);
   await page.keyboard.press('Escape');
   await expect(page.locator('.orb-fluid-ghost[data-kind="'+key+'"]')).toHaveCount(1);
-  await expect(page.getByRole('dialog')).toHaveCount(0,{timeout:3200});
+  await expect(page.locator('#orbStoryLayer')).toHaveCount(0,{timeout:3200});
   await expect(page.locator('.orb-fluid-ghost')).toHaveCount(0);
  }
  await page.locator('[data-open="1"]').click();

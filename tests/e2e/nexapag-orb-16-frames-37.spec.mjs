@@ -13,12 +13,12 @@ test('V3.7 animates 16 explicit fluid poses for all 3 financial orbs',async({pag
   expect(keyframes).toHaveLength(16);
   expect(keyframes.every(f=>f.transform?.includes('translate3d')&&f.transform?.includes('scale3d'))).toBe(true);
   expect(keyframes.every(f=>f.clipPath?.startsWith('polygon('))).toBe(true);
-  await expect(page.getByRole('dialog',{name:dialog})).toBeVisible();
+  await expect(page.getByRole('region',{name:dialog})).toBeVisible();
   await expect(page.locator('.orb-story-layer.is-content-ready')).toHaveCount(1,{timeout:3500});
   await expect(ghost).toHaveCount(0,{timeout:3500});
   await page.keyboard.press('Escape');
   await expect(page.locator('.orb-fluid-ghost[data-kind="'+kind+'"]')).toHaveCount(1);
-  await expect(page.getByRole('dialog')).toHaveCount(0,{timeout:3500});
+  await expect(page.locator('#orbStoryLayer')).toHaveCount(0,{timeout:3500});
   await expect(page.locator(selector)).toHaveAttribute('aria-expanded','false');
  }
  await page.locator('[data-open="1"]').click();

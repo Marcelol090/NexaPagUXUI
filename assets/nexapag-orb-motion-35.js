@@ -47,7 +47,7 @@ const LIQUID_POSES=[
  {t:0.985,move:1.000,w:1.000,h:1.000,lift:0,super:4.20,ripple:0.000,jet:0,opacity:.08},
  {t:1.000,move:1.000,w:1.000,h:1.000,lift:0,super:4.20,ripple:0.000,jet:0,opacity:0}
 ];
-const OPEN_DURATION=1120,CLOSE_DURATION=920;
+const OPEN_DURATION=920,CLOSE_DURATION=770;
 let flightAnimation=null,morphRevealTimer=null;
 function fluidOutline(pose,reverse=false){
  // Superellipse progresses circle -> softly rounded card. 64 equidistant
@@ -119,10 +119,11 @@ function showLayer(kind,button){
  if(bridge()?.state)bridge().state.firstShow=false;
  restoreFocus=button;
  const source=button.querySelector('.jelly')||button,from=rect(source),v=STORIES[kind];
- const layer=document.createElement('section');layer.id='orbStoryLayer';layer.className='orb-story-layer';layer.dataset.kind=kind;
+ const host=document.getElementById('heroRegion');if(!host){busy=false;transitionDirection='idle';return;}
+ const layer=document.createElement('section');layer.id='orbStoryLayer';layer.className='orb-story-layer orb-inline-section';layer.dataset.kind=kind;
+ layer.setAttribute('role','region');layer.setAttribute('aria-labelledby','orbStoryTitle');layer.setAttribute('aria-describedby','orbStoryDescription');
  const ticks=Array.from({length:45},()=>'<i></i>').join('');
- layer.innerHTML='<div class="orb-story-backdrop" data-orb-close="1"></div>'+
- '<article class="orb-story-card" role="dialog" aria-modal="true" aria-labelledby="orbStoryTitle" aria-describedby="orbStoryDescription">'+
+ layer.innerHTML='<article class="orb-story-card" aria-describedby="orbStoryDescription">'+
  '<div class="orb-story-content"><div class="orb-story-top"><span class="orb-story-kicker">'+v.label+'</span>'+
  '<button class="orb-story-close" type="button" data-orb-close="1" aria-label="Recolher para o orb '+v.label+'">×</button></div>'+
  '<div class="orb-story-value">'+money(v.value)+'</div><h2 class="orb-story-title" id="orbStoryTitle">'+v.title+'</h2>'+
@@ -130,7 +131,10 @@ function showLayer(kind,button){
  '<div class="orb-story-ruler" aria-hidden="true">'+ticks+'</div><div class="orb-story-labels" aria-hidden="true">'+v.labels.map(t=>'<span>'+t+'</span>').join('')+'</div>'+
  '<div class="orb-story-divider"></div><div class="orb-story-foot"><span>'+v.note+'</span>'+
  '<button type="button" class="orb-story-go" data-orb-follow="'+kind+'">'+v.cta+'</button></div></div></article>';
- phone.append(layer);active={kind,layer,card:layer.querySelector('.orb-story-card'),from};
+ host.append(layer);active={kind,layer,card:layer.querySelector('.orb-story-card'),from};
+ const expandedHeight=Math.ceil(layer.getBoundingClientRect().height+14);
+ home()?.style.setProperty('--orb-target-height',Math.max(275,expandedHeight)+'px');
+ home()?.classList.remove('orb-inline-closing');home()?.classList.add('orb-inline-expanded','orb-choreo-running');
  const target=rect(active.card);active.card.style.opacity='0';
  button.classList.add('is-morph-origin');button.setAttribute('aria-expanded','true');
  requestAnimationFrame(()=>layer.classList.add('is-open'));
@@ -139,7 +143,7 @@ function showLayer(kind,button){
   active.card.style.opacity='1';layer.classList.add('is-content-ready');};
  fluidFlight(from,target,kind,false,reveal).then(()=>{
   if(active?.layer!==layer)return;
-  reveal();busy=false;transitionDirection='open';
+  reveal();busy=false;transitionDirection='open';home()?.classList.remove('orb-choreo-running');
   const request=pendingClose;pendingClose=null;
   if(request?.kind==='layer'){queueMicrotask(()=>closeLayer(request.follow));return;}
   layer.querySelector('.orb-story-close')?.focus({preventScroll:true});
@@ -152,11 +156,14 @@ function closeLayer(follow){
  const {kind,layer,card,from}=active;
  const fromCard=rect(card);
  layer.classList.remove('is-content-ready');layer.classList.add('is-closing');
+ home()?.classList.remove('orb-inline-expanded');home()?.classList.add('orb-inline-closing','orb-choreo-running');
  card.style.opacity='0';
  const destination=restoreFocus?.querySelector('.jelly')?.isConnected?rect(restoreFocus.querySelector('.jelly')):from;
  fluidFlight(destination,fromCard,kind,true).then(()=>{
   if(active?.layer!==layer)return;
-  layer.remove();active=null;restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;
+  layer.remove();active=null;
+  home()?.classList.remove('orb-inline-expanded','orb-inline-closing','orb-choreo-running');home()?.style.removeProperty('--orb-target-height');
+  restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;
   const next=pendingOpen;if(next)queueMicrotask(launchPendingOpen);
   if(follow==='refund')bridge()?.showMoneyInsight?.('refund',restoreFocus);
   else if(follow==='income'){
@@ -236,19 +243,15 @@ document.addEventListener('keydown',event=>{
  if(!active&&event.key==='Escape'&&bridge()?.state?.expanded&&bridge()?.state?.tab==='home'){event.preventDefault();event.stopImmediatePropagation();closeSpending();return;}
  if(!active)return;
  if(event.key==='Escape'){event.preventDefault();closeLayer();return;}
- if(event.key!=='Tab'||busy)return;
- const buttons=[...active.layer.querySelectorAll('button')];
- const first=buttons[0],last=buttons.at(-1);
- if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
- else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+ // An inline disclosure, not a modal: normal Tab navigation remains available.
 },true);
 phone.addEventListener('click',event=>{
  if(event.target.closest('#dock [data-tab]')&&(active||busy)){
   if(active){active.layer.remove();active=null;}stopFlight();restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;pendingOpen=null;
-  home()?.classList.remove('orb-choreo-running','orb-flight-cover','orb-flight-reveal');
+  home()?.classList.remove('orb-choreo-running','orb-flight-cover','orb-flight-reveal','orb-inline-expanded','orb-inline-closing');home()?.style.removeProperty('--orb-target-height');
  }
 },true);
 // Keep V2.8 collapsed until a user chooses an orb.
 if(bridge()?.state)bridge().state.firstShow=false;
-window.NexaOrbFlowV35={get phase(){return busy?'morphing':active?.kind||bridge()?.state?.expanded?'expanded':'idle'},get activeKind(){return active?.kind||(bridge()?.state?.expanded?'spending':null)}};
+window.NexaOrbFlowV35={version:'3.11-inline',get phase(){return busy?'morphing':active?.kind||bridge()?.state?.expanded?'expanded':'idle'},get activeKind(){return active?.kind||(bridge()?.state?.expanded?'spending':null)},get inline(){return Boolean(active?.layer?.parentElement?.id==='heroRegion')}};
 })();

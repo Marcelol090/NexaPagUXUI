@@ -17,7 +17,7 @@ test('V3.9 queues close during liquid expansion, all three orb flows',async({pag
  await expect(page.locator('#homePage')).not.toHaveClass(/hero-expanded/,{timeout:4500});
  await expect(page.locator('.orb-fluid-ghost')).toHaveCount(0,{timeout:4500});
  await page.locator('[data-orb-story="refund"]').click();
- await expect(page.getByRole('dialog',{name:'Valor recuperado.'})).toBeVisible();
+ await expect(page.getByRole('region',{name:'Valor recuperado.'})).toBeVisible();
  expect(errs).toEqual([]);
 });
 test('V3.9 Escape during opening is not swallowed and reduced motion remains stable',async({page})=>{
@@ -27,7 +27,7 @@ test('V3.9 Escape during opening is not swallowed and reduced motion remains sta
  await page.locator('[data-orb-story="income"]').click();await page.keyboard.press('Escape');
  await expect(page.locator('#orbStoryLayer')).toHaveCount(0,{timeout:4500});
  await page.emulateMedia({reducedMotion:'reduce'});await page.locator('[data-orb-story="income"]').click();
- await expect(page.getByRole('dialog',{name:'Dinheiro que entrou.'})).toBeVisible();
+ await expect(page.getByRole('region',{name:'Dinheiro que entrou.'})).toBeVisible();
  await page.keyboard.press('Escape');
  await expect(page.locator('#orbStoryLayer')).toHaveCount(0);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth)).toBeLessThanOrEqual(2);

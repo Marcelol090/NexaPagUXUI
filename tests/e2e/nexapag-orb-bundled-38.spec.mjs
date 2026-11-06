@@ -12,10 +12,10 @@ test('V3.8 motion controller is present in the production Vite build, not just s
  await expect(page.locator('.orb-fluid-ghost[data-kind="income"]')).toHaveCount(1,{timeout:2500});
  const frames=await page.locator('.orb-fluid-ghost[data-kind="income"]').evaluate(el=>el.getAnimations()[0]?.effect?.getKeyframes()||[]);
  expect(frames).toHaveLength(16);
- await expect(page.getByRole('dialog',{name:'Dinheiro que entrou.'})).toBeVisible();
+ await expect(page.getByRole('region',{name:'Dinheiro que entrou.'})).toBeVisible();
  await expect(page.locator('.orb-fluid-ghost')).toHaveCount(0,{timeout:3500});
  await page.keyboard.press('Escape');
- await expect(page.getByRole('dialog')).toHaveCount(0,{timeout:3500});
+ await expect(page.locator('#orbStoryLayer')).toHaveCount(0,{timeout:3500});
  await page.locator('[data-open="1"]').click();
  await expect(page.locator('.orb-fluid-ghost[data-kind="spending"]')).toHaveCount(1);
  await expect(page.locator('#homePage')).toHaveClass(/hero-expanded/);
@@ -23,6 +23,6 @@ test('V3.8 motion controller is present in the production Vite build, not just s
  await expect(page.locator('#homePage')).not.toHaveClass(/hero-expanded/);
  await page.locator('[data-orb-story="refund"]').click();
  await expect(page.locator('.orb-fluid-ghost[data-kind="refund"]')).toHaveCount(1);
- await expect(page.getByRole('dialog',{name:'Valor recuperado.'})).toBeVisible();
+ await expect(page.getByRole('region',{name:'Valor recuperado.'})).toBeVisible();
  expect(errors).toEqual([]);
 });

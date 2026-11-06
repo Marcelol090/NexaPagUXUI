@@ -1,0 +1,5 @@
+# NexaPag V3.11 · Inline Liquid Components
+Source: 20261106-2054-56.9542450.mp4 (5.48s). At 0-1.4s an emerald orb grows into a green component but the surrounding UI is blurred and darkened by an overlay. User explicitly rejected that modal behavior.
+**Revised design**: Entradas and Estornos are in-document disclosures in `#heroRegion`. They have `role=region` rather than `dialog`, no `aria-modal`, no backdrop, no fixed overlay and no blur of surrounding UI. A single liquid shared-element transition morphs each orb to its destination card; height of the home hero region interpolates and organically moves the following content. Saídas uses the existing in-place carousel. All three use 16-vertex-control keyframe poses.
+Closing reverses the liquid trajectory, and the home layout contracts continuously. Reduced motion keeps functional cards without animation; dark/light, financial amounts and 5-tab nav remain unchanged.
+**Acceptance**: rendering stays on the same page, content below card reflows, inline region is child of `#heroRegion`, and both expansion and collapse work on 320/390/430 px. No modal backdrop is produced by tapping an orb.

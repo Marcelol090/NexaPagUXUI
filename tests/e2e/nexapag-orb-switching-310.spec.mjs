@@ -8,12 +8,12 @@ test('V3.10 immediately queues another orb tapped during liquid reverse',async({
  await page.getByRole('button',{name:'Recolher os cartões'}).click();
  await expect(page.locator('#homePage')).not.toHaveClass(/hero-expanded/);
  await page.locator('[data-orb-story="refund"]').click();
- await expect(page.getByRole('dialog',{name:'Valor recuperado.'})).toBeVisible({timeout:5000});
+ await expect(page.getByRole('region',{name:'Valor recuperado.'})).toBeVisible({timeout:5000});
  await expect(page.locator('.orb-fluid-ghost')).toHaveCount(0,{timeout:5000});
  await page.keyboard.press('Escape');
- await expect(page.getByRole('dialog')).toHaveCount(0,{timeout:5000});
+ await expect(page.locator('#orbStoryLayer')).toHaveCount(0,{timeout:5000});
  await page.locator('[data-orb-story="income"]').click();
- await expect(page.getByRole('dialog',{name:'Dinheiro que entrou.'})).toBeVisible();
+ await expect(page.getByRole('region',{name:'Dinheiro que entrou.'})).toBeVisible();
  await page.keyboard.press('Escape');
  await expect(page.locator('#orbStoryLayer')).toHaveCount(0,{timeout:5000});
  expect(errors).toEqual([]);
@@ -28,7 +28,7 @@ test('V3.10 Escape cancels queued orb during reverse; reduced-motion follow-up w
  await expect(page.locator('#orbStoryLayer')).toHaveCount(0);
  await page.emulateMedia({reducedMotion:'reduce'});
  await page.locator('[data-orb-story="income"]').click();
- await expect(page.getByRole('dialog',{name:'Dinheiro que entrou.'})).toBeVisible();
+ await expect(page.getByRole('region',{name:'Dinheiro que entrou.'})).toBeVisible();
  await page.keyboard.press('Escape');
  await expect(page.locator('#orbStoryLayer')).toHaveCount(0);
 });

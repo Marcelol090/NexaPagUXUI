@@ -205,3 +205,134 @@
  .orb-fluid-ghost,.orb-fluid-ghost::before,.orb-fluid-ghost::after{animation:none!important;transition:none!important}
  #homePage .milestone .jelly{animation:none!important}
 }
+
+
+/* V3.11 — The orb becomes a component IN the Home document flow.
+   There is no modal, overlay/backdrop, screen dimming or blur behind the card.
+   Hero height animates smoothly so subsequent analytics move naturally. */
+#homePage #heroRegion {
+  position:relative;
+  display:block;
+  height:155px;
+  min-height:0;
+  isolation:isolate;
+  transition:height 890ms cubic-bezier(.22,.82,.22,1);
+}
+#homePage.hero-expanded #heroRegion {height:286px}
+#homePage.orb-inline-expanded #heroRegion {height:var(--orb-target-height,288px)}
+#homePage.orb-inline-closing #heroRegion {height:155px}
+#homePage #compactHero {
+  position:absolute;
+  top:0;left:0;right:0;
+  width:min(100%,353px);
+  margin-inline:auto;
+  height:155px;
+  max-height:155px;
+  overflow:visible;
+  transition:opacity 185ms cubic-bezier(.24,.72,.24,1),filter 185ms ease;
+}
+#homePage:is(.hero-expanded,.orb-inline-expanded) #compactHero {
+  height:155px!important;
+  max-height:155px!important;
+  margin-top:0!important;
+  transform:none!important;
+  opacity:0;
+  pointer-events:none;
+}
+#homePage.orb-inline-closing #compactHero{
+  opacity:1;
+  pointer-events:auto;
+}
+#homePage #expandedHero{
+  position:absolute;
+  left:-17px;
+  right:-17px;
+  top:0;
+  margin:0;
+  overflow:hidden;
+}
+#homePage.hero-expanded #expandedHero{
+  max-height:277px;
+  opacity:1;
+  transform:none;
+  pointer-events:auto;
+}
+#homePage .orb-inline-section{
+  position:absolute;
+  inset:0 0 auto;
+  display:block;
+  width:100%;
+  height:auto;
+  min-height:0;
+  margin:0;
+  padding:9px 4px 0;
+  z-index:3;
+  isolation:isolate;
+  background:none!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  pointer-events:auto;
+}
+#homePage .orb-inline-section .orb-story-card{
+  display:block;
+  margin:0 auto;
+  width:min(calc(100% - 12px),328px);
+  min-height:238px;
+  max-height:none;
+  padding:15px 17px 13px;
+  border-radius:28px;
+  border:1px solid rgba(255,255,255,.77);
+  box-shadow:0 12px 26px rgba(5,25,12,.15),inset 0 1px 0 rgba(255,255,255,.78);
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  transform:translateZ(0);
+  transition:opacity 190ms ease-out,box-shadow 260ms ease;
+}
+#homePage .orb-inline-section .orb-story-content{
+  opacity:0;
+  transform:translateY(7px);
+  transition:opacity 290ms ease-out,transform 420ms cubic-bezier(.22,.84,.23,1);
+}
+#homePage .orb-inline-section.is-content-ready .orb-story-content{
+  opacity:1;transform:none;
+}
+#homePage .orb-inline-section.is-closing .orb-story-content{
+  opacity:0;transform:translateY(4px);transition-duration:140ms;
+}
+#homePage .orb-inline-section .orb-story-value{
+  margin:14px 0 4px;
+  font-size:clamp(31px,9cqw,39px);
+}
+#homePage .orb-inline-section .orb-story-foot{margin-top:8px}
+#homePage .orb-inline-section .orb-story-go{min-height:36px}
+#homePage .orb-inline-section .orb-story-close{position:relative;z-index:3}
+#homePage .orb-inline-section .orb-story-description{
+  opacity:.9;line-height:1.42;
+}
+#homePage.orb-inline-expanded .greeting,
+#homePage.orb-inline-closing .greeting{
+  filter:none;
+  opacity:1;
+}
+.phone[data-ui-theme="dark"] #homePage .orb-inline-section .orb-story-card{
+  box-shadow:0 14px 30px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.65);
+}
+/* The transient animated liquid is just a shared-element transform, never a popup. */
+.phone .orb-fluid-ghost{pointer-events:none;z-index:24}
+.phone .orb-fluid-ghost::before{animation-duration:8s}
+@media (max-width:350px){
+ #homePage #compactHero{height:148px;max-height:148px}
+ #homePage #heroRegion{height:148px}
+ #homePage.orb-inline-closing #heroRegion{height:148px}
+ #homePage:is(.hero-expanded,.orb-inline-expanded) #compactHero{
+  height:148px!important;max-height:148px!important;
+ }
+ #homePage .orb-inline-section{padding:8px 0 0}
+ #homePage .orb-inline-section .orb-story-card{width:calc(100% - 4px);padding:13px 13px 12px}
+ #homePage .orb-inline-section .orb-story-value{font-size:32px}
+}
+@media(prefers-reduced-motion:reduce){
+ #homePage #heroRegion,#homePage #compactHero,#homePage .orb-inline-section .orb-story-card,
+ #homePage .orb-inline-section .orb-story-content{transition:none!important}
+}
