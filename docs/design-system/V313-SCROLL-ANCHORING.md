@@ -1,0 +1,2 @@
+# V3.13 · Prevent scroll anchoring from cancelling inline transition
+Chromium retains the vertical position of its chosen anchor when an element above it grows. During orb-to-card morph this made the greeting appear stationary even though the inline hero height changed. Explicitly disable `overflow-anchor` on `#scroller` and `#heroRegion` so the animated layout shift is actually visible. QA asserts greeting moves >55 px while scroller.scrollTop changes <=3px after expanding each inline card.

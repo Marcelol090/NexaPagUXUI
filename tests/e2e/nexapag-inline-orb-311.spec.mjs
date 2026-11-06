@@ -7,6 +7,7 @@ for(const width of [320,390,430]){
   await expect.poll(()=>page.evaluate(()=>window.NexaOrbFlowV35?.version)).toBe('3.11-inline');
   await expect(page.locator('.greeting')).toBeVisible();
   const before=await page.locator('.greeting').boundingBox();
+  const scrollBefore=await page.locator('#scroller').evaluate(el=>el.scrollTop);
   for(const [kind,label] of [['income','Dinheiro que entrou.'],['refund','Valor recuperado.']]){
    await page.locator('[data-orb-story="'+kind+'"]').click();
    const section=page.locator('#orbStoryLayer');
@@ -24,6 +25,8 @@ for(const width of [320,390,430]){
    await expect(ghost).toHaveCount(0,{timeout:3200});
    const during=await page.locator('.greeting').boundingBox();
    expect(during.y).toBeGreaterThan(before.y+55);
+   const scrollAfter=await page.locator('#scroller').evaluate(el=>el.scrollTop);
+   expect(Math.abs(scrollAfter-scrollBefore)).toBeLessThanOrEqual(3);
    expect(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth)).toBeLessThanOrEqual(2);
    await page.locator('[data-orb-close]').click();
    await expect(section).toHaveCount(0,{timeout:3200});

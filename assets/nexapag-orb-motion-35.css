@@ -351,3 +351,9 @@
  opacity:1;
  transform:none;
 }
+
+/* V3.13: the changing height of #heroRegion is an intentional layout motion.
+   Chromium's scroll anchoring otherwise scrolls #scroller by the same delta and
+   visually cancels the vertical movement of the greeting/analytics below. */
+#scroller{overflow-anchor:none;}
+#homePage #heroRegion{overflow-anchor:none;}
