@@ -159,3 +159,47 @@
  #homePage .milestone .jelly,#homePage .milestone .jelly::before,
  .orb-fluid-ghost::before,.orb-fluid-ghost::after{animation:none!important}
 }
+
+
+/* V3.7 · 16 explicitly authored liquid poses from the approved GIF;
+   frame interpolation is rendered natively at display refresh rate. */
+#homePage .milestone .jelly{isolation:isolate}
+.orb-fluid-ghost{
+ will-change:transform,clip-path,opacity;
+ contain:layout style;
+ border-radius:0!important;
+ overflow:visible;
+ filter:drop-shadow(0 11px 18px rgba(8,30,17,.17));
+ background:
+  radial-gradient(ellipse at 25% 12%,rgba(255,255,255,.84),transparent 35%),
+  radial-gradient(ellipse at 63% 80%,var(--fluid-deep),transparent 48%),
+  linear-gradient(155deg,var(--fluid-light) 0%,var(--fluid-base) 48%,var(--fluid-light) 100%);
+}
+.orb-fluid-ghost::before{
+ inset:2%;border-radius:40%;
+ background:radial-gradient(ellipse at 31% 18%,rgba(255,255,255,.89),transparent 36%),
+ radial-gradient(ellipse at 75% 78%,rgba(255,255,255,.32),transparent 45%);
+}
+.orb-fluid-ghost[data-kind="income"]{--fluid-base:#86ddb1;--fluid-light:#d8fbd7;--fluid-deep:#43bd90}
+.orb-fluid-ghost[data-kind="spending"]{--fluid-base:#f9aa90;--fluid-light:#ffe1cd;--fluid-deep:#dd8275}
+.orb-fluid-ghost[data-kind="refund"]{--fluid-base:#bb91eb;--fluid-light:#ecddff;--fluid-deep:#9168cf}
+#homePage.orb-flight-reveal .carousel-slide.current{opacity:1!important;filter:none!important}
+#homePage.orb-flight-reveal .carousel-slide.current .slide-motion-media{opacity:1!important}
+.orb-story-layer{
+ align-items:start;
+ padding:clamp(105px,13.5%,130px) 17px 76px;
+}
+.orb-story-backdrop{
+ background:rgba(6,24,14,.14);
+ backdrop-filter:blur(3px);
+ -webkit-backdrop-filter:blur(3px);
+}
+.orb-story-layer .orb-story-card{transform:translateZ(0)}
+.orb-story-layer.is-content-ready .orb-story-content{
+ opacity:1;transform:none;transition:opacity .3s ease,transform .4s cubic-bezier(.2,.85,.2,1)
+}
+@media(max-width:350px){.orb-story-layer{padding:94px 12px 74px}}
+@media(prefers-reduced-motion:reduce){
+ .orb-fluid-ghost,.orb-fluid-ghost::before,.orb-fluid-ghost::after{animation:none!important;transition:none!important}
+ #homePage .milestone .jelly{animation:none!important}
+}

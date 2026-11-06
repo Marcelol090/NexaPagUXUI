@@ -24,52 +24,90 @@ const cleanupFlight=()=>{if(flight){flight.remove();flight=null;}};
 const ease='cubic-bezier(.23,.78,.18,1)';
 // Frame-authored liquid morph. Only transform/border radius/opacity animate:
 // no left/top/width/height layout interpolation, no animation restart at its midpoint.
-let flightAnimation=null;
-function fluidFlight(start,end,kind,reverse=false){
+/* V3.7: the 16 storyboard poses define phase, deformation, and timing.
+   Between authored poses, Web Animations interpolates every display frame. */
+const LIQUID_POSES=[
+ {t:0.000,move:0.000,w:0.000,h:0.000,lift:0,super:2.00,ripple:0.00,jet:0,opacity:1},
+ {t:0.055,move:0.003,w:-0.025,h:-0.060,lift:0,super:2.00,ripple:0.018,jet:0,opacity:1},
+ {t:0.115,move:0.015,w:0.015,h:0.085,lift:2,super:2.12,ripple:0.028,jet:0.33,opacity:1},
+ {t:0.182,move:0.050,w:0.065,h:0.210,lift:10,super:2.16,ripple:0.040,jet:0.68,opacity:1},
+ {t:0.250,move:0.135,w:0.145,h:0.340,lift:16,super:2.37,ripple:0.038,jet:0.62,opacity:1},
+ {t:0.332,move:0.270,w:0.320,h:0.490,lift:19,super:2.60,ripple:0.032,jet:0.38,opacity:1},
+ {t:0.420,move:0.470,w:0.545,h:0.675,lift:11,super:2.95,ripple:0.027,jet:0.12,opacity:1},
+ {t:0.515,move:0.695,w:0.765,h:0.840,lift:4,super:3.42,ripple:0.020,jet:0.02,opacity:1},
+ {t:0.610,move:0.885,w:0.915,h:0.960,lift:0,super:4.02,ripple:0.013,jet:0,opacity:1},
+ {t:0.710,move:1.000,w:1.024,h:1.035,lift:0,super:4.25,ripple:0.010,jet:0,opacity:1},
+ {t:0.794,move:1.000,w:0.992,h:0.987,lift:0,super:4.15,ripple:0.008,jet:0,opacity:1},
+ {t:0.866,move:1.000,w:1.000,h:1.000,lift:0,super:4.25,ripple:0.004,jet:0,opacity:.91},
+ {t:0.910,move:1.000,w:1.000,h:1.000,lift:0,super:4.20,ripple:0.002,jet:0,opacity:.66},
+ {t:0.951,move:1.000,w:1.000,h:1.000,lift:0,super:4.20,ripple:0.001,jet:0,opacity:.29},
+ {t:0.985,move:1.000,w:1.000,h:1.000,lift:0,super:4.20,ripple:0.000,jet:0,opacity:.08},
+ {t:1.000,move:1.000,w:1.000,h:1.000,lift:0,super:4.20,ripple:0.000,jet:0,opacity:0}
+];
+const OPEN_DURATION=1120,CLOSE_DURATION=920;
+let flightAnimation=null,morphRevealTimer=null;
+function fluidOutline(pose,reverse=false){
+ // Superellipse progresses circle -> softly rounded card. 64 equidistant
+ // vertices plus two harmonics produce the liquid edge without canvas reflow.
+ const points=[];
+ const power=2/pose.super;
+ for(let i=0;i<64;i++){
+  const a=-Math.PI/2+Math.PI*2*i/64;
+  const c=Math.cos(a),s=Math.sin(a);
+  const bulge=Math.max(0,s*-1)**14*pose.jet*.32;
+  const wave=pose.ripple*(Math.sin(3*a+1.1)+.43*Math.sin(5*a-.6));
+  const scale=Math.min(.998,Math.max(.6,.965*(1+bulge+wave)));
+  const px=50+49.8*Math.sign(c)*Math.pow(Math.abs(c),power)*scale;
+  const py=50+49.8*Math.sign(s)*Math.pow(Math.abs(s),power)*scale;
+  points.push(px.toFixed(3)+'% '+py.toFixed(3)+'%');
+ }
+ return 'polygon('+points.join(',')+')';
+}
+function fluidFlight(start,end,kind,reverse=false,onReveal){
  cleanupFlight();
- if(reduce()||!Element.prototype.animate)return Promise.resolve();
- if(!start||!end||start.w<=0||start.h<=0||end.w<=0||end.h<=0)return Promise.resolve();
- const el=document.createElement('div');
- el.className='orb-fluid-ghost';el.dataset.kind=kind;el.setAttribute('aria-hidden','true');
- Object.assign(el.style,{left:start.x+'px',top:start.y+'px',width:start.w+'px',height:start.h+'px',
-  borderRadius:'50%',transformOrigin:'0 0',transform:'translate3d(0,0,0)'});
- phone.append(el);flight=el;
+ if(reduce()||!Element.prototype.animate){onReveal?.();return Promise.resolve();}
+ if(!start||!end||start.w<=0||start.h<=0||end.w<=0||end.h<=0){onReveal?.();return Promise.resolve();}
+ const ghost=document.createElement('div');
+ ghost.className='orb-fluid-ghost';ghost.dataset.kind=kind;
+ ghost.dataset.phase=reverse?'closing':'opening';
+ ghost.setAttribute('aria-hidden','true');
+ Object.assign(ghost.style,{left:start.x+'px',top:start.y+'px',width:start.w+'px',height:start.h+'px',
+  transformOrigin:'0 0',transform:'translate3d(0,0,0)'});
+ phone.append(ghost);flight=ghost;
  const source={x:start.x+start.w/2,y:start.y+start.h/2};
  const target={x:end.x+end.w/2,y:end.y+end.h/2};
- const stops=[
-  {t:0,p:0,sx:0,sy:0,lift:0,rad:'50% 50% 50% 50%'},
-  {t:.09,p:.015,sx:-.02,sy:.09,lift:4,rad:'46% 54% 50% 50% / 49% 45% 55% 51%'},
-  {t:.20,p:.09,sx:.13,sy:.22,lift:15,rad:'46% 56% 37% 58% / 35% 46% 62% 50%'},
-  {t:.32,p:.27,sx:.36,sy:.35,lift:24,rad:'36% 46% 34% 52% / 35% 41% 66% 53%'},
-  {t:.47,p:.50,sx:.61,sy:.57,lift:15,rad:'26% 38% 28% 47% / 41% 39% 53% 47%'},
-  {t:.65,p:.79,sx:.86,sy:.82,lift:5,rad:'32% 26% 30% 37% / 39% 41% 43% 46%'},
-  {t:.83,p:.98,sx:1.026,sy:1.026,lift:0,rad:'30px 29px 35px 28px'},
-  {t:.93,p:1,sx:.994,sy:.99,lift:0,rad:'27px 28px 29px 27px'},
-  {t:1,p:1,sx:1,sy:1,lift:0,rad:'28px'}
- ];
- const frame=(s,offset)=>{
-  const width=Math.max(start.w*.62,lerp(start.w,end.w,s.sx));
-  const height=Math.max(start.h*.63,lerp(start.h,end.h,s.sy));
-  const x=lerp(source.x,target.x,s.p)-width/2-start.x;
-  const y=lerp(source.y,target.y,s.p)-height/2-start.y-s.lift;
-  return {offset,transform:'translate3d('+x.toFixed(3)+'px,'+y.toFixed(3)+'px,0) scale3d('+
-   (width/start.w).toFixed(5)+','+(height/start.h).toFixed(5)+',1)',
-   borderRadius:s.rad,opacity:1};
- };
- const points=reverse?stops.slice().reverse():stops;
- const frames=points.map(s=>frame(s,reverse?1-s.t:s.t));
- const id=++flightGeneration;
- el.dataset.phase=reverse?'closing':'opening';
- const animation=el.animate(frames,{duration:reverse?830:940,easing:'cubic-bezier(.18,.78,.17,1)',fill:'forwards'});
+ const poses=reverse?LIQUID_POSES.slice().reverse():LIQUID_POSES;
+ const frames=poses.map(p=>{
+  const w=Math.max(start.w*.66,lerp(start.w,end.w,p.w));
+  const h=Math.max(start.h*.65,lerp(start.h,end.h,p.h));
+  const x=lerp(source.x,target.x,p.move)-w/2-start.x;
+  const y=lerp(source.y,target.y,p.move)-h/2-start.y-p.lift;
+  return {
+   offset:reverse?1-p.t:p.t,
+   transform:'translate3d('+x.toFixed(3)+'px,'+y.toFixed(3)+'px,0) scale3d('+
+     (w/start.w).toFixed(5)+','+(h/start.h).toFixed(5)+',1)',
+   clipPath:fluidOutline(p),
+   opacity:reverse?1:p.opacity
+  };
+ });
+ const gen=++flightGeneration,duration=reverse?CLOSE_DURATION:OPEN_DURATION;
+ const animation=ghost.animate(frames,{duration,easing:'linear',fill:'forwards'});
  flightAnimation=animation;
+ if(!reverse&&onReveal){
+  morphRevealTimer=setTimeout(()=>{
+   morphRevealTimer=null;
+   if(gen===flightGeneration)onReveal();
+  },Math.round(duration*.78));
+ }
  return animation.finished.catch(()=>{}).then(()=>{
-  if(id===flightGeneration)cleanupFlight();
+  if(gen===flightGeneration){if(morphRevealTimer!==null)clearTimeout(morphRevealTimer);morphRevealTimer=null;
+   if(!reverse)onReveal?.();cleanupFlight();}
  }).finally(()=>{
   if(flightAnimation===animation)flightAnimation=null;
-  animation.cancel();if(el.isConnected)el.remove();
+  animation.cancel();if(ghost.isConnected)ghost.remove();
  });
 }
-function stopFlight(){flightGeneration++;flightAnimation?.cancel();flightAnimation=null;cleanupFlight();}
+function stopFlight(){flightGeneration++;if(morphRevealTimer!==null)clearTimeout(morphRevealTimer);morphRevealTimer=null;flightAnimation?.cancel();flightAnimation=null;cleanupFlight();}
 function restoreOrigin(){if(restoreFocus?.isConnected){restoreFocus.classList.remove('is-morph-origin');restoreFocus.setAttribute('aria-expanded','false');}}
 function showLayer(kind,button){
  if(busy||active||!STORIES[kind])return;
@@ -93,10 +131,12 @@ function showLayer(kind,button){
  const target=rect(active.card);active.card.style.opacity='0';
  button.classList.add('is-morph-origin');button.setAttribute('aria-expanded','true');
  requestAnimationFrame(()=>layer.classList.add('is-open'));
- fluidFlight(from,target,kind).then(()=>{
+ let revealed=false;
+ const reveal=()=>{if(revealed||active?.layer!==layer)return;revealed=true;
+  active.card.style.opacity='1';layer.classList.add('is-content-ready');};
+ fluidFlight(from,target,kind,false,reveal).then(()=>{
   if(active?.layer!==layer)return;
-  active.card.style.opacity='';
-  layer.classList.add('is-content-ready');busy=false;
+  reveal();busy=false;
   layer.querySelector('.orb-story-close')?.focus({preventScroll:true});
  });
 }
@@ -131,8 +171,10 @@ async function openSpending(button){
  await waitFrames();
  const target=document.querySelector('.carousel-slide.current');
  if(!target){home()?.classList.remove('orb-choreo-running','orb-flight-cover');restoreOrigin();busy=false;return;}
- await fluidFlight(originalPosition,rect(target),'spending');
- home()?.classList.remove('orb-flight-cover','orb-choreo-running');
+ await fluidFlight(originalPosition,rect(target),'spending',false,()=>{
+  home()?.classList.add('orb-flight-reveal');
+ });
+ home()?.classList.remove('orb-flight-cover','orb-flight-reveal','orb-choreo-running');
  busy=false;
 }
 async function closeSpending(){
@@ -143,7 +185,7 @@ async function closeSpending(){
  const fromCard=card?rect(card):null;
  const currentScroll=document.getElementById('scroller')?.scrollTop||0;
  const destination=originalPosition?inPhone({...originalPosition,y:originalPosition.y-(currentScroll-scrollAtOpen)}):null;
- home()?.classList.add('orb-choreo-running','orb-flight-cover');
+ home()?.classList.remove('orb-flight-reveal');home()?.classList.add('orb-choreo-running','orb-flight-cover');
  bridge()?.state && (bridge().state.slide=0);
  bridge()?.stopAutoplay?.();
  // V3.4 bridge exposes expand but not collapse: keep original state in sync.
@@ -154,7 +196,7 @@ async function closeSpending(){
  const fallback=orbFor('spending')?.querySelector('.jelly');
  const to=destination|| (fallback?rect(fallback):null);
  if(fromCard&&to)await fluidFlight(to,fromCard,'spending',true);
- home()?.classList.remove('orb-flight-cover','orb-choreo-running');
+ home()?.classList.remove('orb-flight-cover','orb-flight-reveal','orb-choreo-running');
  restoreOrigin();busy=false;
  if(restoreFocus?.isConnected)restoreFocus.focus({preventScroll:true});
 }
@@ -190,7 +232,7 @@ document.addEventListener('keydown',event=>{
 phone.addEventListener('click',event=>{
  if(event.target.closest('#dock [data-tab]')&&(active||busy)){
   if(active){active.layer.remove();active=null;}stopFlight();restoreOrigin();busy=false;
-  home()?.classList.remove('orb-choreo-running','orb-flight-cover');
+  home()?.classList.remove('orb-choreo-running','orb-flight-cover','orb-flight-reveal');
  }
 },true);
 // Keep V2.8 collapsed until a user chooses an orb.
