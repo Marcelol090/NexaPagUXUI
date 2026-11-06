@@ -5,6 +5,7 @@ for(const width of [320,390,430]){
   await page.setViewportSize({width,height:844});
   await page.goto('/v2.html');
   await expect.poll(()=>page.evaluate(()=>window.NexaOrbFlowV35?.version)).toBe('3.11-inline');
+  await expect(page.locator('.greeting')).toBeVisible();
   const before=await page.locator('.greeting').boundingBox();
   for(const [kind,label] of [['income','Dinheiro que entrou.'],['refund','Valor recuperado.']]){
    await page.locator('[data-orb-story="'+kind+'"]').click();

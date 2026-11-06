@@ -336,3 +336,18 @@
  #homePage #heroRegion,#homePage #compactHero,#homePage .orb-inline-section .orb-story-card,
  #homePage .orb-inline-section .orb-story-content{transition:none!important}
 }
+
+/* V3.12 · Keep the greeting visible in both compact and expanded home states.
+   Previously this block had max-height:0 unless hero-expanded, which meant
+   income/refund inline expansion could not naturally shift downstream content. */
+#homePage .greeting{
+ max-height:90px;
+ opacity:1;
+ transform:none;
+ overflow:visible;
+}
+#homePage:is(.orb-inline-expanded,.orb-inline-closing,.hero-expanded) .greeting{
+ max-height:90px;
+ opacity:1;
+ transform:none;
+}
