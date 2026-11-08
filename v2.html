@@ -1068,12 +1068,13 @@ function walletLiveMarkup(){
  '</section>';
 }
 
-let walletLiveMotionToken=0,walletLiveMotionTimer=0;
+let walletLiveMotionToken=0,walletLiveMotionTimer=0,walletLivePendingIndex=null,walletLiveRetractEndsAt=0;
 function walletLiveApplySelection(index,open,token){
  if(token!==walletLiveMotionToken||state.tab!=='cards')return;
  const scene=document.querySelector('[data-wallet-live-scene]');
  if(!scene||!scene.isConnected)return;
  const bank=walletBanks[index];
+ walletLivePendingIndex=null;walletLiveRetractEndsAt=0;
  state.card=index;
  scene.dataset.phase=open?'lifting':'resting';
  scene.dataset.opened='false';
@@ -1122,9 +1123,18 @@ function updateWalletLive(index,shouldToggle=false){
  clearTimeout(walletLiveMotionTimer);walletLiveMotionTimer=0;
  const scene=document.querySelector('[data-wallet-live-scene]');
  if(!scene)return;
+ if(scene.dataset.phase==='retracting'&&!reducedMotion()){
+  walletLivePendingIndex=index;
+  const remaining=Math.max(0,walletLiveRetractEndsAt-performance.now());
+  walletLiveMotionTimer=setTimeout(()=>{
+   walletLiveMotionTimer=0;walletLiveApplySelection(index,true,token);
+  },remaining);
+  return;
+ }
  const same=index===state.card;
  const expand=shouldToggle&&same?!walletLiveRaised:true;
  if(walletLiveRaised&&!same&&!reducedMotion()){
+  walletLivePendingIndex=index;walletLiveRetractEndsAt=performance.now()+255;
   scene.dataset.phase='retracting';
   scene.dataset.opened='false';
   walletLiveRaised=false;
@@ -1137,7 +1147,8 @@ function updateWalletLive(index,shouldToggle=false){
  }
 }
 function stepWalletLive(delta){
- updateWalletLive((state.card+delta+walletBanks.length)%walletBanks.length);
+ const base=walletLivePendingIndex===null?state.card:walletLivePendingIndex;
+ updateWalletLive((base+delta+walletBanks.length)%walletBanks.length);
 }
 let walletLiveGesture=null;
 
@@ -1290,7 +1301,7 @@ document.addEventListener('visibilitychange',syncSlideBackdropMedia);
 window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener?.('change',syncSlideBackdropMedia);
 
 function render(){
- clearTimeout(walletLiveMotionTimer);walletLiveMotionTimer=0;walletLiveMotionToken++;
+ clearTimeout(walletLiveMotionTimer);walletLiveMotionTimer=0;walletLivePendingIndex=null;walletLiveRetractEndsAt=0;walletLiveMotionToken++;
  if(state.tab!=='cards'){walletLiveRaised=false;walletLiveGesture=null;}
  stopLiquid();hideMoneyInsight(false);categoryMotionObserver?.disconnect();const walletOverlay=document.getElementById('walletLayer');if(walletOverlay)walletOverlay.remove();walletClosing=false;const tab=state.tab;const phone=document.querySelector('.phone');if(phone){phone.dataset.pageTheme=tab;phone.classList.remove('expenses-theme');phone.classList.toggle('scrolled-deep',$('#scroller').scrollTop>112)}cancelAnimationFrame(expenseMotionFrame);cancelAnimationFrame(graphMotionFrame);$('#screen').innerHTML=({home,expenses,ads,cards,review})[tab]();$('#dock').style.setProperty('--active-tab',String(['home','expenses','ads','cards','review'].indexOf(tab)));$$('#dock button').forEach(b=>{const selected=b.dataset.tab===tab;b.classList.toggle('active',selected);b.setAttribute('aria-current',selected?'page':'false')});if(tab==='home'){const root=$('#homePage');root.classList.toggle('hero-expanded',state.expanded);if(state.expanded)requestAnimationFrame(updateCarousel)}if(tab==='expenses'){requestAnimationFrame(()=>{animateExpense();animateChart();})}prepareMotionOrbs();syncSlideBackdropMedia();if(tab==='expenses')requestAnimationFrame(setupCategoryMotions);$('#topbar').classList.toggle('is-scrolled',false)}
 function $$(s,r=document){return [...r.querySelectorAll(s)]}
