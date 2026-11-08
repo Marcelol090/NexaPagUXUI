@@ -40,6 +40,10 @@ test('V3.18 reduced motion keeps shape, value and 5-tab navigation',async({page}
  await expect(page.getByRole('region',{name:'Valor recuperado.'})).toBeVisible();
  await expect(page.locator('.orb-fluid-ghost')).toHaveCount(0);
  await expect(page.locator('#dock button')).toHaveCount(5);
+ await page.emulateMedia({reducedMotion:'no-preference'});
+ await expect(page.locator('#compactHero .orb-bot-identity')).toHaveCount(3);
+ await expect.poll(()=>page.locator('#compactHero .jelly.bot-orb').evaluateAll(nodes=>
+  nodes.every(node=>node.getAnimations().some(a=>a.id.startsWith('nexapag-bot-idle-'))))).toBe(true);
 });
 test('V3.18 reinitializes character shape after switching tabs',async({page})=>{
  await page.goto('/v2.html');

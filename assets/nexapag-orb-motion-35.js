@@ -195,8 +195,10 @@ const botReducedMedia=matchMedia('(prefers-reduced-motion: reduce)');
 botReducedMedia.addEventListener?.('change',()=>{
  document.querySelectorAll('#compactHero .jelly.bot-orb').forEach(jelly=>{
   botAnimationMap.get(jelly)?.cancel();
+  botAnimationMap.delete(jelly);
   if(!reduce()){
-   jelly.removeAttribute('data-bot-ready');jelly.dataset.botReady='';
+   jelly.querySelector('.orb-bot-identity')?.remove();
+   jelly.dataset.botReady='0';
   }
  });
  queueFinancialBots();
