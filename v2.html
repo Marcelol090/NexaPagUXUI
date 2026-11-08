@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#111211">
 <meta name="description" content="NexaPag V3.1 · estrutura V2.8, fundo verde-floresta e modo dark.">
-<title>NexaPag V3.19 · Animated Financial Mascots</title>
+<title>NexaPag V3.20 · Wallet Pocket Motion</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/nexapag-wallet-motion-41.css">
 <style>
 :root {font-family:'DM Sans',sans-serif;color:#232520;background:#111211;font-synthesis:none;--surface:#fbfaf8;--ink:#272924;--muted:#9b9b97;--line:#eeede8;--ease:cubic-bezier(.22,1,.36,1);--orange:#ffb16d;--lime:#a9c884;--purple:#b7a4ec;--red:#e48176;--jelly-opacity:.85}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;overflow-x:hidden}button,a{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible{outline:2px solid #a58dff;outline-offset:4px}button:disabled{cursor:not-allowed;opacity:.4}svg{display:block}::selection{background:#fbdab4;color:#272924}
@@ -1025,7 +1026,91 @@ const walletGroups=[
 ];
 const walletIcon=(name)=>name==='close'?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>':'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14m-7-7h14"/></svg>';
 function walletFolder(group,index){return `<button type="button" class="wallet-folder wallet-folder--${group.kind}" data-wallet-folder="${index}" aria-label="Abrir ${group.name}, ${group.ids.length} ${group.ids.length===1?'cartão':'cartões'}" aria-haspopup="dialog" aria-expanded="false"><span class="wallet-folder-shell"><span class="wallet-folder-back"></span><span class="wallet-folder-stack">${group.ids.map(id=>`<span class="wallet-preview wallet-preview--${walletBanks[id].kind}"><b>${walletBanks[id].label}</b><small>•••• ${walletBanks[id].last}</small></span>`).join('')}</span><span class="wallet-folder-front"><span class="wallet-folder-name">${group.name}</span><span class="wallet-folder-sub">${group.sub}</span><span class="wallet-folder-action">${walletIcon('plus')}</span></span></span></button>`}
-function cards(){const b=walletBanks[state.card];return `<div class="screen-page wallet-page">${heading('Sua carteira','Cartões','Seus cartões organizados em um só lugar.')}<div class="wallet-intro"><strong>Abra uma carteira para explorar</strong><span class="wallet-count"><i class="wallet-indicator"></i>3 cartões</span></div><div class="wallet-grid" aria-label="Carteiras e cartões">${walletGroups.map(walletFolder).join('')}</div><div class="wallet-selected-summary" style="--summary-glow:${['#ddc5f277','#f0cd9977','#ffd1bc77'][state.card]}"><div class="w-summary-label">Cartão em destaque</div><div class="w-summary-bank"><span class="wallet-brand-dot ${b.kind}">${b.tag}</span><b>${b.n}</b></div><div class="w-summary-bottom"><span>Final •••• ${b.last}</span><span class="w-summary-chip">Vinculado</span></div><div class="w-summary-note">${b.detail}. Valores financeiros individuais não disponíveis neste protótipo.</div></div></div>`}
+let walletLiveRaised=false,walletLiveSuppressClickUntil=0;
+const walletLiveDescriptions=[
+ 'Ultravioleta · compras e lançamentos',
+ 'Personnalité · acompanhamento financeiro',
+ 'Inter Black · cartão vinculado'
+];
+function walletLiveCard(id){
+ const b=walletBanks[id];
+ const relative=(id-state.card+walletBanks.length)%walletBanks.length;
+ const slot=relative===0?'active':relative===1?'next':'previous';
+ return '<button type="button" class="wallet-live-card wallet-live-card--'+b.kind+'" data-wallet-live-card="'+id+
+ '" data-slot="'+slot+'" aria-pressed="'+(id===state.card?'true':'false')+
+ '" aria-label="Destacar '+b.n+', final '+b.last+'">'+
+ '<span class="wallet-live-card-top"><b>'+b.label+'</b><small>•••• '+b.last+'</small></span>'+
+ '<span class="wallet-live-card-watermark" aria-hidden="true">'+b.tag+'</span>'+
+ '<span class="wallet-live-card-base"><small>VINCULADO AO NEXAPAG</small><strong>'+b.n+'</strong></span></button>';
+}
+function walletLiveMarkup(){
+ const b=walletBanks[state.card];
+ return '<section class="wallet-live" aria-label="Carteira interativa">'+
+ '<div class="wallet-live-heading"><div><span class="wallet-live-eyebrow">CARTEIRA DIGITAL</span><h3>Seus cartões, em movimento.</h3></div>'+
+ '<span class="wallet-live-count">03 <span>/ 03</span></span></div>'+
+ '<p class="wallet-live-instruction">Toque em um cartão ou deslize para alternar.</p>'+
+ '<div class="wallet-live-scene" data-wallet-live-scene data-opened="'+(walletLiveRaised?'true':'false')+'" tabindex="0" role="group" aria-roledescription="carteira de cartões" aria-label="Selecione um cartão deslizando ou usando as setas">'+
+ '<div class="wallet-live-pocket-back" aria-hidden="true"></div>'+
+ '<div class="wallet-live-stack">'+walletBanks.map((_,id)=>walletLiveCard(id)).join('')+'</div>'+
+ '<div class="wallet-live-pocket-front" aria-hidden="true"><i class="wallet-live-stitch"></i>'+
+ '<span class="wallet-live-pocket-brand"><span class="wallet-live-pocket-mark" aria-hidden="true">N</span><strong>nexapag.</strong><small>WALLET</small></span>'+
+ '<span class="wallet-live-pocket-notch"></span></div></div>'+
+ '<div class="wallet-live-selection"><div class="wallet-live-selection-copy"><small>Cartão selecionado</small>'+
+ '<strong data-wallet-live-selected>'+b.n+'</strong>'+
+ '<span data-wallet-live-ending>Final •••• '+b.last+' · Vinculado</span></div>'+
+ '<button type="button" class="wallet-live-details" data-wallet-live-details="1" aria-label="Ver informações do cartão selecionado">Ver detalhes <span aria-hidden="true">↗</span></button></div>'+
+ '<div class="wallet-live-navigation" role="group" aria-label="Navegar entre os cartões">'+
+ '<button type="button" data-wallet-live-step="-1" class="wallet-live-arrow" aria-label="Cartão anterior">‹</button>'+
+ '<div class="wallet-live-dots">'+walletBanks.map((bank,id)=>
+ '<button type="button" class="wallet-live-dot" data-wallet-live-dot="'+id+'" aria-pressed="'+(id===state.card?'true':'false')+'" aria-label="Mostrar '+bank.n+'"><i></i></button>').join('')+'</div>'+
+ '<button type="button" data-wallet-live-step="1" class="wallet-live-arrow" aria-label="Próximo cartão">›</button></div>'+
+ '<p class="wallet-live-announcement" role="status" aria-live="polite" aria-atomic="true" data-wallet-live-announcement>Selecione um cartão para destacá-lo.</p>'+
+ '</section>';
+}
+function updateWalletLive(index,shouldToggle=false){
+ if(state.tab!=='cards'||!walletBanks[index])return;
+ const wasActive=index===state.card;
+ walletLiveRaised=shouldToggle&&wasActive?!walletLiveRaised:true;
+ state.card=index;
+ const scene=document.querySelector('[data-wallet-live-scene]');
+ if(!scene)return;
+ scene.dataset.opened=String(walletLiveRaised);
+ scene.style.setProperty('--wallet-live-accent',['#805ba5','#d5a075','#e59670'][index]);
+ scene.querySelectorAll('[data-wallet-live-card]').forEach(button=>{
+  const id=Number(button.dataset.walletLiveCard);
+  const relative=(id-index+walletBanks.length)%walletBanks.length;
+  button.dataset.slot=relative===0?'active':relative===1?'next':'previous';
+  button.setAttribute('aria-pressed',String(id===index));
+ });
+ document.querySelectorAll('[data-wallet-live-dot]').forEach(button=>{
+  button.setAttribute('aria-pressed',String(Number(button.dataset.walletLiveDot)===index));
+ });
+ const b=walletBanks[index];
+ const selected=document.querySelector('[data-wallet-live-selected]');
+ if(selected)selected.textContent=b.n;
+ const ending=document.querySelector('[data-wallet-live-ending]');
+ if(ending)ending.textContent='Final •••• '+b.last+' · Vinculado';
+ const count=document.querySelector('.wallet-live-count');
+ if(count)count.innerHTML=String(index+1).padStart(2,'0')+' <span>/ 03</span>';
+ const summary=document.querySelector('.wallet-selected-summary');
+ if(summary){
+  summary.style.setProperty('--summary-glow',['#ddc5f277','#f0cd9977','#ffd1bc77'][index]);
+  const bank=summary.querySelector('.w-summary-bank');
+  if(bank)bank.innerHTML='<span class="wallet-brand-dot '+b.kind+'">'+b.tag+'</span><b>'+b.n+'</b>';
+  const last=summary.querySelector('.w-summary-bottom > span:first-child');
+  if(last)last.textContent='Final •••• '+b.last;
+  const note=summary.querySelector('.w-summary-note');
+  if(note)note.textContent=b.detail+'. Valores financeiros individuais não disponíveis neste protótipo.';
+ }
+ const announce=document.querySelector('[data-wallet-live-announcement]');
+ if(announce)announce.textContent=b.n+(walletLiveRaised?' destacado':' recolhido')+'. Cartão final '+b.last+'.';
+}
+function stepWalletLive(delta){
+ updateWalletLive((state.card+delta+walletBanks.length)%walletBanks.length);
+}
+let walletLiveGesture=null;
+
+function cards(){const b=walletBanks[state.card];return `<div class="screen-page wallet-page">${heading('Sua carteira','Cartões','Seus cartões organizados em um só lugar.')}<div class="wallet-intro"><strong>Uma carteira, três cartões</strong><span class="wallet-count"><i class="wallet-indicator"></i>3 vinculados</span></div>${walletLiveMarkup()}<div class="wallet-secondary-title">Explorar por banco <span>Outras formas de acesso</span></div><div class="wallet-grid" aria-label="Carteiras e cartões">${walletGroups.map(walletFolder).join('')}</div><div class="wallet-selected-summary" style="--summary-glow:${['#ddc5f277','#f0cd9977','#ffd1bc77'][state.card]}"><div class="w-summary-label">Cartão em destaque</div><div class="w-summary-bank"><span class="wallet-brand-dot ${b.kind}">${b.tag}</span><b>${b.n}</b></div><div class="w-summary-bottom"><span>Final •••• ${b.last}</span><span class="w-summary-chip">Vinculado</span></div><div class="w-summary-note">${b.detail}. Valores financeiros individuais não disponíveis neste protótipo.</div></div></div>`}
 let walletLastTrigger=null, walletClosing=false;
 function openWallet(index,trigger){if(state.tab!=='cards'||!walletGroups[index])return;closeWallet(false);walletLastTrigger=trigger;walletClosing=false;const group=walletGroups[index],layer=document.createElement('div');layer.className='wallet-layer';layer.id='walletLayer';layer.setAttribute('role','presentation');layer.innerHTML=`<div class="wallet-scrim" data-wallet-close="1"></div><section class="wallet-detail" role="dialog" aria-modal="true" aria-labelledby="walletTitle" aria-describedby="walletDesc"><div class="wallet-detail-head"><div><span class="eyebrow">NEXAPAG / CARTEIRA</span><h3 id="walletTitle">${group.name}</h3><p id="walletDesc">${group.ids.length} ${group.ids.length===1?'cartão disponível':'cartões disponíveis'} · toque para selecionar</p></div><button class="wallet-close" data-wallet-close="1" aria-label="Fechar carteira">${walletIcon('close')}</button></div><div class="wallet-detail-scene" data-card-count="${group.ids.length}"><div class="wallet-detail-pocket-back"></div>${group.ids.map((id,i)=>`<button type="button" class="wallet-detail-card" data-wallet-pick="${id}" data-kind="${walletBanks[id].kind}" data-idx="${i}" style="--i:${i};z-index:${i+1}" aria-label="Selecionar ${walletBanks[id].n} final ${walletBanks[id].last}"><b>${walletBanks[id].n}</b><small>•••• &nbsp;${walletBanks[id].last}</small></button>`).join('')}<div class="wallet-detail-pocket-front"><span>Seu espaço financeiro</span></div></div><div class="wallet-bank-options" role="group" aria-label="Selecionar cartão">${group.ids.map(id=>`<button type="button" data-wallet-pick="${id}" aria-label="Selecionar ${walletBanks[id].n}">${walletBanks[id].label}</button>`).join('')}</div><div class="wallet-detail-foot">${icon('sparkle')} Escolha um cartão para ver seus dados</div></section>`;
  document.querySelector('.phone').appendChild(layer);const f=trigger?.closest('.wallet-folder');f?.classList.add('is-open');f?.setAttribute('aria-expanded','true');requestAnimationFrame(()=>requestAnimationFrame(()=>layer.classList.add('is-visible')));layer.querySelector('.wallet-close')?.focus({preventScroll:true});}
@@ -1182,7 +1267,20 @@ function go(tab){if(!['home','expenses','ads','cards','review'].includes(tab))re
 function notify(msg){clearTimeout(toastTimeout);const el=$('#toast');el.textContent=msg;el.classList.remove('hidden');toastTimeout=setTimeout(()=>el.classList.add('hidden'),3100)}
 function action(a){switch(a){case'prev':case'next':stopAutoplay();state.slide=(state.slide+(a==='next'?1:2))%3;updateCarousel();break;case'collapse':collapse();break;case'expenseReplay':animateExpense();break;case'graphReplay':animateChart();break;case'expenseDetails':$('#spendingChart')?.scrollIntoView({behavior:reducedMotion()?'auto':'smooth',block:'nearest'});break;case'expenseIncome':notify('Entradas demonstrativas: '+money(1950)+'.');break;case'slideAction':notify(`${stars[state.slide].title}: dados demonstrativos.`);break;case'wins':case'goal':showMoneyInsight('budget',document.activeElement);break;case'refund':showMoneyInsight('refund',document.activeElement);break;case'tip':notify('Antes de comprar, confira quanto falta para sua meta semanal.');break;case'category':toggleExpenseCategory('Alimentação',true);break;case'calendar':document.getElementById('calendarSection')?.scrollIntoView({behavior:reducedMotion()?'instant':'smooth',block:'start'});break;case'adDemo':case'adInfo':notify('Conectores externos não estão ativos neste protótipo.');break;case'reviewInfo':notify('Os eventos exibidos são exemplos.');break;default:break}}
 $('#dock').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(b)go(b.dataset.tab)});
-$('#screen').addEventListener('click',e=>{const folder=e.target.closest('[data-wallet-folder]');if(folder){openWallet(Number(folder.dataset.walletFolder),folder);return}const b=e.target.closest('button');if(!b)return;if(b.dataset.categoryMotion){playCategoryMotion(b);return}if(b.dataset.categoryToggle){toggleExpenseCategory(b.dataset.categoryToggle);return}if(b.dataset.open){state.slide=0;expand(false);return}if(b.dataset.action){if(b.dataset.action==='slideAction'){const card=b.closest('.carousel-slide');if(card){state.slide=Number(card.dataset.slide);updateCarousel()}}action(b.dataset.action);return}if(b.dataset.index!==undefined){stopAutoplay();state.slide=+b.dataset.index;updateCarousel();return}if(b.dataset.day!==undefined){state.day=+b.dataset.day;$$('[data-day]').forEach(el=>{el.classList.toggle('selected',+el.dataset.day===state.day);el.setAttribute('aria-pressed',+el.dataset.day===state.day?'true':'false')});const details=$('#weekDayDetail');if(details)details.innerHTML=weekDetailMarkup(state.day);return}if(b.dataset.tabGo){go(b.dataset.tabGo);return}if(b.dataset.period){state.period=b.dataset.period;state.graphIndex=state.period==='Semana'?3:6;render();return}if(b.dataset.graph!==undefined){activateGraph(Number(b.dataset.graph));return}if(b.dataset.heat!==undefined){const n=+b.dataset.heat;if(n>0&&n<=30){state.heatDay=n;document.querySelectorAll('.heat-day').forEach(x=>{const yes=+x.dataset.heat===n;x.classList.toggle('selected',yes);x.setAttribute('aria-pressed',String(yes))});const detail=document.getElementById('calendarDetail');if(detail)detail.innerHTML=calendarDetailMarkup(n)}return}if(b.dataset.card!==undefined){state.card=+b.dataset.card;render();return}if(b.dataset.review!==undefined){const i=+b.dataset.review;if(!state.reviewed.includes(i)){state.reviewed.push(i);render()}return}});
+$('#screen').addEventListener('click',e=>{
+ const walletCard=e.target.closest('[data-wallet-live-card]');
+ if(walletCard){if(performance.now()<walletLiveSuppressClickUntil)return;updateWalletLive(Number(walletCard.dataset.walletLiveCard),true);return;}
+ const walletDot=e.target.closest('[data-wallet-live-dot]');
+ if(walletDot){updateWalletLive(Number(walletDot.dataset.walletLiveDot));return;}
+ const walletStep=e.target.closest('[data-wallet-live-step]');
+ if(walletStep){stepWalletLive(Number(walletStep.dataset.walletLiveStep));return;}
+ const walletDetails=e.target.closest('[data-wallet-live-details]');
+ if(walletDetails){
+  const target=document.querySelector('.wallet-selected-summary');
+  if(target){target.scrollIntoView({behavior:reducedMotion()?'instant':'smooth',block:'nearest'});target.setAttribute('tabindex','-1');target.focus({preventScroll:true});}
+  return;
+ }
+ const folder=e.target.closest('[data-wallet-folder]');if(folder){openWallet(Number(folder.dataset.walletFolder),folder);return}const b=e.target.closest('button');if(!b)return;if(b.dataset.categoryMotion){playCategoryMotion(b);return}if(b.dataset.categoryToggle){toggleExpenseCategory(b.dataset.categoryToggle);return}if(b.dataset.open){state.slide=0;expand(false);return}if(b.dataset.action){if(b.dataset.action==='slideAction'){const card=b.closest('.carousel-slide');if(card){state.slide=Number(card.dataset.slide);updateCarousel()}}action(b.dataset.action);return}if(b.dataset.index!==undefined){stopAutoplay();state.slide=+b.dataset.index;updateCarousel();return}if(b.dataset.day!==undefined){state.day=+b.dataset.day;$$('[data-day]').forEach(el=>{el.classList.toggle('selected',+el.dataset.day===state.day);el.setAttribute('aria-pressed',+el.dataset.day===state.day?'true':'false')});const details=$('#weekDayDetail');if(details)details.innerHTML=weekDetailMarkup(state.day);return}if(b.dataset.tabGo){go(b.dataset.tabGo);return}if(b.dataset.period){state.period=b.dataset.period;state.graphIndex=state.period==='Semana'?3:6;render();return}if(b.dataset.graph!==undefined){activateGraph(Number(b.dataset.graph));return}if(b.dataset.heat!==undefined){const n=+b.dataset.heat;if(n>0&&n<=30){state.heatDay=n;document.querySelectorAll('.heat-day').forEach(x=>{const yes=+x.dataset.heat===n;x.classList.toggle('selected',yes);x.setAttribute('aria-pressed',String(yes))});const detail=document.getElementById('calendarDetail');if(detail)detail.innerHTML=calendarDetailMarkup(n)}return}if(b.dataset.card!==undefined){state.card=+b.dataset.card;render();return}if(b.dataset.review!==undefined){const i=+b.dataset.review;if(!state.reviewed.includes(i)){state.reviewed.push(i);render()}return}});
 document.querySelector('.phone').addEventListener('click',e=>{const p=e.target.closest('[data-wallet-pick]');if(p){selectWalletCard(Number(p.dataset.walletPick));return}if(e.target.closest('[data-wallet-close]')){closeWallet();return}});
 document.addEventListener('keydown',e=>{const layer=document.getElementById('walletLayer');if(!layer)return;if(e.key==='Escape'){e.preventDefault();closeWallet();return}if(e.key==='Tab'){const f=[...layer.querySelectorAll('button')];if(!f.length)return;const first=f[0],last=f[f.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
 let carouselGesture=null, suppressCarouselClick=false;
@@ -1222,10 +1320,38 @@ function endCarouselGesture(e,canceled=false){
  }
  updateCarousel();
 }
+$('#screen').addEventListener('pointerdown',e=>{
+ const scene=e.target.closest('[data-wallet-live-scene]');
+ if(!scene||e.target.closest('[data-wallet-live-details]')||!e.isPrimary)return;
+ walletLiveGesture={id:e.pointerId,x:e.clientX,y:e.clientY,at:performance.now()};
+},{passive:true});
+$('#screen').addEventListener('pointerup',e=>{
+ const g=walletLiveGesture;
+ if(!g||g.id!==e.pointerId)return;
+ walletLiveGesture=null;
+ const dx=e.clientX-g.x,dy=e.clientY-g.y;
+ if(Math.abs(dx)>44&&Math.abs(dx)>Math.abs(dy)*1.15){
+  walletLiveSuppressClickUntil=performance.now()+380;
+  stepWalletLive(dx<0?1:-1);
+ }else if(dy < -55&&Math.abs(dy)>Math.abs(dx)*1.5){
+  walletLiveSuppressClickUntil=performance.now()+380;
+  const btn=e.target.closest('[data-wallet-live-card]');
+  if(btn)updateWalletLive(Number(btn.dataset.walletLiveCard));
+ }
+},{passive:true});
+$('#screen').addEventListener('pointercancel',()=>{walletLiveGesture=null;},{passive:true});
 $('#screen').addEventListener('pointerup',e=>endCarouselGesture(e));
 $('#screen').addEventListener('pointercancel',e=>endCarouselGesture(e,true));
 $('#screen').addEventListener('click',e=>{if(suppressCarouselClick&&e.target.closest('#carouselViewport')){e.stopImmediatePropagation();e.preventDefault()}},true);
-$('#screen').addEventListener('keydown',e=>{const point=e.target.closest('[data-graph]');if(point&&(e.key==='ArrowRight'||e.key==='ArrowLeft')){e.preventDefault();const ix=(Number(point.dataset.graph)+(e.key==='ArrowRight'?1:6))%7;activateGraph(ix);$(`[data-graph="${ix}"]`)?.focus();}});
+$('#screen').addEventListener('keydown',e=>{
+ const walletScene=e.target.closest('[data-wallet-live-scene]');
+ if(walletScene&&['ArrowRight','ArrowLeft','Home','End'].includes(e.key)){
+  e.preventDefault();if(e.key==='ArrowRight')stepWalletLive(1);
+  else if(e.key==='ArrowLeft')stepWalletLive(-1);
+  else updateWalletLive(e.key==='Home'?0:walletBanks.length-1);
+  return;
+ }
+ const point=e.target.closest('[data-graph]');if(point&&(e.key==='ArrowRight'||e.key==='ArrowLeft')){e.preventDefault();const ix=(Number(point.dataset.graph)+(e.key==='ArrowRight'?1:6))%7;activateGraph(ix);$(`[data-graph="${ix}"]`)?.focus();}});
 $('#screen').addEventListener('keydown',e=>{if(!e.target.closest('#carouselViewport'))return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();stopAutoplay();state.slide=Math.max(0,Math.min(2,state.slide+(e.key==='ArrowRight'?1:-1)));updateCarousel()}if(e.key==='Escape')collapse()});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInterval(autoAdvance);clearTimeout(autoClose)}});
 $('#scroller').addEventListener('scroll',()=>{$('#topbar').classList.toggle('is-scrolled',$('#scroller').scrollTop>25);document.querySelector('.phone')?.classList.toggle('scrolled-deep',$('#scroller').scrollTop>112)},{passive:true});const THEME_KEY='nexapag-ui-theme';
