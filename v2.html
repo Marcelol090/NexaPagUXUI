@@ -1126,11 +1126,15 @@ function walletLiveApplySelection(index,open,token){
  requestAnimationFrame(()=>requestAnimationFrame(()=>{
   if(token!==walletLiveMotionToken||!scene.isConnected||state.tab!=='cards')return;
   scene.dataset.opened='true';
-  walletLiveMotionTimer=setTimeout(()=>{
-   walletLiveMotionTimer=0;
-   if(token===walletLiveMotionToken&&scene.isConnected&&state.tab==='cards')
-    scene.dataset.phase='expanded';
-  },675);
+  // A lift owns its settling callback. Other wallet gestures must not cancel it.
+  // The DOM token prevents an obsolete callback from completing a newer lift.
+  const liftToken=String(token);
+  scene.dataset.liftToken=liftToken;
+  setTimeout(()=>{
+   if(scene.isConnected&&state.tab==='cards'&&
+      scene.dataset.liftToken===liftToken&&scene.dataset.phase==='lifting'&&
+      state.card===index)scene.dataset.phase='expanded';
+  },710);
  }));
 }
 function updateWalletLive(index,shouldToggle=false){
