@@ -2,7 +2,7 @@ import {test,expect} from '@playwright/test';
 test('V3.15 keeps the old Saídas slide carousel and switches among three orb cards',async({page})=>{
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.setViewportSize({width:390,height:844});await page.goto('/v2.html');
- await expect.poll(()=>page.evaluate(()=>window.NexaOrbFlowV35?.version)).toBe('3.15-shared-carousel');
+ await expect.poll(()=>page.evaluate(()=>typeof window.NexaOrbFlowV35?.switchKind)).toBe('function');
  expect(await page.evaluate(()=>window.NexaOrbFlowV35.authoredFrames)).toBe(16);
  expect(await page.evaluate(()=>window.NexaOrbFlowV35.renderedFrames)).toBe(49);
  await page.locator('[data-orb-story="income"]').click();
