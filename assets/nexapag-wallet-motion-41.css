@@ -169,3 +169,16 @@
 @media(prefers-reduced-motion:reduce){
  .wallet-live-card,.wallet-live-pocket-notch{transition:none!important}
 }
+
+/* V3.21.4: match the 255ms handoff timer to the *physical* retract duration.
+   Old 655ms duration caused the next card to rise before the old one entered
+   the pocket. Expand uses the gentler 655ms motion unchanged. */
+.wallet-live-scene[data-phase="retracting"] .wallet-live-card{
+ transition-duration:240ms,240ms,240ms;
+ transition-timing-function:cubic-bezier(.48,.06,.76,.62),ease,ease;
+}
+@media(prefers-reduced-motion:reduce){
+ .wallet-live-scene[data-phase="retracting"] .wallet-live-card{
+  transition:none!important;
+ }
+}
