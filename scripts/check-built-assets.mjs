@@ -31,5 +31,14 @@ if(!builtV2.includes('assets/'))throw new Error('v2.html does not point to bundl
 const orbHtmlReference = emittedJS.some(name=>builtV2.includes(name));
 if(!orbHtmlReference)throw new Error('ORB UNREACHABLE: no bundled Vite entry script linked by v2.html');
 console.log('Orb-to-card motion controller bundled and linked:',orbScript);
+for(const kind of ['income','spending','refund']){
+ const animation=readdirSync(assetDir).find(name=>name.includes('nexapag-bot-'+kind+'-v319')&&name.endsWith('.webp'));
+ if(!animation)throw new Error('V3.19 animated WebP not emitted for '+kind);
+ if(!styles.includes('nexapag-bot-'+kind+'-v319'))throw new Error('V3.19 animated orb not referenced by compiled CSS: '+kind);
+ const body=readFileSync(join(assetDir,animation));
+ if(body.length<15000||body.toString('ascii',0,4)!=='RIFF'||body.toString('ascii',8,12)!=='WEBP')
+   throw new Error('Broken V3.19 animated asset: '+animation);
+}
+console.log('Three animated orb assets verified in compiled Vite bundle');
 
 console.log('Compiled CSS contract OK: Visualize 9.37 root, legacy lab and relative assets.');

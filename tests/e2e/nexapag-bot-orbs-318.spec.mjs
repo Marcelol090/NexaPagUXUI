@@ -1,14 +1,14 @@
 import {test,expect} from '@playwright/test';
 test('V3.18 three distinct Bot-inspired shapes with value and continuous reaction',async({page})=>{
  await page.setViewportSize({width:390,height:844});await page.goto('/v2.html');
- await expect.poll(()=>page.evaluate(()=>window.NexaOrbFlowV35?.version)).toBe('3.18-expressive-bots');
+ await expect.poll(()=>page.evaluate(()=>window.NexaOrbFlowV35?.version)).toBe('3.19-animated-art-orbs');
  const types=await page.locator('#compactHero .milestone').evaluateAll(buttons=>
   buttons.map(button=>({
    kind:button.dataset.botKind,
    shape:button.querySelector('.jelly')?.style.clipPath,
    amount:button.querySelector('.orb-bot-amount')?.textContent,
    eyes:button.querySelectorAll('.orb-bot-eye').length,
-   idle:button.querySelector('.jelly')?.getAnimations().filter(x=>x.id.startsWith('nexapag-bot-idle-')).length
+   idle:button.querySelector('.orb-bot-art')?1:0
   })));
  expect(types).toHaveLength(3);
  expect(types.map(x=>x.kind)).toEqual(['income','spending','refund']);
@@ -43,7 +43,7 @@ test('V3.18 reduced motion keeps shape, value and 5-tab navigation',async({page}
  await page.emulateMedia({reducedMotion:'no-preference'});
  await expect(page.locator('#compactHero .orb-bot-identity')).toHaveCount(3);
  await expect.poll(()=>page.locator('#compactHero .jelly.bot-orb').evaluateAll(nodes=>
-  nodes.every(node=>node.getAnimations().some(a=>a.id.startsWith('nexapag-bot-idle-'))))).toBe(true);
+  nodes.every(node=>Boolean(node.querySelector('.orb-bot-art'))))).toBe(true);
 });
 test('V3.18 reinitializes character shape after switching tabs',async({page})=>{
  await page.goto('/v2.html');

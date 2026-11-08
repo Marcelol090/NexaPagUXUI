@@ -1,0 +1,4 @@
+# NexaPag V3.19 | Original animated financial bot artwork
+The three 12-frame image-generation GIFs are preserved as optimized 132×132 transparent animated WebP (240 ms/frame, infinite repeat). Every animation has a first-frame static WebP for the OS reduced-motion preference. Shapes are income/droplet, spending/rounded triangle, refund/soft hexagon.
+The financial figures no longer overlap their characters. Each selector has 3 layers: a tabular and legible amount above, the animation in the center and a category caption beneath. Visual values: R$ 1,9 mil, R$ 3,4 mil, R$ 349,90; accessible full figures R$ 1.950,00, R$ 3.468,20, R$ 349,90.
+Existing flow remains orb → fluid → card and card → fluid → card, inside Início without popup. Generated first-frame poster crossfades at the start and end of the liquid ghost. Vite CSS imports all assets; the build checks exact WebP container signatures and output inclusion.
