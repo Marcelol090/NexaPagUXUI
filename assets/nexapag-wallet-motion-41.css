@@ -96,3 +96,76 @@
  .wallet-live-scene[data-opened="false"] .wallet-live-card[data-slot="next"]{transform:translate3d(calc(-50% + 5px),77px,0) scale(.953)}
  .wallet-live-scene[data-opened="false"] .wallet-live-card[data-slot="previous"]{transform:translate3d(calc(-50% - 5px),96px,0) scale(.946)}
 }
+
+/* NexaPag V3.21 · Card ribbon hit-targets, non-overlapping lift and sequential switching. */
+.wallet-live-scene{height:309px;max-width:346px;touch-action:pan-y}
+.wallet-live-pocket-back{height:146px;bottom:21px}
+.wallet-live-pocket-front{height:120px;bottom:5px;z-index:8}
+.wallet-live-card{
+ top:37px;height:171px;width:min(82%,284px);
+ transition:transform 655ms cubic-bezier(.21,.78,.19,1),
+ box-shadow 320ms ease,filter 320ms ease;
+}
+.wallet-live-scene[data-opened="false"] .wallet-live-card[data-slot="active"]{
+ z-index:2;transform:translate3d(-50%,19px,0) scale(.966) rotate(-1.2deg)
+}
+.wallet-live-scene[data-opened="false"] .wallet-live-card[data-slot="next"]{
+ z-index:3;transform:translate3d(calc(-50% + 3px),62px,0) scale(.959) rotate(.8deg)
+}
+.wallet-live-scene[data-opened="false"] .wallet-live-card[data-slot="previous"]{
+ z-index:4;transform:translate3d(calc(-50% - 3px),104px,0) scale(.952) rotate(-.7deg)
+}
+.wallet-live-scene[data-opened="true"] .wallet-live-card[data-slot="active"]{
+ z-index:7;transform:translate3d(-50%,-32px,0) scale(1) rotate(0);
+ box-shadow:0 20px 28px rgba(12,28,20,.24),inset 0 1px rgba(255,255,255,.42)
+}
+.wallet-live-scene[data-opened="true"] .wallet-live-card[data-slot="next"]{
+ z-index:4;transform:translate3d(calc(-50% + 69px),67px,0) scale(.84) rotate(8deg)
+}
+.wallet-live-scene[data-opened="true"] .wallet-live-card[data-slot="previous"]{
+ z-index:5;transform:translate3d(calc(-50% - 69px),70px,0) scale(.84) rotate(-8deg)
+}
+.wallet-live-scene[data-phase="retracting"] .wallet-live-card[data-slot="active"]{
+ transform:translate3d(-50%,19px,0) scale(.966) rotate(0)
+}
+.wallet-live-card:active{filter:brightness(1.06)}
+.wallet-live-card-base{padding-bottom:7px}
+.wallet-live-card-top{gap:9px}
+.wallet-live-card-top b{font-size:12.5px}
+.wallet-live-pocket-front::after{
+ content:"";position:absolute;top:-1px;left:8%;width:84%;height:1px;
+ background:linear-gradient(90deg,transparent,rgba(226,240,220,.24),transparent)
+}
+.wallet-live-scene[data-opened="true"] .wallet-live-pocket-notch{transform:translateY(3px)}
+.wallet-live-scene .wallet-live-card[data-slot="active"]:focus-visible{
+ outline:3px solid rgba(171,224,177,.88);outline-offset:2px
+}
+@media(max-width:360px){
+ .wallet-live-scene{height:293px}
+ .wallet-live-card{top:35px;height:162px;width:84%}
+ .wallet-live-pocket-front{height:113px}
+ .wallet-live-scene[data-opened="false"] .wallet-live-card[data-slot="active"]{
+  transform:translate3d(-50%,20px,0) scale(.963) rotate(-1.2deg)
+ }
+ .wallet-live-scene[data-opened="false"] .wallet-live-card[data-slot="next"]{
+  transform:translate3d(calc(-50% + 3px),60px,0) scale(.954) rotate(.8deg)
+ }
+ .wallet-live-scene[data-opened="false"] .wallet-live-card[data-slot="previous"]{
+  transform:translate3d(calc(-50% - 3px),99px,0) scale(.948) rotate(-.7deg)
+ }
+ .wallet-live-scene[data-opened="true"] .wallet-live-card[data-slot="active"]{
+  transform:translate3d(-50%,-30px,0) scale(1) rotate(0)
+ }
+ .wallet-live-scene[data-opened="true"] .wallet-live-card[data-slot="next"]{
+  transform:translate3d(calc(-50% + 58px),64px,0) scale(.825) rotate(8deg)
+ }
+ .wallet-live-scene[data-opened="true"] .wallet-live-card[data-slot="previous"]{
+  transform:translate3d(calc(-50% - 58px),67px,0) scale(.825) rotate(-8deg)
+ }
+ .wallet-live-scene[data-phase="retracting"] .wallet-live-card[data-slot="active"]{
+  transform:translate3d(-50%,20px,0) scale(.963) rotate(0)
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ .wallet-live-card,.wallet-live-pocket-notch{transition:none!important}
+}

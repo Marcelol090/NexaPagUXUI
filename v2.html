@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#111211">
 <meta name="description" content="NexaPag V3.1 · estrutura V2.8, fundo verde-floresta e modo dark.">
-<title>NexaPag V3.20 · Wallet Pocket Motion</title>
+<title>NexaPag V3.21 · Wallet Pocket Interaction</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -1048,7 +1048,7 @@ function walletLiveMarkup(){
  return '<section class="wallet-live" aria-label="Carteira interativa">'+
  '<div class="wallet-live-heading"><div><span class="wallet-live-eyebrow">CARTEIRA DIGITAL</span><h3>Seus cartões, em movimento.</h3></div>'+
  '<span class="wallet-live-count">03 <span>/ 03</span></span></div>'+
- '<p class="wallet-live-instruction">Toque em um cartão ou deslize para alternar.</p>'+
+ '<p class="wallet-live-instruction">Toque na borda de um cartão, deslize ou use as setas.</p>'+
  '<div class="wallet-live-scene" data-wallet-live-scene data-opened="'+(walletLiveRaised?'true':'false')+'" tabindex="0" role="group" aria-roledescription="carteira de cartões" aria-label="Selecione um cartão deslizando ou usando as setas">'+
  '<div class="wallet-live-pocket-back" aria-hidden="true"></div>'+
  '<div class="wallet-live-stack">'+walletBanks.map((_,id)=>walletLiveCard(id)).join('')+'</div>'+
@@ -1067,43 +1067,74 @@ function walletLiveMarkup(){
  '<p class="wallet-live-announcement" role="status" aria-live="polite" aria-atomic="true" data-wallet-live-announcement>Selecione um cartão para destacá-lo.</p>'+
  '</section>';
 }
-function updateWalletLive(index,shouldToggle=false){
- if(state.tab!=='cards'||!walletBanks[index])return;
- const wasActive=index===state.card;
- walletLiveRaised=shouldToggle&&wasActive?!walletLiveRaised:true;
- state.card=index;
+
+let walletLiveMotionToken=0,walletLiveMotionTimer=0;
+function walletLiveApplySelection(index,open,token){
+ if(token!==walletLiveMotionToken||state.tab!=='cards')return;
  const scene=document.querySelector('[data-wallet-live-scene]');
- if(!scene)return;
- scene.dataset.opened=String(walletLiveRaised);
+ if(!scene||!scene.isConnected)return;
+ const bank=walletBanks[index];
+ state.card=index;
+ scene.dataset.phase=open?'lifting':'resting';
+ scene.dataset.opened='false';
  scene.style.setProperty('--wallet-live-accent',['#805ba5','#d5a075','#e59670'][index]);
  scene.querySelectorAll('[data-wallet-live-card]').forEach(button=>{
   const id=Number(button.dataset.walletLiveCard);
   const relative=(id-index+walletBanks.length)%walletBanks.length;
-  button.dataset.slot=relative===0?'active':relative===1?'next':'previous';
-  button.setAttribute('aria-pressed',String(id===index));
+  const slot=relative===0?'active':relative===1?'next':'previous';
+  button.dataset.slot=slot;
+  const selected=id===index;
+  button.setAttribute('aria-pressed',String(selected));
+  button.setAttribute('aria-label',(selected&&open?'Recolher ':'Destacar ')+walletBanks[id].n+', final '+walletBanks[id].last);
  });
  document.querySelectorAll('[data-wallet-live-dot]').forEach(button=>{
   button.setAttribute('aria-pressed',String(Number(button.dataset.walletLiveDot)===index));
  });
- const b=walletBanks[index];
- const selected=document.querySelector('[data-wallet-live-selected]');
- if(selected)selected.textContent=b.n;
+ const current=document.querySelector('[data-wallet-live-selected]');
+ if(current)current.textContent=bank.n;
  const ending=document.querySelector('[data-wallet-live-ending]');
- if(ending)ending.textContent='Final •••• '+b.last+' · Vinculado';
+ if(ending)ending.textContent='Final •••• '+bank.last+' · Vinculado';
  const count=document.querySelector('.wallet-live-count');
  if(count)count.innerHTML=String(index+1).padStart(2,'0')+' <span>/ 03</span>';
  const summary=document.querySelector('.wallet-selected-summary');
  if(summary){
   summary.style.setProperty('--summary-glow',['#ddc5f277','#f0cd9977','#ffd1bc77'][index]);
-  const bank=summary.querySelector('.w-summary-bank');
-  if(bank)bank.innerHTML='<span class="wallet-brand-dot '+b.kind+'">'+b.tag+'</span><b>'+b.n+'</b>';
+  const name=summary.querySelector('.w-summary-bank');
+  if(name)name.innerHTML='<span class="wallet-brand-dot '+bank.kind+'">'+bank.tag+'</span><b>'+bank.n+'</b>';
   const last=summary.querySelector('.w-summary-bottom > span:first-child');
-  if(last)last.textContent='Final •••• '+b.last;
+  if(last)last.textContent='Final •••• '+bank.last;
   const note=summary.querySelector('.w-summary-note');
-  if(note)note.textContent=b.detail+'. Valores financeiros individuais não disponíveis neste protótipo.';
+  if(note)note.textContent=bank.detail+'. Valores financeiros individuais não disponíveis neste protótipo.';
  }
- const announce=document.querySelector('[data-wallet-live-announcement]');
- if(announce)announce.textContent=b.n+(walletLiveRaised?' destacado':' recolhido')+'. Cartão final '+b.last+'.';
+ const status=document.querySelector('[data-wallet-live-announcement]');
+ if(status)status.textContent=bank.n+(open?' destacado':' recolhido')+'. Cartão final '+bank.last+'.';
+ walletLiveRaised=open;
+ if(!open){scene.dataset.phase='resting';return}
+ if(reducedMotion()){scene.dataset.opened='true';scene.dataset.phase='expanded';return}
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  if(token!==walletLiveMotionToken||!scene.isConnected||state.tab!=='cards')return;
+  scene.dataset.opened='true';scene.dataset.phase='expanded';
+ }));
+}
+function updateWalletLive(index,shouldToggle=false){
+ if(state.tab!=='cards'||!Number.isInteger(index)||!walletBanks[index])return;
+ const token=++walletLiveMotionToken;
+ clearTimeout(walletLiveMotionTimer);walletLiveMotionTimer=0;
+ const scene=document.querySelector('[data-wallet-live-scene]');
+ if(!scene)return;
+ const same=index===state.card;
+ const expand=shouldToggle&&same?!walletLiveRaised:true;
+ if(walletLiveRaised&&!same&&!reducedMotion()){
+  scene.dataset.phase='retracting';
+  scene.dataset.opened='false';
+  walletLiveRaised=false;
+  walletLiveMotionTimer=setTimeout(()=>{
+   walletLiveMotionTimer=0;
+   walletLiveApplySelection(index,expand,token);
+  },255);
+ }else{
+  walletLiveApplySelection(index,expand,token);
+ }
 }
 function stepWalletLive(delta){
  updateWalletLive((state.card+delta+walletBanks.length)%walletBanks.length);
@@ -1258,7 +1289,10 @@ function syncSlideBackdropMedia(){
 document.addEventListener('visibilitychange',syncSlideBackdropMedia);
 window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener?.('change',syncSlideBackdropMedia);
 
-function render(){stopLiquid();hideMoneyInsight(false);categoryMotionObserver?.disconnect();const walletOverlay=document.getElementById('walletLayer');if(walletOverlay)walletOverlay.remove();walletClosing=false;const tab=state.tab;const phone=document.querySelector('.phone');if(phone){phone.dataset.pageTheme=tab;phone.classList.remove('expenses-theme');phone.classList.toggle('scrolled-deep',$('#scroller').scrollTop>112)}cancelAnimationFrame(expenseMotionFrame);cancelAnimationFrame(graphMotionFrame);$('#screen').innerHTML=({home,expenses,ads,cards,review})[tab]();$('#dock').style.setProperty('--active-tab',String(['home','expenses','ads','cards','review'].indexOf(tab)));$$('#dock button').forEach(b=>{const selected=b.dataset.tab===tab;b.classList.toggle('active',selected);b.setAttribute('aria-current',selected?'page':'false')});if(tab==='home'){const root=$('#homePage');root.classList.toggle('hero-expanded',state.expanded);if(state.expanded)requestAnimationFrame(updateCarousel)}if(tab==='expenses'){requestAnimationFrame(()=>{animateExpense();animateChart();})}prepareMotionOrbs();syncSlideBackdropMedia();if(tab==='expenses')requestAnimationFrame(setupCategoryMotions);$('#topbar').classList.toggle('is-scrolled',false)}
+function render(){
+ clearTimeout(walletLiveMotionTimer);walletLiveMotionTimer=0;walletLiveMotionToken++;
+ if(state.tab!=='cards'){walletLiveRaised=false;walletLiveGesture=null;}
+ stopLiquid();hideMoneyInsight(false);categoryMotionObserver?.disconnect();const walletOverlay=document.getElementById('walletLayer');if(walletOverlay)walletOverlay.remove();walletClosing=false;const tab=state.tab;const phone=document.querySelector('.phone');if(phone){phone.dataset.pageTheme=tab;phone.classList.remove('expenses-theme');phone.classList.toggle('scrolled-deep',$('#scroller').scrollTop>112)}cancelAnimationFrame(expenseMotionFrame);cancelAnimationFrame(graphMotionFrame);$('#screen').innerHTML=({home,expenses,ads,cards,review})[tab]();$('#dock').style.setProperty('--active-tab',String(['home','expenses','ads','cards','review'].indexOf(tab)));$$('#dock button').forEach(b=>{const selected=b.dataset.tab===tab;b.classList.toggle('active',selected);b.setAttribute('aria-current',selected?'page':'false')});if(tab==='home'){const root=$('#homePage');root.classList.toggle('hero-expanded',state.expanded);if(state.expanded)requestAnimationFrame(updateCarousel)}if(tab==='expenses'){requestAnimationFrame(()=>{animateExpense();animateChart();})}prepareMotionOrbs();syncSlideBackdropMedia();if(tab==='expenses')requestAnimationFrame(setupCategoryMotions);$('#topbar').classList.toggle('is-scrolled',false)}
 function $$(s,r=document){return [...r.querySelectorAll(s)]}
 function updateCarousel(options={}){const track=$('#carouselTrack'),vp=$('#carouselViewport');if(!track||!vp)return;const first=track.querySelector('.carousel-slide');if(!first)return;const width=first.offsetWidth,gap=parseFloat(getComputedStyle(track).columnGap)||12,offset=(vp.clientWidth-width)/2-state.slide*(width+gap)+(options.dragOffset||0);track.style.transform=`translate3d(${offset}px,0,0)`;$$('.carousel-slide',vp).forEach((el,i)=>{el.classList.toggle('current',i===state.slide);el.setAttribute('aria-hidden',i!==state.slide?'true':'false');el.querySelectorAll('button').forEach(b=>b.tabIndex=i===state.slide?0:-1);el.classList.toggle('side-prev',i<state.slide);el.classList.toggle('side-next',i>state.slide)});$$('.carousel-dots button').forEach((el,i)=>{el.classList.toggle('active',i===state.slide);el.setAttribute('aria-pressed',i===state.slide?'true':'false')})}
 function expand(play=true){if(state.tab!=='home')return;clearTimeout(autoClose);clearInterval(autoAdvance);state.expanded=true;$('#homePage')?.classList.add('hero-expanded');syncSlideBackdropMedia();requestAnimationFrame(()=>requestAnimationFrame(updateCarousel));if(play&&!matchMedia('(prefers-reduced-motion: reduce)').matches){autoAdvance=setInterval(()=>{state.slide=(state.slide+1)%3;updateCarousel()},2700);autoClose=setTimeout(()=>collapse(),8200)}}
