@@ -1114,7 +1114,12 @@ function walletLiveApplySelection(index,open,token){
  if(reducedMotion()){scene.dataset.opened='true';scene.dataset.phase='expanded';return}
  requestAnimationFrame(()=>requestAnimationFrame(()=>{
   if(token!==walletLiveMotionToken||!scene.isConnected||state.tab!=='cards')return;
-  scene.dataset.opened='true';scene.dataset.phase='expanded';
+  scene.dataset.opened='true';
+  walletLiveMotionTimer=setTimeout(()=>{
+   walletLiveMotionTimer=0;
+   if(token===walletLiveMotionToken&&scene.isConnected&&state.tab==='cards')
+    scene.dataset.phase='expanded';
+  },675);
  }));
 }
 function updateWalletLive(index,shouldToggle=false){
