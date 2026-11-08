@@ -771,3 +771,115 @@
   animation:none!important;transition:none!important;
  }
 }
+
+/* NexaPag V3.19: 12-frame generated characters, readable amounts outside
+   the animated shape. Keep the V2.8 structural hierarchy and 5-tab dock. */
+#homePage #heroRegion{height:166px}
+#homePage.orb-inline-closing #heroRegion{height:166px}
+#homePage #compactHero,#homePage .compact-hero{
+ height:166px;max-height:166px;padding:5px 4px 0;overflow:visible;
+}
+#homePage:is(.hero-expanded,.orb-inline-expanded) #compactHero{
+ height:166px!important;max-height:166px!important;
+}
+#homePage .compact-hero .milestone,
+#homePage .compact-hero .milestone.is-main,
+#homePage .compact-hero .milestone:not(.is-main){
+ display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+ min-width:0;min-height:150px;height:150px;gap:5px;padding:0 1px;
+}
+#homePage #compactHero .orb-metric{
+ display:flex;align-items:baseline;justify-content:center;gap:3px;
+ width:100%;height:21px;flex:none;
+ color:#e3f1e6;white-space:nowrap;text-align:center;
+ font:660 clamp(11px,3.15cqw,12.5px)/1.3 Manrope,Inter,system-ui,sans-serif;
+ letter-spacing:-.025em;font-variant-numeric:tabular-nums lining-nums;
+ text-shadow:0 1px 8px rgba(7,25,15,.16);
+}
+#homePage #compactHero .orb-metric-currency{
+ font-size:10px;font-weight:580;letter-spacing:-.01em;opacity:.83;
+}
+#homePage #compactHero .orb-metric-figure{font-weight:760;letter-spacing:-.028em}
+.phone[data-ui-theme="light"] #homePage #compactHero .orb-metric{color:#233b2b;text-shadow:none}
+.phone[data-ui-theme="light"] #homePage #compactHero .orb-metric-currency{opacity:.76}
+#homePage #compactHero .milestone .jelly.bot-orb.bot-rendered-image{
+ width:clamp(77px,24cqw,92px);height:clamp(77px,24cqw,92px);flex:none;
+ border:0!important;background:none!important;border-radius:0!important;
+ overflow:visible!important;contain:none!important;clip-path:none!important;
+ box-shadow:none!important;filter:none!important;will-change:auto;
+ isolation:isolate;
+}
+#homePage #compactHero .bot-rendered-image::before,
+#homePage #compactHero .bot-rendered-image::after{content:none!important;display:none!important}
+#homePage #compactHero .bot-rendered-image :is(
+ .orb-bot-identity,.liquid-canvas,.orb-poster,.orb-media,.orb-fill-media,.value){
+ opacity:0!important;visibility:hidden!important;
+}
+#homePage #compactHero .orb-bot-art{
+ position:absolute;z-index:4;display:block;inset:-13%;pointer-events:none;
+ background-repeat:no-repeat;background-position:center;background-size:contain;
+ filter:drop-shadow(0 5px 10px rgba(2,30,17,.17));
+ transition:filter .25s ease;transform:translateZ(0);
+}
+#homePage #compactHero [data-bot-kind="income"] .orb-bot-art{
+ background-image:url('./nexapag-bot-income-v319.webp');
+}
+#homePage #compactHero [data-bot-kind="spending"] .orb-bot-art{
+ background-image:url('./nexapag-bot-spending-v319.webp');
+}
+#homePage #compactHero [data-bot-kind="refund"] .orb-bot-art{
+ background-image:url('./nexapag-bot-refund-v319.webp');
+}
+#homePage #compactHero .milestone>span:last-child{
+ font:690 clamp(10.5px,3.1cqw,11.5px)/1.2 Manrope,Inter,system-ui,sans-serif;
+ text-align:center;letter-spacing:-.01em;color:#d2e0d2;opacity:1!important;
+ padding-top:0;margin-top:1px;
+}
+.phone[data-ui-theme="light"] #homePage #compactHero .milestone>span:last-child{color:#435a49}
+#homePage #compactHero .milestone:focus-visible{
+ outline:2px solid #a4d7ac;outline-offset:3px;border-radius:20px;
+}
+#homePage #compactHero .milestone:is(:focus-visible,:hover) .orb-bot-art{
+ filter:drop-shadow(0 7px 13px rgba(15,46,25,.23));
+}
+#homePage #compactHero .milestone.is-morph-origin .orb-metric{
+ opacity:0;transition:opacity 170ms ease-out;
+}
+.orb-fluid-ghost .orb-bot-flight-identity{opacity:0!important}
+.orb-fluid-ghost .orb-bot-flight-poster{
+ position:absolute;display:block;z-index:8;inset:-13%;pointer-events:none;
+ background-size:contain;background-repeat:no-repeat;background-position:center;
+}
+.orb-fluid-ghost[data-kind="income"] .orb-bot-flight-poster{
+ background-image:url('./nexapag-bot-income-poster-v319.webp');
+}
+.orb-fluid-ghost[data-kind="spending"] .orb-bot-flight-poster{
+ background-image:url('./nexapag-bot-spending-poster-v319.webp');
+}
+.orb-fluid-ghost[data-kind="refund"] .orb-bot-flight-poster{
+ background-image:url('./nexapag-bot-refund-poster-v319.webp');
+}
+@media(max-width:350px){
+ #homePage #heroRegion{height:162px}
+ #homePage.orb-inline-closing #heroRegion{height:162px}
+ #homePage #compactHero,#homePage .compact-hero{height:162px;max-height:162px}
+ #homePage:is(.hero-expanded,.orb-inline-expanded) #compactHero{
+  height:162px!important;max-height:162px!important;
+ }
+ #homePage #compactHero .orb-metric{font-size:10.8px;gap:2px}
+ #homePage #compactHero .orb-metric-currency{font-size:9px}
+ #homePage .compact-hero .milestone{height:148px;min-height:148px}
+ #homePage #compactHero .milestone .jelly.bot-orb.bot-rendered-image{width:76px;height:76px}
+}
+@media(prefers-reduced-motion:reduce){
+ #homePage #compactHero [data-bot-kind="income"] .orb-bot-art{
+  background-image:url('./nexapag-bot-income-poster-v319.webp');
+ }
+ #homePage #compactHero [data-bot-kind="spending"] .orb-bot-art{
+  background-image:url('./nexapag-bot-spending-poster-v319.webp');
+ }
+ #homePage #compactHero [data-bot-kind="refund"] .orb-bot-art{
+  background-image:url('./nexapag-bot-refund-poster-v319.webp');
+ }
+ #homePage #compactHero .orb-bot-art{transition:none!important;filter:none!important}
+}
