@@ -1074,9 +1074,10 @@ function walletLiveApplySelection(index,open,token){
  const scene=document.querySelector('[data-wallet-live-scene]');
  if(!scene||!scene.isConnected)return;
  const bank=walletBanks[index];
+ const animatedClose=!open&&walletLiveRaised&&!reducedMotion();
  walletLivePendingIndex=null;walletLiveRetractEndsAt=0;
  state.card=index;
- scene.dataset.phase=open?'lifting':'resting';
+ scene.dataset.phase=open?'lifting':animatedClose?'closing':'resting';
  scene.dataset.opened='false';
  scene.style.setProperty('--wallet-live-accent',['#805ba5','#d5a075','#e59670'][index]);
  scene.querySelectorAll('[data-wallet-live-card]').forEach(button=>{
@@ -1110,7 +1111,17 @@ function walletLiveApplySelection(index,open,token){
  const status=document.querySelector('[data-wallet-live-announcement]');
  if(status)status.textContent=bank.n+(open?' destacado':' recolhido')+'. Cartão final '+bank.last+'.';
  walletLiveRaised=open;
- if(!open){scene.dataset.phase='resting';return}
+ if(!open){
+  if(animatedClose){
+   walletLiveRetractEndsAt=performance.now()+365;
+   walletLiveMotionTimer=setTimeout(()=>{
+    walletLiveMotionTimer=0;
+    if(token!==walletLiveMotionToken||!scene.isConnected)return;
+    scene.dataset.phase='resting';walletLiveRetractEndsAt=0;
+   },365);
+  }else scene.dataset.phase='resting';
+  return;
+ }
  if(reducedMotion()){scene.dataset.opened='true';scene.dataset.phase='expanded';return}
  requestAnimationFrame(()=>requestAnimationFrame(()=>{
   if(token!==walletLiveMotionToken||!scene.isConnected||state.tab!=='cards')return;
@@ -1128,7 +1139,7 @@ function updateWalletLive(index,shouldToggle=false){
  clearTimeout(walletLiveMotionTimer);walletLiveMotionTimer=0;
  const scene=document.querySelector('[data-wallet-live-scene]');
  if(!scene)return;
- if(scene.dataset.phase==='retracting'&&!reducedMotion()){
+ if((scene.dataset.phase==='retracting'||scene.dataset.phase==='closing')&&!reducedMotion()){
   walletLivePendingIndex=index;
   const remaining=Math.max(0,walletLiveRetractEndsAt-performance.now());
   walletLiveMotionTimer=setTimeout(()=>{
