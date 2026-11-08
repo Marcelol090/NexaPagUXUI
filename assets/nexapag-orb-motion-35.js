@@ -154,26 +154,37 @@ function botIdentity(kind,amount){
  number.textContent=amount||'';
  shell.append(face,number);return shell;
 }
+const ORB_METRICS={
+ income:{figure:'1,9 mil',full:'R$ 1.950,00',label:'Entradas'},
+ spending:{figure:'3,4 mil',full:'R$ 3.468,20',label:'Saídas'},
+ refund:{figure:'349,90',full:'R$ 349,90',label:'Estornos'}
+};
 function setupBotShape(button,kind){
  const jelly=button.querySelector('.jelly');
  if(!jelly||jelly.dataset.botReady==='1')return;
+ const info=ORB_METRICS[kind];if(!info)return;
  button.dataset.botKind=kind;jelly.dataset.botKind=kind;
- jelly.classList.add('bot-orb');jelly.dataset.botReady='1';
+ jelly.classList.add('bot-orb','bot-rendered-image');jelly.dataset.botReady='1';
+ button.classList.add('orb-financial-item');
+ button.setAttribute('aria-label',info.label+': '+info.full+'. Abrir detalhes');
+ let metric=button.querySelector(':scope > .orb-metric');
+ if(!metric){
+  metric=document.createElement('span');metric.className='orb-metric';
+  const symbol=document.createElement('span');symbol.className='orb-metric-currency';symbol.textContent='R$';
+  const figure=document.createElement('strong');figure.className='orb-metric-figure';figure.textContent=info.figure;
+  metric.append(symbol,figure);button.insertBefore(metric,jelly);
+ }
  const value=jelly.querySelector('.value');
- const amount=value?.textContent?.trim()||'';
- const identity=botIdentity(kind,amount);
- jelly.append(identity);
  if(value)value.classList.add('bot-orb-native-value');
+ if(!jelly.querySelector('.orb-bot-art')){
+  const art=document.createElement('span');art.className='orb-bot-art';
+  art.dataset.kind=kind;art.setAttribute('aria-hidden','true');jelly.append(art);
+ }
+ if(!jelly.querySelector('.orb-bot-identity')){
+  jelly.append(botIdentity(kind,value?.textContent?.trim()||''));
+ }
  jelly.style.clipPath=botContour(kind,0);
- if(reduce())return;
- const spec=BOT_SHAPES[kind];
- const phases=spec.phases;
- const frames=phases.map((phase,index)=>({
-  offset:index/(phases.length-1),clipPath:botContour(kind,phase)
- }));
- const motion=jelly.animate(frames,{duration:spec.period,iterations:Infinity,easing:'linear',fill:'both'});
- motion.id='nexapag-bot-idle-'+kind;
- botAnimationMap.set(jelly,motion);
+ botAnimationMap.get(jelly)?.cancel();botAnimationMap.delete(jelly);
 }
 let botInitFrame=0;
 function setupFinancialBots(){
@@ -256,6 +267,8 @@ function fluidFlight(start,end,kind,reverse=false,onReveal,onStart,fromKind=null
   const value=orbFor(kind)?.querySelector('.value')?.textContent?.trim()||'';
   const identity=botIdentity(kind,value);identity.classList.add('orb-bot-flight-identity');
   ghost.append(identity);
+  const poster=document.createElement('span');poster.className='orb-bot-flight-poster';
+  poster.dataset.kind=kind;poster.setAttribute('aria-hidden','true');ghost.append(poster);
  }
  phone.append(ghost);flight=ghost;
  const source={x:start.x+start.w/2,y:start.y+start.h/2};
@@ -292,6 +305,14 @@ function fluidFlight(start,end,kind,reverse=false,onReveal,onStart,fromKind=null
   ]:[
    {opacity:1,offset:0},{opacity:.8,offset:.07},{opacity:0,offset:.22},
    {opacity:0,offset:1}
+  ],{duration,easing:'linear',fill:'forwards'});
+ }
+ const artPoster=ghost.querySelector('.orb-bot-flight-poster');
+ if(artPoster){
+  artPoster.animate(reverse?[
+   {opacity:0,offset:0},{opacity:0,offset:.74},{opacity:.64,offset:.90},{opacity:1,offset:1}
+  ]:[
+   {opacity:1,offset:0},{opacity:.72,offset:.09},{opacity:0,offset:.27},{opacity:0,offset:1}
   ],{duration,easing:'linear',fill:'forwards'});
  }
  if(cardToCard){
@@ -521,5 +542,5 @@ phone.addEventListener('click',event=>{
 },true);
 // Keep V2.8 collapsed until a user chooses an orb.
 if(bridge()?.state)bridge().state.firstShow=false;
-window.NexaOrbFlowV35={version:'3.18-expressive-bots',botShapes:Object.fromEntries(Object.entries(BOT_SHAPES).map(([kind,shape])=>[kind,shape.name])),authoredFrames:LIQUID_POSES.length,renderedFrames:RENDER_FRAME_COUNT,switchKind,get phase(){return busy?'morphing':active?.kind||bridge()?.state?.expanded?'expanded':'idle'},get activeKind(){return active?.kind||(bridge()?.state?.expanded?'spending':null)},get inline(){return Boolean(active?.layer?.parentElement?.id==='heroRegion')}};
+window.NexaOrbFlowV35={version:'3.19-animated-art-orbs',assetFrames:12,assetType:'animated-webp',botShapes:Object.fromEntries(Object.entries(BOT_SHAPES).map(([kind,shape])=>[kind,shape.name])),authoredFrames:LIQUID_POSES.length,renderedFrames:RENDER_FRAME_COUNT,switchKind,get phase(){return busy?'morphing':active?.kind||bridge()?.state?.expanded?'expanded':'idle'},get activeKind(){return active?.kind||(bridge()?.state?.expanded?'spending':null)},get inline(){return Boolean(active?.layer?.parentElement?.id==='heroRegion')}};
 })();
