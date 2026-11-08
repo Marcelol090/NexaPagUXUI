@@ -94,7 +94,122 @@ function poseAt(t){
  }
  return pose;
 }
-function fluidOutline(pose){
+
+/* V3.18 · NexaPag's original expressive financial orbs.
+   Geometry is original to the app; Grok Bot is a motion-language reference,
+   not an imported logo, sprite, package, or third-party artwork. */
+const BOT_SHAPES={
+ income:{name:'gotícula',period:7300,phases:[0,.24,.68,.37,.85,.22,0]},
+ spending:{name:'triângulo arredondado',period:6200,phases:[0,.36,.82,.30,.70,.42,0]},
+ refund:{name:'hexágono maleável',period:8800,phases:[0,.16,.40,.83,.30,.68,0]}
+};
+const BOT_VERTEX_COUNT=48;
+const botAnimationMap=new WeakMap();
+function polygonRadius(sides,angle,orientation){
+ const period=2*Math.PI/sides;
+ const relative=angle-(orientation+Math.PI/sides);
+ const offset=((relative+period/2)%period+period)%period-period/2;
+ return Math.cos(Math.PI/sides)/Math.cos(offset);
+}
+function botRadial(kind,angle,phase=0){
+ const sin=Math.sin(angle),cos=Math.cos(angle);
+ if(kind==='income'){
+  // A gentle upward tip and pear-shaped lower reservoir: money flowing in.
+  const base=.91+.052*sin+.13*Math.pow(Math.max(0,-sin),18);
+  return clamp(base*(1+.011*Math.sin(2*angle+phase*2.4)
+    +.006*Math.sin(4*angle-phase*1.6)),.73,.998);
+ }
+ if(kind==='spending'){
+  // Rounded triangle: forward energy, no cut-out spikes or hard corners.
+  const n=3,angleStep=.125;
+  const softened=(polygonRadius(n,angle,-Math.PI/2)*2+
+   polygonRadius(n,angle-angleStep,-Math.PI/2)+
+   polygonRadius(n,angle+angleStep,-Math.PI/2))/4;
+  return clamp((.345+.655*softened)*(1+.008*Math.sin(3*angle+phase*1.9)),.57,.993);
+ }
+ // A faceted six-sided silhouette, deliberately more composed and slower.
+ const n=6,orientation=-Math.PI/2+Math.PI/6;
+ const smooth=(polygonRadius(n,angle,orientation)*2+
+   polygonRadius(n,angle-.08,orientation)+polygonRadius(n,angle+.08,orientation))/4;
+ return clamp((.06+.94*smooth)*(1+.008*Math.sin(2*angle-phase*1.4)),.80,.991);
+}
+function botContour(kind,phase=0){
+ const points=[];
+ for(let i=0;i<BOT_VERTEX_COUNT;i++){
+  const angle=-Math.PI/2+i*2*Math.PI/BOT_VERTEX_COUNT;
+  const r=botRadial(kind,angle,phase)*.983;
+  points.push((50+49.8*Math.cos(angle)*r).toFixed(3)+'% '+
+              (50+49.8*Math.sin(angle)*r).toFixed(3)+'%');
+ }
+ return 'polygon('+points.join(',')+')';
+}
+function botIdentity(kind,amount){
+ const shell=document.createElement('span');
+ shell.className='orb-bot-identity';shell.setAttribute('aria-hidden','true');
+ const face=document.createElement('span');face.className='orb-bot-face';
+ const left=document.createElement('i'),right=document.createElement('i');
+ left.className='orb-bot-eye';right.className='orb-bot-eye';
+ face.append(left,right);
+ const number=document.createElement('span');number.className='orb-bot-amount';
+ number.textContent=amount||'';
+ shell.append(face,number);return shell;
+}
+function setupBotShape(button,kind){
+ const jelly=button.querySelector('.jelly');
+ if(!jelly||jelly.dataset.botReady==='1')return;
+ button.dataset.botKind=kind;jelly.dataset.botKind=kind;
+ jelly.classList.add('bot-orb');jelly.dataset.botReady='1';
+ const value=jelly.querySelector('.value');
+ const amount=value?.textContent?.trim()||'';
+ const identity=botIdentity(kind,amount);
+ jelly.append(identity);
+ if(value)value.classList.add('bot-orb-native-value');
+ jelly.style.clipPath=botContour(kind,0);
+ if(reduce())return;
+ const spec=BOT_SHAPES[kind];
+ const phases=spec.phases;
+ const frames=phases.map((phase,index)=>({
+  offset:index/(phases.length-1),clipPath:botContour(kind,phase)
+ }));
+ const motion=jelly.animate(frames,{duration:spec.period,iterations:Infinity,easing:'linear',fill:'both'});
+ motion.id='nexapag-bot-idle-'+kind;
+ botAnimationMap.set(jelly,motion);
+}
+let botInitFrame=0;
+function setupFinancialBots(){
+ botInitFrame=0;
+ document.querySelectorAll('#compactHero .milestone').forEach((button,index)=>{
+  const kind=KINDS[index];if(kind)setupBotShape(button,kind);
+ });
+}
+function queueFinancialBots(){
+ if(botInitFrame)return;
+ botInitFrame=requestAnimationFrame(setupFinancialBots);
+}
+const screenRoot=document.getElementById('screen');
+if(screenRoot){
+ const botObserver=new MutationObserver(queueFinancialBots);
+ botObserver.observe(screenRoot,{childList:true,subtree:true});
+}
+const botReducedMedia=matchMedia('(prefers-reduced-motion: reduce)');
+botReducedMedia.addEventListener?.('change',()=>{
+ document.querySelectorAll('#compactHero .jelly.bot-orb').forEach(jelly=>{
+  botAnimationMap.get(jelly)?.cancel();
+  if(!reduce()){
+   jelly.removeAttribute('data-bot-ready');jelly.dataset.botReady='';
+  }
+ });
+ queueFinancialBots();
+});
+document.addEventListener('visibilitychange',()=>{
+ document.querySelectorAll('#compactHero .jelly.bot-orb').forEach(jelly=>{
+  const motion=botAnimationMap.get(jelly);
+  if(motion){if(document.hidden)motion.pause();else if(!reduce())motion.play();}
+ });
+});
+queueFinancialBots();
+
+function fluidOutline(pose,kind=null){
  // Forty-eight ordered points preserve the soft liquid edge and limit paint cost.
  const points=[],power=2/pose.super;
  for(let i=0;i<48;i++){
@@ -103,8 +218,12 @@ function fluidOutline(pose){
   const crown=Math.pow(Math.max(0,-sine),12)*pose.jet*.15;
   const surface=pose.ripple*(Math.sin(3*angle+1.1)+.32*Math.sin(5*angle-.6));
   const radius=clamp(.978*(1+crown+surface),.88,.997);
-  const x=50+49.8*Math.sign(cosine)*Math.pow(Math.abs(cosine),power)*radius;
-  const y=50+49.8*Math.sign(sine)*Math.pow(Math.abs(sine),power)*radius;
+  const morphWeight=kind?clamp((pose.move-.02)/.82,0,1):1;
+  const organic=kind?botRadial(kind,angle,0)*.983:1;
+  const roundedX=Math.sign(cosine)*Math.pow(Math.abs(cosine),power)*radius;
+  const roundedY=Math.sign(sine)*Math.pow(Math.abs(sine),power)*radius;
+  const x=50+49.8*lerp(cosine*organic,roundedX,morphWeight);
+  const y=50+49.8*lerp(sine*organic,roundedY,morphWeight);
   points.push(x.toFixed(3)+'% '+y.toFixed(3)+'%');
  }
  return 'polygon('+points.join(',')+')';
@@ -131,6 +250,11 @@ function fluidFlight(start,end,kind,reverse=false,onReveal,onStart,fromKind=null
   transformOrigin:'0 0',transform:'translate3d(0,0,0)',
   '--orb-flight-time':duration+'ms'
  });
+ if(!cardToCard){
+  const value=orbFor(kind)?.querySelector('.value')?.textContent?.trim()||'';
+  const identity=botIdentity(kind,value);identity.classList.add('orb-bot-flight-identity');
+  ghost.append(identity);
+ }
  phone.append(ghost);flight=ghost;
  const source={x:start.x+start.w/2,y:start.y+start.h/2};
  const target={x:end.x+end.w/2,y:end.y+end.h/2};
@@ -151,7 +275,7 @@ function fluidFlight(start,end,kind,reverse=false,onReveal,onStart,fromKind=null
    offset:time,
    transform:'translate3d('+x.toFixed(3)+'px,'+y.toFixed(3)+'px,0) scale3d('+
     (w/start.w).toFixed(5)+','+(h/start.h).toFixed(5)+',1)',
-   clipPath:fluidOutline(outline),
+   clipPath:fluidOutline(outline,cardToCard?null:kind),
    opacity:reverse?1:p.opacity
   };
  });
@@ -159,6 +283,15 @@ function fluidFlight(start,end,kind,reverse=false,onReveal,onStart,fromKind=null
  onStart?.();
  const animation=ghost.animate(frames,{duration,easing:'linear',fill:'forwards'});
  flightAnimation=animation;
+ const identity=ghost.querySelector('.orb-bot-flight-identity');
+ if(identity){
+  identity.animate(reverse?[
+   {opacity:0,offset:0},{opacity:0,offset:.78},{opacity:1,offset:1}
+  ]:[
+   {opacity:1,offset:0},{opacity:.8,offset:.07},{opacity:0,offset:.22},
+   {opacity:0,offset:1}
+  ],{duration,easing:'linear',fill:'forwards'});
+ }
  if(cardToCard){
   ghost.querySelector('.orb-fluid-color-mix')?.animate([
     {opacity:1,offset:0},{opacity:.80,offset:.18},
@@ -386,5 +519,5 @@ phone.addEventListener('click',event=>{
 },true);
 // Keep V2.8 collapsed until a user chooses an orb.
 if(bridge()?.state)bridge().state.firstShow=false;
-window.NexaOrbFlowV35={version:'3.15-shared-carousel',authoredFrames:LIQUID_POSES.length,renderedFrames:RENDER_FRAME_COUNT,switchKind,get phase(){return busy?'morphing':active?.kind||bridge()?.state?.expanded?'expanded':'idle'},get activeKind(){return active?.kind||(bridge()?.state?.expanded?'spending':null)},get inline(){return Boolean(active?.layer?.parentElement?.id==='heroRegion')}};
+window.NexaOrbFlowV35={version:'3.18-expressive-bots',botShapes:Object.fromEntries(Object.entries(BOT_SHAPES).map(([kind,shape])=>[kind,shape.name])),authoredFrames:LIQUID_POSES.length,renderedFrames:RENDER_FRAME_COUNT,switchKind,get phase(){return busy?'morphing':active?.kind||bridge()?.state?.expanded?'expanded':'idle'},get activeKind(){return active?.kind||(bridge()?.state?.expanded?'spending':null)},get inline(){return Boolean(active?.layer?.parentElement?.id==='heroRegion')}};
 })();
