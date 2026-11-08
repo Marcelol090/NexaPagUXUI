@@ -74,3 +74,25 @@
 .phone[data-ui-theme="dark"] .wallet-live-dot[aria-pressed="true"] i{background:#c2e3c0}
 @media(max-width:360px){.wallet-live{padding:13px 10px 12px;border-radius:22px}.wallet-live-scene{height:252px}.wallet-live-card{top:30px;height:157px;width:84%;padding:12px}.wallet-live-pocket-front{height:126px}.wallet-live-selection-copy strong{font-size:12px}.wallet-live-details{padding:9px 8px;font-size:9px}.wallet-live-pocket-brand strong{font-size:13px}.wallet-live-heading h3{font-size:14px}}
 @media(prefers-reduced-motion:reduce){.wallet-live-card,.wallet-live-dot i,.wallet-live-pocket-notch{transition:none!important;animation:none!important}.wallet-live-scene:before{filter:none}}
+
+
+/* Geometry correction: three actual, separately tappable top ribbons must
+   remain exposed, exactly as in the reference wallet video. */
+.wallet-live-pocket-front{height:112px}
+.wallet-live-scene[data-opened="false"] .wallet-live-card[data-slot="active"]{
+ z-index:2;transform:translate3d(-50%,57px,0) scale(.96)
+}
+.wallet-live-scene[data-opened="false"] .wallet-live-card[data-slot="next"]{
+ z-index:3;transform:translate3d(calc(-50% + 5px),77px,0) scale(.954)
+}
+.wallet-live-scene[data-opened="false"] .wallet-live-card[data-slot="previous"]{
+ z-index:4;transform:translate3d(calc(-50% - 5px),97px,0) scale(.947)
+}
+.wallet-live-scene[data-opened="true"] .wallet-live-card[data-slot="active"]{z-index:6}
+.wallet-live-card-base{padding-bottom:34px}
+@media(max-width:360px){
+ .wallet-live-pocket-front{height:108px}
+ .wallet-live-scene[data-opened="false"] .wallet-live-card[data-slot="active"]{transform:translate3d(-50%,58px,0) scale(.96)}
+ .wallet-live-scene[data-opened="false"] .wallet-live-card[data-slot="next"]{transform:translate3d(calc(-50% + 5px),77px,0) scale(.953)}
+ .wallet-live-scene[data-opened="false"] .wallet-live-card[data-slot="previous"]{transform:translate3d(calc(-50% - 5px),96px,0) scale(.946)}
+}
