@@ -9,7 +9,7 @@ test('V3.19 uses 12-frame artworks and places all financial amounts above their 
  await expect.poll(()=>page.evaluate(()=>window.NexaOrbFlowV35?.version)).toBe('3.19-animated-art-orbs');
  const data=[['income','1,9 mil','1.950,00'],['spending','3,4 mil','3.468,20'],['refund','349,90','349,90']];
  for(const [kind,compact,full] of data){
-  const button=page.locator('#compactHero [data-bot-kind="'+kind+'"]');
+  const button=page.locator('#compactHero button[data-bot-kind="'+kind+'"]');
   await expect(button).toHaveAttribute('aria-label',new RegExp(full.replace('.','\\.') ));
   await expect(button.locator('.orb-metric')).toContainText(compact);
   await expect(button.locator('.orb-bot-art')).toHaveCount(1);
@@ -36,7 +36,7 @@ test('V3.19 reduced motion uses first-frame poster and fits 320px',async({page})
  await page.emulateMedia({reducedMotion:'reduce'});
  await page.goto('/v2.html');
  for(const kind of ['income','spending','refund']){
-  const orb=page.locator('#compactHero [data-bot-kind="'+kind+'"]');
+  const orb=page.locator('#compactHero button[data-bot-kind="'+kind+'"]');
   await expect(orb.locator('.orb-bot-art')).toHaveCount(1);
   const image=await orb.locator('.orb-bot-art').evaluate(el=>getComputedStyle(el).backgroundImage);
   expect(image).not.toBe('none');

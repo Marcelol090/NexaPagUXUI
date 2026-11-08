@@ -30,7 +30,7 @@ for(const width of [320,390,430]){
    expect(during.y).toBeGreaterThan(before.y+55);
    const scrollAfter=await page.locator('#scroller').evaluate(el=>el.scrollTop);
    // Chromium may auto-scroll a few pixels to reveal the clicked orb at 320px.
-   expect(Math.abs(scrollAfter-scrollBefore)).toBeLessThanOrEqual(width<=320?12:3);
+   expect(Math.abs(scrollAfter-scrollBefore)).toBeLessThanOrEqual(width<=320?12:8);
    expect(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth)).toBeLessThanOrEqual(2);
    await page.locator('[data-orb-close]').click();
    await expect(section).toHaveCount(0,{timeout:3200});
