@@ -141,7 +141,7 @@
  outline:3px solid rgba(171,224,177,.88);outline-offset:2px
 }
 @media(max-width:360px){
- .wallet-live-scene{height:293px}
+ .wallet-live-scene{height:307px}
  .wallet-live-card{top:35px;height:162px;width:84%}
  .wallet-live-pocket-front{height:113px}
  .wallet-live-scene[data-opened="false"] .wallet-live-card[data-slot="active"]{
