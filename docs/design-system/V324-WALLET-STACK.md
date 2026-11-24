@@ -1,0 +1,2 @@
+# V3.24 Wallet Stack
+Reference 1: fixed pocket with vertically aligned cards lifting together, small tilt only on front card. Reference 2: selected card transitions into a horizontal card carousel with overview below, reverse on back. Reference 3: compact controls and 12/16/24px spacing rhythm. No simulated bank balances or merchant transactions assigned to individual cards. Keep existing bank folder access, themes and dock. Existing V3.21 tap-to-lift test superseded by tap-to-detail tests; rapid switching test retained.
