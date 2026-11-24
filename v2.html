@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#111211">
 <meta name="description" content="NexaPag V3.1 · estrutura V2.8, fundo verde-floresta e modo dark.">
-<title>NexaPag V3.22 · Spacing & Visual Rhythm</title>
+<title>NexaPag V3.23 · Compact Header & Motion Continuity</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -812,6 +812,7 @@ button:focus-visible{outline:2px solid #70658f;outline-offset:3px}
 <link rel="stylesheet" href="./assets/category-microbots-26.css">
 <link rel="stylesheet" href="./assets/nexapag-orb-motion-35.css">
 <link rel="stylesheet" href="./assets/nexapag-spacing-322.css">
+<link rel="stylesheet" href="./assets/nexapag-motion-polish-323.css">
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
@@ -1124,19 +1125,25 @@ function walletLiveApplySelection(index,open,token){
   return;
  }
  if(reducedMotion()){scene.dataset.opened='true';scene.dataset.phase='expanded';return}
- requestAnimationFrame(()=>requestAnimationFrame(()=>{
-  if(token!==walletLiveMotionToken||!scene.isConnected||state.tab!=='cards')return;
+ // Separate deck positioning and lifting; settle from the real CSS transition,
+ // with a token-guarded deadline if the browser suppresses transitionend.
+ const liftToken=String(token);
+ scene.dataset.liftToken=liftToken;
+ const valid=()=>scene.isConnected&&state.tab==='cards'&&scene.dataset.liftToken===liftToken&&scene.dataset.phase==='lifting';
+ const settle=()=>{if(valid()&&scene.dataset.opened==='true')scene.dataset.phase='expanded'};
+ const lift=()=>{
+  if(!valid()||token!==walletLiveMotionToken)return;
+  const target=scene.querySelector('[data-slot="active"]');
   scene.dataset.opened='true';
-  // A lift owns its settling callback. Other wallet gestures must not cancel it.
-  // The DOM token prevents an obsolete callback from completing a newer lift.
-  const liftToken=String(token);
-  scene.dataset.liftToken=liftToken;
-  setTimeout(()=>{
-   if(scene.isConnected&&state.tab==='cards'&&
-      scene.dataset.liftToken===liftToken&&scene.dataset.phase==='lifting'&&
-      state.card===index)scene.dataset.phase='expanded';
-  },710);
- }));
+  if(!target){settle();return;}
+  const end=e=>{if(e.target===target&&e.propertyName==='transform'){target.removeEventListener('transitionend',end);settle();}};
+  target.addEventListener('transitionend',end);
+  setTimeout(()=>{target.removeEventListener('transitionend',end);settle()},520);
+ };
+ // Commit the closed layout before raising the selected card.
+ void scene.offsetHeight;
+ requestAnimationFrame(()=>requestAnimationFrame(lift));
+
 }
 function updateWalletLive(index,shouldToggle=false){
  if(state.tab!=='cards'||!Number.isInteger(index)||!walletBanks[index])return;
@@ -1178,7 +1185,7 @@ let walletLastTrigger=null, walletClosing=false;
 function openWallet(index,trigger){if(state.tab!=='cards'||!walletGroups[index])return;closeWallet(false);walletLastTrigger=trigger;walletClosing=false;const group=walletGroups[index],layer=document.createElement('div');layer.className='wallet-layer';layer.id='walletLayer';layer.setAttribute('role','presentation');layer.innerHTML=`<div class="wallet-scrim" data-wallet-close="1"></div><section class="wallet-detail" role="dialog" aria-modal="true" aria-labelledby="walletTitle" aria-describedby="walletDesc"><div class="wallet-detail-head"><div><span class="eyebrow">NEXAPAG / CARTEIRA</span><h3 id="walletTitle">${group.name}</h3><p id="walletDesc">${group.ids.length} ${group.ids.length===1?'cartão disponível':'cartões disponíveis'} · toque para selecionar</p></div><button class="wallet-close" data-wallet-close="1" aria-label="Fechar carteira">${walletIcon('close')}</button></div><div class="wallet-detail-scene" data-card-count="${group.ids.length}"><div class="wallet-detail-pocket-back"></div>${group.ids.map((id,i)=>`<button type="button" class="wallet-detail-card" data-wallet-pick="${id}" data-kind="${walletBanks[id].kind}" data-idx="${i}" style="--i:${i};z-index:${i+1}" aria-label="Selecionar ${walletBanks[id].n} final ${walletBanks[id].last}"><b>${walletBanks[id].n}</b><small>•••• &nbsp;${walletBanks[id].last}</small></button>`).join('')}<div class="wallet-detail-pocket-front"><span>Seu espaço financeiro</span></div></div><div class="wallet-bank-options" role="group" aria-label="Selecionar cartão">${group.ids.map(id=>`<button type="button" data-wallet-pick="${id}" aria-label="Selecionar ${walletBanks[id].n}">${walletBanks[id].label}</button>`).join('')}</div><div class="wallet-detail-foot">${icon('sparkle')} Escolha um cartão para ver seus dados</div></section>`;
  document.querySelector('.phone').appendChild(layer);const f=trigger?.closest('.wallet-folder');f?.classList.add('is-open');f?.setAttribute('aria-expanded','true');requestAnimationFrame(()=>requestAnimationFrame(()=>layer.classList.add('is-visible')));layer.querySelector('.wallet-close')?.focus({preventScroll:true});}
 function closeWallet(restoreFocus=true){const layer=document.getElementById('walletLayer');if(!layer||walletClosing)return;walletClosing=true;document.querySelectorAll('.wallet-folder.is-open').forEach(folder=>{folder.classList.remove('is-open');folder.setAttribute('aria-expanded','false')});const target=walletLastTrigger;walletLastTrigger=null;const reduced=reducedMotion();layer.classList.remove('is-visible');const remove=()=>{if(layer.isConnected)layer.remove();walletClosing=false;if(restoreFocus&&target?.isConnected)target.focus({preventScroll:true})};if(reduced){remove();return}setTimeout(remove,300)}
-function selectWalletCard(id){if(!Number.isInteger(id)||!walletBanks[id])return;closeWallet(false);state.card=id;render();const summary=document.querySelector('.wallet-selected-summary');if(summary&&!reducedMotion())summary.animate([{opacity:.55,transform:'translateY(8px)'},{opacity:1,transform:'none'}],{duration:350,easing:'cubic-bezier(.2,.86,.22,1)'});notify(`${walletBanks[id].n} selecionado.`)}
+function selectWalletCard(id){if(!Number.isInteger(id)||!walletBanks[id])return;closeWallet(false);if(walletLiveRaised){updateWalletLive(id)}else{clearTimeout(walletLiveMotionTimer);walletLiveMotionTimer=0;walletLiveApplySelection(id,false,++walletLiveMotionToken)}notify(`${walletBanks[id].n} selecionado.`)}
 
 function review(){const names=['Compra sem categoria','Pix aguardando identificação','Notificação duplicada'];return `<div class="screen-page">${heading('Sua atenção','Revisar','Só o que precisa de você, sem excesso de ruído.')}<div class="surface overview"><small>Eventos a revisar</small><strong>${3-state.reviewed.length}</strong><span class="highlight">Revisões neste protótipo não alteram dados reais</span></div><div class="section-title"><h2>Pendências</h2><button data-action="reviewInfo">Sobre a captura</button></div>${names.map((name,i)=>`<div class="surface review-item ${state.reviewed.includes(i)?'is-done':''}">${jelly(i===1?'lilac':i===2?'lime':'orange','')}<div class="review-copy"><b>${name}</b><p>${['Confira a categoria para manter as análises precisas.','Verifique o titular da transferência antes de confirmar.','Compare o evento com os registros anteriores.'][i]}</p><button data-review="${i}" ${state.reviewed.includes(i)?'disabled':''}>${state.reviewed.includes(i)?'Revisado ✓':'Marcar revisado'}</button></div></div>`).join('')}${state.reviewed.length===3?'<div class="surface empty-state">Tudo revisado. Seu painel está em dia.</div>':''}</div>`}
 
@@ -1323,7 +1330,7 @@ window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener?.('change
 
 function render(){
  clearTimeout(walletLiveMotionTimer);walletLiveMotionTimer=0;walletLivePendingIndex=null;walletLiveRetractEndsAt=0;walletLiveMotionToken++;
- if(state.tab!=='cards'){walletLiveRaised=false;walletLiveGesture=null;}
+ if(state.tab!=='cards'){walletLiveRaised=false;walletLiveGesture=null;walletLiveSuppressClickUntil=0;}
  stopLiquid();hideMoneyInsight(false);categoryMotionObserver?.disconnect();const walletOverlay=document.getElementById('walletLayer');if(walletOverlay)walletOverlay.remove();walletClosing=false;const tab=state.tab;const phone=document.querySelector('.phone');if(phone){phone.dataset.pageTheme=tab;phone.classList.remove('expenses-theme');phone.classList.toggle('scrolled-deep',$('#scroller').scrollTop>112)}cancelAnimationFrame(expenseMotionFrame);cancelAnimationFrame(graphMotionFrame);$('#screen').innerHTML=({home,expenses,ads,cards,review})[tab]();$('#dock').style.setProperty('--active-tab',String(['home','expenses','ads','cards','review'].indexOf(tab)));$$('#dock button').forEach(b=>{const selected=b.dataset.tab===tab;b.classList.toggle('active',selected);b.setAttribute('aria-current',selected?'page':'false')});if(tab==='home'){const root=$('#homePage');root.classList.toggle('hero-expanded',state.expanded);if(state.expanded)requestAnimationFrame(updateCarousel)}if(tab==='expenses'){requestAnimationFrame(()=>{animateExpense();animateChart();})}prepareMotionOrbs();syncSlideBackdropMedia();if(tab==='expenses')requestAnimationFrame(setupCategoryMotions);$('#topbar').classList.toggle('is-scrolled',false)}
 function $$(s,r=document){return [...r.querySelectorAll(s)]}
 function updateCarousel(options={}){const track=$('#carouselTrack'),vp=$('#carouselViewport');if(!track||!vp)return;const first=track.querySelector('.carousel-slide');if(!first)return;const width=first.offsetWidth,gap=parseFloat(getComputedStyle(track).columnGap)||12,offset=(vp.clientWidth-width)/2-state.slide*(width+gap)+(options.dragOffset||0);track.style.transform=`translate3d(${offset}px,0,0)`;$$('.carousel-slide',vp).forEach((el,i)=>{el.classList.toggle('current',i===state.slide);el.setAttribute('aria-hidden',i!==state.slide?'true':'false');el.querySelectorAll('button').forEach(b=>b.tabIndex=i===state.slide?0:-1);el.classList.toggle('side-prev',i<state.slide);el.classList.toggle('side-next',i>state.slide)});$$('.carousel-dots button').forEach((el,i)=>{el.classList.toggle('active',i===state.slide);el.setAttribute('aria-pressed',i===state.slide?'true':'false')})}

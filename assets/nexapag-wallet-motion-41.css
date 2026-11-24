@@ -196,3 +196,7 @@
 @media(prefers-reduced-motion:reduce){
  .wallet-live-scene[data-phase="closing"] .wallet-live-card{transition:none!important}
 }
+
+/* V3.23: consistent spring-like lift with a bounded settle window. */
+.wallet-live-scene[data-phase="lifting"] .wallet-live-card{transition-duration:440ms,260ms,260ms;transition-timing-function:cubic-bezier(.22,.72,.22,1),ease,ease}
+@media(prefers-reduced-motion:reduce){.wallet-live-scene[data-phase="lifting"] .wallet-live-card{transition:none!important}}

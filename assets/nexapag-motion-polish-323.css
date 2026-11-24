@@ -1,0 +1,67 @@
+/* NexaPag V3.23: compact top controls, balanced financial characters,
+   same animated assets and structural hierarchy. Visual circles are smaller
+   than their independent 44px web touch targets. */
+.phone[data-spacing-system="v322"] .topbar{
+ height:44px;padding:0 17px;align-items:center;
+}
+.phone[data-spacing-system="v322"] .top-actions{gap:4px;align-items:center}
+.phone[data-spacing-system="v322"] .topbar .round-action,
+.phone[data-spacing-system="v322"] .topbar .round-action.theme-switch{
+ --nx-control-bg:linear-gradient(155deg,#fffdfb,#f6faf3);
+ --nx-control-border:rgba(40,81,49,.10);
+ --nx-control-shadow:0 2px 8px rgba(20,54,31,.09);
+ width:44px;height:44px;min-width:44px;min-height:44px;
+ padding:0;isolation:isolate;position:relative;
+ border:0;background:transparent;box-shadow:none;
+ color:#254c36;
+}
+.phone[data-spacing-system="v322"] .topbar .round-action::before{
+ content:"";position:absolute;inset:5px;z-index:-1;border-radius:50%;
+ background:var(--nx-control-bg);border:1px solid var(--nx-control-border);
+ box-shadow:var(--nx-control-shadow);pointer-events:none;
+}
+.phone[data-spacing-system="v322"] .topbar .round-action svg,
+.phone[data-spacing-system="v322"] .topbar .round-action.theme-switch svg{width:17px;height:17px;stroke-width:1.85}
+.phone[data-spacing-system="v322"] .topbar .round-action.notice::after{right:10px;top:8px;width:6px;height:6px;border-width:1px}
+.phone[data-spacing-system="v322"] .topbar .round-action.avatar{
+ --nx-control-bg:linear-gradient(145deg,#e2c6ed,#efb798);--nx-control-border:rgba(255,255,255,.9);
+ color:#fff;font-size:13px;font-weight:750;
+}
+.phone[data-spacing-system="v322"][data-ui-theme="dark"] .topbar .round-action{
+ --nx-control-bg:linear-gradient(145deg,#2d4936,#233a2b);
+ --nx-control-border:rgba(190,226,184,.2);--nx-control-shadow:inset 0 1px rgba(255,255,255,.07);
+ color:#e4f0df;
+}
+.phone[data-spacing-system="v322"][data-ui-theme="dark"] .topbar .round-action.avatar{--nx-control-bg:linear-gradient(145deg,#426e50,#294c36)}
+.phone[data-spacing-system="v322"] .scroller{top:94px}
+.phone[data-spacing-system="v322"] #homePage{--nx-orb-rest-height:144px}
+.phone[data-spacing-system="v322"] #homePage:not(.hero-expanded):not(.orb-inline-expanded) #heroRegion,
+.phone[data-spacing-system="v322"] #homePage.orb-inline-closing #heroRegion{height:var(--nx-orb-rest-height)}
+.phone[data-spacing-system="v322"] #homePage #compactHero{
+ width:100%;height:var(--nx-orb-rest-height);max-height:var(--nx-orb-rest-height);
+ grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:5px 2px 0;
+}
+.phone[data-spacing-system="v322"] #homePage:is(.hero-expanded,.orb-inline-expanded) #compactHero{
+ height:var(--nx-orb-rest-height)!important;max-height:var(--nx-orb-rest-height)!important;
+}
+.phone[data-spacing-system="v322"] #homePage #compactHero .milestone{
+ height:128px;min-height:128px;gap:6px;margin:0;padding:0;
+}
+.phone[data-spacing-system="v322"] #homePage #compactHero .orb-metric{height:19px;font-size:clamp(10px,3.1cqw,12px);gap:3px;line-height:1.3}
+.phone[data-spacing-system="v322"] #homePage #compactHero .milestone .jelly.bot-orb.bot-rendered-image{
+ width:min(82px,100%);height:auto;aspect-ratio:1;max-width:82px;
+}
+.phone[data-spacing-system="v322"] #homePage #compactHero .orb-bot-art{inset:0}
+.phone[data-spacing-system="v322"] #homePage #compactHero .milestone>span:last-child{font-size:11px;line-height:1.3;margin:0;padding:0}
+.phone[data-spacing-system="v322"] #homePage .greeting{margin-top:4px}
+.phone[data-spacing-system="v322"] .orb-fluid-ghost .orb-bot-flight-poster{inset:0}
+.phone[data-spacing-system="v322"] #homePage #heroRegion{transition:height 650ms cubic-bezier(.22,.72,.22,1)}
+.phone[data-spacing-system="v322"] .wallet-live-navigation{gap:8px}
+.phone[data-spacing-system="v322"] .wallet-live-announcement{min-height:14px}
+@container(max-width:350px){
+ .phone[data-spacing-system="v322"] #homePage{--nx-orb-rest-height:132px}
+ .phone[data-spacing-system="v322"] #homePage #compactHero{gap:6px;padding-inline:0}
+ .phone[data-spacing-system="v322"] #homePage #compactHero .milestone{min-height:116px;height:116px;gap:5px}
+ .phone[data-spacing-system="v322"] #homePage #compactHero .milestone .jelly.bot-orb.bot-rendered-image{max-width:73px}
+}
+@media(prefers-reduced-motion:reduce){.phone[data-spacing-system="v322"] #homePage #heroRegion{transition:none!important}}

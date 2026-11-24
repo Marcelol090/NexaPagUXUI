@@ -60,7 +60,7 @@ const LIQUID_POSES=[
  {t:0.985,move:1.000,w:1.000,h:1.000,lift:0,super:4.20,ripple:0.000,jet:0,opacity:.08},
  {t:1.000,move:1.000,w:1.000,h:1.000,lift:0,super:4.20,ripple:0.000,jet:0,opacity:0}
 ];
-const OPEN_DURATION=920,CLOSE_DURATION=770;
+const OPEN_DURATION=740,CLOSE_DURATION=620;
 let flightAnimation=null,morphRevealTimer=null;
 
 /* V3.17: 16 authored poses, continuously interpolated with shape-preserving cubic
@@ -257,7 +257,7 @@ function fluidFlight(start,end,kind,reverse=false,onReveal,onStart,fromKind=null
   const tint=document.createElement('span');tint.className='orb-fluid-color-mix';
   ghost.append(tint);
  }
- const duration=reverse?CLOSE_DURATION:(cardToCard?720:OPEN_DURATION);
+ const duration=reverse?CLOSE_DURATION:(cardToCard?560:OPEN_DURATION);
  Object.assign(ghost.style,{
   left:start.x+'px',top:start.y+'px',width:start.w+'px',height:start.h+'px',
   transformOrigin:'0 0',transform:'translate3d(0,0,0)',
@@ -345,7 +345,7 @@ function showLayer(kind,button,sourceOverride=null,outgoingLayer=null,sourceKind
  bridge()?.stopAutoplay?.();
  if(bridge()?.state)bridge().state.firstShow=false;
  restoreFocus=button;
- const source=button.querySelector('.jelly')||button,from=sourceOverride||rect(source),v=STORIES[kind];
+ const source=button.querySelector('.orb-bot-art')||button.querySelector('.jelly')||button,from=sourceOverride||rect(source),v=STORIES[kind];
  const host=document.getElementById('heroRegion');if(!host){busy=false;transitionDirection='idle';return;}
  const layer=document.createElement('section');layer.id='orbStoryLayer';layer.className='orb-story-layer orb-inline-section';layer.dataset.kind=kind;
  layer.setAttribute('role','region');layer.setAttribute('aria-labelledby','orbStoryTitle');layer.setAttribute('aria-describedby','orbStoryDescription');
@@ -390,7 +390,8 @@ function closeLayer(follow){
  layer.classList.remove('is-content-ready');layer.classList.add('is-closing');
  home()?.classList.remove('orb-inline-expanded');home()?.classList.add('orb-inline-closing','orb-choreo-running');
  card.style.opacity='0';
- const destination=restoreFocus?.querySelector('.jelly')?.isConnected?rect(restoreFocus.querySelector('.jelly')):from;
+ const origin=restoreFocus?.querySelector('.orb-bot-art')||restoreFocus?.querySelector('.jelly');
+ const destination=origin?.isConnected?rect(origin):from;
  fluidFlight(destination,fromCard,kind,true).then(()=>{
   if(active?.layer!==layer)return;
   layer.remove();active=null;
@@ -410,17 +411,19 @@ async function openSpending(button,sourceOverride=null,outgoingLayer=null,source
  if(bridge()?.state){bridge().state.firstShow=false;bridge().state.slide=0;}
  restoreFocus=button;
  button.classList.add('is-morph-origin');button.setAttribute('aria-expanded','true');
- originalPosition=rect(button.querySelector('.jelly')||button);
+ originalPosition=rect(button.querySelector('.orb-bot-art')||button.querySelector('.jelly')||button);
  scrollAtOpen=document.getElementById('scroller')?.scrollTop||0;
  if(home()&&!home().dataset.orbStageHeight){const baseline=phone.getBoundingClientRect().width<=350?376:360;home().dataset.orbStageHeight=String(baseline);home().style.setProperty('--orb-stage-height',baseline+'px');}
  home()?.classList.add('orb-choreo-running','orb-flight-cover');
  bridge()?.expand?.(false);
  await waitFrames();
+ if(bridge()?.state?.tab!=='home'||!busy||transitionDirection!=='opening')return;
  const target=document.querySelector('.carousel-slide.current');
  if(!target){home()?.classList.remove('orb-choreo-running','orb-flight-cover');restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;return;}
  await fluidFlight(sourceOverride||originalPosition,rect(target),'spending',false,()=>{
   home()?.classList.add('orb-flight-reveal');
  },()=>outgoingLayer?.remove(),sourceKind);
+ if(bridge()?.state?.tab!=='home'||!busy||transitionDirection!=='opening')return;
  home()?.classList.remove('orb-flight-cover','orb-flight-reveal','orb-choreo-running');
  busy=false;transitionDirection='open';
  if(pendingSwitch){flushPendingSwitch();return;}
@@ -444,9 +447,11 @@ async function closeSpending(){
  home()?.classList.remove('hero-expanded');
  document.querySelectorAll('.slide-motion-video').forEach(v=>v.pause());
  await waitFrames();
- const fallback=orbFor('spending')?.querySelector('.jelly');
- const to=destination|| (fallback?rect(fallback):null);
+ if(bridge()?.state?.tab!=='home'||!busy||transitionDirection!=='closing')return;
+ const fallback=orbFor('spending')?.querySelector('.orb-bot-art')||orbFor('spending')?.querySelector('.jelly');
+ const to=fallback?rect(fallback):destination;
  if(fromCard&&to)await fluidFlight(to,fromCard,'spending',true);
+ if(bridge()?.state?.tab!=='home'||!busy||transitionDirection!=='closing')return;
  home()?.classList.remove('orb-flight-cover','orb-flight-reveal','orb-choreo-running');
  home()?.style.removeProperty('--orb-stage-height');if(home())delete home().dataset.orbStageHeight;
  restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;
@@ -535,7 +540,8 @@ document.addEventListener('keydown',event=>{
  // An inline disclosure, not a modal: normal Tab navigation remains available.
 },true);
 phone.addEventListener('click',event=>{
- if(event.target.closest('#dock [data-tab]')&&(active||busy)){
+ if(event.target.closest('#dock [data-tab]')&&(active||busy||bridge()?.state?.expanded)){
+  if(bridge()?.state)bridge().state.expanded=false;
   if(active){active.layer.remove();active=null;}document.querySelectorAll('.orb-story-departing').forEach(el=>el.remove());stopFlight();restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;pendingOpen=null;pendingSwitch=null;home()?.style.removeProperty('--orb-stage-height');if(home())delete home().dataset.orbStageHeight;
   home()?.classList.remove('orb-choreo-running','orb-flight-cover','orb-flight-reveal','orb-inline-expanded','orb-inline-closing');home()?.style.removeProperty('--orb-target-height');
  }
