@@ -6,13 +6,14 @@ for(const width of [320,390,430]){
   await page.locator('#dock [data-tab="cards"]').click();
   const scene=page.locator('[data-wallet-live-scene]');
   const tops=()=>scene.locator('[data-wallet-live-card]').evaluateAll(els=>els.map(e=>e.getBoundingClientRect().top));
+  await scene.locator('[data-wallet-stack-toggle]').scrollIntoViewIfNeeded();
   const before=await tops();
-  const pocket=await scene.locator('.wallet-live-pocket-front').boundingBox();
+  const pocket=await scene.locator('.wallet-live-pocket-front').evaluate(el=>el.getBoundingClientRect().top-el.closest('[data-wallet-live-scene]').getBoundingClientRect().top);
   await scene.locator('[data-wallet-stack-toggle]').click();
   await expect(scene).toHaveAttribute('data-opened','true');
   await expect.poll(async()=>{const a=await tops();return a.every((v,i)=>v<before[i]-8)}).toBe(true);
-  const after=await scene.locator('.wallet-live-pocket-front').boundingBox();
-  expect(Math.abs(pocket.y-after.y)).toBeLessThan(2);
+  const after=await scene.locator('.wallet-live-pocket-front').evaluate(el=>el.getBoundingClientRect().top-el.closest('[data-wallet-live-scene]').getBoundingClientRect().top);
+  expect(Math.abs(pocket-after)).toBeLessThan(2);
   await page.locator('.phone').screenshot({path:info.outputPath('stack.png')});
   await scene.locator('[data-wallet-live-card="1"]').click({position:{x:80,y:12}});
   await expect(page.locator('#walletDetail324')).toBeVisible();

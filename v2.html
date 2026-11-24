@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#111211">
 <meta name="description" content="NexaPag V3.1 · estrutura V2.8, fundo verde-floresta e modo dark.">
-<title>NexaPag V3.24 · Wallet Stack & Card Detail</title>
+<title>NexaPag V3.25 · Refined Navigation & Wallet Motion</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -814,6 +814,7 @@ button:focus-visible{outline:2px solid #70658f;outline-offset:3px}
 <link rel="stylesheet" href="./assets/nexapag-spacing-322.css">
 <link rel="stylesheet" href="./assets/nexapag-motion-polish-323.css">
 <link rel="stylesheet" href="./assets/nexapag-wallet-stack-324.css">
+<link rel="stylesheet" href="./assets/nexapag-navigation-325.css">
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
@@ -1446,6 +1447,8 @@ $('#notifications').addEventListener('click',()=>notify('Não há novas notifica
 let walletDetailState=null,walletDetailGeneration=0,walletDetailFlight=null;
 function resetWalletDetail(){
  walletDetailGeneration++;
+ if(walletDetailState)clearTimeout(walletDetailState.settleTimer);
+ document.querySelectorAll('.wd-exiting').forEach(el=>el.remove());
  if(walletDetailFlight){walletDetailFlight.remove();walletDetailFlight=null;}
  const layer=document.getElementById('walletDetail324');if(layer)layer.remove();
  document.querySelector('.wallet-page')?.classList.remove('wallet-detail-hidden');
@@ -1470,9 +1473,9 @@ function walletDetailCard324(id){
 }
 function walletDetailMarkup324(){
  return '<section class="wallet-detail324" id="walletDetail324" aria-label="Detalhes dos cartões">'+
- '<header class="wd-header"><button class="wd-icon" data-wd-back aria-label="Voltar para carteira"><svg viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></button><h1>Minha carteira</h1><span class="wd-header-end" aria-hidden="true">03</span></header>'+
- '<div class="wd-carousel" tabindex="0" aria-label="Cartões vinculados, deslize para mudar">'+walletBanks.map((_,i)=>walletDetailCard324(i)).join('')+'</div>'+
- '<div class="wd-nav"><button class="wd-icon" data-wd-step="-1" aria-label="Cartão anterior"><svg viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></button><div class="wd-dots">'+walletBanks.map((b,i)=>'<button data-wd-select="'+i+'" aria-label="Mostrar '+b.n+'" aria-pressed="false"><i></i></button>').join('')+'</div><button class="wd-icon" data-wd-step="1" aria-label="Próximo cartão"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button></div>'+
+ '<header class="wd-header"><button class="wd-icon" data-wd-back aria-label="Voltar para carteira"><svg viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></button><h1>Minha carteira</h1><span class="wd-header-end" data-wd-count aria-live="polite">01 / 03</span></header>'+
+ '<div class="wd-carousel" tabindex="0" role="region" aria-roledescription="carrossel" aria-label="Cartões vinculados, deslize para mudar">'+walletBanks.map((_,i)=>walletDetailCard324(i)).join('')+'</div>'+
+ '<div class="wd-nav" role="group" aria-label="Navegar pelos cartões"><button class="wd-icon" data-wd-step="-1" aria-label="Cartão anterior"><svg viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></button><div class="wd-dots">'+walletBanks.map((b,i)=>'<button data-wd-select="'+i+'" aria-label="Mostrar '+b.n+'" aria-pressed="false"><i></i></button>').join('')+'</div><button class="wd-icon" data-wd-step="1" aria-label="Próximo cartão"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button></div>'+
  '<div class="wd-summary"><div><span>Cartão selecionado</span><strong data-wd-name></strong><small data-wd-ending></small></div><span class="wd-linked"><i></i> Vinculado</span></div>'+
  '<div class="wd-section"><h2>Informações do cartão</h2><div class="wd-metrics"><div><small>Gastos</small><strong>—</strong><span>Não disponível</span></div><div><small>Limite disponível</small><strong>—</strong><span>Não disponível</span></div></div></div>'+
  '<div class="wd-section"><h2>Movimentações</h2><div class="wd-empty"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="3"/><path d="M4 10h16m-12 5h4"/></svg><div><strong>Sem histórico individual disponível</strong><p>Os lançamentos demonstrativos ainda não estão vinculados a um cartão específico.</p></div></div><button class="wd-all" data-wd-all>Ver gastos gerais <span>↗</span></button></div></section>';
@@ -1484,14 +1487,73 @@ function syncWalletDetail324(id,scroll=true,animated=false){
  layer.querySelector('[data-wd-name]').textContent=b.n;
  layer.querySelector('[data-wd-ending]').textContent='Final •••• '+b.last;
  layer.querySelectorAll('[data-wd-select]').forEach(el=>el.setAttribute('aria-pressed',String(Number(el.dataset.wdSelect)===id)));
- layer.querySelectorAll('[data-wd-card]').forEach(el=>el.classList.toggle('is-current',Number(el.dataset.wdCard)===id));
+ layer.querySelector('[data-wd-count]').textContent=String(id+1).padStart(2,'0')+' / '+String(walletBanks.length).padStart(2,'0');
+ layer.querySelector('[data-wd-step="-1"]').disabled=id===0;
+ layer.querySelector('[data-wd-step="1"]').disabled=id===walletBanks.length-1;
+ layer.querySelectorAll('[data-wd-card]').forEach(el=>{const selected=Number(el.dataset.wdCard)===id;el.classList.toggle('is-current',selected);el.setAttribute('aria-current',selected?'true':'false')});
  const track=layer.querySelector('.wd-carousel'),target=track.querySelector('[data-wd-card="'+id+'"]');
  if(scroll&&target){
   const x=track.scrollLeft+target.getBoundingClientRect().left+target.getBoundingClientRect().width/2-track.getBoundingClientRect().left-track.clientWidth/2;
-  d.scrollLockUntil=animated&&!reducedMotion()?performance.now()+550:0;
+  d.pendingIndex=animated&&!reducedMotion()?id:null;
   track.scrollTo({left:x,behavior:animated&&!reducedMotion()?'smooth':'instant'});
+  if(d.pendingIndex!==null)scheduleWalletSettle325(d);
  }
 }
+
+function closestWalletCard325(track){
+ const center=track.getBoundingClientRect().left+track.clientWidth/2;
+ return [...track.querySelectorAll('[data-wd-card]')].reduce((best,el)=>{
+  const r=el.getBoundingClientRect(),distance=Math.abs(r.left+r.width/2-center);
+  return !best||distance<best.distance?{el,distance}:best;
+ },null)?.el;
+}
+function settleWallet325(d){
+ if(!d||walletDetailState!==d||d.opening||d.closing||d.drag)return;
+ clearTimeout(d.settleTimer);d.pendingIndex=null;
+ const card=closestWalletCard325(d.layer.querySelector('.wd-carousel'));
+ if(card)syncWalletDetail324(Number(card.dataset.wdCard),false);
+}
+function scheduleWalletSettle325(d){
+ clearTimeout(d.settleTimer);d.settleTimer=setTimeout(()=>settleWallet325(d),140);
+}
+function walletOcclusion325(source,page){
+ if(!source||!page)return 0;
+ const from=source.getBoundingClientRect(),pocket=page.querySelector('.wallet-live-pocket-front');
+ let seam=pocket?pocket.getBoundingClientRect().top:from.bottom;
+ const z=Number(getComputedStyle(source).zIndex);
+ for(const card of page.querySelectorAll('[data-wallet-live-card]')){
+  const r=card.getBoundingClientRect();
+  if(card!==source&&Number(getComputedStyle(card).zIndex)>z&&r.top>from.top)seam=Math.min(seam,r.top);
+ }
+ return Math.max(0,Math.min(.95,(from.bottom-seam)/Math.max(1,from.height)));
+}
+function bindWalletDrag325(d,track){
+ track.addEventListener('scroll',()=>scheduleWalletSettle325(d),{passive:true});
+ track.addEventListener('scrollend',()=>settleWallet325(d),{passive:true});
+ track.addEventListener('pointerdown',e=>{
+  if(e.pointerType!=='mouse'||e.button!==0||d.opening||d.closing)return;
+  d.drag={id:e.pointerId,x:e.clientX,left:track.scrollLeft,moved:false};
+ },{passive:true});
+ track.addEventListener('pointermove',e=>{
+  const g=d.drag;if(!g||g.id!==e.pointerId)return;
+  const delta=e.clientX-g.x;
+  if(!g.moved&&Math.abs(delta)<6)return;
+  if(!g.moved){g.moved=true;d.pendingIndex=null;track.classList.add('wd-dragging');track.setPointerCapture(e.pointerId);}
+  track.scrollLeft=g.left-delta;e.preventDefault();
+ });
+ const end=e=>{
+  const g=d.drag;if(!g||g.id!==e.pointerId)return;
+  d.drag=null;track.classList.remove('wd-dragging');
+  if(!g.moved)return;
+  d.ignoreClickUntil=performance.now()+250;
+  const delta=e.clientX-g.x,nearest=closestWalletCard325(track);
+  const index=Math.abs(delta)>48?Math.max(0,Math.min(walletBanks.length-1,d.index+(delta<0?1:-1))):Number(nearest?.dataset.wdCard??d.index);
+  syncWalletDetail324(index,true,true);
+ };
+ track.addEventListener('pointerup',end);
+ track.addEventListener('pointercancel',end);
+}
+
 function walletSharedFlight324(from,to,id,reverse=false,clip=0){
  const phone=document.querySelector('.phone');if(!phone||reducedMotion()||!from||!to||!Element.prototype.animate)return Promise.resolve();
  const origin=phone.getBoundingClientRect(),sx=phone.offsetWidth/origin.width,sy=phone.offsetHeight/origin.height;
@@ -1506,60 +1568,65 @@ function walletSharedFlight324(from,to,id,reverse=false,clip=0){
  const animation=ghost.animate([
  {transform:'translate3d(0,0,0) scale(1,1)',clipPath:reverse?'inset(0% round 16px)':'inset(0 0 '+hidden+'% 0 round 16px)'},
  {transform:'translate3d('+(b.x-a.x)+'px,'+(b.y-a.y)+'px,0) scale('+b.w/a.w+','+b.h/a.h+')',clipPath:reverse?'inset(0 0 '+hidden+'% 0 round 16px)':'inset(0% round 16px)'}
- ],{duration:reverse?420:560,easing:'cubic-bezier(.22,.72,.22,1)',fill:'forwards'});
+ ],{duration:reverse?480:520,easing:'cubic-bezier(.22,.75,.23,1)',fill:'forwards'});
  return animation.finished.catch(()=>{}).then(()=>{ghost.remove();if(walletDetailFlight===ghost)walletDetailFlight=null});
 }
 async function openWalletDetail(id,source){
  if(state.tab!=='cards'||walletDetailState||!walletBanks[id])return;
  const page=document.querySelector('.wallet-page'),screen=document.getElementById('screen'),scroller=document.getElementById('scroller');
  if(!page||!screen)return;
- const from=source?.getBoundingClientRect();let seam=page.querySelector('.wallet-live-pocket-front')?.getBoundingClientRect().top;
- if(source&&from){const z=Number(getComputedStyle(source).zIndex);for(const card of page.querySelectorAll('[data-wallet-live-card]')){const r=card.getBoundingClientRect();if(card!==source&&Number(getComputedStyle(card).zIndex)>z&&r.top>from.top)seam=Math.min(seam,r.top);}}
- const clip=from&&seam?Math.max(0,(from.bottom-seam)/from.height):0;
+ const from=source?.getBoundingClientRect(),clip=walletOcclusion325(source,page);
+ const wasRaised=walletLiveRaised;
  const scroll=scroller.scrollTop,token=++walletDetailGeneration;
  clearTimeout(walletLiveMotionTimer);walletLiveMotionTimer=0;++walletLiveMotionToken;
  const wrap=document.createElement('div');wrap.innerHTML=walletDetailMarkup324();
  const layer=wrap.firstElementChild;screen.append(layer);
- walletDetailState={index:id,page,layer,scroll,source,opening:true,closing:false};
+ walletDetailState={index:id,page,layer,scroll,source,wasRaised,opening:true,closing:false,pendingIndex:null,settleTimer:0};
  page.classList.add('wallet-detail-hidden');scroller.scrollTop=0;
  syncWalletDetail324(id);
  const target=layer.querySelector('[data-wd-card="'+id+'"]');
  layer.classList.add('wd-entering');target.style.visibility='hidden';
  const track=layer.querySelector('.wd-carousel');
- let scrollFrame=0;
- track.addEventListener('scroll',()=>{cancelAnimationFrame(scrollFrame);scrollFrame=requestAnimationFrame(()=>{
-  if(!walletDetailState||walletDetailState.layer!==layer||walletDetailState.opening||walletDetailState.closing||performance.now()<(walletDetailState.scrollLockUntil||0))return;
-  const center=track.getBoundingClientRect().left+track.clientWidth/2;
-  const closest=[...track.querySelectorAll('[data-wd-card]')].sort((a,b)=>Math.abs(a.getBoundingClientRect().left+a.offsetWidth/2-center)-Math.abs(b.getBoundingClientRect().left+b.offsetWidth/2-center))[0];
-  if(closest)syncWalletDetail324(Number(closest.dataset.wdCard),false);
- })},{passive:true});
+ bindWalletDrag325(walletDetailState,track);
  await walletSharedFlight324(from,target.getBoundingClientRect(),id,false,clip);
  if(token!==walletDetailGeneration||!walletDetailState)return;
  target.style.visibility='';layer.classList.remove('wd-entering');walletDetailState.opening=false;layer.querySelector('[data-wd-back]').focus({preventScroll:true});
+ if(walletDetailState.closeRequested)closeWalletDetail324();
 }
 async function closeWalletDetail324(){
- const d=walletDetailState;if(!d||d.opening||d.closing)return;
- d.closing=true;const token=++walletDetailGeneration,scroller=document.getElementById('scroller');
- const from=d.layer.querySelector('[data-wd-card="'+d.index+'"]').getBoundingClientRect();
- d.layer.style.display='none';d.page.classList.remove('wallet-detail-hidden');scroller.scrollTop=d.scroll;
- d.page.classList.add('wd-restoring');walletLiveRaised=false;
- walletLiveApplySelection(d.index,false,++walletLiveMotionToken);
- const target=d.page.querySelector('[data-wallet-live-card="'+d.index+'"]'),to=target?.getBoundingClientRect();
- const seam=d.page.querySelector('.wallet-live-pocket-front')?.getBoundingClientRect().top;
+ const d=walletDetailState;if(!d||d.closing)return;
+ if(d.opening){d.closeRequested=true;return;}
+ d.closing=true;clearTimeout(d.settleTimer);const token=++walletDetailGeneration,scroller=document.getElementById('scroller');
+ const track=d.layer.querySelector('.wd-carousel'),nearest=closestWalletCard325(track);
+ if(nearest)syncWalletDetail324(Number(nearest.dataset.wdCard),false);
+ const selected=d.layer.querySelector('[data-wd-card="'+d.index+'"]');
+ const from=selected.getBoundingClientRect(),layerRect=d.layer.getBoundingClientRect(),phone=document.querySelector('.phone'),pr=phone.getBoundingClientRect();
+ const sx=phone.offsetWidth/pr.width,sy=phone.offsetHeight/pr.height;
+ const scrollLeft=track.scrollLeft;
+ // Keep the outgoing screen in the same visual location while the wallet is restored underneath.
+ selected.style.visibility='hidden';d.layer.classList.add('wd-exiting');d.layer.inert=true;
+ Object.assign(d.layer.style,{position:'absolute',left:(layerRect.left-pr.left)*sx+'px',top:(layerRect.top-pr.top)*sy+'px',width:layerRect.width*sx+'px',zIndex:'20',pointerEvents:'none'});
+ phone.append(d.layer);track.scrollLeft=scrollLeft;
+ d.page.classList.add('wd-restoring');d.page.classList.remove('wallet-detail-hidden');scroller.scrollTop=d.scroll;
+ walletLiveRaised=false;walletLiveApplySelection(d.index,false,++walletLiveMotionToken);
+ if(d.wasRaised){walletLiveRaised=true;const scene=d.page.querySelector('[data-wallet-live-scene]');scene.dataset.opened='true';scene.dataset.phase='expanded';const b=scene.querySelector('[data-wallet-stack-toggle]');b?.setAttribute('aria-expanded','true');b?.setAttribute('aria-label','Recolher pilha de cartões');}
+ const target=d.page.querySelector('[data-wallet-live-card="'+d.index+'"]'),to=target?.getBoundingClientRect(),clip=walletOcclusion325(target,d.page);
  if(target)target.style.visibility='hidden';
- await walletSharedFlight324(from,to,d.index,true,to&&seam?Math.max(0,(to.bottom-seam)/to.height):0);
+ if(reducedMotion())d.layer.style.opacity='0';else d.layer.animate([{opacity:1},{opacity:0}],{duration:300,easing:'ease-out',fill:'forwards'});
+ await walletSharedFlight324(from,to,d.index,true,clip);
  if(token!==walletDetailGeneration)return;
  if(target)target.style.visibility='';d.page.classList.remove('wd-restoring');d.layer.remove();walletDetailState=null;target?.focus({preventScroll:true});
 }
 document.getElementById('screen').addEventListener('click',e=>{
  const layer=e.target.closest('#walletDetail324');if(!layer)return;
  e.stopImmediatePropagation();e.preventDefault();
- if(!walletDetailState||walletDetailState.opening||walletDetailState.closing)return;
- if(e.target.closest('[data-wd-back]'))closeWalletDetail324();
- else if(e.target.closest('[data-wd-all]'))go('expenses');
+ if(!walletDetailState||walletDetailState.closing)return;
+ if(e.target.closest('[data-wd-back]')){closeWalletDetail324();return;}
+ if(walletDetailState.opening||performance.now()<(walletDetailState.ignoreClickUntil||0))return;
+ if(e.target.closest('[data-wd-all]'))go('expenses');
  else{
   const step=e.target.closest('[data-wd-step]'),select=e.target.closest('[data-wd-select]'),card=e.target.closest('[data-wd-card]');
-  const id=step?(walletDetailState.index+Number(step.dataset.wdStep)+walletBanks.length)%walletBanks.length:select?Number(select.dataset.wdSelect):card?Number(card.dataset.wdCard):null;
+  const id=step?Math.max(0,Math.min(walletBanks.length-1,walletDetailState.index+Number(step.dataset.wdStep))):select?Number(select.dataset.wdSelect):card?Number(card.dataset.wdCard):null;
   if(id!==null)syncWalletDetail324(id,true,true);
  }
 },true);
@@ -1567,7 +1634,7 @@ document.addEventListener('keydown',e=>{
  if(!walletDetailState)return;
  if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();closeWalletDetail324();}
  else if(['ArrowLeft','ArrowRight'].includes(e.key)&&e.target.closest('#walletDetail324')){
-  e.preventDefault();e.stopImmediatePropagation();syncWalletDetail324((walletDetailState.index+(e.key==='ArrowRight'?1:2))%3,true,true);
+  e.preventDefault();e.stopImmediatePropagation();syncWalletDetail324(Math.max(0,Math.min(walletBanks.length-1,walletDetailState.index+(e.key==='ArrowRight'?1:-1))),true,true);
  }
 },true);
 
