@@ -1467,7 +1467,7 @@ function toggleWalletStack(){
 function walletDetailCard324(id){
  const b=walletBanks[id];
  return '<article class="wd-card wd-card--'+b.kind+'" data-wd-card="'+id+'" aria-label="'+b.n+', final '+b.last+'">'+
- '<div class="wd-card-top"><b>'+b.label+'</b><span>Cartão vinculado</span></div>'+
+ '<div class="wd-card-top"><b>'+b.label+'</b><span>•••• '+b.last+'</span></div>'+
  '<div class="wd-card-body"><small>Saldo do cartão</small><strong>—</strong><span>Não disponível</span></div>'+
  '<div class="wd-card-bottom"><span>•••• &nbsp;•••• &nbsp;•••• &nbsp;'+b.last+'</span><b>'+b.tag+'</b></div></article>';
 }
@@ -1512,6 +1512,7 @@ function settleWallet325(d){
  clearTimeout(d.settleTimer);d.pendingIndex=null;
  const card=closestWalletCard325(d.layer.querySelector('.wd-carousel'));
  if(card)syncWalletDetail324(Number(card.dataset.wdCard),false);
+ if(d.closeRequested){d.closeRequested=false;closeWalletDetail324();}
 }
 function scheduleWalletSettle325(d){
  clearTimeout(d.settleTimer);d.settleTimer=setTimeout(()=>settleWallet325(d),140);
@@ -1544,7 +1545,7 @@ function bindWalletDrag325(d,track){
  const end=e=>{
   const g=d.drag;if(!g||g.id!==e.pointerId)return;
   d.drag=null;track.classList.remove('wd-dragging');
-  if(!g.moved)return;
+  if(!g.moved){if(d.closeRequested)scheduleWalletSettle325(d);return;}
   d.ignoreClickUntil=performance.now()+250;
   const delta=e.clientX-g.x,nearest=closestWalletCard325(track);
   const index=Math.abs(delta)>48?Math.max(0,Math.min(walletBanks.length-1,d.index+(delta<0?1:-1))):Number(nearest?.dataset.wdCard??d.index);
@@ -1552,6 +1553,7 @@ function bindWalletDrag325(d,track){
  };
  track.addEventListener('pointerup',end);
  track.addEventListener('pointercancel',end);
+ track.addEventListener('lostpointercapture',end);
 }
 
 function walletSharedFlight324(from,to,id,reverse=false,clip=0){
@@ -1595,7 +1597,7 @@ async function openWalletDetail(id,source){
 }
 async function closeWalletDetail324(){
  const d=walletDetailState;if(!d||d.closing)return;
- if(d.opening){d.closeRequested=true;return;}
+ if(d.opening||d.pendingIndex!==null||d.drag){d.closeRequested=true;if(!d.opening&&!d.drag)scheduleWalletSettle325(d);return;}
  d.closing=true;clearTimeout(d.settleTimer);const token=++walletDetailGeneration,scroller=document.getElementById('scroller');
  const track=d.layer.querySelector('.wd-carousel'),nearest=closestWalletCard325(track);
  if(nearest)syncWalletDetail324(Number(nearest.dataset.wdCard),false);

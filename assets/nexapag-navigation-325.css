@@ -115,3 +115,7 @@
 .phone .wd-flight .wd-card{width:100%;height:100%;aspect-ratio:auto;border-radius:16px;transition:none}
 @media(max-width:350px){.phone .wallet-live{padding:12px}.phone .wd-carousel{--wd-gutter:16px}.phone .wd-card{padding:12px}.phone .wd-header h1{font-size:15px}.phone .wd-summary strong{font-size:13px}.phone .wd-card-top span{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.phone .bottom-dock *,.phone .wd-card,.phone .wd-dots i,.phone .wd-icon::before,.phone .wallet-live-arrow::before,.phone .chips .chip,.phone #homePage .carousel-track,.phone #homePage .carousel-slide{transition:none!important;animation:none!important}}
+
+/* Avoid duplicated card text at the shared-element handoff. */
+.phone .wd-card-top span{font-variant-numeric:tabular-nums;letter-spacing:.01em;white-space:nowrap}
+.phone .wd-flight{isolation:isolate}

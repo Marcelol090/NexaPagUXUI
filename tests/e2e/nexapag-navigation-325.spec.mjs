@@ -39,3 +39,19 @@ for(const width of [320,390,430]){
   expect(errors).toEqual([]);
  });
 }
+
+test('V3.25 quick return waits for the selected card and restores the expanded stack',async({page})=>{
+ await page.setViewportSize({width:390,height:844});await page.goto('/v2.html');
+ await page.locator('#dock [data-tab="cards"]').click();
+ const scene=page.locator('[data-wallet-live-scene]');
+ await scene.locator('[data-wallet-stack-toggle]').click();
+ await expect(scene).toHaveAttribute('data-opened','true');
+ await page.locator('[data-wallet-live-details]').click();
+ await expect(page.locator('.wd-flight')).toHaveCount(0);
+ await page.locator('[data-wd-select="2"]').click();
+ await page.locator('[data-wd-back]').click();
+ await expect(page.locator('#walletDetail324')).toHaveCount(0,{timeout:6000});
+ await expect(scene).toHaveAttribute('data-opened','true');
+ await expect(page.locator('.wallet-live-selection')).toContainText('Inter Black');
+ await expect(page.locator('.wd-flight')).toHaveCount(0);
+});
