@@ -60,8 +60,8 @@ const LIQUID_POSES=[
  {t:0.985,move:1.000,w:1.000,h:1.000,lift:0,super:4.20,ripple:0.000,jet:0,opacity:.08},
  {t:1.000,move:1.000,w:1.000,h:1.000,lift:0,super:4.20,ripple:0.000,jet:0,opacity:0}
 ];
-const OPEN_DURATION=740,CLOSE_DURATION=620;
-let flightAnimation=null,morphRevealTimer=null;
+const OPEN_DURATION=540,CLOSE_DURATION=440;
+let flightAnimation=null,morphRevealFrame=0;
 
 /* V3.17: 16 authored poses, continuously interpolated with shape-preserving cubic
    Hermite sampling. The browser receives 49 evenly spaced animation frames. */
@@ -257,7 +257,7 @@ function fluidFlight(start,end,kind,reverse=false,onReveal,onStart,fromKind=null
   const tint=document.createElement('span');tint.className='orb-fluid-color-mix';
   ghost.append(tint);
  }
- const duration=reverse?CLOSE_DURATION:(cardToCard?560:OPEN_DURATION);
+ const motion=window.NexaMotion336;const duration=reverse?(motion?.orbClose??CLOSE_DURATION):(cardToCard?(motion?.orbSwitch??420):(motion?.orbOpen??OPEN_DURATION));
  Object.assign(ghost.style,{
   left:start.x+'px',top:start.y+'px',width:start.w+'px',height:start.h+'px',
   transformOrigin:'0 0',transform:'translate3d(0,0,0)',
@@ -322,22 +322,26 @@ function fluidFlight(start,end,kind,reverse=false,onReveal,onStart,fromKind=null
   ],{duration,easing:'cubic-bezier(.22,.65,.29,1)',fill:'forwards'});
  }
  if(!reverse&&onReveal){
-  morphRevealTimer=setTimeout(()=>{
-   morphRevealTimer=null;
-   if(gen===flightGeneration)onReveal();
-  },Math.round(duration*(cardToCard?.70:.73)));
+  // Follow the actual animation clock, not a separate timeout. If the
+  // browser drops frames, the content still reveals at the correct pose.
+  const revealAt=duration*(motion?.reveal??.5);
+  const checkReveal=()=>{morphRevealFrame=0;if(gen!==flightGeneration)return;
+   if(Number(animation.currentTime)>=revealAt||animation.playState==='finished'){onReveal();return}
+   morphRevealFrame=requestAnimationFrame(checkReveal);
+  };morphRevealFrame=requestAnimationFrame(checkReveal);
  }
  return animation.finished.catch(()=>{}).then(()=>{
   if(gen===flightGeneration){
-   if(morphRevealTimer!==null)clearTimeout(morphRevealTimer);
-   morphRevealTimer=null;if(!reverse)onReveal?.();cleanupFlight();
+   cancelAnimationFrame(morphRevealFrame);morphRevealFrame=0;if(!reverse)onReveal?.();cleanupFlight();
   }
  }).finally(()=>{
   if(flightAnimation===animation)flightAnimation=null;
   animation.cancel();if(ghost.isConnected)ghost.remove();
  });
 }
-function stopFlight(){flightGeneration++;if(morphRevealTimer!==null)clearTimeout(morphRevealTimer);morphRevealTimer=null;flightAnimation?.cancel();flightAnimation=null;cleanupFlight();}
+function stopFlight(){flightGeneration++;cancelAnimationFrame(morphRevealFrame);morphRevealFrame=0;flightAnimation?.cancel();flightAnimation=null;cleanupFlight();}
+function settleFlight(){if(flightAnimation&&flightAnimation.playState!=='finished'){try{flightAnimation.finish()}catch{}}}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)settleFlight()});botReducedMedia.addEventListener?.('change',e=>{if(e.matches)settleFlight()});
 function restoreOrigin(){if(restoreFocus?.isConnected){restoreFocus.classList.remove('is-morph-origin');restoreFocus.setAttribute('aria-expanded','false');}}
 function showLayer(kind,button,sourceOverride=null,outgoingLayer=null,sourceKind=null){
  if(busy||active||!STORIES[kind])return;
@@ -359,11 +363,11 @@ function showLayer(kind,button,sourceOverride=null,outgoingLayer=null,sourceKind
  '<div class="orb-story-divider"></div><div class="orb-story-foot"><span>'+v.note+'</span>'+
  '<button type="button" class="orb-story-go" data-orb-follow="'+kind+'">'+v.cta+'</button></div></div></article>'+orbControlsMarkup(kind);
  host.append(layer);active={kind,layer,card:layer.querySelector('.orb-story-card'),from};
- const expandedHeight=Math.ceil(layer.getBoundingClientRect().height+14);
- const baseline=phone.getBoundingClientRect().width<=350?376:360;
- const hostHeight=Math.max(Number(home()?.dataset.orbStageHeight)||0,baseline,expandedHeight);
+ const expandedHeight=Math.ceil(layer.getBoundingClientRect().height+8);
+ const hostHeight=expandedHeight;
  home().dataset.orbStageHeight=String(hostHeight);
  home()?.style.setProperty('--orb-stage-height',hostHeight+'px');
+ host.style.setProperty('--orb-stage-height',hostHeight+'px');
  home()?.style.setProperty('--orb-target-height',hostHeight+'px');
  home()?.classList.remove('orb-inline-closing');home()?.classList.add('orb-inline-expanded','orb-choreo-running');
  const target=rect(active.card);active.card.style.opacity='0';
@@ -383,12 +387,12 @@ function showLayer(kind,button,sourceOverride=null,outgoingLayer=null,sourceKind
 }
 function closeLayer(follow){
  if(!active)return;
- if(busy){if(transitionDirection==='opening')pendingClose={kind:'layer',follow};return;}
+ if(busy){if(transitionDirection==='opening'){pendingClose={kind:'layer',follow};settleFlight()}return;}
  busy=true;transitionDirection='closing';
  const {kind,layer,card,from}=active;
  const fromCard=rect(card);
  layer.classList.remove('is-content-ready');layer.classList.add('is-closing');
- home()?.classList.remove('orb-inline-expanded');home()?.classList.add('orb-inline-closing','orb-choreo-running');
+ home()?.classList.add('orb-inline-closing','orb-choreo-running');
  card.style.opacity='0';
  const origin=restoreFocus?.querySelector('.orb-bot-art')||restoreFocus?.querySelector('.jelly');
  const destination=origin?.isConnected?rect(origin):from;
@@ -413,12 +417,13 @@ async function openSpending(button,sourceOverride=null,outgoingLayer=null,source
  button.classList.add('is-morph-origin');button.setAttribute('aria-expanded','true');
  originalPosition=rect(button.querySelector('.orb-bot-art')||button.querySelector('.jelly')||button);
  scrollAtOpen=document.getElementById('scroller')?.scrollTop||0;
- if(home()&&!home().dataset.orbStageHeight){const baseline=phone.getBoundingClientRect().width<=350?376:360;home().dataset.orbStageHeight=String(baseline);home().style.setProperty('--orb-stage-height',baseline+'px');}
+ if(home()){home().dataset.orbStageHeight='286';home().style.setProperty('--orb-stage-height','286px');}
  home()?.classList.add('orb-choreo-running','orb-flight-cover');
  bridge()?.expand?.(false);
  await waitFrames();
  if(bridge()?.state?.tab!=='home'||!busy||transitionDirection!=='opening')return;
  const target=document.querySelector('.carousel-slide.current');
+ const panel=document.getElementById('expandedHero');if(panel&&home()){const measured=Math.ceil(panel.getBoundingClientRect().height+8);home().dataset.orbStageHeight=String(measured);home().style.setProperty('--orb-stage-height',measured+'px');document.getElementById('heroRegion')?.style.setProperty('--orb-stage-height',measured+'px');}
  if(!target){home()?.classList.remove('orb-choreo-running','orb-flight-cover');restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;return;}
  await fluidFlight(sourceOverride||originalPosition,rect(target),'spending',false,()=>{
   home()?.classList.add('orb-flight-reveal');
@@ -432,14 +437,14 @@ async function openSpending(button,sourceOverride=null,outgoingLayer=null,source
 }
 async function closeSpending(){
  if(!bridge()?.state?.expanded)return;
- if(busy){if(transitionDirection==='opening')pendingClose={kind:'spending'};return;}
+ if(busy){if(transitionDirection==='opening'){pendingClose={kind:'spending'};settleFlight()}return;}
  busy=true;transitionDirection='closing';
  bridge()?.stopAutoplay?.();
  const card=document.querySelector('.carousel-slide.current');
  const fromCard=card?rect(card):null;
  const currentScroll=document.getElementById('scroller')?.scrollTop||0;
  const destination=originalPosition?inPhone({...originalPosition,y:originalPosition.y-(currentScroll-scrollAtOpen)}):null;
- home()?.classList.remove('orb-flight-reveal');home()?.classList.add('orb-choreo-running','orb-flight-cover');
+ home()?.classList.remove('orb-flight-reveal');home()?.classList.add('orb-choreo-running','orb-flight-cover','orb-spending-closing');
  bridge()?.state && (bridge().state.slide=0);
  bridge()?.stopAutoplay?.();
  // V3.4 bridge exposes expand but not collapse: keep original state in sync.
@@ -452,7 +457,7 @@ async function closeSpending(){
  const to=fallback?rect(fallback):destination;
  if(fromCard&&to)await fluidFlight(to,fromCard,'spending',true);
  if(bridge()?.state?.tab!=='home'||!busy||transitionDirection!=='closing')return;
- home()?.classList.remove('orb-flight-cover','orb-flight-reveal','orb-choreo-running');
+ home()?.classList.remove('orb-flight-cover','orb-flight-reveal','orb-choreo-running','orb-spending-closing');
  home()?.style.removeProperty('--orb-stage-height');if(home())delete home().dataset.orbStageHeight;
  restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;
  const next=pendingOpen;
@@ -466,7 +471,7 @@ function switchKind(kind){
  if(!KINDS.includes(kind)||bridge()?.state?.tab!=='home')return;
  const current=active?.kind||(bridge()?.state?.expanded?'spending':null);
  if(!current||current===kind)return;
- if(busy){pendingSwitch=kind;return;}
+ if(busy){pendingSwitch=kind;settleFlight();return;}
  const sourceEl=current==='spending'?document.querySelector('.carousel-slide.current'):active?.card;
  if(!sourceEl)return;
  const sourceRect=rect(sourceEl);

@@ -1,0 +1,63 @@
+/* V3.36 Human Motion System — derived exclusively from Quiet Precision.
+ * Timing is independent of refresh rate. CSS uses role-based duration;
+ * JS uses window.NexaMotion336 for authored timelines and replay. */
+.phone[data-spacing-system="v322"]{
+ --nx-motion-press:120ms;--nx-motion-feedback:160ms;--nx-motion-nav:240ms;
+ --nx-motion-disclose:240ms;--nx336-carousel:320ms;--nx336-sheet:280ms;
+ --nx336-arrive:cubic-bezier(.16,.84,.24,1);
+ --nx336-exit:cubic-bezier(.4,0,.7,.35);
+}
+.phone[data-spacing-system="v322"] .screen-page.nx-tab-enter{
+ animation:nx336-enter 160ms var(--nx336-arrive) both;
+}
+@keyframes nx336-enter{from{opacity:.94}to{opacity:1}}
+.phone[data-spacing-system="v322"] :is(.round-action,.bottom-dock button,.day-cell,.category-open,.category-morph,.offer-card button,.review-copy button,.expense-periods button,.expression-actions button,.wd-icon,.wallet-live-arrow){
+ -webkit-tap-highlight-color:transparent;
+}
+.phone[data-spacing-system="v322"] :is(.offer-card button,.review-copy button,.expense-periods button,.expression-actions button){
+ transition:background-color var(--nx-motion-feedback) ease,color var(--nx-motion-feedback) ease,transform var(--nx-motion-press) var(--nx336-arrive);
+}
+.phone[data-spacing-system="v322"] :is(.offer-card button,.review-copy button,.expense-periods button,.expression-actions button):active:not(:disabled){transform:scale(.97)}
+.phone[data-spacing-system="v322"] #homePage .carousel-track{transition:transform var(--nx336-carousel) var(--nx336-arrive)}
+.phone[data-spacing-system="v322"] #homePage .carousel-track.is-dragging{transition:none!important}
+.phone[data-spacing-system="v322"] #homePage .carousel-slide{transition:transform var(--nx336-carousel) var(--nx336-arrive),opacity 160ms ease,filter 160ms ease}
+.phone[data-spacing-system="v322"] #homePage .carousel-slide.current{filter:none}
+.phone[data-spacing-system="v322"] #homePage .orb-inline-section .orb-story-content{transition:opacity 160ms ease-out,transform 160ms var(--nx336-arrive)}
+.phone[data-spacing-system="v322"] #homePage .orb-inline-section .orb-story-content>*{transition-delay:0ms}
+.phone[data-spacing-system="v322"] .category-v29 .category-detail{
+ transition:grid-template-rows var(--nx-motion-disclose) var(--nx336-arrive),opacity var(--nx-motion-feedback) ease;
+}
+.phone[data-spacing-system="v322"] .category-v29 .category-chevron{transition:transform var(--nx-motion-disclose) var(--nx336-arrive)}
+/* The chart's old decorative pseudo-element protruded 68px outside its
+   card at every tested width. Remove the overflowing ornament, not the data. */
+.phone[data-spacing-system="v322"] .spending-chart::before{content:none;display:none}
+.phone[data-spacing-system="v322"] .spending-chart .chart-plot{min-width:0;margin-inline:0}
+.phone[data-spacing-system="v322"] .spending-chart .chart-plot svg{overflow:hidden}
+.phone[data-spacing-system="v322"] .spending-chart .chart-hit span{transition:opacity 120ms ease,transform 120ms var(--nx336-arrive)}
+.phone[data-spacing-system="v322"] .expense-expression .expression-face,
+.phone[data-spacing-system="v322"] .expense-expression .expression-rhythm{
+ transition:opacity 160ms ease,transform 240ms var(--nx336-arrive);
+}
+.phone[data-spacing-system="v322"] .expense-expression .expression-face g{transition:opacity 120ms ease,transform 180ms var(--nx336-arrive)}
+.phone[data-spacing-system="v322"] .expense-expression .expression-wash{animation-play-state:paused}
+.phone[data-spacing-system="v322"] .expense-expression.expression-counting .expression-wash{animation-play-state:running}
+.phone[data-spacing-system="v322"] .insight-sheet{transition:transform var(--nx336-sheet) var(--nx336-arrive)}
+.phone[data-spacing-system="v322"] .insight-scrim{transition:opacity var(--nx-motion-feedback) ease}
+.phone[data-spacing-system="v322"] .toast{animation-duration:160ms}
+.phone[data-spacing-system="v322"] .wallet-live-card{
+ transition:transform 320ms var(--nx336-arrive),opacity 160ms ease;
+}
+.phone[data-spacing-system="v322"] .wallet-live-scene[data-phase="retracting"] .wallet-live-card{transition-duration:240ms,160ms}
+.phone[data-spacing-system="v322"] .wallet-live-scene[data-phase="lifting"] .wallet-live-card{transition-duration:320ms,160ms}
+.phone[data-spacing-system="v322"] .wallet-live-scene[data-phase="closing"] .wallet-live-card{transition-duration:300ms,160ms}
+.phone[data-spacing-system="v322"] .review-item.is-done .review-glyph{animation:nx336-confirm 160ms var(--nx336-arrive) both}
+@keyframes nx336-confirm{from{transform:scale(.92)}to{transform:none}}
+@media(prefers-reduced-motion:reduce){
+ .phone[data-spacing-system="v322"] :is(.screen-page.nx-tab-enter,.review-glyph,.toast,.expression-wash){animation:none!important}
+ .phone[data-spacing-system="v322"] :is(.carousel-track,.carousel-slide,.orb-story-content,.orb-story-content>*,.category-detail,.category-chevron,.expression-face,.expression-face g,.expression-rhythm,.chart-hit span,.wallet-live-card,.insight-sheet,.insight-scrim,.review-copy button,.offer-card button,.expense-periods button,.expression-actions button){transition:none!important}
+}
+
+/* Retired ornaments must not contribute to scrollWidth. Keep branded wallet
+   pigmentation inside the bounds of its reading panel. */
+.phone[data-spacing-system="v322"] :is(.overview:not(.expense-expression),.offer-card)::before{content:none;display:none}
+.phone[data-spacing-system="v322"] .wallet-selected-summary::before{right:0;top:0;width:100%;height:100%;background:radial-gradient(ellipse at 95% 0%,var(--summary-glow,#d7b2ec70),transparent 65%)}

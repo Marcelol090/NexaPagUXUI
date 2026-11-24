@@ -1,0 +1,131 @@
+/* V3.35 — Optical Composition. V3.28 Quiet Precision lineage.
+ * Shared rails, role-based keylines and measured internal alignment.
+ * Do not impose identical radii on financial characters or bank artwork. */
+.phone[data-spacing-system="v322"]{
+ --nx335-pad:16px;--nx335-gap:12px;--nx335-section:24px;
+ --nx335-radius:22px;--nx335-inner:14px;--nx335-control:12px;
+ --nx335-border:1px;--nx335-keyline:#dce5da;--nx335-divider:#e4eae2;
+ --nx335-glyph:18px;--nx335-stroke:1.85;
+ --nx335-secondary:#526357;--nx335-value:#25372c;
+ --nx335-out:#963f38;--nx335-in:#286744;--nx335-refund:#825500;
+}
+.phone[data-spacing-system="v322"][data-ui-theme="dark"]{
+ --nx335-keyline:#405347;--nx335-divider:#35473b;
+ --nx335-secondary:#c1d0c4;--nx335-value:#edf4e8;
+ --nx335-out:#ff9c91;--nx335-in:#96e5ac;--nx335-refund:#f7cf73;
+}
+@container(max-width:350px){
+ .phone[data-spacing-system="v322"]{--nx335-pad:12px;--nx335-gap:8px}
+}
+.phone[data-spacing-system="v322"] .screen-page{min-width:0}
+.phone[data-spacing-system="v322"] .screen-page>.section-title{
+ margin:var(--nx335-section) 0 8px;
+ display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;
+}
+.phone[data-spacing-system="v322"] .section-title h2{
+ display:flex;align-items:center;gap:8px;font-size:16px;line-height:1.3;letter-spacing:-.025em;
+}
+.phone[data-spacing-system="v322"] .section-title h2 svg{
+ width:var(--nx335-glyph);height:var(--nx335-glyph);flex:0 0 var(--nx335-glyph);display:block;
+}
+.phone[data-spacing-system="v322"] .section-title button{
+ max-width:min(128px,37cqw);text-align:center;justify-self:end;
+ border-radius:var(--nx335-control);padding:8px 10px;
+}
+.phone[data-spacing-system="v322"] .page-header{padding:8px 0 20px}
+.phone[data-spacing-system="v322"] .page-header h1{margin:4px 0 6px;letter-spacing:-.04em}
+.phone[data-spacing-system="v322"] .page-header p{max-width:42ch;line-height:1.5}
+.phone[data-spacing-system="v322"][data-page-theme] :is(.week,.money-insight,.daily-note,.transactions,.calendar-surface,.spending-chart,.overview:not(.expense-expression),.offer-card,.review-item,.wallet-live,.wallet-selected-summary){
+ box-sizing:border-box;border:var(--nx335-border) solid var(--nx335-keyline);border-radius:var(--nx335-radius);
+ padding:var(--nx335-pad);min-width:0;
+}
+.phone[data-spacing-system="v322"] .expenses-page .category.category-v29{
+ border:var(--nx335-border) solid var(--nx335-keyline);
+ border-radius:var(--nx335-radius)!important;
+}
+.phone[data-spacing-system="v322"] .expenses-page .category-v29 .category-row{
+ padding:var(--nx335-pad);grid-template-columns:44px minmax(0,1fr);gap:var(--nx335-gap);
+}
+.phone[data-spacing-system="v322"] .expenses-page .category-v29 .category-morph{
+ justify-self:center;align-self:center;width:44px;height:44px;min-width:44px;min-height:44px;
+}
+.phone[data-spacing-system="v322"] .expenses-page .category-v29 .category-open{
+ grid-template-columns:minmax(0,1fr) max-content 16px;column-gap:8px;align-items:center;
+}
+.phone[data-spacing-system="v322"] .expenses-page .category-v29 .category-open .copy>small{margin-top:4px;line-height:1.4}
+.phone[data-spacing-system="v322"] .expenses-page .category-v29 .category-open .amount{justify-self:end;font-variant-numeric:tabular-nums}
+.phone[data-spacing-system="v322"] .expenses-page .category-v29 .category-chevron{width:16px;height:16px;align-self:center;stroke-width:1.85}
+.phone[data-spacing-system="v322"] .expenses-page .category-v29 .category-detail-content{
+ padding:12px var(--nx335-pad) var(--nx335-pad);border-top:1px solid var(--nx335-divider);
+}
+.phone[data-spacing-system="v322"] .expenses-page .category-v29 .subcategory-main{align-items:baseline;gap:8px}
+.phone[data-spacing-system="v322"] .expenses-page .category-v29 .subcategory-entry{padding:8px 0}
+@container(max-width:350px){
+ .phone[data-spacing-system="v322"] .expenses-page .category-v29 .category-open{
+  grid-template-rows:auto auto;row-gap:8px;
+ }
+ .phone[data-spacing-system="v322"] .expenses-page .category-v29 .category-open .copy{grid-column:1/-1;grid-row:1}
+ .phone[data-spacing-system="v322"] .expenses-page .category-v29 .category-open .amount{grid-column:2;grid-row:2}
+ .phone[data-spacing-system="v322"] .expenses-page .category-v29 .category-chevron{grid-column:3;grid-row:2}
+}
+.phone[data-spacing-system="v322"] .week-head{align-items:start;gap:8px}
+.phone[data-spacing-system="v322"] .week .days{grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;margin-top:12px}
+.phone[data-spacing-system="v322"] .week .day-cell{padding:6px 0;gap:6px;justify-content:center;min-height:56px}
+.phone[data-spacing-system="v322"] .week .week-day-detail{padding:12px;margin-top:12px;border-radius:var(--nx335-inner);border:1px solid var(--nx335-divider)}
+.phone[data-spacing-system="v322"] .week-day-head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline}
+.phone[data-spacing-system="v322"] .week-source{margin-top:8px;line-height:1.4}
+.phone[data-spacing-system="v322"] .money-insights{gap:var(--nx335-gap);align-items:stretch}
+.phone[data-spacing-system="v322"][data-page-theme] .money-insight{
+ display:grid;grid-template-rows:32px auto minmax(32px,1fr) 5px auto;gap:8px;
+ align-content:stretch;min-height:178px;padding:12px;text-align:left;
+}
+.phone[data-spacing-system="v322"] .money-insight .insight-head{gap:4px;align-items:center;font-size:11px}
+.phone[data-spacing-system="v322"] .money-insight .insight-mark{width:28px;height:28px;border-radius:9px}
+.phone[data-spacing-system="v322"] .money-insight .insight-mark svg{width:16px;height:16px;display:block}
+.phone[data-spacing-system="v322"] .money-insight .insight-amount{margin:0;font-size:clamp(16px,5cqw,20px);line-height:1.25}
+.phone[data-spacing-system="v322"] .money-insight .insight-explain{margin:0;line-height:1.4}
+.phone[data-spacing-system="v322"] .money-insight .insight-track{margin:0;align-self:center;width:100%}
+.phone[data-spacing-system="v322"] .money-insight .insight-footer{grid-row:5;display:grid;grid-template-columns:1fr;gap:4px;margin:0;padding:0;align-content:start;line-height:1.3}
+.phone[data-spacing-system="v322"] .money-insight .insight-footer>span{justify-content:space-between;width:100%}
+.phone[data-spacing-system="v322"] .money-insight--refund .insight-track-placeholder{grid-row:4;visibility:hidden}
+.phone[data-spacing-system="v322"][data-page-theme] .transactions{padding:4px var(--nx335-pad)}
+.phone[data-spacing-system="v322"] .transactions .transaction{
+ display:grid;grid-template-columns:36px minmax(0,1fr) max-content;gap:var(--nx335-gap);align-items:center;
+ min-height:64px;padding:8px 0;border:0;border-bottom:1px solid var(--nx335-divider);border-radius:0;
+}
+.phone[data-spacing-system="v322"] .transactions .transaction:last-child{border-bottom:0}
+.phone[data-spacing-system="v322"] .transaction-symbol{width:36px;height:36px;border-radius:11px}
+.phone[data-spacing-system="v322"] :is(.transaction-symbol,.offer-icon,.review-glyph,.insight-mark,.tiny-icon) svg{display:block}
+.phone[data-spacing-system="v322"] .transaction-symbol svg{width:18px;height:18px}
+.phone[data-spacing-system="v322"] .transaction-amount{justify-self:end;text-align:right}
+.phone[data-spacing-system="v322"] .transaction-amount.out{color:var(--nx335-out)}
+.phone[data-spacing-system="v322"] .transaction-amount.in{color:var(--nx335-in)}
+.phone[data-spacing-system="v322"] .transaction-amount.refund{color:var(--nx335-refund)}
+.phone[data-spacing-system="v322"] .calendar-surface .calendar-intro{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.phone[data-spacing-system="v322"] .calendar-heatmap,.phone[data-spacing-system="v322"] .calendar-weekdays{grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.phone[data-spacing-system="v322"] .calendar-heatmap .heat-day{border-radius:9px;padding:4px 2px;align-items:center}
+.phone[data-spacing-system="v322"] .calendar-heatmap .heat-day .heat-day-line{margin-left:0;align-self:center;max-width:100%}
+.phone[data-spacing-system="v322"] .calendar-detail-panel{padding:12px 0 0;margin-top:12px;border-color:var(--nx335-divider)}
+.phone[data-spacing-system="v322"] .expense-expression{padding:var(--nx335-pad);border-radius:var(--nx335-radius)}
+.phone[data-spacing-system="v322"] .expense-expression .expression-actions{gap:8px}
+.phone[data-spacing-system="v322"] .expense-expression .expression-actions button{min-height:44px;border-radius:var(--nx335-inner)}
+.phone[data-spacing-system="v322"] .chart-readout{align-items:baseline;flex-wrap:wrap;gap:4px 8px;white-space:normal}
+.phone[data-spacing-system="v322"] .chart-readout strong{font-variant-numeric:tabular-nums}
+.phone[data-spacing-system="v322"] .offer-card .offer-icon{width:40px;height:40px;border-radius:var(--nx335-control)}
+.phone[data-spacing-system="v322"] .offer-card .offer-icon svg{width:20px;height:20px}
+.phone[data-spacing-system="v322"] .offer-card h3{margin:12px 0 4px}
+.phone[data-spacing-system="v322"] .offer-card p{margin:0 0 12px}
+.phone[data-spacing-system="v322"] .review-item{grid-template-columns:40px minmax(0,1fr);gap:var(--nx335-gap)}
+.phone[data-spacing-system="v322"] .review-copy{display:grid;justify-items:start;gap:4px}
+.phone[data-spacing-system="v322"] .review-copy p{margin:0 0 8px}
+.phone[data-spacing-system="v322"] .review-copy button{border-radius:var(--nx335-control);justify-self:start}
+.phone[data-spacing-system="v322"] .wallet-grid{padding:12px 0 8px;gap:16px var(--nx335-gap)}
+.phone[data-spacing-system="v322"] .wallet-secondary-title{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 8px}
+.phone[data-spacing-system="v322"] .wallet-live-heading{gap:8px}
+.phone[data-spacing-system="v322"] .wallet-live-selection,.phone[data-spacing-system="v322"] .wallet-live-navigation{align-items:center;gap:8px}
+.phone[data-spacing-system="v322"] .wallet-detail324 :is(.wd-summary,.wd-metrics>div,.wd-empty){border:1px solid var(--nx335-keyline);border-radius:var(--nx335-inner);padding:var(--nx335-pad)}
+.phone[data-spacing-system="v322"] .wallet-detail324 .wd-section{margin-top:var(--nx335-section)}
+.phone[data-spacing-system="v322"] .wallet-detail324 .wd-metrics{gap:var(--nx335-gap)}
+.phone[data-spacing-system="v322"] .wallet-detail324 .wd-card-top b{min-width:0;line-height:1.35}
+.phone[data-spacing-system="v322"] .wallet-detail324 .wd-card-top span{flex:none}
+@media(prefers-reduced-motion:reduce){.phone[data-spacing-system="v322"] .money-insight{transition:none!important}}

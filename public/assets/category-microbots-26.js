@@ -12,6 +12,7 @@
   const duration=1440; // generated asset: 9 frames × 160ms
   const settleDelay=1350;
   const timers=new WeakMap();
+  const active=new Set();
   const reduced=()=>window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const url=(slug,final=false)=>`./assets/microbot-${slug}${final?'-last.png':'.webp'}`;
 
@@ -28,14 +29,15 @@
       <span class="category-morph-glyph" aria-hidden="true"><svg viewBox="0 0 24 24">${fallback}</svg></span>
     </button>`;
   };
+  function settle(button){
+    const old=timers.get(button);if(old)old.forEach(clearTimeout);timers.delete(button);active.delete(button);
+    button.classList.remove('is-playing','is-finishing');button.classList.add('is-complete');button.dataset.motionState='complete';
+    const film=button.querySelector('.category-morph-film');if(film?.hasAttribute('src'))film.removeAttribute('src');
+  }
   function play(button){
     if(!button || !button.isConnected)return;
     const spec=catalogue[button.dataset.categoryMotion];
-    if(!spec || reduced()){
-      button.classList.remove('is-playing','is-finishing');
-      button.classList.add('is-complete');
-      return;
-    }
+    if(!spec||reduced()||document.hidden){settle(button);return;}
     const old=timers.get(button);
     if(old){old.forEach(clearTimeout)}
     // Replacing the <img> restarts the decoder without refetching unique URLs.
@@ -45,31 +47,37 @@
     film.removeAttribute('src');
     previous.replaceWith(film);
     button.classList.remove('is-playing','is-finishing','is-complete');
-    button.dataset.motionState='loading';
+    button.dataset.motionState='loading';active.add(button);
     let started=false;
     const begin=()=>{
       if(started)return; started=true;
-      if(!button.isConnected||film!==button.querySelector('.category-morph-film'))return;
+      if(!button.isConnected||film!==button.querySelector('.category-morph-film')||button.dataset.motionState!=='loading')return;
+      if(reduced()||document.hidden){settle(button);return;}
+      button.classList.remove('has-fallback');
       button.dataset.motionState='playing';
       button.classList.add('is-playing');
       const a=setTimeout(()=>{
         if(button.isConnected){button.classList.add('is-finishing');button.dataset.motionState='finishing'}
       },settleDelay);
       const b=setTimeout(()=>{
-        if(button.isConnected){button.classList.remove('is-playing','is-finishing');button.classList.add('is-complete');button.dataset.motionState='complete'}
+        settle(button);
       },duration+120);
       timers.set(button,[a,b]);
     };
     film.addEventListener('load',begin,{once:true});
     film.addEventListener('error',()=>{
-      button.classList.add('has-fallback');
+      if(film!==button.querySelector('.category-morph-film')||button.dataset.motionState!=='loading')return;
+      settle(button);if(!button.querySelector('.category-morph-final')?.naturalWidth)button.classList.add('has-fallback');
       button.dataset.motionState='fallback';
     },{once:true});
     film.src=film.dataset.motionSrc;
     // Cached animation may decode synchronously on some browsers.
     if(film.complete&&film.naturalWidth)queueMicrotask(begin);
   };
-  window.NexaPagMicrobots={markup,play};
+  const settleAll=()=>[...active].forEach(settle);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)settleAll()});
+  window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener?.('change',e=>{if(e.matches)settleAll()});
+  window.NexaPagMicrobots={markup,play,settle};
   // Any failed static frame should not leave a blank icon.
   document.addEventListener('error',event=>{
     const target=event.target;
