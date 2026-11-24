@@ -24,7 +24,10 @@ test('V3.20 wallet cards lift from a sleeve, switch in place and show grounded b
   await page.keyboard.press('End');
   await expect(page.locator('.wallet-live-selection')).toContainText('Inter Black');
   await page.locator('[data-wallet-live-details]').click();
-  await expect(page.locator('.wallet-selected-summary')).toContainText('Inter Black');
+  await expect(page.locator('[data-wd-name]')).toHaveText('Inter Black');
+  await expect(page.locator('.wd-flight')).toHaveCount(0);
+  await page.locator('[data-wd-back]').click();
+  await expect(page.locator('#walletDetail324')).toHaveCount(0);
   await expect(page.locator('#dock button')).toHaveCount(5);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth)).toBeLessThanOrEqual(2);
  }

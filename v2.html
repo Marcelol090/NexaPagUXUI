@@ -1477,7 +1477,7 @@ function walletDetailMarkup324(){
  '<div class="wd-section"><h2>Informações do cartão</h2><div class="wd-metrics"><div><small>Gastos</small><strong>—</strong><span>Não disponível</span></div><div><small>Limite disponível</small><strong>—</strong><span>Não disponível</span></div></div></div>'+
  '<div class="wd-section"><h2>Movimentações</h2><div class="wd-empty"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="3"/><path d="M4 10h16m-12 5h4"/></svg><div><strong>Sem histórico individual disponível</strong><p>Os lançamentos demonstrativos ainda não estão vinculados a um cartão específico.</p></div></div><button class="wd-all" data-wd-all>Ver gastos gerais <span>↗</span></button></div></section>';
 }
-function syncWalletDetail324(id,scroll=true){
+function syncWalletDetail324(id,scroll=true,animated=false){
  const d=walletDetailState;if(!d||!walletBanks[id])return;
  d.index=id;state.card=id;
  const b=walletBanks[id],layer=d.layer;
@@ -1486,7 +1486,11 @@ function syncWalletDetail324(id,scroll=true){
  layer.querySelectorAll('[data-wd-select]').forEach(el=>el.setAttribute('aria-pressed',String(Number(el.dataset.wdSelect)===id)));
  layer.querySelectorAll('[data-wd-card]').forEach(el=>el.classList.toggle('is-current',Number(el.dataset.wdCard)===id));
  const track=layer.querySelector('.wd-carousel'),target=track.querySelector('[data-wd-card="'+id+'"]');
- if(scroll&&target)track.scrollTo({left:target.offsetLeft-track.offsetLeft-(track.clientWidth-target.offsetWidth)/2,behavior:'instant'});
+ if(scroll&&target){
+  const x=track.scrollLeft+target.getBoundingClientRect().left+target.getBoundingClientRect().width/2-track.getBoundingClientRect().left-track.clientWidth/2;
+  d.scrollLockUntil=animated&&!reducedMotion()?performance.now()+550:0;
+  track.scrollTo({left:x,behavior:animated&&!reducedMotion()?'smooth':'instant'});
+ }
 }
 function walletSharedFlight324(from,to,id,reverse=false,clip=0){
  const phone=document.querySelector('.phone');if(!phone||reducedMotion()||!from||!to||!Element.prototype.animate)return Promise.resolve();
@@ -1509,7 +1513,8 @@ async function openWalletDetail(id,source){
  if(state.tab!=='cards'||walletDetailState||!walletBanks[id])return;
  const page=document.querySelector('.wallet-page'),screen=document.getElementById('screen'),scroller=document.getElementById('scroller');
  if(!page||!screen)return;
- const from=source?.getBoundingClientRect(),seam=page.querySelector('.wallet-live-pocket-front')?.getBoundingClientRect().top;
+ const from=source?.getBoundingClientRect();let seam=page.querySelector('.wallet-live-pocket-front')?.getBoundingClientRect().top;
+ if(source&&from){const z=Number(getComputedStyle(source).zIndex);for(const card of page.querySelectorAll('[data-wallet-live-card]')){const r=card.getBoundingClientRect();if(card!==source&&Number(getComputedStyle(card).zIndex)>z&&r.top>from.top)seam=Math.min(seam,r.top);}}
  const clip=from&&seam?Math.max(0,(from.bottom-seam)/from.height):0;
  const scroll=scroller.scrollTop,token=++walletDetailGeneration;
  clearTimeout(walletLiveMotionTimer);walletLiveMotionTimer=0;++walletLiveMotionToken;
@@ -1523,7 +1528,7 @@ async function openWalletDetail(id,source){
  const track=layer.querySelector('.wd-carousel');
  let scrollFrame=0;
  track.addEventListener('scroll',()=>{cancelAnimationFrame(scrollFrame);scrollFrame=requestAnimationFrame(()=>{
-  if(!walletDetailState||walletDetailState.layer!==layer||walletDetailState.opening||walletDetailState.closing)return;
+  if(!walletDetailState||walletDetailState.layer!==layer||walletDetailState.opening||walletDetailState.closing||performance.now()<(walletDetailState.scrollLockUntil||0))return;
   const center=track.getBoundingClientRect().left+track.clientWidth/2;
   const closest=[...track.querySelectorAll('[data-wd-card]')].sort((a,b)=>Math.abs(a.getBoundingClientRect().left+a.offsetWidth/2-center)-Math.abs(b.getBoundingClientRect().left+b.offsetWidth/2-center))[0];
   if(closest)syncWalletDetail324(Number(closest.dataset.wdCard),false);
@@ -1537,13 +1542,14 @@ async function closeWalletDetail324(){
  d.closing=true;const token=++walletDetailGeneration,scroller=document.getElementById('scroller');
  const from=d.layer.querySelector('[data-wd-card="'+d.index+'"]').getBoundingClientRect();
  d.layer.style.display='none';d.page.classList.remove('wallet-detail-hidden');scroller.scrollTop=d.scroll;
+ d.page.classList.add('wd-restoring');walletLiveRaised=false;
  walletLiveApplySelection(d.index,false,++walletLiveMotionToken);
  const target=d.page.querySelector('[data-wallet-live-card="'+d.index+'"]'),to=target?.getBoundingClientRect();
  const seam=d.page.querySelector('.wallet-live-pocket-front')?.getBoundingClientRect().top;
  if(target)target.style.visibility='hidden';
  await walletSharedFlight324(from,to,d.index,true,to&&seam?Math.max(0,(to.bottom-seam)/to.height):0);
  if(token!==walletDetailGeneration)return;
- if(target)target.style.visibility='';d.layer.remove();walletDetailState=null;target?.focus({preventScroll:true});
+ if(target)target.style.visibility='';d.page.classList.remove('wd-restoring');d.layer.remove();walletDetailState=null;target?.focus({preventScroll:true});
 }
 document.getElementById('screen').addEventListener('click',e=>{
  const layer=e.target.closest('#walletDetail324');if(!layer)return;
@@ -1554,14 +1560,14 @@ document.getElementById('screen').addEventListener('click',e=>{
  else{
   const step=e.target.closest('[data-wd-step]'),select=e.target.closest('[data-wd-select]'),card=e.target.closest('[data-wd-card]');
   const id=step?(walletDetailState.index+Number(step.dataset.wdStep)+walletBanks.length)%walletBanks.length:select?Number(select.dataset.wdSelect):card?Number(card.dataset.wdCard):null;
-  if(id!==null)syncWalletDetail324(id);
+  if(id!==null)syncWalletDetail324(id,true,true);
  }
 },true);
 document.addEventListener('keydown',e=>{
  if(!walletDetailState)return;
  if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();closeWalletDetail324();}
  else if(['ArrowLeft','ArrowRight'].includes(e.key)&&e.target.closest('#walletDetail324')){
-  e.preventDefault();e.stopImmediatePropagation();syncWalletDetail324((walletDetailState.index+(e.key==='ArrowRight'?1:2))%3);
+  e.preventDefault();e.stopImmediatePropagation();syncWalletDetail324((walletDetailState.index+(e.key==='ArrowRight'?1:2))%3,true,true);
  }
 },true);
 

@@ -75,3 +75,7 @@
 @keyframes wdReveal{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media(max-width:360px){.phone .wallet-live{padding:12px}.phone .wallet-live-scene{height:286px}.phone .wallet-live-card{height:151px}.phone .wallet-live-pocket-front{height:105px}.wd-card{padding:12px}.wd-card-top b{font-size:12px}.wd-card-top span{font-size:9px}.wd-summary{padding:12px}.wd-summary strong{font-size:13px}.wd-metrics>div{padding:12px}}
 @media(prefers-reduced-motion:reduce){.phone .wallet-live-card,.wd-dots i{transition:none!important}.wd-entering *{animation:none!important}}
+
+/* Keep return geometry settled while the shared element flies back. */
+.phone .wallet-page.wd-restoring .wallet-live-card{transition:none!important}
+.wd-carousel{scroll-padding-inline:10px}
