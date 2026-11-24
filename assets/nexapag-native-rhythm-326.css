@@ -23,7 +23,7 @@
  linear-gradient(180deg,var(--nr-wash),transparent);
  opacity:1;
 }
-.phone[data-spacing-system="v322"][data-page-theme].scrolled-deep::before{opacity:.30}
+.phone[data-spacing-system="v322"][data-page-theme].scrolled-deep::before{opacity:1}
 .phone[data-spacing-system="v322"] .status{
  height:var(--nr-status);padding:10px calc(var(--nr-gutter) + 5px) 0;
  align-items:center;font-size:11px;line-height:1;font-weight:720;
@@ -157,3 +157,23 @@
  .phone[data-spacing-system="v322"] .bottom-area{padding-bottom:calc(8px + env(safe-area-inset-bottom,0px))}
 }
 @media(prefers-reduced-motion:reduce){.phone[data-spacing-system="v322"]::before{transition:none!important}}
+
+/* V3.27 · Anchored green atmosphere.
+   The phone owns the backdrop; the scroller owns the moving content.
+   Scroll state never changes the material or moves the gradient.
+   Keep the original 278px composition and toolbar geometry. */
+.phone[data-spacing-system="v322"][data-page-theme]::before,
+.phone[data-spacing-system="v322"][data-page-theme].scrolled-deep::before{
+ opacity:1;inset:0 0 auto;height:278px;
+ transition:none!important;
+ pointer-events:none;
+}
+.phone[data-spacing-system="v322"][data-page-theme] .scroller{
+ background:transparent;
+}
+.phone[data-spacing-system="v322"][data-page-theme] .status,
+.phone[data-spacing-system="v322"][data-page-theme] .topbar{
+ background:transparent;
+}
+/* No second backdrop or sticky panel: fixed system chrome remains separate
+   from scrolling content, including wallet detail, all tabs and dark mode. */
