@@ -360,8 +360,7 @@ function showLayer(kind,button,sourceOverride=null,outgoingLayer=null,sourceKind
  '<button type="button" class="orb-story-go" data-orb-follow="'+kind+'">'+v.cta+'</button></div></div></article>'+orbControlsMarkup(kind);
  host.append(layer);active={kind,layer,card:layer.querySelector('.orb-story-card'),from};
  const expandedHeight=Math.ceil(layer.getBoundingClientRect().height+14);
- const baseline=phone.getBoundingClientRect().width<=350?376:360;
- const hostHeight=Math.max(Number(home()?.dataset.orbStageHeight)||0,baseline,expandedHeight);
+ const hostHeight=Math.max(280,expandedHeight);
  home().dataset.orbStageHeight=String(hostHeight);
  home()?.style.setProperty('--orb-stage-height',hostHeight+'px');
  home()?.style.setProperty('--orb-target-height',hostHeight+'px');
@@ -388,7 +387,7 @@ function closeLayer(follow){
  const {kind,layer,card,from}=active;
  const fromCard=rect(card);
  layer.classList.remove('is-content-ready');layer.classList.add('is-closing');
- home()?.classList.remove('orb-inline-expanded');home()?.classList.add('orb-inline-closing','orb-choreo-running');
+ home()?.classList.add('orb-inline-closing','orb-choreo-running');
  card.style.opacity='0';
  const origin=restoreFocus?.querySelector('.orb-bot-art')||restoreFocus?.querySelector('.jelly');
  const destination=origin?.isConnected?rect(origin):from;
@@ -413,7 +412,7 @@ async function openSpending(button,sourceOverride=null,outgoingLayer=null,source
  button.classList.add('is-morph-origin');button.setAttribute('aria-expanded','true');
  originalPosition=rect(button.querySelector('.orb-bot-art')||button.querySelector('.jelly')||button);
  scrollAtOpen=document.getElementById('scroller')?.scrollTop||0;
- if(home()&&!home().dataset.orbStageHeight){const baseline=phone.getBoundingClientRect().width<=350?376:360;home().dataset.orbStageHeight=String(baseline);home().style.setProperty('--orb-stage-height',baseline+'px');}
+ if(home()){home().dataset.orbStageHeight='286';home().style.setProperty('--orb-stage-height','286px');}
  home()?.classList.add('orb-choreo-running','orb-flight-cover');
  bridge()?.expand?.(false);
  await waitFrames();
