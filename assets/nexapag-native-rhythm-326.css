@@ -1,0 +1,159 @@
+/* V3.26 — native screen rhythm, derived from the supplied video references.
+   A shared screen grid and edge-to-edge backdrop, not an extra header.
+   Preserve V3.25 motion engine, routes, financial data and category palettes. */
+.phone[data-spacing-system="v322"]{
+ --nr-gutter:clamp(14px,4.8cqw,19px);
+ --nr-status:46px;--nr-toolbar:44px;--nr-header-gap:8px;
+ --nr-bottom:88px;--nr-card-radius:22px;
+ --nr-edge:#e3eedc;--nr-wash:#eef4e8;
+ --nr-ink:#24392b;--nr-muted:#5b6d5e;
+ --nr-surface:#fff;--nr-border:#dbe4d8;
+}
+.phone[data-spacing-system="v322"][data-ui-theme="dark"]{
+ --nr-edge:#213d2c;--nr-wash:#172c20;--nr-ink:#eff6ec;--nr-muted:#c3d6c1;
+ --nr-surface:#21362a;--nr-border:#405547;
+}
+/* Backdrop fills the screen behind its status area and the existing toolbar.
+   Soft overlapping atmospheric fields give the reference's edge-to-edge effect
+   without introducing decorative panels or an additional vertical region. */
+.phone[data-spacing-system="v322"][data-page-theme]::before{
+ inset:0 0 auto;height:278px;
+ background:radial-gradient(ellipse 86% 75% at 90% 0%,var(--bg-green, var(--nr-edge)),transparent 100%),
+ radial-gradient(ellipse 100% 94% at 6% 0%,var(--nr-edge),transparent 100%),
+ linear-gradient(180deg,var(--nr-wash),transparent);
+ opacity:1;
+}
+.phone[data-spacing-system="v322"][data-page-theme].scrolled-deep::before{opacity:.30}
+.phone[data-spacing-system="v322"] .status{
+ height:var(--nr-status);padding:10px calc(var(--nr-gutter) + 5px) 0;
+ align-items:center;font-size:11px;line-height:1;font-weight:720;
+}
+.phone[data-spacing-system="v322"] .dynamic-island{top:8px;width:clamp(88px,29cqw,112px);height:27px}
+.phone[data-spacing-system="v322"] .status-right{gap:4px}
+.phone[data-spacing-system="v322"] .topbar{
+ height:var(--nr-toolbar);padding:0 var(--nr-gutter);gap:0;
+ display:flex;align-items:center;justify-content:space-between;
+}
+.phone[data-spacing-system="v322"] .topbar .brand-short{
+ position:absolute;left:calc(var(--nr-gutter) + 48px);right:calc(var(--nr-gutter) + 94px);
+ text-align:center;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+ pointer-events:none;
+}
+.phone[data-spacing-system="v322"] .topbar .top-actions{
+ display:flex;width:100%;margin:0;gap:4px;align-items:center;
+}
+.phone[data-spacing-system="v322"] .topbar .avatar{order:-1;margin-right:auto}
+.phone[data-spacing-system="v322"] .topbar .round-action,
+.phone[data-spacing-system="v322"] .topbar .round-action.theme-switch{
+ flex:0 0 44px;width:44px;height:44px;min-width:44px;min-height:44px;
+}
+.phone[data-spacing-system="v322"] .topbar .round-action::before{
+ inset:5px;border-width:1px;box-shadow:0 2px 6px #223b2a12;
+}
+.phone[data-spacing-system="v322"] .topbar .round-action.avatar{
+ --nx-control-bg:linear-gradient(145deg,#315e40,#254a34);--nx-control-border:#ffffff80;
+ color:#fff;
+}
+.phone[data-spacing-system="v322"] .topbar .round-action svg{width:16px;height:16px;stroke-width:1.8}
+.phone[data-spacing-system="v322"] .scroller{
+ top:calc(var(--nr-status) + var(--nr-toolbar) + var(--nr-header-gap));
+ padding:0 var(--nr-gutter) calc(var(--nr-bottom) + 16px);
+ scroll-padding-top:8px;scroll-padding-bottom:calc(var(--nr-bottom) + 12px);
+}
+/* Keep the carousel's full-width viewport symmetric with the new screen gutter. */
+.phone[data-spacing-system="v322"] #homePage .expanded-hero{margin-inline:calc(-1 * var(--nr-gutter))}
+.phone[data-spacing-system="v322"] #homePage{--nx-orb-rest-height:132px}
+.phone[data-spacing-system="v322"] #homePage #compactHero{
+ padding:5px 0 0;gap:6px;align-items:start;grid-template-columns:repeat(3,minmax(0,1fr));
+}
+.phone[data-spacing-system="v322"] #homePage #compactHero .milestone{
+ width:100%;height:120px;min-height:120px;gap:4px;padding:0;justify-content:flex-start;
+}
+.phone[data-spacing-system="v322"] #homePage #compactHero .orb-metric{height:20px;font-size:clamp(11px,3.15cqw,12.5px)}
+.phone[data-spacing-system="v322"] #homePage #compactHero .milestone .jelly.bot-orb.bot-rendered-image{
+ width:clamp(66px,20cqw,78px);height:auto;aspect-ratio:1;max-width:78px;
+}
+.phone[data-spacing-system="v322"] #homePage #compactHero .milestone>span:last-child{
+ font-size:11px;line-height:1.3;min-height:15px;letter-spacing:0;
+}
+.phone[data-spacing-system="v322"] #homePage .greeting{margin:8px 0 16px;max-height:none}
+.phone[data-spacing-system="v322"] #homePage .greeting h1{
+ margin:0 0 4px;font-size:clamp(23px,6.9cqw,27px);line-height:1.18;letter-spacing:-.055em;
+}
+.phone[data-spacing-system="v322"] #homePage .greeting p{
+ margin:0;font-size:11px;line-height:1.45;color:var(--nr-muted)
+}
+/* Week module: the title and compact counter share a row; the day grid is
+   aligned, smaller than the financial bots and separated from the details. */
+.phone[data-spacing-system="v322"] .week{
+ padding:12px;border-radius:var(--nr-card-radius);border:1px solid var(--nr-border);
+ box-shadow:0 5px 16px #1d302510;
+}
+.phone[data-spacing-system="v322"] .week-head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:8px}
+.phone[data-spacing-system="v322"] .week-head .week-title{gap:3px}
+.phone[data-spacing-system="v322"] .week-head .week-title strong{font-size:14px;line-height:1.25;letter-spacing:-.025em}
+.phone[data-spacing-system="v322"] .week-head .week-title em{font-size:10px;line-height:1.35;margin:0}
+.phone[data-spacing-system="v322"] .week-head .week-counter{
+ display:inline-flex;align-items:center;gap:4px;max-width:none;white-space:nowrap;
+ font-size:9px;line-height:1.25;padding:5px 7px;border-radius:999px;font-weight:650;
+}
+.phone[data-spacing-system="v322"] .week-counter svg{width:12px;height:12px;min-width:12px;flex:0 0 12px;stroke-width:1.6}
+.phone[data-spacing-system="v322"] .week .days{margin-top:12px;gap:3px}
+.phone[data-spacing-system="v322"] .week .day-cell{
+ min-width:0;width:100%;padding:5px 0 4px;gap:5px;border-radius:11px;
+ display:flex;align-items:center;justify-content:center;flex-direction:column;
+}
+.phone[data-spacing-system="v322"] .week .day-cell .jelly.week-liquid,
+.phone[data-spacing-system="v322"] .week .day-cell .jelly.week-liquid.ghost{
+ width:min(100%,31px);height:auto;aspect-ratio:1;max-width:31px;flex:none;
+}
+.phone[data-spacing-system="v322"] .week .day-cell .week-orb-canvas{width:100%;height:100%}
+.phone[data-spacing-system="v322"] .week .weekday{font-size:10px;line-height:1.2}
+.phone[data-spacing-system="v322"] .week .week-day-detail{margin-top:8px;padding:10px;min-height:0;border-radius:13px}
+.phone[data-spacing-system="v322"] .week-day-head{gap:8px}
+.phone[data-spacing-system="v322"] .week-day-head span{font-size:10px;line-height:1.3}
+.phone[data-spacing-system="v322"] .week-day-head strong{font-size:12px;line-height:1.3}
+.phone[data-spacing-system="v322"] .week-day-cats{gap:5px 8px}
+.phone[data-spacing-system="v322"] .week-day-cats span{font-size:9px;line-height:1.35;white-space:normal}
+.phone[data-spacing-system="v322"] .week-source{font-size:9px;line-height:1.4;margin-top:8px}
+/* Compact floating dock, stable destinations and quiet material thickness. */
+.phone[data-spacing-system="v322"] .bottom-area{
+ height:var(--nr-bottom);padding-bottom:16px;
+ background:linear-gradient(0deg,#faf9f6 38%,#faf9f6e8 65%,transparent 100%);
+}
+.phone[data-spacing-system="v322"][data-ui-theme="dark"] .bottom-area{
+ background:linear-gradient(0deg,#111b16 38%,#111b16e8 65%,transparent 100%);
+}
+.phone[data-spacing-system="v322"] .bottom-dock{
+ width:min(328px,calc(100% - 2 * var(--nr-gutter)));height:58px;padding:4px;border-radius:24px;
+ border-width:1px;box-shadow:0 6px 18px #172d2430,inset 0 1px #ffffff14;
+}
+.phone[data-spacing-system="v322"] .bottom-dock .dock-indicator{top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/5);border-radius:19px}
+.phone[data-spacing-system="v322"] .bottom-dock button,.phone[data-spacing-system="v322"] .bottom-dock button.active{height:48px;min-height:44px;gap:3px;padding:3px 0}
+.phone[data-spacing-system="v322"] .bottom-dock button svg,.phone[data-spacing-system="v322"] .bottom-dock button.active svg{width:19px;height:19px;flex-basis:19px;stroke-width:1.8}
+.phone[data-spacing-system="v322"] .bottom-dock button span,.phone[data-spacing-system="v322"] .bottom-dock button.active span{font-size:9px;line-height:1.15}
+.phone[data-spacing-system="v322"] .home-indicator{width:100px;height:3px;bottom:5px}
+/* Other screens inherit the same content rail and vertical rhythm, not home layout. */
+.phone[data-spacing-system="v322"] .page-header{padding:8px 0 16px}
+.phone[data-spacing-system="v322"] .section-title{margin-top:20px;margin-bottom:8px}
+.phone[data-spacing-system="v322"] .money-insights{gap:10px}
+.phone[data-spacing-system="v322"] .money-insight{min-height:156px;border-radius:20px}
+@container(max-width:350px){
+ .phone[data-spacing-system="v322"]{--nr-gutter:14px;--nx-orb-rest-height:124px}
+ .phone[data-spacing-system="v322"] #homePage{--nx-orb-rest-height:124px}
+ .phone[data-spacing-system="v322"] #homePage #compactHero .milestone{height:112px;min-height:112px}
+ .phone[data-spacing-system="v322"] #homePage #compactHero .milestone .jelly.bot-orb.bot-rendered-image{max-width:69px}
+ .phone[data-spacing-system="v322"] .week{padding:10px}
+ .phone[data-spacing-system="v322"] .week .days{gap:2px}
+ .phone[data-spacing-system="v322"] .week-head .week-counter{font-size:8.5px;padding:5px}
+ .phone[data-spacing-system="v322"] .week-head .week-title em{font-size:9.5px}
+}
+/* On an installed PWA, the operating system supplies the status and home
+   indicator. Avoid duplicating them; safe-area insets are applied once. */
+@media(display-mode:standalone){
+ .phone[data-spacing-system="v322"]{--nr-status:env(safe-area-inset-top,0px);--nr-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+ .phone[data-spacing-system="v322"] .status{visibility:hidden;padding:0}
+ .phone[data-spacing-system="v322"] .home-indicator{display:none}
+ .phone[data-spacing-system="v322"] .bottom-area{padding-bottom:calc(8px + env(safe-area-inset-bottom,0px))}
+}
+@media(prefers-reduced-motion:reduce){.phone[data-spacing-system="v322"]::before{transition:none!important}}
