@@ -418,6 +418,7 @@ async function openSpending(button,sourceOverride=null,outgoingLayer=null,source
  await waitFrames();
  if(bridge()?.state?.tab!=='home'||!busy||transitionDirection!=='opening')return;
  const target=document.querySelector('.carousel-slide.current');
+ const panel=document.getElementById('expandedHero');if(panel&&home()){const measured=Math.ceil(panel.getBoundingClientRect().height+8);home().dataset.orbStageHeight=String(measured);home().style.setProperty('--orb-stage-height',measured+'px');}
  if(!target){home()?.classList.remove('orb-choreo-running','orb-flight-cover');restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;return;}
  await fluidFlight(sourceOverride||originalPosition,rect(target),'spending',false,()=>{
   home()?.classList.add('orb-flight-reveal');
@@ -438,7 +439,7 @@ async function closeSpending(){
  const fromCard=card?rect(card):null;
  const currentScroll=document.getElementById('scroller')?.scrollTop||0;
  const destination=originalPosition?inPhone({...originalPosition,y:originalPosition.y-(currentScroll-scrollAtOpen)}):null;
- home()?.classList.remove('orb-flight-reveal');home()?.classList.add('orb-choreo-running','orb-flight-cover');
+ home()?.classList.remove('orb-flight-reveal');home()?.classList.add('orb-choreo-running','orb-flight-cover','orb-spending-closing');
  bridge()?.state && (bridge().state.slide=0);
  bridge()?.stopAutoplay?.();
  // V3.4 bridge exposes expand but not collapse: keep original state in sync.
@@ -451,7 +452,7 @@ async function closeSpending(){
  const to=fallback?rect(fallback):destination;
  if(fromCard&&to)await fluidFlight(to,fromCard,'spending',true);
  if(bridge()?.state?.tab!=='home'||!busy||transitionDirection!=='closing')return;
- home()?.classList.remove('orb-flight-cover','orb-flight-reveal','orb-choreo-running');
+ home()?.classList.remove('orb-flight-cover','orb-flight-reveal','orb-choreo-running','orb-spending-closing');
  home()?.style.removeProperty('--orb-stage-height');if(home())delete home().dataset.orbStageHeight;
  restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;
  const next=pendingOpen;
