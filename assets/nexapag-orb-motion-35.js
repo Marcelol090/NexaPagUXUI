@@ -359,10 +359,11 @@ function showLayer(kind,button,sourceOverride=null,outgoingLayer=null,sourceKind
  '<div class="orb-story-divider"></div><div class="orb-story-foot"><span>'+v.note+'</span>'+
  '<button type="button" class="orb-story-go" data-orb-follow="'+kind+'">'+v.cta+'</button></div></div></article>'+orbControlsMarkup(kind);
  host.append(layer);active={kind,layer,card:layer.querySelector('.orb-story-card'),from};
- const expandedHeight=Math.ceil(layer.getBoundingClientRect().height+14);
- const hostHeight=Math.max(280,expandedHeight);
+ const expandedHeight=Math.ceil(layer.getBoundingClientRect().height+8);
+ const hostHeight=expandedHeight;
  home().dataset.orbStageHeight=String(hostHeight);
  home()?.style.setProperty('--orb-stage-height',hostHeight+'px');
+ host.style.setProperty('--orb-stage-height',hostHeight+'px');
  home()?.style.setProperty('--orb-target-height',hostHeight+'px');
  home()?.classList.remove('orb-inline-closing');home()?.classList.add('orb-inline-expanded','orb-choreo-running');
  const target=rect(active.card);active.card.style.opacity='0';
@@ -418,7 +419,7 @@ async function openSpending(button,sourceOverride=null,outgoingLayer=null,source
  await waitFrames();
  if(bridge()?.state?.tab!=='home'||!busy||transitionDirection!=='opening')return;
  const target=document.querySelector('.carousel-slide.current');
- const panel=document.getElementById('expandedHero');if(panel&&home()){const measured=Math.ceil(panel.getBoundingClientRect().height+8);home().dataset.orbStageHeight=String(measured);home().style.setProperty('--orb-stage-height',measured+'px');}
+ const panel=document.getElementById('expandedHero');if(panel&&home()){const measured=Math.ceil(panel.getBoundingClientRect().height+8);home().dataset.orbStageHeight=String(measured);home().style.setProperty('--orb-stage-height',measured+'px');document.getElementById('heroRegion')?.style.setProperty('--orb-stage-height',measured+'px');}
  if(!target){home()?.classList.remove('orb-choreo-running','orb-flight-cover');restoreOrigin();busy=false;transitionDirection='idle';pendingClose=null;return;}
  await fluidFlight(sourceOverride||originalPosition,rect(target),'spending',false,()=>{
   home()?.classList.add('orb-flight-reveal');
