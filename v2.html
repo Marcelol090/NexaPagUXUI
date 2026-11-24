@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#111211">
 <meta name="description" content="NexaPag V3.1 · estrutura V2.8, fundo verde-floresta e modo dark.">
-<title>NexaPag V3.30 · Optical Material Engine</title>
+<title>NexaPag V3.31 · Expressive Liquid Physics</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -1224,7 +1224,14 @@ function review(){const names=['Compra sem categoria','Pix aguardando identifica
 // One periodic canvas renderer for all finance orbs. No video loop edges, no hard-cut alpha resets.
 const orbReduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
 const TWO_PI=Math.PI*2,LIQUID_CYCLE_MS=6400;
-let liquidRaf=0,liquidCanvases=[],liquidVisible=true,liquidObserver=null;
+let liquidRaf=0,liquidCanvases=[],liquidObserver=null,liquidPhase=0,liquidLastFrame=null;
+const liquidBoundaryCache=new Map();
+// Invert the circular-segment area, not linear height. The nominal split is proportional to the ledger.
+function liquidBoundary(share){
+ const q=Math.min(1,Math.max(0,share));if(liquidBoundaryCache.has(q))return liquidBoundaryCache.get(q);
+ let lo=-1,hi=1;for(let i=0;i<24;i++){const mid=(lo+hi)/2;const fraction=(Math.acos(mid)-mid*Math.sqrt(Math.max(0,1-mid*mid)))/Math.PI;if(fraction>q)lo=mid;else hi=mid;}
+ const y=40+36.2*(lo+hi)/2;liquidBoundaryCache.set(q,y);return y;
+}
 const MONO_TONES={orange:[{category:'Alimentação',value:1}],lilac:[{category:'Compras',value:1}],lime:[{category:'Transporte',value:1}],red:[{category:'Casa',value:1}]};
 function hexRGB(hex){return [parseInt(hex.slice(1,3),16),parseInt(hex.slice(3,5),16),parseInt(hex.slice(5,7),16)];}
 function rgba(hex,a){return `rgba(${hexRGB(hex).join(',')},${a})`}
@@ -1239,11 +1246,12 @@ function paintLiquid(canvas,items,phase){
  // Draw nested, gently undulating category layers. The boundaries are weighted by actual amounts.
  for(let j=entries.length-2;j>=0;j--){
    const share=entries.slice(0,j+1).reduce((v,r)=>v+r.value,0)/total;
-   const y0=80*(1-share);const color=WEEK_PALETTE[entries[j].category];
+   const y0=liquidBoundary(share);const color=WEEK_PALETTE[entries[j].category];
+   const amplitude=Math.min(1,Math.max(0,(36.2-Math.abs(y0-40))/12));
    const shape=new Path2D();shape.moveTo(-5,85);
-   shape.lineTo(-5,y0+2.3*Math.sin(phase+j));
+   shape.lineTo(-5,y0+amplitude*2.3*Math.sin(phase+j));
    for(let x=0;x<=85;x+=2){
-      const wave=3.3*Math.sin(x*.095+phase+j*.72)+1.6*Math.sin(x*.18-phase*2+j);
+      const wave=amplitude*(2.5*Math.sin((x-40)*.095+phase+j*.72)+1.1*Math.sin((x-40)*.18-phase*2+j));
       shape.lineTo(x,y0+wave);
    }
    shape.lineTo(85,85);shape.closePath();
@@ -1262,15 +1270,20 @@ function paintLiquid(canvas,items,phase){
  ctx.beginPath();ctx.arc(40,40,35.8,0,TWO_PI);ctx.strokeStyle='rgba(255,255,255,.77)';ctx.lineWidth=2;ctx.stroke();
  ctx.beginPath();ctx.arc(40,40,34,Math.PI*.19,Math.PI*.87);ctx.strokeStyle='rgba(80,65,90,.10)';ctx.lineWidth=1.8;ctx.stroke();
 }
-function stopLiquid(){cancelAnimationFrame(liquidRaf);liquidRaf=0;liquidObserver?.disconnect();liquidObserver=null;liquidCanvases=[]}
+function pauseLiquid(){cancelAnimationFrame(liquidRaf);liquidRaf=0;liquidLastFrame=null}
+function stopLiquid(){pauseLiquid();liquidObserver?.disconnect();liquidObserver=null;liquidCanvases=[]}
+function canPaintLiquid(){return !document.hidden&&!orbReduceMotion.matches&&state.tab==='home'&&liquidCanvases.some(x=>x.visible!==false&&x.canvas.isConnected)}
+function scheduleLiquid(){if(!liquidRaf&&canPaintLiquid())liquidRaf=requestAnimationFrame(frameLiquid)}
 function frameLiquid(t){
- if(document.hidden||state.tab!=='home'||!liquidCanvases.length){liquidRaf=0;return}
- const phase=(t%LIQUID_CYCLE_MS)/LIQUID_CYCLE_MS*TWO_PI;
+ liquidRaf=0;if(!canPaintLiquid()){liquidLastFrame=null;return}
+ const dt=liquidLastFrame===null?0:Math.min(50,Math.max(0,t-liquidLastFrame));liquidLastFrame=t;
+ liquidPhase=(liquidPhase+dt/LIQUID_CYCLE_MS*TWO_PI)%TWO_PI;
+ const phase=liquidPhase;
  liquidCanvases.forEach(({canvas,items,offset,visible})=>{
     if(!canvas.isConnected||visible===false)return;
     paintLiquid(canvas,items,phase+offset);
  });
- liquidRaf=requestAnimationFrame(frameLiquid);
+ scheduleLiquid();
 }
 function prepareMotionOrbs(){
  stopLiquid();
@@ -1286,17 +1299,16 @@ function prepareMotionOrbs(){
  });
  liquidCanvases.forEach(({canvas,items,offset})=>paintLiquid(canvas,items,offset+.72));
  if('IntersectionObserver' in window){
-  liquidObserver=new IntersectionObserver(entries=>{for(const entry of entries){const item=liquidCanvases.find(v=>v.canvas===entry.target);if(item)item.visible=entry.isIntersecting;}},{root:$('#scroller'),threshold:0});
+  liquidObserver=new IntersectionObserver(entries=>{for(const entry of entries){const item=liquidCanvases.find(v=>v.canvas===entry.target);if(item)item.visible=entry.isIntersecting;}if(canPaintLiquid())scheduleLiquid();else pauseLiquid();},{root:$('#scroller'),threshold:0});
   liquidCanvases.forEach(item=>liquidObserver.observe(item.canvas));
  }
- if(!orbReduceMotion.matches&&state.tab==='home'&&!document.hidden)liquidRaf=requestAnimationFrame(frameLiquid);
+ scheduleLiquid();
 }
 document.addEventListener('visibilitychange',()=>{
- if(document.hidden)cancelAnimationFrame(liquidRaf);
- else if(state.tab==='home'&&!orbReduceMotion.matches){cancelAnimationFrame(liquidRaf);liquidRaf=requestAnimationFrame(frameLiquid)}
+ if(document.hidden)pauseLiquid();else scheduleLiquid();
 });
 orbReduceMotion.addEventListener?.('change',()=>prepareMotionOrbs());
-window.NexaLiquidDebug={paintLiquid,TWO_PI,WEEK_LEDGER,WEEK_SPENT,WEEK_REMAINING};
+window.NexaLiquidDebug={paintLiquid,liquidBoundary,TWO_PI,WEEK_LEDGER,WEEK_SPENT,WEEK_REMAINING,activity:()=>({scheduled:Boolean(liquidRaf),visible:liquidCanvases.filter(x=>x.visible!==false&&x.canvas.isConnected).length,phase:liquidPhase})};
 
 let insightRestore=null,insightClosing=false;
 function showMoneyInsight(which,trigger){
