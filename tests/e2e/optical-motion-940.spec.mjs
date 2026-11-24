@@ -49,6 +49,7 @@ test('9.40 workbench keeps four lightfields, gradient and no-motion control',asy
   await page.locator('#screen').evaluate(el=>el.scrollTop=200);
   expect(await atmo.evaluate(el=>getComputedStyle(el).backgroundImage)).toBe(before);
  }
+ await page.locator('[data-panel="motion"]').click();
  const motion=page.locator('[data-toggle="motion"]');
  await motion.click();await expect(device).toHaveClass(/no-motion/);
  await page.locator('#navigation [data-tab="chart"]').click();
