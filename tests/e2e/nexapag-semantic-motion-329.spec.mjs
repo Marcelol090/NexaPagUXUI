@@ -46,3 +46,34 @@ test('V3.29 financial glyphs distinguish receipt, transfer and refund',async({pa
  await expect(tx.nth(2).locator('.transaction-amount')).toHaveClass(/refund/);
  await expect(page.locator('.money-insight--goal use').first()).toHaveAttribute('href','#i-target');
 });
+
+test('V3.29 exact financial value during replay and neutral expression',async({page})=>{
+ await page.setViewportSize({width:390,height:844});await page.goto('/v2.html');
+ await page.locator('#dock [data-tab="expenses"]').click();
+ const card=page.locator('#expenseExpression'),integer=page.locator('#expressionInteger'),cents=page.locator('#expressionCents');
+ await page.locator('.expense-periods button').filter({hasText:'Mês'}).click();
+ await expect(integer).toHaveText('3.468');await expect(cents).toHaveText(',20');
+ await card.locator('[data-action="expenseReplay"]').click();
+ for(const ms of [0,90,180,240]){
+  if(ms)await page.waitForTimeout(ms);
+  await expect(integer).toHaveText('3.468');await expect(cents).toHaveText(',20');
+ }
+ await expect(card).toHaveClass(/expression-settled/);
+ await expect.poll(()=>card.locator('.eyes-joy').evaluate(el=>getComputedStyle(el).opacity)).toBe('0');
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.locator('.expense-periods button').filter({hasText:'Semana'}).click();
+ await expect(integer).toHaveText('270');await expect(cents).toHaveText(',00');
+ await expect(card).toHaveClass(/expression-settled/);
+});
+test('V3.29 reading films separate card from field in both themes',async({page})=>{
+ await page.setViewportSize({width:390,height:844});await page.goto('/v2.html');
+ const phone=page.locator('.phone');
+ for(const theme of ['light','dark']){
+  if(await phone.getAttribute('data-ui-theme')!==theme)await page.locator('#themeToggle').click();
+  const background=theme==='dark'?'rgb(27, 43, 33)':'rgb(248, 250, 246)';
+  for(const selector of ['.week','.transactions','.daily-note']){
+   await expect.poll(()=>page.locator(selector).evaluate(el=>getComputedStyle(el).backgroundColor)).toBe(background);
+  }
+  await expect.poll(()=>page.locator('.transactions .transaction').first().evaluate(el=>getComputedStyle(el).backgroundColor)).toBe('rgba(0, 0, 0, 0)');
+ }
+});
