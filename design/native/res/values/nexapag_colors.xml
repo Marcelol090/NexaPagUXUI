@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="nx_surface">#F8FAF6</color>
+    <color name="nx_ink">#24392B</color>
+    <color name="nx_secondary">#536858</color>
+    <color name="nx_out">#9B3E36</color>
+    <color name="nx_income">#286744</color>
+    <color name="nx_refund">#855900</color>
+    <color name="nx_focus">#285D39</color>
+</resources>

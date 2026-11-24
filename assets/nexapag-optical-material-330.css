@@ -1,0 +1,29 @@
+/* V3.30 · Optical Material Engine. Derived solely from V3.28/3.29.
+   A restrained static lens: one film, one rim, one elevation. No new shader. */
+.phone[data-spacing-system="v322"]{
+ --nx330-film:#f8faf6;--nx330-sheen:rgba(255,255,255,.38);
+ --nx330-rim:rgba(37,67,42,.13);--nx330-shadow:0 4px 14px rgba(25,52,34,.065);
+ --nx330-ink:#24392b;--nx330-muted:#536858;
+}
+.phone[data-spacing-system="v322"][data-ui-theme="dark"]{
+ --nx330-film:#1b2b21;--nx330-sheen:rgba(236,255,233,.035);
+ --nx330-rim:rgba(209,237,200,.15);--nx330-shadow:0 5px 16px rgba(0,13,7,.18);
+ --nx330-ink:#edf4e8;--nx330-muted:#b7cdb9;
+}
+.phone[data-spacing-system="v322"][data-page-theme] :is(.week,.transactions,.daily-note,.spending-chart,.calendar-surface,.review-item,.offer-card){
+ background-color:var(--nx330-film);
+ background-image:linear-gradient(150deg,var(--nx330-sheen),transparent 43%);
+ border-color:var(--nx330-rim);box-shadow:var(--nx330-shadow);
+}
+.phone[data-spacing-system="v322"][data-page-theme] :is(.transaction-name b,.spending-chart h3,.chart-readout strong){color:var(--nx330-ink)}
+.phone[data-spacing-system="v322"][data-page-theme] :is(.transaction-name small,.chart-kicker,.chart-readout>span){color:var(--nx330-muted)}
+.phone[data-spacing-system="v322"][data-page-theme] .transactions .transaction{background:transparent;box-shadow:none}
+.phone[data-spacing-system="v322"] .calendar-detail-panel{border-top-color:var(--nx330-rim)}
+/* Keep semantic gradients on graphs, orbs, category bars and branded cards. */
+@media(prefers-contrast:more){
+ .phone[data-spacing-system="v322"]{--nx330-rim:#56705a}
+ .phone[data-spacing-system="v322"][data-ui-theme="dark"]{--nx330-rim:#93b498}
+}
+@media(prefers-reduced-transparency:reduce){
+ .phone[data-spacing-system="v322"]{--nx330-sheen:transparent;--nx330-shadow:none}
+}

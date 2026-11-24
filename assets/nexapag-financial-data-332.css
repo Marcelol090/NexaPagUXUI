@@ -1,0 +1,8 @@
+/* V3.32: financial data design on the Quiet Precision lineage. */
+.phone[data-spacing-system="v322"] .nx332-axis{font:9px Inter,system-ui,sans-serif;fill:var(--nx330-muted)}
+.phone[data-spacing-system="v322"] .chart-plot[data-missing="true"] :is(.graph-needle,.graph-halo,.graph-marker){visibility:hidden}
+.phone[data-spacing-system="v322"] .chart-hit[data-missing="true"] span{background:transparent;border:1px dashed currentColor;opacity:.65;box-shadow:none}
+.phone[data-spacing-system="v322"] .chart-hit[data-missing="true"].active span{outline:1px solid currentColor;outline-offset:3px}
+.phone[data-spacing-system="v322"] .calendar-heatmap .heat-day[data-recorded="false"] .heat-day-line{display:none}
+.phone[data-spacing-system="v322"] :is(.chart-readout strong,.subcategory-value,.calendar-detail-head strong,.heat-day-amount){font-variant-numeric:tabular-nums lining-nums}
+.phone[data-spacing-system="v322"] :is(.chart-hit,.heat-day,.category-open):focus-visible{outline:2px solid var(--nx330-ink);outline-offset:2px}

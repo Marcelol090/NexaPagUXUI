@@ -1,0 +1,102 @@
+/* V3.29: semantic motion, stable atmosphere and optical glyphs.
+   Scope: v2.html only; preserve V3.27 backdrop and existing canvas/orb engines. */
+.phone[data-spacing-system="v322"]{
+ --nx-edge-ink:rgba(38,70,45,.19);
+ --nx-glyph-neutral:#354e3a;--nx-glyph-out:#9b3e36;--nx-glyph-in:#286744;--nx-glyph-refund:#855900;
+ --nx-scroll-edge:0;
+}
+.phone[data-spacing-system="v322"][data-ui-theme="dark"]{
+ --nx-edge-ink:rgba(202,232,194,.24);
+ --nx-glyph-neutral:#c9e1c8;--nx-glyph-out:#ff9c91;--nx-glyph-in:#96e5ac;--nx-glyph-refund:#f7cf73;
+}
+/* Not a second backdrop: a narrow, non-interactive optical edge. No scroll-driven layout or blur. */
+.phone[data-spacing-system="v322"] .topbar::after,
+.phone[data-spacing-system="v322"] .topbar.is-scrolled::after{
+ content:"";position:absolute;left:var(--nr-gutter);right:var(--nr-gutter);bottom:-5px;
+ height:5px;background:linear-gradient(180deg,var(--nx-edge-ink),transparent);
+ opacity:var(--nx-scroll-edge);pointer-events:none;
+}
+.phone[data-spacing-system="v322"] .topbar .round-action svg{width:20px;height:20px}
+.phone[data-spacing-system="v322"] .bottom-dock button,
+.phone[data-spacing-system="v322"] .bottom-dock button.active{
+ min-height:48px;min-width:48px;
+}
+.phone[data-spacing-system="v322"] .bottom-dock button .nx-nav-glyph,
+.phone[data-spacing-system="v322"] .bottom-dock button.active .nx-nav-glyph{
+ width:var(--nx-glyph);height:var(--nx-glyph);flex:0 0 var(--nx-glyph);transform:none;overflow:visible;
+}
+.phone[data-spacing-system="v322"] .bottom-dock button:active .nx-nav-glyph{transform:scale(.94)}
+.phone[data-spacing-system="v322"] .bottom-dock button span,
+.phone[data-spacing-system="v322"] .bottom-dock button.active span{
+ position:static;opacity:1;transform:none;overflow:visible;display:block;
+ font-size:clamp(9px,2.65cqw,10px);line-height:1.15;
+}
+.phone[data-spacing-system="v322"] .bottom-dock button:focus-visible{outline:2px solid currentColor;outline-offset:-3px}
+/* Semantics over ornamental badges: keep color local to the financial glyph. */
+.phone[data-spacing-system="v322"] :is(.transaction-symbol,.offer-card .offer-icon,.insight-head .insight-mark){
+ background:transparent;box-shadow:none;color:var(--nx-glyph-neutral);
+}
+.phone[data-spacing-system="v322"] .transaction-symbol.red{color:var(--nx-glyph-out)}
+.phone[data-spacing-system="v322"] .transaction-symbol.green{color:var(--nx-glyph-in)}
+.phone[data-spacing-system="v322"] .transaction-symbol.purple,
+.phone[data-spacing-system="v322"] .money-insight--refund .insight-mark{color:var(--nx-glyph-refund)}
+.phone[data-spacing-system="v322"] .transaction-amount.in{color:var(--nx-glyph-in)}
+.phone[data-spacing-system="v322"] .transaction-amount.out{color:var(--nx-glyph-out)}
+.phone[data-spacing-system="v322"] .transaction-amount.refund{color:var(--nx-glyph-refund)}
+.phone[data-spacing-system="v322"] :is(.transaction-symbol,.offer-card .offer-icon,.insight-mark) svg{
+ width:20px;height:20px;flex:none;overflow:visible;
+}
+.phone[data-spacing-system="v322"] .section-title h2{display:flex;align-items:center;gap:6px;min-width:0}
+.phone[data-spacing-system="v322"] .section-title h2 svg{width:17px;height:17px;flex:0 0 17px;color:var(--nx-glyph-neutral)}
+.phone[data-spacing-system="v322"] .section-title button{min-height:48px;min-width:48px;padding:4px 2px;font-size:11px;flex-shrink:0}
+.phone[data-spacing-system="v322"] .day-cell{min-height:48px}
+.phone[data-spacing-system="v322"] .expense-periods .chip{min-height:48px}
+.phone[data-spacing-system="v322"] :is(.transaction-amount,.insight-amount,.orb-metric,.category-open .amount){font-variant-numeric:tabular-nums}
+.phone[data-spacing-system="v322"] .screen-page{animation:none}
+.phone[data-spacing-system="v322"] .screen-page.nx-tab-enter{animation:nxTabEnter329 160ms ease-out both}
+@keyframes nxTabEnter329{from{opacity:.94}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+ .phone[data-spacing-system="v322"] .screen-page.nx-tab-enter,
+ .phone[data-spacing-system="v322"] .bottom-dock *{animation:none!important;transition:none!important}
+ .phone[data-spacing-system="v322"] .topbar::after{opacity:0}
+}
+
+/* V3.29 optical surface hierarchy. Only neutral reading surfaces, not
+   financial bots, category pigments, wallet artwork or expression scenes.
+   A nearly opaque film protects text from the anchored atmosphere. */
+.phone[data-spacing-system="v322"]{
+ --nx-reading-film:#f8faf6;
+ --nx-reading-edge:rgba(37,67,42,.13);
+ --nx-reading-shadow:0 4px 14px rgba(25,52,34,.065);
+ --nx-reading-inner:rgba(255,255,255,.78);
+}
+.phone[data-spacing-system="v322"][data-ui-theme="dark"]{
+ --nx-reading-film:#1b2b21;
+ --nx-reading-edge:rgba(209,237,200,.15);
+ --nx-reading-shadow:0 5px 16px rgba(0,13,7,.18);
+ --nx-reading-inner:rgba(242,255,237,.055);
+}
+.phone[data-spacing-system="v322"][data-page-theme] :is(.week,.transactions,.daily-note){
+ background:var(--nx-reading-film);
+ border-color:var(--nx-reading-edge);
+ box-shadow:var(--nx-reading-shadow),inset 0 1px 0 var(--nx-reading-inner);
+}
+/* Rows belong to the parent surface rather than appearing as nested cards. */
+.phone[data-spacing-system="v322"][data-page-theme] .transactions .transaction{
+ background:transparent;box-shadow:none;
+}
+.phone[data-spacing-system="v322"] .category-v29 .category-detail{
+ transition:grid-template-rows var(--nx-motion-disclose) var(--nx-motion-standard),opacity var(--nx-motion-feedback) ease;
+}
+.phone[data-spacing-system="v322"] .expense-expression .expression-money{
+ font-variant-numeric:tabular-nums lining-nums;
+}
+.phone[data-spacing-system="v322"] .expense-expression.mood-neutral.expression-settled .eyes-joy{opacity:0}
+.phone[data-spacing-system="v322"] .expense-expression.mood-neutral.expression-settled .eyes-neutral{opacity:1;transform:none}
+@media(prefers-contrast:more){
+ .phone[data-spacing-system="v322"]{--nx-reading-edge:#56705a}
+ .phone[data-spacing-system="v322"][data-ui-theme="dark"]{--nx-reading-edge:#93b498}
+}
+@media(prefers-reduced-motion:reduce){
+ .phone[data-spacing-system="v322"] .category-v29 .category-detail{transition:none!important}
+}

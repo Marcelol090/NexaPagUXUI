@@ -1,0 +1,17 @@
+# V3.30–V3.33 — Quiet Precision evolution
+Base exclusively V3.28 Quiet Precision, main commit 11cb71741f78d06be1d8ce99454a31715351f64a, route /v2.html. V3.29 is the direct predecessor. V9.xx is excluded from visual evolution. Keep index.html and its separate legacy tests intact.
+
+## V3.30 Optical Material Engine
+Static optical films, light/dark tokens, subtle directional sheen, one edge and elevation on neutral reading surfaces. Existing 278px atmospheric field stays anchored. No dynamic blur or shader; no recolor of category, orb or branded art. This is an optical approximation, not physical ray-traced refraction. High contrast and reduced transparency preferences adjust material detail.
+
+## V3.31 Expressive Liquid Physics
+Preserve original authored motion assets, bot morph and 6.4-second cycle. Weekly canvas split is based on the area of a circular segment: (acos(r)-r*sqrt(1-r²))/π, inverted with 24 iterations; cached by proportion. Wave amplitude is attenuated near the rim. This makes the nominal boundary proportional, not an exact per-frame conservation-of-volume simulation. Animation scheduling pauses when no observed canvas is visible, when the tab is hidden or reduced motion is requested; resume uses a bounded elapsed-time step rather than jumping to wall-clock phase. Existing facial rig is preserved with V3.29 neutral state and stable financial amount. Existing animated assets are not replaced.
+
+## V3.32 Financial Data Design
+Zero-baseline plots, rounded upper scale, bounded cubic interpolation that cannot overshoot adjacent values, area ends at last recorded point. Weekly future sample days are missing values, not zero expenditure; retain seven selectable positions, show dash and accessible context for missing data. Exact relative category and calendar scales; preserve underlying ledger, calendar gradient and category drill-down. Monthly/all periods are existing demonstration ranges, not a verified live transaction history. No changes to API, backend or Android financial data.
+
+## V3.33 Native Fidelity
+CSS geometry bridge and native resource export under design/native: token JSON, dimensions and light/night color XML. Preserve 44dp visual toolbar, 58dp dock, 21dp glyph, 48dp nav touch. For Android Views apply TouchDelegate on toolbar to achieve 48dp hit targets without enlarging visuals; avoid overlapping delegate rectangles. Use WindowInsetsCompat for status/navigation bars, View animations respecting system animator duration scale, and lifecycle-bound Canvas/Choreographer for liquid renderer. Keep text in sp (respect font scaling), currency as exact model state, custom vector glyphs in VectorDrawable. Actual Kotlin integration must occur in Android repository and be built with Gradle; this PR only supplies implementation-ready resources, no Compose, no APK, no real-device QA. Web focus retained on period changes; standalone safe-area gutters supported.
+
+## Release and QA
+Separate version commits remain on design/v329-semantic-motion (PR 27); final combined route V3.33. Previous V3.29 CI #139 passed 130 tests before the subsequent revisions; #143 was cancelled. New browser coverage: four widths, both themes, five tabs, contrast material tokens, anchored field, geometry, missing values, keyboard focus, and liquid area. Verify all prior tests before merge. Test real device font scale, TalkBack, edge-to-edge, thermal performance and frames separately; no claims of actual device performance or WCAG certification.

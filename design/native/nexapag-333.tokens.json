@@ -1,0 +1,56 @@
+{
+  "version": "3.33",
+  "lineage": "3.28 Quiet Precision",
+  "route": "/v2.html",
+  "platform": "Android Views, Kotlin (no Compose)",
+  "geometryDp": {
+    "toolbar": 44,
+    "dock": 58,
+    "navTarget": 48,
+    "navGlyph": 21,
+    "sectionGlyph": 17,
+    "cardRadius": 22,
+    "spacing": 8,
+    "atmosphereHeight": 278
+  },
+  "motionMs": {
+    "press": 120,
+    "tab": 160,
+    "feedback": 180,
+    "disclose": 240,
+    "dock": 280,
+    "expression": 460,
+    "liquidCycle": 6400
+  },
+  "stroke": {
+    "glyph": 1.85
+  },
+  "colors": {
+    "light": {
+      "surface": "#F8FAF6",
+      "ink": "#24392B",
+      "secondary": "#536858",
+      "out": "#9B3E36",
+      "income": "#286744",
+      "refund": "#855900",
+      "focus": "#285D39"
+    },
+    "dark": {
+      "surface": "#1B2B21",
+      "ink": "#EDF4E8",
+      "secondary": "#B7CDB9",
+      "out": "#FF9C91",
+      "income": "#96E5AC",
+      "refund": "#F7CF73",
+      "focus": "#C4E6B9"
+    }
+  },
+  "accessibility": {
+    "reducedMotion": "static final state",
+    "financialAmounts": "exact throughout animation",
+    "minimumNativeTouchTargetDp": 48,
+    "toolbarVisualSizeDp": 44,
+    "toolbarTouchDelegateDp": 48,
+    "missingData": "unrecorded != zero"
+  }
+}

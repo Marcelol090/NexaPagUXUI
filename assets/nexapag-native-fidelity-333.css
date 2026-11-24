@@ -1,0 +1,15 @@
+/* V3.33 Native Fidelity bridge — CSS pixels map to Android dp at design baseline,
+   not physical screen pixels. Existing V3.28 geometry is retained. */
+.phone[data-spacing-system="v322"]{
+ --nx333-toolbar:44px;--nx333-dock:58px;--nx333-icon:21px;--nx333-touch:48px;
+ --nx333-radius:22px;--nx333-spacing:8px;--nx333-focus:#285d39;
+ --nr-toolbar:var(--nx333-toolbar);--nr-card-radius:var(--nx333-radius);--nx-glyph:var(--nx333-icon);
+}
+.phone[data-spacing-system="v322"][data-ui-theme="dark"]{--nx333-focus:#c4e6b9}
+.phone[data-spacing-system="v322"] .bottom-dock{height:var(--nx333-dock)}
+.phone[data-spacing-system="v322"] .bottom-dock button{min-height:var(--nx333-touch)}
+.phone[data-spacing-system="v322"] :is(.category-open,.day-cell,.chart-hit,.round-action,.bottom-dock button):focus-visible{outline:2px solid var(--nx333-focus);outline-offset:2px}
+.phone[data-spacing-system="v322"] .topbar .round-action:focus-visible{outline-offset:-1px}
+.phone[data-spacing-system="v322"] .bottom-dock button:focus-visible{outline-offset:-3px}
+@media(pointer:coarse){.phone[data-spacing-system="v322"] :is(.round-action,.bottom-dock button,.day-cell,.category-open){touch-action:manipulation}}
+@media(display-mode:standalone){.phone[data-spacing-system="v322"]{--nr-gutter:max(14px,4.8cqw,env(safe-area-inset-left,0px),env(safe-area-inset-right,0px))}}
