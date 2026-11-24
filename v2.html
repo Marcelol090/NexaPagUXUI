@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#111211">
 <meta name="description" content="NexaPag V3.1 · estrutura V2.8, fundo verde-floresta e modo dark.">
-<title>NexaPag V3.35 · Optical Composition</title>
+<title>NexaPag V3.36 · Human Motion System</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -823,6 +823,7 @@ button:focus-visible{outline:2px solid #70658f;outline-offset:3px}
 <link rel="stylesheet" href="./assets/nexapag-native-fidelity-333.css">
 <link rel="stylesheet" href="./assets/nexapag-frame-coherence-334.css">
 <link rel="stylesheet" href="./assets/nexapag-composition-335.css">
+<link rel="stylesheet" href="./assets/nexapag-human-motion-336.css">
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
@@ -937,16 +938,18 @@ function expressionRhythmMarkup(){
  const curve=buildCurve(pts);const last=pts[pts.length-1];
  return `<div class="expression-rhythm" id="expressionRhythm"><div class="rhythm-caption">RITMO DAS SAÍDAS <span>${state.period}</span></div><svg viewBox="0 0 270 96" preserveAspectRatio="none" role="img" aria-label="Curva do ritmo de saídas do período"><defs><linearGradient id="rhythmArea" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ecac7a" stop-opacity=".25"/><stop offset="100%" stop-color="#f8d8aa" stop-opacity="0"/></linearGradient><linearGradient id="rhythmStroke"><stop stop-color="#d48c70"/><stop offset="50%" stop-color="#f5af72"/><stop offset="100%" stop-color="#b89ab7"/></linearGradient></defs><path class="mini-rhythm-guide" d="M13 79H257"/><path class="mini-rhythm-area" d="${curve} L${last[0]} 80 L13 80 Z"/><path class="mini-rhythm-line" id="miniRhythmPath" d="${curve}"/><circle class="mini-rhythm-dot" cx="${last[0]}" cy="${last[1]}" r="3.5"/></svg></div>`;
 }
-function revealExpressionRhythm(){
+const NX_MOTION=Object.freeze({press:120,feedback:160,tab:160,disclosure:240,carousel:320,walletOpen:400,walletClose:340,expression:360,graphReplay:520,orbOpen:540,orbClose:440,orbSwitch:420,reveal:0.5,categoryStagger:40});
+window.NexaMotion336=NX_MOTION;
+function revealExpressionRhythm(animate=true){
  const root=$('#expenseExpression'),line=$('#miniRhythmPath');
  if(!root||!line)return;
  const total=line.getTotalLength();
  line.style.strokeDasharray=String(total);
- line.style.strokeDashoffset=reducedMotion()?'0':String(total);
+ line.style.strokeDashoffset=(!animate||reducedMotion()||document.hidden)?'0':String(total);
  root.classList.add('rhythm-visible');
- if(!reducedMotion())requestAnimationFrame(()=>requestAnimationFrame(()=>{
-   if(line.isConnected){line.style.transition='stroke-dashoffset 1080ms cubic-bezier(.12,.75,.14,1)';line.style.strokeDashoffset='0';}
- }));
+ if(animate&&!reducedMotion()&&!document.hidden)requestAnimationFrame(()=>{
+   if(line.isConnected){line.style.transition='stroke-dashoffset '+NX_MOTION.graphReplay+'ms cubic-bezier(.12,.75,.14,1)';line.style.strokeDashoffset='0';}
+ });
 }
 function expressionMarkup(){
  const sum=expenseTotal(),safe=state.period==='Semana';const [whole,cents]=integerParts(sum);
@@ -977,12 +980,12 @@ function animateExpense(){
  const parts=integerParts(target);field.textContent=parts[0];cents.textContent=parts[1];
  root.classList.remove('expression-settled','rhythm-visible','expression-counting');
  const mini=$('#miniRhythmPath');if(mini){mini.style.transition='none';mini.style.strokeDashoffset=String(mini.getTotalLength())}
- const settle=()=>{if(!root.isConnected)return;root.classList.remove('expression-counting');root.classList.add('expression-settled');revealExpressionRhythm()};
- if(reducedMotion()){settle();return;}
+ const settle=()=>{if(!root.isConnected)return;root.classList.remove('expression-counting');root.classList.add('expression-settled');revealExpressionRhythm(!document.hidden)};
+ if(reducedMotion()||document.hidden){settle();return;}
  root.classList.add('expression-counting');
- expenseMotionTimer=setTimeout(settle,460);
+ expenseMotionTimer=setTimeout(settle,NX_MOTION.expression);
 }
-function animateChart(){cancelAnimationFrame(graphMotionFrame);const line=$('#graphPath'),area=$('.graph-area'),plot=$('#chartPlot');if(!line||!plot)return;const length=line.getTotalLength();line.style.strokeDasharray=String(length);if(reducedMotion()){line.style.strokeDashoffset='0';if(area)area.style.opacity='1';return;}line.style.strokeDashoffset=String(length);if(area)area.style.opacity='0';const begun=performance.now();function draw(now){if(!line.isConnected)return;const t=Math.min(1,(now-begun)/1060),ease=1-Math.pow(1-t,3);line.style.strokeDashoffset=String(length*(1-ease));if(area)area.style.opacity=String(Math.min(1,t*1.7));if(t<1)graphMotionFrame=requestAnimationFrame(draw);}graphMotionFrame=requestAnimationFrame(draw);}
+function animateChart(replay=false){cancelAnimationFrame(graphMotionFrame);const line=$('#graphPath'),area=$('.graph-area'),plot=$('#chartPlot');if(!line||!plot)return;const length=line.getTotalLength();line.style.strokeDasharray=String(length);line.style.strokeDashoffset='0';if(area)area.style.opacity='1';if(!replay||reducedMotion()||document.hidden)return;line.style.strokeDashoffset=String(length);const begun=performance.now();function draw(now){if(!line.isConnected)return;const t=Math.min(1,(now-begun)/NX_MOTION.graphReplay),ease=1-Math.pow(1-t,3);line.style.strokeDashoffset=String(length*(1-ease));if(t<1&&!document.hidden&&!reducedMotion())graphMotionFrame=requestAnimationFrame(draw);else line.style.strokeDashoffset='0';}graphMotionFrame=requestAnimationFrame(draw);}
 function activateGraph(index){if(state.tab!=='expenses')return;const series=chartWeeks[state.period];index=Math.max(0,Math.min(series.values.length-1,index));state.graphIndex=index;const n=series.values[index];$('#chartAmount').textContent=graphMissing(index)?'—':money(n);$('#chartPlot').dataset.missing=String(graphMissing(index));$('#chartSubtitle').textContent=state.period==='Semana'?series.labels[index]+(WEEK_LEDGER[index]?.future?' · ainda não ocorreu':' · gastos do dia'):'Faixa '+series.labels[index]+' · amostra do período';$$('[data-graph]').forEach(el=>{const active=Number(el.dataset.graph)===index;el.classList.toggle('active',active);el.setAttribute('aria-pressed',String(active));});const selected=$(`[data-graph="${index}"]`),cx=Number(selected.style.left.replace('%',''))*3.2,cy=Number(selected.style.top.replace('%',''))*1.35;for(const id of ['graphMarker','graphHalo']){const node=$('#'+id);node?.setAttribute('cx',cx.toFixed(2));node?.setAttribute('cy',cy.toFixed(2));}$('#graphNeedle')?.setAttribute('x1',cx.toFixed(2));$('#graphNeedle')?.setAttribute('x2',cx.toFixed(2));$('#graphNeedle')?.setAttribute('y1',cy.toFixed(2));}
 const categoryGlyphs={
   'Alimentação':'<path d="M4.5 3v7.7a3.2 3.2 0 0 0 3.2 3.2h.8V21"/><path d="M8.5 3v10.9M12 3v7.7a3.2 3.2 0 0 1-3.2 3.2"/><path d="M19.6 21V3c-4.2 2.4-5.4 6.6-5.4 11.6h5.4"/>',
@@ -1227,7 +1230,7 @@ function openWallet(index,trigger){if(state.tab!=='cards'||!walletGroups[index])
 function closeWallet(restoreFocus=true){const layer=document.getElementById('walletLayer');if(!layer||walletClosing)return;walletClosing=true;document.querySelectorAll('.wallet-folder.is-open').forEach(folder=>{folder.classList.remove('is-open');folder.setAttribute('aria-expanded','false')});const target=walletLastTrigger;walletLastTrigger=null;const reduced=reducedMotion();layer.classList.remove('is-visible');const remove=()=>{if(layer.isConnected)layer.remove();walletClosing=false;if(restoreFocus&&target?.isConnected)target.focus({preventScroll:true})};if(reduced){remove();return}setTimeout(remove,300)}
 function selectWalletCard(id){if(!Number.isInteger(id)||!walletBanks[id])return;closeWallet(false);if(walletLiveRaised){updateWalletLive(id)}else{clearTimeout(walletLiveMotionTimer);walletLiveMotionTimer=0;walletLiveApplySelection(id,false,++walletLiveMotionToken)}notify(`${walletBanks[id].n} selecionado.`)}
 
-function review(){const names=['Compra sem categoria','Pix aguardando identificação','Notificação duplicada'];return `<div class="screen-page">${heading('Sua atenção','Revisar','Só o que precisa de você, sem excesso de ruído.')}<div class="surface overview"><small>Eventos a revisar</small><strong>${3-state.reviewed.length}</strong><span class="highlight">Revisões neste protótipo não alteram dados reais</span></div><div class="section-title"><h2>${icon('inbox')}Pendências</h2><button data-action="reviewInfo">Sobre a captura</button></div>${names.map((name,i)=>`<div class="surface review-item ${state.reviewed.includes(i)?'is-done':''}"><span class="review-glyph" data-kind="${i}" aria-hidden="true">${icon(state.reviewed.includes(i)?'check':['tag','transfer','duplicate'][i])}</span><div class="review-copy"><b>${name}</b><p>${['Confira a categoria para manter as análises precisas.','Verifique o titular da transferência antes de confirmar.','Compare o evento com os registros anteriores.'][i]}</p><button data-review="${i}" ${state.reviewed.includes(i)?'disabled':''}>${state.reviewed.includes(i)?'Revisado ✓':'Marcar revisado'}</button></div></div>`).join('')}${state.reviewed.length===3?'<div class="surface empty-state">Tudo revisado. Seu painel está em dia.</div>':''}</div>`}
+function review(){const names=['Compra sem categoria','Pix aguardando identificação','Notificação duplicada'];return `<div class="screen-page">${heading('Sua atenção','Revisar','Só o que precisa de você, sem excesso de ruído.')}<div class="surface overview"><small>Eventos a revisar</small><strong id="reviewRemaining" role="status" aria-live="polite">${3-state.reviewed.length}</strong><span class="highlight">Revisões neste protótipo não alteram dados reais</span></div><div class="section-title"><h2>${icon('inbox')}Pendências</h2><button data-action="reviewInfo">Sobre a captura</button></div>${names.map((name,i)=>`<div class="surface review-item ${state.reviewed.includes(i)?'is-done':''}"><span class="review-glyph" data-kind="${i}" aria-hidden="true">${icon(state.reviewed.includes(i)?'check':['tag','transfer','duplicate'][i])}</span><div class="review-copy"><b>${name}</b><p>${['Confira a categoria para manter as análises precisas.','Verifique o titular da transferência antes de confirmar.','Compare o evento com os registros anteriores.'][i]}</p><button data-review="${i}" ${state.reviewed.includes(i)?'disabled':''}>${state.reviewed.includes(i)?'Revisado ✓':'Marcar revisado'}</button></div></div>`).join('')}${state.reviewed.length===3?'<div class="surface empty-state">Tudo revisado. Seu painel está em dia.</div>':''}</div>`}
 
 // One periodic canvas renderer for all finance orbs. No video loop edges, no hard-cut alpha resets.
 const orbReduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -1343,7 +1346,7 @@ document.addEventListener('keydown',e=>{
  if(e.key==='Tab'){const list=[...layer.querySelectorAll('button')],first=list[0],last=list[list.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}
 });
 
-let categoryMotionObserver;
+let categoryMotionObserver;const categorySeen=new Set();let categoryMotionTimers=[];
 function playCategoryMotion(button){
   if(window.NexaPagMicrobots)return window.NexaPagMicrobots.play(button);
   if(!button||!button.isConnected)return;
@@ -1355,14 +1358,14 @@ function playCategoryMotion(button){
   button.classList.add('is-playing');
 }
 function setupCategoryMotions(){
-  categoryMotionObserver?.disconnect();
-  const buttons=$$('.category-morph');
+  categoryMotionObserver?.disconnect();categoryMotionTimers.forEach(clearTimeout);categoryMotionTimers=[];
+  const buttons=$('.category-morph').filter(b=>!categorySeen.has(b.dataset.categoryMotion));
   if(!buttons.length||reducedMotion())return;
   if(!('IntersectionObserver' in window)){buttons.forEach(playCategoryMotion);return}
   categoryMotionObserver=new IntersectionObserver(entries=>{
     entries.filter(e=>e.isIntersecting).forEach(({target},i)=>{
       categoryMotionObserver.unobserve(target);
-      setTimeout(()=>{if(target.isConnected&&state.tab==='expenses')playCategoryMotion(target)},i*110);
+      categoryMotionTimers.push(setTimeout(()=>{if(target.isConnected&&state.tab==='expenses'&&!document.hidden&&!reducedMotion()){categorySeen.add(target.dataset.categoryMotion);playCategoryMotion(target)}},Math.min(i*NX_MOTION.categoryStagger,120)));
     });
   },{root:$('#scroller'),threshold:.55});
   buttons.forEach(el=>categoryMotionObserver.observe(el));
@@ -1382,20 +1385,22 @@ function syncSlideBackdropMedia(){
   }
 }
 document.addEventListener('visibilitychange',syncSlideBackdropMedia);
+function settleAnalyticalMotion(){if(!document.hidden&&!reducedMotion())return;categoryMotionTimers.forEach(clearTimeout);categoryMotionTimers=[];if(state.tab==='expenses'){clearTimeout(expenseMotionTimer);cancelAnimationFrame(graphMotionFrame);const root=$('#expenseExpression');root?.classList.remove('expression-counting');root?.classList.add('expression-settled');revealExpressionRhythm(false);animateChart(false)}}
+document.addEventListener('visibilitychange',settleAnalyticalMotion);matchMedia('(prefers-reduced-motion: reduce)').addEventListener?.('change',settleAnalyticalMotion);
 window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener?.('change',syncSlideBackdropMedia);
 
 function render(){
  resetWalletDetail();
  clearTimeout(walletLiveMotionTimer);walletLiveMotionTimer=0;walletLivePendingIndex=null;walletLiveRetractEndsAt=0;walletLiveMotionToken++;
  if(state.tab!=='cards'){walletLiveRaised=false;walletLiveGesture=null;walletLiveSuppressClickUntil=0;}
- stopLiquid();hideMoneyInsight(false);categoryMotionObserver?.disconnect();const walletOverlay=document.getElementById('walletLayer');if(walletOverlay)walletOverlay.remove();walletClosing=false;const tab=state.tab;const phone=document.querySelector('.phone');if(phone){phone.dataset.pageTheme=tab;phone.classList.remove('expenses-theme');phone.classList.toggle('scrolled-deep',$('#scroller').scrollTop>112)}cancelAnimationFrame(expenseMotionFrame);cancelAnimationFrame(graphMotionFrame);$('#screen').innerHTML=({home,expenses,ads,cards,review})[tab]();$('#dock').style.setProperty('--active-tab',String(['home','expenses','ads','cards','review'].indexOf(tab)));$$('#dock button').forEach(b=>{const selected=b.dataset.tab===tab;b.classList.toggle('active',selected);b.setAttribute('aria-current',selected?'page':'false')});if(tab==='home'){const root=$('#homePage');root.classList.toggle('hero-expanded',state.expanded);if(state.expanded)requestAnimationFrame(updateCarousel)}if(tab==='expenses'){requestAnimationFrame(()=>{animateExpense();animateChart();})}prepareMotionOrbs();syncSlideBackdropMedia();if(tab==='expenses')requestAnimationFrame(setupCategoryMotions);requestAnimationFrame(syncScrollChrome328)}
+ stopLiquid();hideMoneyInsight(false);categoryMotionObserver?.disconnect();categoryMotionTimers.forEach(clearTimeout);categoryMotionTimers=[];const walletOverlay=document.getElementById('walletLayer');if(walletOverlay)walletOverlay.remove();walletClosing=false;const tab=state.tab;const phone=document.querySelector('.phone');if(phone){phone.dataset.pageTheme=tab;phone.classList.remove('expenses-theme');phone.classList.toggle('scrolled-deep',$('#scroller').scrollTop>112)}cancelAnimationFrame(expenseMotionFrame);clearTimeout(expenseMotionTimer);cancelAnimationFrame(graphMotionFrame);$('#screen').innerHTML=({home,expenses,ads,cards,review})[tab]();$('#dock').style.setProperty('--active-tab',String(['home','expenses','ads','cards','review'].indexOf(tab)));$$('#dock button').forEach(b=>{const selected=b.dataset.tab===tab;b.classList.toggle('active',selected);b.setAttribute('aria-current',selected?'page':'false')});if(tab==='home'){const root=$('#homePage');root.classList.toggle('hero-expanded',state.expanded);if(state.expanded)requestAnimationFrame(updateCarousel)}if(tab==='expenses'){requestAnimationFrame(()=>{animateExpense();animateChart();})}prepareMotionOrbs();syncSlideBackdropMedia();if(tab==='expenses')requestAnimationFrame(setupCategoryMotions);requestAnimationFrame(syncScrollChrome328)}
 function $$(s,r=document){return [...r.querySelectorAll(s)]}
 function updateCarousel(options={}){const track=$('#carouselTrack'),vp=$('#carouselViewport');if(!track||!vp)return;const first=track.querySelector('.carousel-slide');if(!first)return;const width=first.offsetWidth,gap=parseFloat(getComputedStyle(track).columnGap)||12,offset=(vp.clientWidth-width)/2-state.slide*(width+gap)+(options.dragOffset||0);track.style.transform=`translate3d(${offset}px,0,0)`;$$('.carousel-slide',vp).forEach((el,i)=>{el.classList.toggle('current',i===state.slide);el.setAttribute('aria-hidden',i!==state.slide?'true':'false');el.querySelectorAll('button').forEach(b=>b.tabIndex=i===state.slide?0:-1);el.classList.toggle('side-prev',i<state.slide);el.classList.toggle('side-next',i>state.slide)});$$('.carousel-dots button').forEach((el,i)=>{el.classList.toggle('active',i===state.slide);el.setAttribute('aria-pressed',i===state.slide?'true':'false')})}
 function expand(play=true){if(state.tab!=='home')return;clearTimeout(autoClose);clearInterval(autoAdvance);state.expanded=true;$('#homePage')?.classList.add('hero-expanded');syncSlideBackdropMedia();requestAnimationFrame(()=>requestAnimationFrame(updateCarousel));if(play&&!matchMedia('(prefers-reduced-motion: reduce)').matches){autoAdvance=setInterval(()=>{state.slide=(state.slide+1)%3;updateCarousel()},2700);autoClose=setTimeout(()=>collapse(),8200)}}
 function collapse(){clearTimeout(autoClose);clearInterval(autoAdvance);state.expanded=false;$('#homePage')?.classList.remove('hero-expanded');syncSlideBackdropMedia();$('#scroller')?.classList.remove('carousel-interacting')}
 function go(tab){const changed=state.tab!==tab;if(!['home','expenses','ads','cards','review'].includes(tab))return;clearTimeout(autoClose);clearInterval(autoAdvance);state.tab=tab;render();if(changed)$('#screen').querySelector('.screen-page')?.classList.add('nx-tab-enter');$('#scroller').scrollTop=0;syncScrollChrome328();document.querySelector('.phone')?.classList.remove('scrolled-deep');if(tab==='home'&&state.expanded)requestAnimationFrame(updateCarousel)}
 function notify(msg){clearTimeout(toastTimeout);const el=$('#toast');el.textContent=msg;el.classList.remove('hidden');toastTimeout=setTimeout(()=>el.classList.add('hidden'),3100)}
-function action(a){switch(a){case'prev':case'next':stopAutoplay();state.slide=(state.slide+(a==='next'?1:2))%3;updateCarousel();break;case'collapse':collapse();break;case'expenseReplay':animateExpense();break;case'graphReplay':animateChart();break;case'expenseDetails':$('#spendingChart')?.scrollIntoView({behavior:reducedMotion()?'auto':'smooth',block:'nearest'});break;case'expenseIncome':notify('Entradas demonstrativas: '+money(1950)+'.');break;case'slideAction':notify(`${stars[state.slide].title}: dados demonstrativos.`);break;case'wins':case'goal':showMoneyInsight('budget',document.activeElement);break;case'refund':showMoneyInsight('refund',document.activeElement);break;case'tip':notify('Antes de comprar, confira quanto falta para sua meta semanal.');break;case'category':toggleExpenseCategory('Alimentação',true);break;case'calendar':document.getElementById('calendarSection')?.scrollIntoView({behavior:reducedMotion()?'instant':'smooth',block:'start'});break;case'adDemo':case'adInfo':notify('Conectores externos não estão ativos neste protótipo.');break;case'reviewInfo':notify('Os eventos exibidos são exemplos.');break;default:break}}
+function action(a){switch(a){case'prev':case'next':stopAutoplay();state.slide=(state.slide+(a==='next'?1:2))%3;updateCarousel();break;case'collapse':collapse();break;case'expenseReplay':animateExpense();break;case'graphReplay':animateChart(true);break;case'expenseDetails':$('#spendingChart')?.scrollIntoView({behavior:reducedMotion()?'auto':'smooth',block:'nearest'});break;case'expenseIncome':notify('Entradas demonstrativas: '+money(1950)+'.');break;case'slideAction':notify(`${stars[state.slide].title}: dados demonstrativos.`);break;case'wins':case'goal':showMoneyInsight('budget',document.activeElement);break;case'refund':showMoneyInsight('refund',document.activeElement);break;case'tip':notify('Antes de comprar, confira quanto falta para sua meta semanal.');break;case'category':toggleExpenseCategory('Alimentação',true);break;case'calendar':document.getElementById('calendarSection')?.scrollIntoView({behavior:reducedMotion()?'instant':'smooth',block:'start'});break;case'adDemo':case'adInfo':notify('Conectores externos não estão ativos neste protótipo.');break;case'reviewInfo':notify('Os eventos exibidos são exemplos.');break;default:break}}
 $('#dock').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(b)go(b.dataset.tab)});
 $('#screen').addEventListener('click',e=>{
  const walletCard=e.target.closest('[data-wallet-live-card]');
@@ -1407,7 +1412,7 @@ $('#screen').addEventListener('click',e=>{
  if(walletStep){stepWalletLive(Number(walletStep.dataset.walletLiveStep));return;}
  const walletDetails=e.target.closest('[data-wallet-live-details]');
  if(walletDetails){openWalletDetail(state.card,document.querySelector('[data-wallet-live-card="'+state.card+'"]'));return;}
- const folder=e.target.closest('[data-wallet-folder]');if(folder){openWallet(Number(folder.dataset.walletFolder),folder);return}const b=e.target.closest('button');if(!b)return;if(b.dataset.categoryMotion){playCategoryMotion(b);return}if(b.dataset.categoryToggle){toggleExpenseCategory(b.dataset.categoryToggle);return}if(b.dataset.open){state.slide=0;expand(false);return}if(b.dataset.action){if(b.dataset.action==='slideAction'){const card=b.closest('.carousel-slide');if(card){state.slide=Number(card.dataset.slide);updateCarousel()}}action(b.dataset.action);return}if(b.dataset.index!==undefined){stopAutoplay();state.slide=+b.dataset.index;updateCarousel();return}if(b.dataset.day!==undefined){state.day=+b.dataset.day;$$('[data-day]').forEach(el=>{el.classList.toggle('selected',+el.dataset.day===state.day);el.setAttribute('aria-pressed',+el.dataset.day===state.day?'true':'false')});const details=$('#weekDayDetail');if(details)details.innerHTML=weekDetailMarkup(state.day);return}if(b.dataset.tabGo){go(b.dataset.tabGo);return}if(b.dataset.period){const restore=document.activeElement===b;state.period=b.dataset.period;state.graphIndex=state.period==='Semana'?3:6;render();if(restore)document.querySelector('.expense-periods button.on')?.focus({preventScroll:true});return}if(b.dataset.graph!==undefined){activateGraph(Number(b.dataset.graph));return}if(b.dataset.heat!==undefined){const n=+b.dataset.heat;if(n>0&&n<=30){state.heatDay=n;document.querySelectorAll('.heat-day').forEach(x=>{const yes=+x.dataset.heat===n;x.classList.toggle('selected',yes);x.setAttribute('aria-pressed',String(yes))});const detail=document.getElementById('calendarDetail');if(detail)detail.innerHTML=calendarDetailMarkup(n)}return}if(b.dataset.card!==undefined){state.card=+b.dataset.card;render();return}if(b.dataset.review!==undefined){const i=+b.dataset.review;if(!state.reviewed.includes(i)){state.reviewed.push(i);render()}return}});
+ const folder=e.target.closest('[data-wallet-folder]');if(folder){openWallet(Number(folder.dataset.walletFolder),folder);return}const b=e.target.closest('button');if(!b)return;if(b.dataset.categoryMotion){playCategoryMotion(b);return}if(b.dataset.categoryToggle){toggleExpenseCategory(b.dataset.categoryToggle);return}if(b.dataset.open){state.slide=0;expand(false);return}if(b.dataset.action){if(b.dataset.action==='slideAction'){const card=b.closest('.carousel-slide');if(card){state.slide=Number(card.dataset.slide);updateCarousel()}}action(b.dataset.action);return}if(b.dataset.index!==undefined){stopAutoplay();state.slide=+b.dataset.index;updateCarousel();return}if(b.dataset.day!==undefined){state.day=+b.dataset.day;$$('[data-day]').forEach(el=>{el.classList.toggle('selected',+el.dataset.day===state.day);el.setAttribute('aria-pressed',+el.dataset.day===state.day?'true':'false')});const details=$('#weekDayDetail');if(details)details.innerHTML=weekDetailMarkup(state.day);return}if(b.dataset.tabGo){go(b.dataset.tabGo);return}if(b.dataset.period){if(state.period===b.dataset.period)return;state.period=b.dataset.period;state.graphIndex=state.period==='Semana'?3:6;$('.expense-periods button').forEach(el=>{const active=el.dataset.period===state.period;el.classList.toggle('on',active);el.setAttribute('aria-pressed',String(active))});$('#expenseExpression').outerHTML=expressionMarkup();$('#spendingChart').outerHTML=graphMarkup();animateExpense();animateChart();return}if(b.dataset.graph!==undefined){activateGraph(Number(b.dataset.graph));return}if(b.dataset.heat!==undefined){const n=+b.dataset.heat;if(n>0&&n<=30){state.heatDay=n;document.querySelectorAll('.heat-day').forEach(x=>{const yes=+x.dataset.heat===n;x.classList.toggle('selected',yes);x.setAttribute('aria-pressed',String(yes))});const detail=document.getElementById('calendarDetail');if(detail)detail.innerHTML=calendarDetailMarkup(n)}return}if(b.dataset.card!==undefined){state.card=+b.dataset.card;render();return}if(b.dataset.review!==undefined){const i=+b.dataset.review;if(!state.reviewed.includes(i)){state.reviewed.push(i);const card=b.closest('.review-item');card.classList.add('is-done');card.querySelector('.review-glyph').innerHTML=icon('check');b.textContent='Revisado ✓';b.disabled=true;$('#reviewRemaining').textContent=String(3-state.reviewed.length);if(state.reviewed.length===3){const done=document.createElement('div');done.className='surface empty-state';done.setAttribute('role','status');done.textContent='Tudo revisado. Seu painel está em dia.';$('#screen .screen-page').append(done)}}return}});
 document.querySelector('.phone').addEventListener('click',e=>{const p=e.target.closest('[data-wallet-pick]');if(p){selectWalletCard(Number(p.dataset.walletPick));return}if(e.target.closest('[data-wallet-close]')){closeWallet();return}});
 document.addEventListener('keydown',e=>{const layer=document.getElementById('walletLayer');if(!layer)return;if(e.key==='Escape'){e.preventDefault();closeWallet();return}if(e.key==='Tab'){const f=[...layer.querySelectorAll('button')];if(!f.length)return;const first=f[0],last=f[f.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
 let carouselGesture=null, suppressCarouselClick=false;
@@ -1626,7 +1631,7 @@ function walletSharedFlight324(from,to,id,reverse=false,clip=0){
  const animation=ghost.animate([
  {transform:'translate3d(0,0,0) scale(1,1)',clipPath:reverse?'inset(0% round 16px)':'inset(0 0 '+hidden+'% 0 round 16px)'},
  {transform:'translate3d('+(b.x-a.x)+'px,'+(b.y-a.y)+'px,0) scale('+b.w/a.w+','+b.h/a.h+')',clipPath:reverse?'inset(0 0 '+hidden+'% 0 round 16px)':'inset(0% round 16px)'}
- ],{duration:reverse?480:520,easing:'cubic-bezier(.22,.75,.23,1)',fill:'forwards'});
+ ],{duration:reverse?NX_MOTION.walletClose:NX_MOTION.walletOpen,easing:'cubic-bezier(.22,.75,.23,1)',fill:'forwards'});
  return animation.finished.catch(()=>{}).then(()=>{ghost.remove();if(walletDetailFlight===ghost)walletDetailFlight=null});
 }
 async function openWalletDetail(id,source){
@@ -1670,7 +1675,7 @@ async function closeWalletDetail324(){
  if(d.wasRaised){walletLiveRaised=true;const scene=d.page.querySelector('[data-wallet-live-scene]');scene.dataset.opened='true';scene.dataset.phase='expanded';const b=scene.querySelector('[data-wallet-stack-toggle]');b?.setAttribute('aria-expanded','true');b?.setAttribute('aria-label','Recolher pilha de cartões');}
  const target=d.page.querySelector('[data-wallet-live-card="'+d.index+'"]'),to=target?.getBoundingClientRect(),clip=walletOcclusion325(target,d.page);
  if(target)target.style.visibility='hidden';
- if(reducedMotion())d.layer.style.opacity='0';else d.layer.animate([{opacity:1},{opacity:0}],{duration:300,easing:'ease-out',fill:'forwards'});
+ if(reducedMotion())d.layer.style.opacity='0';else d.layer.animate([{opacity:1},{opacity:0}],{duration:NX_MOTION.feedback,easing:'ease-out',fill:'forwards'});
  await walletSharedFlight324(from,to,d.index,true,clip);
  if(token!==walletDetailGeneration)return;
  if(target)target.style.visibility='';d.page.classList.remove('wd-restoring');d.layer.remove();walletDetailState=null;target?.focus({preventScroll:true});
