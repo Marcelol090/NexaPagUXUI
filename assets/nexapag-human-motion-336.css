@@ -56,3 +56,8 @@
  .phone[data-spacing-system="v322"] :is(.screen-page.nx-tab-enter,.review-glyph,.toast,.expression-wash){animation:none!important}
  .phone[data-spacing-system="v322"] :is(.carousel-track,.carousel-slide,.orb-story-content,.orb-story-content>*,.category-detail,.category-chevron,.expression-face,.expression-face g,.expression-rhythm,.chart-hit span,.wallet-live-card,.insight-sheet,.insight-scrim,.review-copy button,.offer-card button,.expense-periods button,.expression-actions button){transition:none!important}
 }
+
+/* Retired ornaments must not contribute to scrollWidth. Keep branded wallet
+   pigmentation inside the bounds of its reading panel. */
+.phone[data-spacing-system="v322"] :is(.overview:not(.expense-expression),.offer-card)::before{content:none;display:none}
+.phone[data-spacing-system="v322"] .wallet-selected-summary::before{right:0;top:0;width:100%;height:100%;background:radial-gradient(ellipse at 95% 0%,var(--summary-glow,#d7b2ec70),transparent 65%)}
