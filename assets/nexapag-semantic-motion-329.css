@@ -60,3 +60,43 @@
  .phone[data-spacing-system="v322"] .bottom-dock *{animation:none!important;transition:none!important}
  .phone[data-spacing-system="v322"] .topbar::after{opacity:0}
 }
+
+/* V3.29 optical surface hierarchy. Only neutral reading surfaces, not
+   financial bots, category pigments, wallet artwork or expression scenes.
+   A nearly opaque film protects text from the anchored atmosphere. */
+.phone[data-spacing-system="v322"]{
+ --nx-reading-film:#f8faf6;
+ --nx-reading-edge:rgba(37,67,42,.13);
+ --nx-reading-shadow:0 4px 14px rgba(25,52,34,.065);
+ --nx-reading-inner:rgba(255,255,255,.78);
+}
+.phone[data-spacing-system="v322"][data-ui-theme="dark"]{
+ --nx-reading-film:#1b2b21;
+ --nx-reading-edge:rgba(209,237,200,.15);
+ --nx-reading-shadow:0 5px 16px rgba(0,13,7,.18);
+ --nx-reading-inner:rgba(242,255,237,.055);
+}
+.phone[data-spacing-system="v322"][data-page-theme] :is(.week,.transactions,.daily-note){
+ background:var(--nx-reading-film);
+ border-color:var(--nx-reading-edge);
+ box-shadow:var(--nx-reading-shadow),inset 0 1px 0 var(--nx-reading-inner);
+}
+/* Rows belong to the parent surface rather than appearing as nested cards. */
+.phone[data-spacing-system="v322"][data-page-theme] .transactions .transaction{
+ background:transparent;box-shadow:none;
+}
+.phone[data-spacing-system="v322"] .category-v29 .category-detail{
+ transition:grid-template-rows var(--nx-motion-disclose) var(--nx-motion-standard),opacity var(--nx-motion-feedback) ease;
+}
+.phone[data-spacing-system="v322"] .expense-expression .expression-money{
+ font-variant-numeric:tabular-nums lining-nums;
+}
+.phone[data-spacing-system="v322"] .expense-expression.mood-neutral.expression-settled .eyes-joy{opacity:0}
+.phone[data-spacing-system="v322"] .expense-expression.mood-neutral.expression-settled .eyes-neutral{opacity:1;transform:none}
+@media(prefers-contrast:more){
+ .phone[data-spacing-system="v322"]{--nx-reading-edge:#56705a}
+ .phone[data-spacing-system="v322"][data-ui-theme="dark"]{--nx-reading-edge:#93b498}
+}
+@media(prefers-reduced-motion:reduce){
+ .phone[data-spacing-system="v322"] .category-v29 .category-detail{transition:none!important}
+}
