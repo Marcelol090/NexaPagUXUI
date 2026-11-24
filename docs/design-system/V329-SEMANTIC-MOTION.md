@@ -20,3 +20,8 @@ Existing V3.27 persistence tests retained. New tests across 320/390/430/1440, bo
 
 ## Regression correction
 CI run 45425511823: 119 passed, 11 failed. All 11 reported first failures were caused by changes to approved 44px toolbar targets or 21px dock glyphs. Restore those dimensions rather than relaxing legacy assertions. New browser run required.
+
+## Official lineage and optical refinement
+V3.28 Quiet Precision (`main:v2.html`, commit 11cb71741f78d06be1d8ce99454a31715351f64a) is the sole visual baseline for this design track. Do not port components from the V9.xx prototype or merge PR #28 into this track. Preserve the approved 44px toolbar, 21px navigation glyphs, anchored 278px backdrop, original category palettes, financial bot assets, and both themes.
+CI run 45427875086 passed 130 browser tests on the preceding revision. The optical refinement adds a quiet near-opaque reading film to week, transaction list and daily note surfaces; transaction rows are no longer nested elevated cards. The separate expense expression keeps the actual financial amount visible throughout playback, removes the arbitrary 72.2% starting value, and keeps neutral expressions neutral. Category disclosure uses existing 240ms / 180ms tokens; OS reduced-motion still overrides them.
+New tests exercise exact amounts during replay, neutral expression, and both reading films. The previous successful CI is not proof of these subsequent changes; rerun required. No new shader, blur engine, orbit asset or Android change.
