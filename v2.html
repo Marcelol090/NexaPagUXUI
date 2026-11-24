@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#111211">
 <meta name="description" content="NexaPag V3.1 · estrutura V2.8, fundo verde-floresta e modo dark.">
-<title>NexaPag V3.27 · Persistent Green Backdrop</title>
+<title>NexaPag V3.28 · Quiet Precision</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -816,10 +816,17 @@ button:focus-visible{outline:2px solid #70658f;outline-offset:3px}
 <link rel="stylesheet" href="./assets/nexapag-wallet-stack-324.css">
 <link rel="stylesheet" href="./assets/nexapag-navigation-325.css">
 <link rel="stylesheet" href="./assets/nexapag-native-rhythm-326.css">
+<link rel="stylesheet" href="./assets/nexapag-precision-328.css">
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
 <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 5 19 19M19 5 5 19"/></symbol>
+<symbol id="nx-nav-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 10.5 12 3.7l8.5 6.8v8a1.8 1.8 0 0 1-1.8 1.8h-4.2v-5.1a2.5 2.5 0 0 0-5 0v5.1H5.3a1.8 1.8 0 0 1-1.8-1.8z"/></symbol>
+<symbol id="nx-nav-expenses" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 19.5h17"/><path d="M5.5 16v-4.5m4.3 4.5V7.5m4.4 8.5v-6m4.3 6V4.5"/></symbol>
+<symbol id="nx-nav-ads" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="m3.8 9 6.1.1 8.5-4v13.8l-8.5-4-6.1.1a1.3 1.3 0 0 1-1.3-1.3v-3.4A1.3 1.3 0 0 1 3.8 9Z"/><path d="m6.3 15 1.5 5h3l-1.3-5M21.1 9.5v5"/></symbol>
+<symbol id="nx-nav-cards" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><rect x="3.2" y="5.4" width="17.6" height="13.2" rx="2.7"/><path d="M3.2 10h17.6M6.8 15h4.2"/><path d="M16.9 15h.8"/></symbol>
+<symbol id="nx-nav-review" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 8h6m-5.8 6 2 2 4-4.4"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.8v2.1m0 14.2v2.1M2.8 12h2.1m14.2 0h2.1M5.5 5.5 7 7m10 10 1.5 1.5m0-13L17 7M7 17l-1.5 1.5"/></symbol>
 <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 10 8.5-7 8.5 7v9.5A1.5 1.5 0 0 1 19 21h-4.5v-6.2a2.5 2.5 0 0 0-5 0V21H5a1.5 1.5 0 0 1-1.5-1.5V10Z"/></symbol>
 <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 19.5v-5.2M9.5 19.5V9.6M14.5 19.5v-13M19.5 19.5v-8.4"/><path d="M3 21h18"/></symbol>
 <symbol id="i-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l1.2 12.4a1 1 0 0 1-1 1.1H4.8a1 1 0 0 1-1-1.1L5 8Z"/><path d="M8.5 9V6a3.5 3.5 0 1 1 7 0v3"/></symbol>
@@ -846,11 +853,11 @@ button:focus-visible{outline:2px solid #70658f;outline-offset:3px}
 <header class="topbar" id="topbar"><strong class="brand-short">nexapag.</strong><div class="top-actions"><button class="round-action theme-switch" type="button" id="themeToggle" aria-label="Ativar modo escuro" aria-pressed="false" title="Alternar tema claro e escuro"><svg aria-hidden="true"><use href="#i-moon"/></svg></button><button class="round-action notice" type="button" id="notifications" aria-label="Notificações"><svg><use href="#i-bell"/></svg></button><button class="round-action avatar" type="button" id="avatar" aria-label="Perfil de demonstração">N</button></div></header>
 <div class="scroller" id="scroller"><div id="screen" aria-live="polite"></div></div>
 <footer class="bottom-area"><nav class="bottom-dock" id="dock" aria-label="Navegação principal" style="--active-tab:0"><span class="dock-indicator" aria-hidden="true"></span>
-<button type="button" class="active" data-tab="home" aria-label="Início" title="Início" aria-current="page"><svg><use href="#i-home"/></svg><span>Início</span></button>
-<button type="button" data-tab="expenses" aria-label="Gastos" title="Gastos"><svg><use href="#i-chart"/></svg><span>Gastos</span></button>
-<button type="button" data-tab="ads" aria-label="Anúncios" title="Anúncios"><svg><use href="#i-bag"/></svg><span>Anúncios</span></button>
-<button type="button" data-tab="cards" aria-label="Cartões" title="Cartões"><svg><use href="#i-card"/></svg><span>Cartões</span></button>
-<button type="button" data-tab="review" aria-label="Revisar" title="Revisar"><svg><use href="#i-check"/></svg><span>Revisar</span></button>
+<button type="button" class="active" data-tab="home" aria-label="Início" title="Início" aria-current="page"><svg class="nx-nav-glyph" viewBox="0 0 24 24" aria-hidden="true"><use href="#nx-nav-home"/></svg><span>Início</span></button>
+<button type="button" data-tab="expenses" aria-label="Gastos" title="Gastos"><svg class="nx-nav-glyph" viewBox="0 0 24 24" aria-hidden="true"><use href="#nx-nav-expenses"/></svg><span>Gastos</span></button>
+<button type="button" data-tab="ads" aria-label="Anúncios" title="Anúncios"><svg class="nx-nav-glyph" viewBox="0 0 24 24" aria-hidden="true"><use href="#nx-nav-ads"/></svg><span>Anúncios</span></button>
+<button type="button" data-tab="cards" aria-label="Cartões" title="Cartões"><svg class="nx-nav-glyph" viewBox="0 0 24 24" aria-hidden="true"><use href="#nx-nav-cards"/></svg><span>Cartões</span></button>
+<button type="button" data-tab="review" aria-label="Revisar" title="Revisar"><svg class="nx-nav-glyph" viewBox="0 0 24 24" aria-hidden="true"><use href="#nx-nav-review"/></svg><span>Revisar</span></button>
 </nav><span class="home-indicator"></span></footer>
 <div class="toast hidden" id="toast" role="status"></div>
 </div></div><div class="studio-foot">Protótipo com dados demonstrativos · Passe os cards, toque nas esferas e explore as cinco abas</div>
@@ -1195,7 +1202,7 @@ function review(){const names=['Compra sem categoria','Pix aguardando identifica
 // One periodic canvas renderer for all finance orbs. No video loop edges, no hard-cut alpha resets.
 const orbReduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
 const TWO_PI=Math.PI*2,LIQUID_CYCLE_MS=6400;
-let liquidRaf=0,liquidCanvases=[],liquidVisible=true;
+let liquidRaf=0,liquidCanvases=[],liquidVisible=true,liquidObserver=null;
 const MONO_TONES={orange:[{category:'Alimentação',value:1}],lilac:[{category:'Compras',value:1}],lime:[{category:'Transporte',value:1}],red:[{category:'Casa',value:1}]};
 function hexRGB(hex){return [parseInt(hex.slice(1,3),16),parseInt(hex.slice(3,5),16),parseInt(hex.slice(5,7),16)];}
 function rgba(hex,a){return `rgba(${hexRGB(hex).join(',')},${a})`}
@@ -1233,12 +1240,12 @@ function paintLiquid(canvas,items,phase){
  ctx.beginPath();ctx.arc(40,40,35.8,0,TWO_PI);ctx.strokeStyle='rgba(255,255,255,.77)';ctx.lineWidth=2;ctx.stroke();
  ctx.beginPath();ctx.arc(40,40,34,Math.PI*.19,Math.PI*.87);ctx.strokeStyle='rgba(80,65,90,.10)';ctx.lineWidth=1.8;ctx.stroke();
 }
-function stopLiquid(){cancelAnimationFrame(liquidRaf);liquidRaf=0;liquidCanvases=[]}
+function stopLiquid(){cancelAnimationFrame(liquidRaf);liquidRaf=0;liquidObserver?.disconnect();liquidObserver=null;liquidCanvases=[]}
 function frameLiquid(t){
  if(document.hidden||state.tab!=='home'||!liquidCanvases.length){liquidRaf=0;return}
  const phase=(t%LIQUID_CYCLE_MS)/LIQUID_CYCLE_MS*TWO_PI;
- liquidCanvases.forEach(({canvas,items,offset})=>{
-    if(!canvas.isConnected)return;
+ liquidCanvases.forEach(({canvas,items,offset,visible})=>{
+    if(!canvas.isConnected||visible===false)return;
     paintLiquid(canvas,items,phase+offset);
  });
  liquidRaf=requestAnimationFrame(frameLiquid);
@@ -1248,7 +1255,7 @@ function prepareMotionOrbs(){
  const items=[...document.querySelectorAll('#screen .orb-cinema')];
  for(let i=0;i<items.length;i++){
    const orb=items[i];const tone=['orange','lilac','lime','red'].find(t=>orb.classList.contains(t))||'orange';
-   const canvas=document.createElement('canvas');canvas.className='liquid-canvas';canvas.width=112;canvas.height=112;canvas.setAttribute('aria-hidden','true');orb.appendChild(canvas);
+   const canvas=orb.querySelector('.liquid-canvas')||document.createElement('canvas');canvas.className='liquid-canvas';canvas.width=112;canvas.height=112;canvas.setAttribute('aria-hidden','true');if(!canvas.isConnected)orb.appendChild(canvas);
    liquidCanvases.push({canvas,items:MONO_TONES[tone],offset:i*.61});
    orb.querySelector('video')?.pause();
  }
@@ -1256,6 +1263,10 @@ function prepareMotionOrbs(){
    liquidCanvases.push({canvas,items:WEEK_LEDGER[+canvas.dataset.weekOrb].items,offset:+canvas.dataset.weekOrb*.77});
  });
  liquidCanvases.forEach(({canvas,items,offset})=>paintLiquid(canvas,items,offset+.72));
+ if('IntersectionObserver' in window){
+  liquidObserver=new IntersectionObserver(entries=>{for(const entry of entries){const item=liquidCanvases.find(v=>v.canvas===entry.target);if(item)item.visible=entry.isIntersecting;}},{root:$('#scroller'),threshold:0});
+  liquidCanvases.forEach(item=>liquidObserver.observe(item.canvas));
+ }
  if(!orbReduceMotion.matches&&state.tab==='home'&&!document.hidden)liquidRaf=requestAnimationFrame(frameLiquid);
 }
 document.addEventListener('visibilitychange',()=>{
@@ -1428,7 +1439,9 @@ $('#screen').addEventListener('keydown',e=>{
  const point=e.target.closest('[data-graph]');if(point&&(e.key==='ArrowRight'||e.key==='ArrowLeft')){e.preventDefault();const ix=(Number(point.dataset.graph)+(e.key==='ArrowRight'?1:6))%7;activateGraph(ix);$(`[data-graph="${ix}"]`)?.focus();}});
 $('#screen').addEventListener('keydown',e=>{if(!e.target.closest('#carouselViewport'))return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();stopAutoplay();state.slide=Math.max(0,Math.min(2,state.slide+(e.key==='ArrowRight'?1:-1)));updateCarousel()}if(e.key==='Escape')collapse()});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){clearInterval(autoAdvance);clearTimeout(autoClose)}});
-$('#scroller').addEventListener('scroll',()=>{$('#topbar').classList.toggle('is-scrolled',$('#scroller').scrollTop>25);document.querySelector('.phone')?.classList.toggle('scrolled-deep',$('#scroller').scrollTop>112)},{passive:true});const THEME_KEY='nexapag-ui-theme';
+let nxScrollFrame=0;
+function syncScrollChrome328(){nxScrollFrame=0;const y=$('#scroller').scrollTop;$('#topbar').classList.toggle('is-scrolled',y>25);document.querySelector('.phone')?.classList.toggle('scrolled-deep',y>112);}
+$('#scroller').addEventListener('scroll',()=>{if(!nxScrollFrame)nxScrollFrame=requestAnimationFrame(syncScrollChrome328)},{passive:true});const THEME_KEY='nexapag-ui-theme';
 let nexaTheme='light';
 try{if(localStorage.getItem(THEME_KEY)==='dark')nexaTheme='dark'}catch(_e){}
 function applyNexaTheme(next){
@@ -1436,7 +1449,7 @@ function applyNexaTheme(next){
  const phone=document.querySelector('.phone');
  if(phone)phone.dataset.uiTheme=nexaTheme;
  const btn=document.getElementById('themeToggle');
- if(btn){const dark=nexaTheme==='dark';btn.setAttribute('aria-pressed',String(dark));btn.setAttribute('aria-label',dark?'Ativar modo claro':'Ativar modo escuro');btn.title=dark?'Ativar modo claro':'Ativar modo escuro';const use=btn.querySelector('use');if(use)use.setAttribute('href',dark?'#i-sparkle':'#i-moon')}
+ if(btn){const dark=nexaTheme==='dark';btn.setAttribute('aria-pressed',String(dark));btn.setAttribute('aria-label',dark?'Ativar modo claro':'Ativar modo escuro');btn.title=dark?'Ativar modo claro':'Ativar modo escuro';const use=btn.querySelector('use');if(use)use.setAttribute('href',dark?'#i-sun':'#i-moon')}
  const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute('content',nexaTheme==='dark'?'#111c17':'#e6f1de');
  try{localStorage.setItem(THEME_KEY,nexaTheme)}catch(_e){}
 }

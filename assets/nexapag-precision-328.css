@@ -1,0 +1,89 @@
+/* NexaPag V3.28 — Quiet Precision.
+  Restrained, task-oriented motion. Preserve 3.27 backdrop, 3.26 rails,
+  3.25 navigation anatomy and approved character/media assets. */
+.phone[data-spacing-system="v322"]{
+ --nx-motion-press:120ms;--nx-motion-feedback:180ms;
+ --nx-motion-nav:280ms;--nx-motion-disclose:240ms;
+ --nx-motion-standard:cubic-bezier(.22,.72,.24,1);
+ --nx-motion-exit:cubic-bezier(.4,0,.8,.4);
+ --nx-glyph:21px;--nx-glyph-stroke:1.85;
+ --nx-keyline:rgba(34,69,42,.14);
+ --nx-elevation:0 4px 14px rgba(24,54,33,.07);
+}
+.phone[data-spacing-system="v322"][data-ui-theme="dark"]{
+ --nx-keyline:rgba(210,242,202,.18);
+ --nx-elevation:0 4px 14px rgba(0,15,8,.18);
+}
+.phone[data-spacing-system="v322"] .bottom-dock{
+ box-shadow:0 5px 16px #132d2030,inset 0 1px #ffffff14;
+ border-color:var(--nav-border);
+}
+.phone[data-spacing-system="v322"] .bottom-dock .dock-indicator{
+ border-radius:18px;transition:transform var(--nx-motion-nav) var(--nx-motion-standard);
+ box-shadow:0 1px 4px #102b1820;
+}
+.phone[data-spacing-system="v322"] .bottom-dock button .nx-nav-glyph{
+ width:var(--nx-glyph);height:var(--nx-glyph);flex-basis:var(--nx-glyph);
+ stroke-width:var(--nx-glyph-stroke);flex-shrink:0;
+ transform-origin:center;transition:transform var(--nx-motion-press) var(--nx-motion-standard);
+}
+.phone[data-spacing-system="v322"] .bottom-dock button:active .nx-nav-glyph{transform:scale(.92)}
+.phone[data-spacing-system="v322"] .bottom-dock button span{
+ font-size:clamp(9px,2.7cqw,10px);font-weight:650;letter-spacing:-.015em;line-height:1.2;
+}
+.phone[data-spacing-system="v322"] .bottom-dock button.active span{font-weight:760}
+.phone[data-spacing-system="v322"] .bottom-dock button:focus-visible{outline:2px solid #fff;outline-offset:-2px}
+.phone[data-spacing-system="v322"] .topbar .round-action::before,
+.phone[data-spacing-system="v322"] .wd-icon::before,
+.phone[data-spacing-system="v322"] .wallet-live-arrow::before{
+ transition:transform var(--nx-motion-press) var(--nx-motion-standard);
+}
+.phone[data-spacing-system="v322"] .topbar .round-action:active::before{transform:scale(.92)}
+.phone[data-spacing-system="v322"] .topbar .brand-short{
+ transition:opacity var(--nx-motion-feedback) ease;
+}
+.phone[data-spacing-system="v322"][data-page-theme] .scroller{
+ overscroll-behavior-y:contain;scroll-behavior:auto;
+}
+.phone[data-spacing-system="v322"][data-page-theme]::before,
+.phone[data-spacing-system="v322"][data-page-theme].scrolled-deep::before{
+ opacity:1;transition:none!important;pointer-events:none;
+}
+/* Separate navigation from content without scroll-jacking or fading the green field. */
+.phone[data-spacing-system="v322"] .topbar.is-scrolled::after{
+ content:"";position:absolute;left:var(--nr-gutter);right:var(--nr-gutter);bottom:-4px;
+ height:1px;background:var(--nx-keyline);pointer-events:none;
+}
+/* No whole-page translation on every filter or tab. */
+.phone[data-spacing-system="v322"] .screen-page{animation:nxPageEnter328 var(--nx-motion-feedback) ease-out both}
+.phone[data-spacing-system="v322"] .wallet-page{animation:none}
+@keyframes nxPageEnter328{from{opacity:.92}to{opacity:1}}
+.phone[data-spacing-system="v322"] .week,
+.phone[data-spacing-system="v322"] .category-v29,
+.phone[data-spacing-system="v322"] .money-insight{
+ box-shadow:var(--nx-elevation);
+}
+.phone[data-spacing-system="v322"] .week-head .week-title em{
+ font-size:11px;line-height:1.35;font-weight:500;
+}
+.phone[data-spacing-system="v322"] .week-head .week-counter{font-weight:650}
+.phone[data-spacing-system="v322"] .week-day-cats span{font-size:10px;line-height:1.4}
+.phone[data-spacing-system="v322"] .week-source{font-size:10px;line-height:1.4}
+.phone[data-spacing-system="v322"] .expense-periods .chip{
+ transition:background-color var(--nx-motion-feedback) ease,color var(--nx-motion-feedback) ease,transform var(--nx-motion-press) var(--nx-motion-standard);
+}
+.phone[data-spacing-system="v322"] .expenses-page .category-v29 .category-chevron{
+ transition:transform var(--nx-motion-disclose) var(--nx-motion-standard);
+}
+.phone[data-spacing-system="v322"] :is(.slide-play,.wallet-live-details,.wd-all,.offer-card button,.review-copy button):focus-visible{
+ outline:2px solid #6b9c75;outline-offset:2px;
+}
+@media(prefers-reduced-motion:reduce){
+ .phone[data-spacing-system="v322"] .screen-page,
+ .phone[data-spacing-system="v322"] .bottom-dock *,
+ .phone[data-spacing-system="v322"] .topbar .round-action::before,
+ .phone[data-spacing-system="v322"] .expense-periods .chip,
+ .phone[data-spacing-system="v322"] .category-chevron{
+  animation:none!important;transition:none!important;
+ }
+}
