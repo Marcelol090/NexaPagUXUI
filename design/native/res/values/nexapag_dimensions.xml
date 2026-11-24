@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="nx_toolbar">44dp</dimen>
+    <dimen name="nx_dock">58dp</dimen>
+    <dimen name="nx_nav_target">48dp</dimen>
+    <dimen name="nx_nav_glyph">21dp</dimen>
+    <dimen name="nx_section_glyph">17dp</dimen>
+    <dimen name="nx_card_radius">22dp</dimen>
+    <dimen name="nx_spacing">8dp</dimen>
+    <dimen name="nx_atmosphere_height">278dp</dimen>
+    <integer name="nx_motion_press">120</integer>
+    <integer name="nx_motion_tab">160</integer>
+    <integer name="nx_motion_feedback">180</integer>
+    <integer name="nx_motion_disclose">240</integer>
+    <integer name="nx_motion_dock">280</integer>
+    <integer name="nx_motion_expression">460</integer>
+    <integer name="nx_motion_liquid_cycle">6400</integer>
+</resources>
