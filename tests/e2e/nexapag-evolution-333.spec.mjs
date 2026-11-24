@@ -4,7 +4,7 @@ for(const width of [320,390,430,1440]){
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.setViewportSize({width,height:844});
   await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/v2.html');
-  await expect(page).toHaveTitle(/V3\.33/);
+  await expect(page).toHaveTitle(/V3\.34/);
   const phone=page.locator('.phone'),dock=page.locator('#dock');
   for(const theme of ['light','dark']){
    if(await phone.getAttribute('data-ui-theme')!==theme)await page.locator('#themeToggle').click();
