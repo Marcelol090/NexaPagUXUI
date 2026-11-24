@@ -1,0 +1,104 @@
+/* V3.34 Frame Coherence — audited recording, V3.28 lineage only. */
+.phone[data-spacing-system="v322"]{
+ --nx334-base:#f5f7f2;--nx334-atmosphere:#d6e8cc;--nx334-atmosphere-soft:#e7efe0;
+ --nx334-edge:#dfeadc;--nx334-secondary:#526357;--nx334-quiet:#65756a;
+}
+.phone[data-spacing-system="v322"][data-ui-theme="dark"]{
+ --nx334-base:#101713;--nx334-atmosphere:#294737;--nx334-atmosphere-soft:#1a2e23;
+ --nx334-edge:#243b2d;--nx334-secondary:#c1d0c4;--nx334-quiet:#aabdaf;
+ --nx330-muted:#c1d0c4;
+}
+/* A single anchored atmosphere, stable through scroll and tab changes.
+   Soft optical edge instead of the visible white/green horizontal stripe. */
+.phone[data-spacing-system="v322"][data-page-theme]{background:var(--nx334-base)}
+.phone[data-spacing-system="v322"][data-page-theme]::before,
+.phone[data-spacing-system="v322"][data-page-theme].scrolled-deep::before{
+ height:278px;inset:0 0 auto;opacity:1;
+ background:radial-gradient(ellipse 90% 85% at 86% 0%,var(--nx334-atmosphere),transparent 100%),
+ linear-gradient(180deg,var(--nx334-atmosphere-soft),var(--nx334-base) 98%);
+}
+.phone[data-spacing-system="v322"] .topbar::after,
+.phone[data-spacing-system="v322"] .topbar.is-scrolled::after{
+ left:0;right:0;bottom:-8px;height:8px;
+ background:linear-gradient(180deg,var(--nx334-edge),transparent);
+ opacity:calc(var(--nx-scroll-edge)*.65);
+}
+.phone[data-spacing-system="v322"] .bottom-area{
+ background:linear-gradient(0deg,var(--nx334-base) 35%,color-mix(in srgb,var(--nx334-base) 94%,transparent) 68%,transparent);
+}
+.phone[data-spacing-system="v322"] .topbar .brand-short{transition:opacity 160ms ease}
+/* Reserve the final region before the shared element moves; avoid placing
+   the live controls on top of the greeting. The ghost is the moving layer. */
+.phone[data-spacing-system="v322"] #homePage.orb-choreo-running #heroRegion{transition:none}
+.phone[data-spacing-system="v322"] #homePage.orb-inline-expanded #heroRegion{
+ height:var(--orb-target-height,286px);
+}
+.phone[data-spacing-system="v322"] #homePage.orb-inline-expanded.orb-inline-closing #heroRegion{
+ height:var(--orb-target-height,286px);
+}
+.phone[data-spacing-system="v322"] #homePage.hero-expanded #heroRegion{height:var(--orb-stage-height,286px)}
+.phone[data-spacing-system="v322"] #homePage.hero-expanded #expandedHero{
+ left:calc(-1 * var(--nr-gutter));right:calc(-1 * var(--nr-gutter));
+ max-height:none;height:auto;padding-bottom:44px;
+}
+.phone[data-spacing-system="v322"] #homePage .orb-spending-switcher{
+ bottom:0;background:var(--nx330-film);border-color:var(--nx330-rim);
+}
+.phone[data-spacing-system="v322"] #homePage .orb-flow-switcher>button:not([aria-current="true"]){
+ color:var(--nx334-secondary);
+}
+.phone[data-spacing-system="v322"] #homePage .orb-flow-switcher>button[aria-current="true"]{color:#fff;background:#294637}
+.phone[data-spacing-system="v322"] #homePage.orb-choreo-running .orb-flow-controls,
+.phone[data-spacing-system="v322"] #homePage.orb-choreo-running .orb-spending-switcher{
+ opacity:0;visibility:hidden;pointer-events:none;
+}
+.phone[data-spacing-system="v322"] #homePage .orb-inline-section .orb-story-content > *{
+ transition-delay:0ms;transition-duration:160ms;
+}
+.phone[data-spacing-system="v322"] #homePage .orb-inline-section .orb-story-content{transition-duration:160ms}
+.phone[data-spacing-system="v322"] #homePage .carousel-slide .slide-timer{color:#25392d;text-shadow:none;font-weight:650}
+.phone[data-spacing-system="v322"] #homePage .carousel-slide .slide-text p,
+.phone[data-spacing-system="v322"] #homePage .carousel-slide .ruler-labels{color:#384b3f}
+.phone[data-spacing-system="v322"] #homePage .orb-inline-section .orb-story-foot{
+ display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;
+}
+.phone[data-spacing-system="v322"] #homePage .orb-inline-section .orb-story-foot span{max-width:none}
+.phone[data-spacing-system="v322"] #homePage .orb-inline-section .orb-story-go{min-height:44px;padding:8px 12px}
+/* Cards: avoid nested glows and competing layouts. Keep meaningful gradients. */
+.phone[data-spacing-system="v322"] :is(.overview:not(.expense-expression),.offer-card)::before{opacity:0;animation:none}
+.phone[data-spacing-system="v322"] .overview:not(.expense-expression){background:var(--nx330-film);border-color:var(--nx330-rim);box-shadow:var(--nx330-shadow)}
+.phone[data-spacing-system="v322"] .section-title{align-items:center;gap:8px}
+.phone[data-spacing-system="v322"] .section-title h2{line-height:1.3}
+.phone[data-spacing-system="v322"] .section-title button{max-width:45%;white-space:normal;text-align:right;line-height:1.25;min-height:44px}
+.phone[data-spacing-system="v322"] .page-header p{margin-bottom:0;line-height:1.5}
+.phone[data-spacing-system="v322"] .money-insight .insight-footer{
+ display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;
+}
+.phone[data-spacing-system="v322"] .money-insight .insight-footer>span{display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+.phone[data-spacing-system="v322"] .review-item{display:grid;grid-template-columns:40px minmax(0,1fr);align-items:start;gap:12px}
+.phone[data-spacing-system="v322"] .review-glyph{width:40px;height:40px;display:grid;place-items:center;color:#90604a;background:#f0e7dc;border-radius:12px}
+.phone[data-spacing-system="v322"] .review-glyph[data-kind="1"]{color:#315e49;background:#e0ede3}
+.phone[data-spacing-system="v322"] .review-glyph[data-kind="2"]{color:#66517d;background:#eae3f0}
+.phone[data-spacing-system="v322"] .review-glyph svg{width:21px;height:21px;display:block;flex:none;stroke-width:1.85}
+.phone[data-spacing-system="v322"] .review-copy{min-width:0}
+.phone[data-spacing-system="v322"] .review-copy button{min-height:44px}
+.phone[data-spacing-system="v322"] .review-item.is-done{opacity:1}
+.phone[data-spacing-system="v322"] .review-item.is-done .review-glyph{color:#467850}
+.phone[data-spacing-system="v322"] :is(.calendar-heatmap .heat-day.is-future,.calendar-heatmap .heat-day.is-unknown){opacity:1;color:var(--nx334-quiet)}
+.phone[data-spacing-system="v322"] .calendar-heatmap .heat-day.has-expenses::before{animation:none;opacity:.28}
+.phone[data-spacing-system="v322"] .calendar-weekdays{color:var(--nx334-secondary)}
+.phone[data-spacing-system="v322"][data-ui-theme="dark"] :is(.week-source,.week-day-cats span,.offer-card p,.review-copy p,.overview small,.page-header p,.category-open small,.calendar-intro,.calendar-detail-note){color:var(--nx334-secondary)}
+.phone[data-spacing-system="v322"][data-ui-theme="dark"] .review-glyph{color:#ffbc94;background:#3a2e25}
+.phone[data-spacing-system="v322"][data-ui-theme="dark"] .review-glyph[data-kind="1"]{color:#a8e6b9;background:#294638}
+.phone[data-spacing-system="v322"][data-ui-theme="dark"] .review-glyph[data-kind="2"]{color:#d9c2ef;background:#3b304b}
+.phone[data-spacing-system="v322"][data-ui-theme="dark"] .calendar-heatmap .heat-day.has-expenses{color:#f6e7d9;background:linear-gradient(145deg,#43372e,#302b24);border-color:#775e48}
+.phone[data-spacing-system="v322"][data-ui-theme="dark"] .calendar-heatmap .heat-day .heat-day-amount{color:#f8cc9e}
+/* Wallet: only the shared card travels, destination chrome is legible at once. */
+.phone[data-spacing-system="v322"] .wallet-detail324.wd-entering :is(.wd-header,.wd-nav,.wd-summary,.wd-section){animation:none;opacity:1;transform:none}
+.phone[data-spacing-system="v322"] .wallet-live-scene{margin-top:4px}
+.phone[data-spacing-system="v322"] .wallet-live-instruction{color:var(--nx334-secondary)}
+.phone[data-spacing-system="v322"] .wd-card-top b,.phone[data-spacing-system="v322"] .wd-card-body small{line-height:1.35}
+@media(prefers-reduced-motion:reduce){
+ .phone[data-spacing-system="v322"] #homePage #heroRegion,.phone[data-spacing-system="v322"] #homePage .orb-inline-section .orb-story-content>*{transition:none!important}
+ .phone[data-spacing-system="v322"] .topbar::after{opacity:0}
+}
