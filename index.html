@@ -1968,7 +1968,7 @@ function ads(){
  `<div class="partner-scroll" role="group" aria-label="Escolher parceiro">${partners.map(m=>`<button type="button" class="partner-card ${model.merchant===m.id?'selected':''}" data-merchant="${m.id}" aria-pressed="${model.merchant===m.id}"><span class="partner-mark ${m.style}">${m.mark}</span><strong>${m.id}</strong><small>${m.kind}</small><span class="partner-selected" aria-hidden="true"></span></button>`).join('')}</div>`+
  `<div class="catalog-heading"><strong>${icon('grid',17)}Categorias</strong><span>Filtre a prévia</span></div>`+
  `<div class="catalog-chips" role="group" aria-label="Filtrar categorias">${['Todos','Tecnologia','Casa','Beleza','Moda'].map((name)=>`<button type="button" data-shop-filter="${name}" aria-pressed="${tag===name}" class="${tag===name?'active':''}">${name}</button>`).join('')}</div>`+
- `<div class="catalog-heading catalog-results-head"><strong>${tag==='Todos'?'Explorar ofertas':tag}</strong><span>${model.merchant}</span></div>`+
+ `<div class="catalog-heading catalog-results-head"><strong>${icon('tag',17)}${tag==='Todos'?'Explorar ofertas':tag}</strong><span>${model.merchant}</span></div>`+
  `<div class="catalog-offer-grid" aria-label="Vitrine ilustrativa de ${model.merchant}">${offerMock(tag,0)}${offerMock(tag,1)}</div>`+
  `<div class="catalog-hint" role="status">${icon('shield',16)}<span>Visualização ilustrativa: sem preços, disponibilidade ou cashback ao vivo</span></div>`;
 }
@@ -1984,7 +1984,7 @@ function offerMock(filter,i){
  return `<article class="offer-tile"><div class="offer-media offer-media--${visual}"><div class="offer-render offer-render--${visual}" aria-hidden="true"><span class="offer-render-shape"></span></div><span class="offer-label">Conceito visual</span></div><div class="offer-body"><span class="offer-store">${family}</span><strong>${title}</strong><span class="offer-unavailable">Catálogo não carregado</span><button type="button" data-action="offer" aria-label="Ver situação do catálogo de ${title} na ${model.merchant}">Consultar estado <span aria-hidden="true">›</span></button></div></article>`;
 }
 function cards(){return header('Seus cartões','CARTEIRA · DEMONSTRAÇÃO')+`<p class="info-note" style="margin:0 2px 15px">Cartões de teste. Selecione um para conferir a apresentação e os detalhes.</p>`+[['Nubank','Ultravioleta','4821','purple'],['Itaú','Personnalité','7310','orange'],['Inter','Black','2044','black']].map(([brand,tier,last,cl],i)=>`<button class="bank-card ${cl} ${model.bank===i?'selected':''}" data-bank="${i}" style="width:100%;display:block;text-align:left" aria-label="Selecionar cartão ${brand}" aria-pressed="${model.bank===i}"><div class="card-brand"><span>${brand} <small style="font-size:9px;opacity:.8">${tier}</small></span><span class="chip"></span></div><div class="card-digits"><span>•••• •••• ••••</span><b>${last}</b></div></button>`).join('')+`<div class="ui-card"><div class="card-header"><strong style="font-size:13px">Cartão selecionado</strong><span class="label">${['Nubank','Itaú','Inter'][model.bank]}</span></div><p class="info-note">Os lançamentos demonstrativos continuam vinculados ao fluxo de captura do aplicativo Android, não a este HTML.</p></div>`+`<div class="section-heading"><strong>${icon('receipt',17)}Movimentações recentes</strong></div>${transactions(3)}`}
-function review(){const rec=[['Compra sem categoria','Notificação aguardando classificação','alert'],['PIX para revisar','Comprovante pendente','transfer'],['Evento duplicado','Verifique a origem','receipt']];return header('Para revisar','Eventos capturados',`<span class="date-chip">${3-model.reviewed.length} pendentes</span>`)+`<div class="ui-card"><div class="card-header"><strong style="font-size:12px">Fila de revisão</strong><span class="amber" style="font-size:10px">${3-model.reviewed.length} eventos</span></div><p class="info-note">Estados demonstrativos: recebido, processado ou pendente. Nenhuma ação afeta suas transações reais.</p></div>${rec.map(([title,desc,ic],i)=>model.reviewed.includes(i)?'':`<div class="review-line"><span class="review-badge">${icon(ic,17)}</span><span class="review-copy"><b>${title}</b><small>${desc}</small></span><button data-review="${i}" aria-label="Marcar ${title} como resolvido">${icon('check',16)}</button></div>`).join('')}${model.reviewed.length===3?`<div class="ui-card" style="text-align:center">${icon('check',25)}<p>Todos os eventos demonstrativos foram revisados.</p></div>`:''}<div class="section-heading"><strong>${icon('shield',17)}Como funciona</strong></div><div class="ui-card"><p class="info-note">RECEIVED → PARSED → PROCESSED / FAILED. O fluxo ilustra a separação entre captura e revisão no NexaPag.</p><button class="primary" data-action="resetReview">Restaurar eventos fictícios</button></div>`}
+function review(){const rec=[['Compra sem categoria','Notificação aguardando classificação','alert'],['PIX para revisar','Comprovante pendente','transfer'],['Evento duplicado','Verifique a origem','receipt']];return header('Para revisar','Eventos capturados',`<span class="date-chip">${3-model.reviewed.length} pendentes</span>`)+`<div class="ui-card"><div class="card-header"><strong class="nx940-heading" style="font-size:12px">${icon('inbox',17)}Fila de revisão</strong><span class="amber" style="font-size:10px">${3-model.reviewed.length} eventos</span></div><p class="info-note">Estados demonstrativos: recebido, processado ou pendente. Nenhuma ação afeta suas transações reais.</p></div>${rec.map(([title,desc,ic],i)=>model.reviewed.includes(i)?'':`<div class="review-line"><span class="review-badge">${icon(ic,17)}</span><span class="review-copy"><b>${title}</b><small>${desc}</small></span><button data-review="${i}" aria-label="Marcar ${title} como resolvido">${icon('check',16)}</button></div>`).join('')}${model.reviewed.length===3?`<div class="ui-card" style="text-align:center">${icon('check',25)}<p>Todos os eventos demonstrativos foram revisados.</p></div>`:''}<div class="section-heading"><strong>${icon('shield',17)}Como funciona</strong></div><div class="ui-card"><p class="info-note">RECEIVED → PARSED → PROCESSED / FAILED. O fluxo ilustra a separação entre captura e revisão no NexaPag.</p><button class="primary" data-action="resetReview">Restaurar eventos fictícios</button></div>`}
 function renderNav(){
  const el=$('#navigation');
  if(el.children.length!==nav.length){
@@ -2015,8 +2015,10 @@ function render(resetScroll=false){
  if(changed){
   const selected=$('#navigation .active');
   document.querySelectorAll('#navigation .nx940-enter').forEach(b=>b.classList.remove('nx940-enter'));
-  selected?.classList.add('nx940-enter');
-  selected?.querySelector('svg')?.addEventListener('animationend',()=>selected.classList.remove('nx940-enter'),{once:true});
+  if(selected&&!prefersReducedMotion()&&!$('#device').classList.contains('no-motion')){
+   selected.classList.add('nx940-enter');
+   selected.querySelector('svg')?.addEventListener('animationend',()=>selected.classList.remove('nx940-enter'),{once:true});
+  }
  }
  if(resetScroll)$('#screen').scrollTop=0;
  queueOpticalEdge940();
@@ -2056,6 +2058,7 @@ function replay(){
    moneyEl.textContent=countT<1?moneySigned(lerp(from,target,easeOut(countT))):moneySigned(target);
   }
   morphSignal(hero,t);
+  if(prefersReducedMotion()||$('#device').classList.contains('no-motion')){hero.classList.remove('replaying');if(moneyEl)moneyEl.textContent=moneySigned(target);return;}
   if(t<1)flowFrame=requestAnimationFrame(step);
   else {hero.classList.remove('replaying');if(moneyEl)moneyEl.textContent=moneySigned(target)}
  };
