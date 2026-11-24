@@ -3,7 +3,7 @@
 .phone[data-spacing-system="v322"]{
  --nx-edge-ink:rgba(38,70,45,.19);
  --nx-glyph-neutral:#354e3a;--nx-glyph-out:#9b3e36;--nx-glyph-in:#286744;--nx-glyph-refund:#855900;
- --nx-scroll-edge:0;--nr-toolbar:48px;
+ --nx-scroll-edge:0;
 }
 .phone[data-spacing-system="v322"][data-ui-theme="dark"]{
  --nx-edge-ink:rgba(202,232,194,.24);
@@ -16,13 +16,6 @@
  height:5px;background:linear-gradient(180deg,var(--nx-edge-ink),transparent);
  opacity:var(--nx-scroll-edge);pointer-events:none;
 }
-.phone[data-spacing-system="v322"] .topbar .round-action,
-.phone[data-spacing-system="v322"] .topbar .round-action.theme-switch{
- width:48px;height:48px;min-width:48px;min-height:48px;flex:0 0 48px;
-}
-.phone[data-spacing-system="v322"] .topbar .brand-short{
- left:calc(var(--nr-gutter) + 48px);right:calc(var(--nr-gutter) + 100px);
-}
 .phone[data-spacing-system="v322"] .topbar .round-action svg{width:20px;height:20px}
 .phone[data-spacing-system="v322"] .bottom-dock button,
 .phone[data-spacing-system="v322"] .bottom-dock button.active{
@@ -30,7 +23,7 @@
 }
 .phone[data-spacing-system="v322"] .bottom-dock button .nx-nav-glyph,
 .phone[data-spacing-system="v322"] .bottom-dock button.active .nx-nav-glyph{
- width:22px;height:22px;flex:0 0 22px;transform:none;overflow:visible;
+ width:var(--nx-glyph);height:var(--nx-glyph);flex:0 0 var(--nx-glyph);transform:none;overflow:visible;
 }
 .phone[data-spacing-system="v322"] .bottom-dock button:active .nx-nav-glyph{transform:scale(.94)}
 .phone[data-spacing-system="v322"] .bottom-dock button span,
