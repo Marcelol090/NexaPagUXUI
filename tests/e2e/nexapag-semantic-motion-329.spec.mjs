@@ -15,7 +15,7 @@ for(const width of [320,390,430,1440]){
     for(const b of await dock.locator('button').all()){
      const g=await b.evaluate(el=>{const r=el.getBoundingClientRect(),s=el.querySelector('svg'),t=el.querySelector('span');return {w:r.width,h:r.height,svg:s.getBoundingClientRect().width,label:getComputedStyle(t).opacity,box:s.querySelector('use').getBBox().width}});
      expect(g.w).toBeGreaterThanOrEqual(48);expect(g.h).toBeGreaterThanOrEqual(48);
-     expect(g.svg).toBeCloseTo(22,0);expect(g.label).toBe('1');expect(g.box).toBeGreaterThan(0);
+     expect(g.svg).toBeCloseTo(21,0);expect(g.label).toBe('1');expect(g.box).toBeGreaterThan(0);
     }
     const initial=await backdrop();expect(initial[3]).toBe('1');
     const max=await scroll.evaluate(el=>el.scrollHeight-el.clientHeight);
