@@ -1,0 +1,90 @@
+/* V9.40 · Optical Motion & Glyph System. Root route only.
+   The atmosphere belongs to the device, not the scroll surface.
+   Never animate opacity/filter of the lens ancestor. */
+#device{
+ --nx940-edge:0;
+ --nx940-curve:cubic-bezier(.22,.76,.24,1);
+ --nx940-glyph-ink:#e1eee4;
+ --nx940-out:#ff9c91;
+ --nx940-in:#96e5ac;
+ --nx940-refund:#f7cf73;
+}
+#device > :is(.atmosphere,.scene-folds,.refraction-field,.mist,.grain){
+ position:absolute;pointer-events:none;
+}
+#device .screen{overscroll-behavior-y:contain;scroll-behavior:auto;scroll-padding-top:12px;scroll-padding-bottom:18px}
+#device #screenContent{opacity:1!important;animation:none!important;filter:none!important;transform:none!important}
+#device[data-bg-theme] .app-header.app-header--compact{
+ background:linear-gradient(180deg,rgba(5,16,11,.30),rgba(5,16,11,.03))!important;
+ backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+#device .app-header.app-header--compact::after{
+ content:"";position:absolute;left:16px;right:16px;bottom:0;height:1px;
+ background:linear-gradient(90deg,transparent,rgba(190,233,194,.36) 24%,rgba(190,233,194,.36) 76%,transparent);
+ opacity:var(--nx940-edge);pointer-events:none;
+}
+/* Keep approved icon-only dock and fixed five-column geometry. */
+#device .bottom-nav button,#device .bottom-nav button.active{
+ width:48px!important;min-width:48px!important;height:48px!important;
+}
+#device .bottom-nav button svg{
+ width:23px!important;height:23px!important;overflow:visible;
+ stroke-width:1.85!important;stroke-linecap:round;stroke-linejoin:round;
+ transition:stroke 150ms ease,transform 160ms var(--nx940-curve)!important;
+}
+#device .bottom-nav button.active svg{transform:none}
+#device .bottom-nav button.nx940-enter svg{animation:nx940-glyph-settle 240ms var(--nx940-curve) both}
+@keyframes nx940-glyph-settle{0%{transform:scale(.86)}65%{transform:scale(1.045)}100%{transform:none}}
+#device .app-header--compact :is(.iconbtn,.workbench-mobile) svg{width:21px!important;height:21px!important;stroke-width:1.85!important}
+#device .quick-card.dash-card .quick-icon{
+ width:30px!important;height:30px!important;flex:0 0 30px;
+ background:transparent!important;border-color:transparent!important;box-shadow:none!important;
+ color:var(--tile-ink,var(--nx940-glyph-ink))!important;
+}
+#device .quick-card.dash-card .quick-icon svg{width:21px!important;height:21px!important;stroke-width:1.85!important;overflow:visible}
+#device :is(.mini-icon,.tx-icon,.review-badge){background:transparent!important;border-color:transparent!important;box-shadow:none!important}
+#device .mini-icon svg{width:17px;height:17px;stroke-width:1.85}
+#device :is(.tx-icon,.review-badge) svg{width:20px;height:20px;stroke-width:1.85;overflow:visible}
+#device .transaction[data-kind="expense"] .tx-icon{color:var(--nx940-out)}
+#device .transaction[data-kind="income"] .tx-icon{color:var(--nx940-in)}
+#device .transaction[data-kind="refund"] :is(.tx-icon,.tx-value){color:var(--nx940-refund)!important}
+#device .section-heading strong,#device .catalog-heading strong{
+ display:flex;align-items:center;gap:6px;min-width:0;
+}
+#device :is(.section-heading,.catalog-heading) strong svg{
+ width:17px;height:17px;flex:0 0 17px;color:#b9d7bf;stroke-width:1.85;overflow:visible;
+}
+#device .review-line button{min-width:44px;min-height:44px}
+#device .filters button{min-height:44px}
+#device .screen-title{min-width:0}
+#device #screenContent[data-nx940-transition="tab"] .screen-title h2{
+ animation:nx940-title-settle 180ms var(--nx940-curve) both;
+}
+@keyframes nx940-title-settle{from{transform:translateY(3px);opacity:.8}to{transform:none;opacity:1}}
+/* Avoid repeating a quantitative reveal on every unrelated DOM render. */
+#device #screenContent[data-nx940-transition="local"] :is(.chart-fill,.ranking-fill){animation:none!important}
+/* Respect both OS and Workbench controls; no automatic motion on the scene. */
+#device.no-motion :is(.nx940-enter svg,.screen-title h2){animation:none!important}
+#device.no-motion .bottom-nav button svg{transition:none!important}
+@media(prefers-reduced-motion:reduce){
+ #device :is(.nx940-enter svg,.screen-title h2){animation:none!important;transition:none!important}
+}
+
+/* Optical hierarchy: isolate primary financial reading from the green lightfield.
+   These coefficients preserve the Workbench opacity, blur and saturation tokens.
+   Category tiles keep their own pigment and gradient strength. */
+#device[data-bg-theme="lumen"]:not(.no-optics):not(.flat-glass) .ui-card.hero{
+ background:linear-gradient(155deg,rgba(243,255,247,.045),transparent 43%),rgba(7,15,12,calc(var(--glass-opacity)*.94))!important;
+ -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(calc(var(--color-saturation,1.1)*.86)) brightness(.94)!important;
+ backdrop-filter:blur(var(--glass-blur)) saturate(calc(var(--color-saturation,1.1)*.86)) brightness(.94)!important;
+}
+#device[data-bg-theme="lumen"]:not(.no-optics):not(.flat-glass) .metric{
+ background:rgba(8,19,15,calc(var(--glass-opacity)*.96))!important;
+}
+#device .card-header strong.nx940-heading{display:flex;align-items:center;gap:6px}
+#device .card-header strong.nx940-heading svg{width:17px;height:17px;flex:0 0 17px;color:#b9d7bf}
+@media(prefers-reduced-transparency:reduce),(prefers-contrast:more){
+ #device[data-bg-theme="lumen"]:not(.no-optics):not(.flat-glass) :is(.ui-card.hero,.metric){
+  background:#0c2118!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+ }
+}

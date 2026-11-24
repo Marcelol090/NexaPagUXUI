@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<meta name="description" content="NexaPag Visualize 9.38u2 UX QA. Navegação por ícones, cabeçalho mobile enxuto, orb fluido e Workbench.">
-<title>NexaPag · Visualize 9.38u2 UX QA</title>
+<meta name="description" content="NexaPag Visualize 9.40. Optical Motion, glyphs vetoriais, fundo ancorado, analytics e Workbench.">
+<title>NexaPag · Visualize 9.40 Optical Motion</title>
 <!-- Visual direction inspired by Unslop, by Damir Sokolovsky / heydamir.
   Source https://github.com/heydamir/unslop | CC BY 4.0
   NexaPag's layout, code, and data presentation are independent adaptations. -->
@@ -1699,9 +1699,22 @@ body,button,input,select,textarea,.type-reference{font-family:var(--ui-font)!imp
 <link rel="stylesheet" href="./src/compact-mobile-header-938u1.css">
 <link rel="stylesheet" href="./src/ux-qa-polish-938u2.css">
 <link rel="stylesheet" href="./src/expressive-analytics-939.css">
+<link rel="stylesheet" href="./src/optical-motion-940.css">
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+<symbol id="i-nav-home" viewBox="0 0 24 24"><path d="m3.5 10.5 8.5-7 8.5 7v8a1.8 1.8 0 0 1-1.8 1.8h-4.2v-5.1a2.5 2.5 0 0 0-5 0v5.1H5.3a1.8 1.8 0 0 1-1.8-1.8z"/></symbol>
+<symbol id="i-nav-chart" viewBox="0 0 24 24"><path d="M4 19.5h16M6 16v-5m4 5V7m4 9v-7m4 7V4.5"/></symbol>
+<symbol id="i-nav-bag" viewBox="0 0 24 24"><path d="M4 9h6l8-4v14l-8-4H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1Zm2 6 2 5h3l-2-5M21 9.5v5"/></symbol>
+<symbol id="i-nav-wallet" viewBox="0 0 24 24"><rect x="3.2" y="5.5" width="17.6" height="13" rx="2.7"/><path d="M3.2 10h17.6M7 15h4m5.5 0h.5"/></symbol>
+<symbol id="i-nav-review" viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2.5"/><path d="M9 8h6m-5.5 6 2 2 4-4"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".8" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-receipt" viewBox="0 0 24 24"><path d="M6 3.5h12v17l-3-2-3 2-3-2-3 2zM9 9h6m-6 4h6"/></symbol>
+<symbol id="i-refund" viewBox="0 0 24 24"><path d="m8 5-4 4 4 4M4 9h10a5.5 5.5 0 0 1 0 11H9"/></symbol>
+<symbol id="i-transfer" viewBox="0 0 24 24"><path d="M4 8h15m-4-4 4 4-4 4M20 16H5m4-4-4 4 4 4"/></symbol>
+<symbol id="i-tag" viewBox="0 0 24 24"><path d="M3.5 4.5h8.8l8.2 8.2-7.8 7.8-9.2-9.2Z"/><circle cx="8" cy="8.5" r="1.2"/></symbol>
+<symbol id="i-inbox" viewBox="0 0 24 24"><path d="M5.5 4.5h13L21 14v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4zM3.5 14h5l1.5 2.5h4l1.5-2.5h5"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></symbol>
 <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></symbol>
 <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18M7 16l4-6 4 3 5-8"/></symbol>
 <symbol id="i-bag" viewBox="0 0 24 24"><path d="M4 8h16l-1 13H5L4 8ZM9 9V6a3 3 0 0 1 6 0v3"/></symbol>
@@ -1727,7 +1740,7 @@ body,button,input,select,textarea,.type-reference{font-family:var(--ui-font)!imp
 <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 2 9 4v6c0 6-4 9-9 10-5-1-9-4-9-10V6zM8 12l3 3 5-6"/></symbol>
 </svg>
 <div class="preview-shell">
-<header class="topline"><div class="topline-left"><div class="suite-icon"><svg><use href="#i-spark"/></svg></div><div><div class="eyebrow">NexaPag / laboratório visual</div><h1>Visualize 9.38u2 <span style="font-weight:540;color:#b8dcb8">· UX QA</span></h1></div></div><div class="meta">Interface web · <b>9.38u2</b><br>Dark Matte Forest · Glassmorphism</div></header>
+<header class="topline"><div class="topline-left"><div class="suite-icon"><svg><use href="#i-spark"/></svg></div><div><div class="eyebrow">NexaPag / laboratório visual</div><h1>Visualize 9.40 <span style="font-weight:540;color:#b8dcb8">· Optical Motion</span></h1></div></div><div class="meta">Interface web · <b>9.40</b><br>Dark Matte Forest · Glassmorphism</div></header>
 <div class="workstage">
 <main class="device" id="device" data-bg-theme="lumen" aria-label="Prévia interativa do aplicativo NexaPag">
 <div class="atmosphere" aria-hidden="true"></div><div class="scene-folds" aria-hidden="true"></div><svg class="refraction-field" viewBox="0 0 408 850" preserveAspectRatio="none" aria-hidden="true" focusable="false">
@@ -1763,11 +1776,11 @@ body,button,input,select,textarea,.type-reference{font-family:var(--ui-font)!imp
   </g>
 </svg><div class="mist" aria-hidden="true"></div><div class="grain" aria-hidden="true"></div>
 <div class="statusbar"><span>09:41</span><span class="status-icons"><svg viewBox="0 0 20 16" fill="none"><path d="M1 5Q10-3 19 5M4 9Q10 4 16 9M8 13Q10 11 12 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="battery"></span></span></div>
-<header class="app-header app-header--compact" aria-label="Ações rápidas"><div class="headerbuttons"><button type="button" class="iconbtn notify" id="notifications" aria-label="Notificações" title="Notificações"><svg><use href="#i-bell"/></svg></button><button class="workbench-mobile" id="openDrawer" type="button" aria-label="Abrir Workbench de design" title="Personalizar interface"><svg><use href="#i-sliders"/></svg></button></div></header>
+<header class="app-header app-header--compact" aria-label="Ações rápidas"><div class="headerbuttons"><button type="button" class="iconbtn notify" id="notifications" aria-label="Notificações" title="Notificações"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bell"/></svg></button><button class="workbench-mobile" id="openDrawer" type="button" aria-label="Abrir Workbench de design" title="Personalizar interface"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sliders"/></svg></button></div></header>
 <div class="screen" id="screen"><div class="screen-inner" id="screenContent"></div></div>
 <div class="nav-back"><nav class="bottom-nav" id="navigation" aria-label="Navegação principal"></nav></div><div class="home-indicator"></div><div id="toastLayer" aria-live="polite"></div>
 </main>
-<aside class="inspector" id="inspector" aria-label="Workbench de personalização visual"><header class="inspector-head"><div class="headtop"><span class="eyebrow">Design control center</span><div style="display:flex;gap:6px;align-items:center"><span class="edition">V 9.38u2</span><button class="inspector-close" id="closeDrawer" aria-label="Fechar personalização"><svg><use href="#i-x"/></svg></button></div></div><h2>Workbench<span style="color:#b9dba8">.</span></h2><p>Material, pigmentação, movimento e geometria aplicados aos componentes reais da prévia.</p></header>
+<aside class="inspector" id="inspector" aria-label="Workbench de personalização visual"><header class="inspector-head"><div class="headtop"><span class="eyebrow">Design control center</span><div style="display:flex;gap:6px;align-items:center"><span class="edition">V 9.40</span><button class="inspector-close" id="closeDrawer" aria-label="Fechar personalização"><svg><use href="#i-x"/></svg></button></div></div><h2>Workbench<span style="color:#b9dba8">.</span></h2><p>Material, pigmentação, movimento e geometria aplicados aos componentes reais da prévia.</p></header>
 <nav class="inspector-nav" id="inspectorNav" aria-label="Áreas de personalização"><button type="button" data-panel="material" class="active">Material</button><button type="button" data-panel="pigment">Cor</button><button type="button" data-panel="motion">Motion</button><button type="button" data-panel="geometry">Forma</button><button type="button" data-panel="type">Tipo</button><button type="button" data-panel="orb">Bolha</button><button type="button" data-panel="data">Dados</button></nav>
 <div class="inspector-scroll">
 <section class="inspector-section active" data-section="material">
@@ -1873,7 +1886,7 @@ const fmt=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});const
 const model={weekday:0,tab:'home',period:'month',expenseFilter:'all',heatDay:12,category:null,bank:0,merchant:'Mercado Livre',shopFilter:'Todos',reviewed:[],income:1950,expenses:3818.10,refunds:349.90,weekly:270,budget:1200};
 const nav=[['home','Início'],['chart','Gastos'],['bag','Anúncios'],['wallet','Cartões'],['review','Revisar']];
 const categories=[{name:'Marketplace',value:1280.4,color:'217,92,139',hex:'#F6A3BF',symbol:'store',info:'Compras e ofertas'},{name:'Alimentação',value:890.8,color:'225,149,75',hex:'#F8C07A',symbol:'coffee',info:'Restaurantes e delivery'},{name:'Casa',value:610.6,color:'182,91,105',hex:'#F3A2AF',symbol:'house',info:'Casa e utilidades'},{name:'Moda',value:430.5,color:'236,109,170',hex:'#F4A4D1',symbol:'shirt',info:'Roupas e acessórios'},{name:'Transporte',value:355.8,color:'52,155,190',hex:'#82D7E3',symbol:'car',info:'Mobilidade'},{name:'Outros',value:250,color:'73,169,122',hex:'#A9EDC0',symbol:'cart',info:'Diversos'}];
-const entries=[['Mercado Livre','Hoje · Marketplace',-219.9,'store'],['PIX recebido','Ontem · Transferência',480,'down'],['Ifood','31 out · Alimentação',-68.5,'coffee'],['Estorno aprovado','30 out · Marketplace',349.9,'repeat']];
+const entries=[['Mercado Livre','Hoje · Marketplace',-219.9,'store'],['PIX recebido','Ontem · Transferência',480,'transfer'],['Ifood','31 out · Alimentação',-68.5,'coffee'],['Estorno aprovado','30 out · Marketplace',349.9,'refund']];
 let toastTimer;
 function showToast(msg){const layer=$('#toastLayer');layer.innerHTML=`<div class="toast">${msg}</div>`;clearTimeout(toastTimer);toastTimer=setTimeout(()=>layer.innerHTML='',2300)}
 function header(title,over='Visão geral',side=''){return `<div class="screen-title"><div><div class="kicker">${over}</div><h2>${title}</h2></div>${side||`<span class="date-chip" aria-label="Período demonstrativo: novembro de 2026">${icon('cal',13)} Novembro</span>`}</div>`}
@@ -1896,7 +1909,8 @@ function mood(){if(model.period==='week'){if(model.budget<=0)return{tone:'neutra
 function graph(tone){return window.Nexa939.graph(model,tone)}
 function financialScene(){return `<div class="finance-scene" aria-hidden="true"><div class="finance-layers"><div class="finance-light finance-light-back"></div><div class="finance-light finance-light-core"></div><div class="finance-light finance-light-wisp"></div><div class="finance-light finance-light-ribbon"></div></div><svg class="finance-eyes" viewBox="0 0 90 60" xmlns="http://www.w3.org/2000/svg" fill="none"><path class="finance-brow" data-brow="left" d="M26 14 Q32 14 38 14"/><path class="finance-brow" data-brow="right" d="M52 14 Q58 14 64 14"/><path data-eye="left" d="M32 18 C32 21.7 32 25.3 32 29"/><path data-eye="right" d="M58 18 C58 21.7 58 25.3 58 29"/><path class="finance-mouth" data-mouth d="M34 45 Q45 35 56 45"/></svg></div>`}
 function hero(){const m=mood();return `<div class="ui-card hero" id="hero" data-mood="${m.tone}">${financialScene()}<div class="hero-row"><span class="label">${model.period==='month'?'Resultado mensal':'Disponível na semana'}</span><div class="period" role="group" aria-label="Período do resumo"><button type="button" data-period="month" aria-pressed="${model.period==='month'}" class="${model.period==='month'?'selected':''}">Mês</button><button type="button" data-period="week" aria-pressed="${model.period==='week'}" class="${model.period==='week'?'selected':''}">Semana</button></div></div><div class="value-row"><div class="main-money" data-rolling-money data-final="${m.value}" aria-label="${moneySigned(m.value)}">${moneySigned(m.value)}</div></div>${flowStatus(m)}<div class="small-help">${model.period==='month'?'Entradas menos saídas líquidas · não é saldo bancário.':'Limite semanal menos o total utilizado.'}</div>${graph(m.tone)}<div class="hero-footer"><span><b>${model.period==='month'?'Fluxo de novembro':'Meta semanal'}</b> · dados ilustrativos</span><button class="replaybtn" data-action="replay" aria-label="Reproduzir efeito líquido">${icon('repeat',14)}</button></div></div>`}
-function transactions(n=4){return `<div class="transaction-list">${entries.slice(0,n).map(([title,desc,amount,ic])=>`<div class="transaction"><span class="tx-icon">${icon(ic,17)}</span><div class="tx-main"><b>${title}</b><small>${desc}</small></div><div class="tx-value ${amount<0?'red':'green'}">${moneySigned(amount)}</div></div>`).join('')}</div>`}
+const entryKind=entry=>entry[3]==="refund"?"refund":entry[2]<0?"expense":"income";
+function transactions(n=4,kind=null){const items=entries.filter(e=>!kind||entryKind(e)===kind).slice(0,n);return `<div class="transaction-list">${items.map(entry=>{const [title,desc,amount,ic]=entry,k=entryKind(entry);return `<div class="transaction" data-kind="${k}"><span class="tx-icon">${icon(ic,20)}</span><div class="tx-main"><b>${title}</b><small>${desc}</small></div><div class="tx-value ${k==="refund"?"amber":k==="expense"?"red":"green"}">${moneySigned(amount)}</div></div>`}).join("")}</div>`}
 function goalComposition(){
  const total=Math.max(0,model.expenses);
  if(!total)return `<p class="goal-composition-note">Não há gastos demonstrativos para distribuir em novembro.</p>`;
@@ -1924,10 +1938,10 @@ function home(){
  return header('Seu dinheiro','Dados demonstrativos')+
  hero()+
  `<div class="metrics focus-metrics">${metric('Recebimentos',model.income,'green','down')}${metric('Saídas líquidas',Math.max(0,model.expenses-model.refunds),'red','up')}</div>`+
- `<div class="section-heading"><strong>Meta da semana</strong><button class="textlink" data-action="meta">Acompanhar ${icon('chart',12)}</button></div>`+goal()+
- `<div class="section-heading"><strong>Gastos por categoria</strong><button class="textlink" data-action="gastos">Todas ›</button></div>`+
+ `<div class="section-heading"><strong>${icon('target',17)}Meta da semana</strong><button class="textlink" data-action="meta">Acompanhar ${icon('chart',12)}</button></div>`+goal()+
+ `<div class="section-heading"><strong>${icon('grid',17)}Gastos por categoria</strong><button class="textlink" data-action="gastos">Todas ›</button></div>`+
  `<div class="quick-grid category-tiles">${categories.slice(0,4).map((c,i)=>tileMarkup(c,i)).join('')}</div>`+
- `<div class="section-heading"><strong>Últimas movimentações</strong><button class="textlink" data-action="gastos">Ver todas ›</button></div>`+transactions(3);
+ `<div class="section-heading"><strong>${icon('receipt',17)}Últimas movimentações</strong><button class="textlink" data-action="gastos">Ver todas ›</button></div>`+transactions(3);
 }
 function distributionGraphic(){
  if(model.expenseFilter!=='all'){
@@ -1939,7 +1953,7 @@ function distributionGraphic(){
  const pct=(total>0?100*categoryAmount(largest)/total:0).toLocaleString('pt-BR',{maximumFractionDigits:1,minimumFractionDigits:1});
  return `<div class="distribution"><div class="distribution-track" role="group" aria-label="Participação de cada categoria nos gastos">${categories.map(c=>`<button type="button" data-category="${c.name}" style="width:${((total>0?100*categoryAmount(c)/total:0)).toFixed(4)}%;--segment:${c.color}" aria-label="${c.name}: ${cash(categoryAmount(c))}" title="${c.name} · ${cash(categoryAmount(c))}"></button>`).join('')}</div><div class="distribution-detail"><span>Maior categoria</span><strong>${largest.name} · ${pct}%</strong></div>${window.Nexa939.categoryRanking(categories,categoryAmount,model.category,cash)}</div>`;
 }
-function expenses(){let display=model.expenseFilter==='in'?model.income:model.expenseFilter==='refunds'?model.refunds:model.expenses;return header('Gastos e fluxos','Análise financeira')+`<div class="filters" role="group" aria-label="Tipo de movimentação"><button type="button" data-filter="all" aria-pressed="${model.expenseFilter==='all'}" class="${model.expenseFilter==='all'?'active':''}">Compras</button><button type="button" data-filter="in" aria-pressed="${model.expenseFilter==='in'}" class="${model.expenseFilter==='in'?'active':''}">Recebidos</button><button type="button" data-filter="refunds" aria-pressed="${model.expenseFilter==='refunds'}" class="${model.expenseFilter==='refunds'?'active':''}">Estornos</button></div><div class="ui-card"><div class="chart-top"><div><div class="label">${model.expenseFilter==='in'?'Total recebido':model.expenseFilter==='refunds'?'Total estornado':'Despesas por categoria'}</div><div class="chart-total">${cash(display)}</div></div><div class="date-chip">Novembro</div></div>${distributionGraphic()}<p class="info-note" style="margin:12px 0 0">Participações calculadas sobre as compras demonstrativas. Selecione uma faixa para analisar a categoria.</p></div>${model.expenseFilter==='all'?`<div class="section-heading"><strong>Categorias</strong><span class="label">6 grupos</span></div><div class="quick-grid category-tiles category-page-grid">${categories.map((c,i)=>tileMarkup(c,i)).join('')}</div>${categorySelection()}`:transactions(4)}<div class="section-heading"><strong>Calendário financeiro</strong><span class="label">Novembro de 2026</span></div>${heatmap()}`}
+function expenses(){let display=model.expenseFilter==='in'?model.income:model.expenseFilter==='refunds'?model.refunds:model.expenses;return header('Gastos e fluxos','Análise financeira')+`<div class="filters" role="group" aria-label="Tipo de movimentação"><button type="button" data-filter="all" aria-pressed="${model.expenseFilter==='all'}" class="${model.expenseFilter==='all'?'active':''}">Compras</button><button type="button" data-filter="in" aria-pressed="${model.expenseFilter==='in'}" class="${model.expenseFilter==='in'?'active':''}">Recebidos</button><button type="button" data-filter="refunds" aria-pressed="${model.expenseFilter==='refunds'}" class="${model.expenseFilter==='refunds'?'active':''}">Estornos</button></div><div class="ui-card"><div class="chart-top"><div><div class="label">${model.expenseFilter==='in'?'Total recebido':model.expenseFilter==='refunds'?'Total estornado':'Despesas por categoria'}</div><div class="chart-total">${cash(display)}</div></div><div class="date-chip">Novembro</div></div>${distributionGraphic()}<p class="info-note" style="margin:12px 0 0">${model.expenseFilter==="all"?"Participações calculadas sobre as compras demonstrativas. Selecione uma faixa para analisar a categoria.":"Total demonstrativo do tipo selecionado. O histórico abaixo mostra apenas exemplos desse tipo, não a composição do total."}</p></div>${model.expenseFilter==='all'?`<div class="section-heading"><strong>${icon('grid',17)}Categorias</strong><span class="label">6 grupos</span></div><div class="quick-grid category-tiles category-page-grid">${categories.map((c,i)=>tileMarkup(c,i)).join('')}</div>${categorySelection()}`:transactions(4,model.expenseFilter==="in"?"income":"refund")}<div class="section-heading"><strong>${icon('cal',17)}Calendário financeiro</strong><span class="label">Novembro de 2026</span></div>${heatmap()}`}
 function heatmap(){const levels=[0,1,2,1,3,2,4,1,0,3,2,1,2,4,3,1,0,1,2,3,1,4,3,2,0,1,2,3,1,2];let heat='<div class="ui-card"><div class="weekday">'+['D','S','T','Q','Q','S','S'].map(s=>`<span>${s}</span>`).join('')+'</div><div class="heatmap">';for(let i=0;i<30;i++)heat+=`<button data-day="${i+1}" data-level="${levels[i]}" class="${model.heatDay===i+1?'selected':''}" aria-label="Dia ${i+1}, intensidade ${levels[i]}">${i+1}</button>`;heat+='</div><div class="heat-selection"><span>Dia '+model.heatDay+' · atividade demonstrativa</span><strong>'+cash(levels[model.heatDay-1]*37.5)+'</strong></div></div>';return heat}
 function ads(){
  const partners=[
@@ -1950,11 +1964,11 @@ function ads(){
  const tag=model.shopFilter||'Todos';
  return header('Ofertas','Catálogo de parceiros')+
  `<section class="catalog-intro"><div class="catalog-intro-top"><span>Vitrine NexaPag</span><span class="catalog-demo">Modo demonstração</span></div><h3>Encontre por loja ou categoria</h3><p>Explore a estrutura do catálogo. Os produtos serão exibidos após a integração das plataformas.</p></section>`+
- `<div class="catalog-heading"><strong>Parceiros</strong><span>3 plataformas previstas</span></div>`+
+ `<div class="catalog-heading"><strong>${icon('store',17)}Parceiros</strong><span>3 plataformas previstas</span></div>`+
  `<div class="partner-scroll" role="group" aria-label="Escolher parceiro">${partners.map(m=>`<button type="button" class="partner-card ${model.merchant===m.id?'selected':''}" data-merchant="${m.id}" aria-pressed="${model.merchant===m.id}"><span class="partner-mark ${m.style}">${m.mark}</span><strong>${m.id}</strong><small>${m.kind}</small><span class="partner-selected" aria-hidden="true"></span></button>`).join('')}</div>`+
- `<div class="catalog-heading"><strong>Categorias</strong><span>Filtre a prévia</span></div>`+
+ `<div class="catalog-heading"><strong>${icon('grid',17)}Categorias</strong><span>Filtre a prévia</span></div>`+
  `<div class="catalog-chips" role="group" aria-label="Filtrar categorias">${['Todos','Tecnologia','Casa','Beleza','Moda'].map((name)=>`<button type="button" data-shop-filter="${name}" aria-pressed="${tag===name}" class="${tag===name?'active':''}">${name}</button>`).join('')}</div>`+
- `<div class="catalog-heading catalog-results-head"><strong>${tag==='Todos'?'Explorar ofertas':tag}</strong><span>${model.merchant}</span></div>`+
+ `<div class="catalog-heading catalog-results-head"><strong>${icon('tag',17)}${tag==='Todos'?'Explorar ofertas':tag}</strong><span>${model.merchant}</span></div>`+
  `<div class="catalog-offer-grid" aria-label="Vitrine ilustrativa de ${model.merchant}">${offerMock(tag,0)}${offerMock(tag,1)}</div>`+
  `<div class="catalog-hint" role="status">${icon('shield',16)}<span>Visualização ilustrativa: sem preços, disponibilidade ou cashback ao vivo</span></div>`;
 }
@@ -1969,12 +1983,12 @@ function offerMock(filter,i){
  const [title,visual,family]=(catalog[filter]||catalog['Todos'])[i];
  return `<article class="offer-tile"><div class="offer-media offer-media--${visual}"><div class="offer-render offer-render--${visual}" aria-hidden="true"><span class="offer-render-shape"></span></div><span class="offer-label">Conceito visual</span></div><div class="offer-body"><span class="offer-store">${family}</span><strong>${title}</strong><span class="offer-unavailable">Catálogo não carregado</span><button type="button" data-action="offer" aria-label="Ver situação do catálogo de ${title} na ${model.merchant}">Consultar estado <span aria-hidden="true">›</span></button></div></article>`;
 }
-function cards(){return header('Seus cartões','CARTEIRA · DEMONSTRAÇÃO')+`<p class="info-note" style="margin:0 2px 15px">Cartões de teste. Selecione um para conferir a apresentação e os detalhes.</p>`+[['Nubank','Ultravioleta','4821','purple'],['Itaú','Personnalité','7310','orange'],['Inter','Black','2044','black']].map(([brand,tier,last,cl],i)=>`<button class="bank-card ${cl} ${model.bank===i?'selected':''}" data-bank="${i}" style="width:100%;display:block;text-align:left" aria-label="Selecionar cartão ${brand}" aria-pressed="${model.bank===i}"><div class="card-brand"><span>${brand} <small style="font-size:9px;opacity:.8">${tier}</small></span><span class="chip"></span></div><div class="card-digits"><span>•••• •••• ••••</span><b>${last}</b></div></button>`).join('')+`<div class="ui-card"><div class="card-header"><strong style="font-size:13px">Cartão selecionado</strong><span class="label">${['Nubank','Itaú','Inter'][model.bank]}</span></div><p class="info-note">Os lançamentos demonstrativos continuam vinculados ao fluxo de captura do aplicativo Android, não a este HTML.</p></div>`+`<div class="section-heading"><strong>Movimentações recentes</strong></div>${transactions(3)}`}
-function review(){const rec=[['Compra sem categoria','Notificação aguardando classificação','alert'],['PIX para revisar','Comprovante pendente','review'],['Evento duplicado','Verifique a origem','repeat']];return header('Para revisar','Eventos capturados',`<span class="date-chip">${3-model.reviewed.length} pendentes</span>`)+`<div class="ui-card"><div class="card-header"><strong style="font-size:12px">Fila de revisão</strong><span class="amber" style="font-size:10px">${3-model.reviewed.length} eventos</span></div><p class="info-note">Estados demonstrativos: recebido, processado ou pendente. Nenhuma ação afeta suas transações reais.</p></div>${rec.map(([title,desc,ic],i)=>model.reviewed.includes(i)?'':`<div class="review-line"><span class="review-badge">${icon(ic,17)}</span><span class="review-copy"><b>${title}</b><small>${desc}</small></span><button data-review="${i}" aria-label="Marcar ${title} como resolvido">${icon('check',16)}</button></div>`).join('')}${model.reviewed.length===3?`<div class="ui-card" style="text-align:center">${icon('check',25)}<p>Todos os eventos demonstrativos foram revisados.</p></div>`:''}<div class="section-heading"><strong>Como funciona</strong></div><div class="ui-card"><p class="info-note">RECEIVED → PARSED → PROCESSED / FAILED. O fluxo ilustra a separação entre captura e revisão no NexaPag.</p><button class="primary" data-action="resetReview">Restaurar eventos fictícios</button></div>`}
+function cards(){return header('Seus cartões','CARTEIRA · DEMONSTRAÇÃO')+`<p class="info-note" style="margin:0 2px 15px">Cartões de teste. Selecione um para conferir a apresentação e os detalhes.</p>`+[['Nubank','Ultravioleta','4821','purple'],['Itaú','Personnalité','7310','orange'],['Inter','Black','2044','black']].map(([brand,tier,last,cl],i)=>`<button class="bank-card ${cl} ${model.bank===i?'selected':''}" data-bank="${i}" style="width:100%;display:block;text-align:left" aria-label="Selecionar cartão ${brand}" aria-pressed="${model.bank===i}"><div class="card-brand"><span>${brand} <small style="font-size:9px;opacity:.8">${tier}</small></span><span class="chip"></span></div><div class="card-digits"><span>•••• •••• ••••</span><b>${last}</b></div></button>`).join('')+`<div class="ui-card"><div class="card-header"><strong style="font-size:13px">Cartão selecionado</strong><span class="label">${['Nubank','Itaú','Inter'][model.bank]}</span></div><p class="info-note">Os lançamentos demonstrativos continuam vinculados ao fluxo de captura do aplicativo Android, não a este HTML.</p></div>`+`<div class="section-heading"><strong>${icon('receipt',17)}Movimentações recentes</strong></div>${transactions(3)}`}
+function review(){const rec=[['Compra sem categoria','Notificação aguardando classificação','alert'],['PIX para revisar','Comprovante pendente','transfer'],['Evento duplicado','Verifique a origem','receipt']];return header('Para revisar','Eventos capturados',`<span class="date-chip">${3-model.reviewed.length} pendentes</span>`)+`<div class="ui-card"><div class="card-header"><strong class="nx940-heading" style="font-size:12px">${icon('inbox',17)}Fila de revisão</strong><span class="amber" style="font-size:10px">${3-model.reviewed.length} eventos</span></div><p class="info-note">Estados demonstrativos: recebido, processado ou pendente. Nenhuma ação afeta suas transações reais.</p></div>${rec.map(([title,desc,ic],i)=>model.reviewed.includes(i)?'':`<div class="review-line"><span class="review-badge">${icon(ic,17)}</span><span class="review-copy"><b>${title}</b><small>${desc}</small></span><button data-review="${i}" aria-label="Marcar ${title} como resolvido">${icon('check',16)}</button></div>`).join('')}${model.reviewed.length===3?`<div class="ui-card" style="text-align:center">${icon('check',25)}<p>Todos os eventos demonstrativos foram revisados.</p></div>`:''}<div class="section-heading"><strong>${icon('shield',17)}Como funciona</strong></div><div class="ui-card"><p class="info-note">RECEIVED → PARSED → PROCESSED / FAILED. O fluxo ilustra a separação entre captura e revisão no NexaPag.</p><button class="primary" data-action="resetReview">Restaurar eventos fictícios</button></div>`}
 function renderNav(){
  const el=$('#navigation');
  if(el.children.length!==nav.length){
-  el.innerHTML=nav.map(([id,label])=>`<button type="button" data-tab="${id}" aria-label="${label}" title="${label}">${icon(id,20)}<span>${label}</span></button>`).join('');
+  el.innerHTML=nav.map(([id,label])=>`<button type="button" data-tab="${id}" aria-label="${label}" title="${label}">${icon("nav-"+id,23)}<span>${label}</span></button>`).join('');
  }
  [...el.children].forEach((button,i)=>{
   const active=model.tab===nav[i][0];
@@ -1984,7 +1998,31 @@ function renderNav(){
  });
 }
 const tabFns={home,chart:expenses,bag:ads,wallet:cards,review};
-function render(resetScroll=false){renderNav();$('#screenContent').innerHTML=tabFns[model.tab]();if(resetScroll)$('#screen').scrollTop=0}
+let nx940RenderedTab=null,nx940RenderedPeriod=null,nx940ScrollFrame=0;
+function syncOpticalEdge940(){
+ nx940ScrollFrame=0;
+ const screen=$('#screen'),device=$('#device');
+ device.style.setProperty('--nx940-edge',String(Math.min(1,Math.max(0,screen.scrollTop)/48)));
+}
+function queueOpticalEdge940(){if(!nx940ScrollFrame)nx940ScrollFrame=requestAnimationFrame(syncOpticalEdge940)}
+function render(resetScroll=false){
+ const changed=nx940RenderedTab!==null&&nx940RenderedTab!==model.tab;
+ const periodChanged=nx940RenderedPeriod!==null&&nx940RenderedPeriod!==model.period;
+ const transition=nx940RenderedTab===null?'initial':changed?'tab':periodChanged?'period':'local';
+ nx940RenderedTab=model.tab;nx940RenderedPeriod=model.period;
+ renderNav();
+ const content=$('#screenContent');content.dataset.nx940Transition=transition;content.innerHTML=tabFns[model.tab]();
+ if(changed){
+  const selected=$('#navigation .active');
+  document.querySelectorAll('#navigation .nx940-enter').forEach(b=>b.classList.remove('nx940-enter'));
+  if(selected&&!prefersReducedMotion()&&!$('#device').classList.contains('no-motion')){
+   selected.classList.add('nx940-enter');
+   selected.querySelector('svg')?.addEventListener('animationend',()=>selected.classList.remove('nx940-enter'),{once:true});
+  }
+ }
+ if(resetScroll)$('#screen').scrollTop=0;
+ queueOpticalEdge940();
+}
 let flowTimer=0,flowFrame=0,flowGeneration=0,previousFinancialValue=null;
 const prefersReducedMotion=()=>window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const lerp=(a,b,t)=>a+(b-a)*t;
@@ -2020,6 +2058,7 @@ function replay(){
    moneyEl.textContent=countT<1?moneySigned(lerp(from,target,easeOut(countT))):moneySigned(target);
   }
   morphSignal(hero,t);
+  if(prefersReducedMotion()||$('#device').classList.contains('no-motion')){hero.classList.remove('replaying');if(moneyEl)moneyEl.textContent=moneySigned(target);return;}
   if(t<1)flowFrame=requestAnimationFrame(step);
   else {hero.classList.remove('replaying');if(moneyEl)moneyEl.textContent=moneySigned(target)}
  };
@@ -2082,7 +2121,7 @@ function applyRange(el){const v=Number(el.value),key=el.dataset.token,unit=el.da
 let flowInputTimer=0;
 function updateNumber(){for(let [field,key] of [['incomeField','income'],['expensesField','expenses'],['refundsField','refunds'],['budgetField','budget']])model[key]=Math.max(0,Number($('#'+field).value)||0);model.weekly=+$('#weekSpent').value;$('#weekSpentOutput').textContent=cash(model.weekly);render();if(model.tab==='home'){clearTimeout(flowInputTimer);flowInputTimer=setTimeout(()=>{if(model.tab==='home')replay()},150)}}
 function agitateOrb(){let orb=$('.orb');if(!orb)return;if(prefersReducedMotion()||$('#device').classList.contains('no-motion'))return;orb.classList.remove('agitated');void orb.offsetWidth;orb.classList.add('agitated');setTimeout(()=>{if(orb.isConnected)orb.classList.remove('agitated')},850)}
-function exportConfig(){let fields=Object.fromEntries([...document.querySelectorAll('[data-token]')].map(x=>[x.dataset.token,Number(x.value)]));let payload={design:'NexaPag Visualize 9.38 Mobile Gradients',source:'visualize standalone',typeFamily:selectedTypeFamily,tokens:fields,palette:Object.fromEntries([...document.querySelectorAll('[data-palette-color]')].map(el=>[el.dataset.paletteColor,el.value])),financialMock:{income:model.income,expenses:model.expenses,refunds:model.refunds,weekly:model.weekly,budget:model.budget}};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const link=document.createElement('a');const url=URL.createObjectURL(blob);link.href=url;link.download='nexapag-938-mobile-gradients-tokens.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),500);showToast('Tokens exportados')}
+function exportConfig(){let fields=Object.fromEntries([...document.querySelectorAll('[data-token]')].map(x=>[x.dataset.token,Number(x.value)]));let payload={design:'NexaPag Visualize 9.40 Optical Motion',source:'visualize standalone',typeFamily:selectedTypeFamily,tokens:fields,palette:Object.fromEntries([...document.querySelectorAll('[data-palette-color]')].map(el=>[el.dataset.paletteColor,el.value])),financialMock:{income:model.income,expenses:model.expenses,refunds:model.refunds,weekly:model.weekly,budget:model.budget}};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const link=document.createElement('a');const url=URL.createObjectURL(blob);link.href=url;link.download='nexapag-940-optical-motion-tokens.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),500);showToast('Tokens exportados')}
 function reset(){setTypeFamily('jakarta');choosePalette('reference');document.querySelectorAll('[data-token]').forEach(x=>{x.value=x.defaultValue;applyRange(x)});[['incomeField',1950],['expensesField',3818.10],['refundsField',349.90],['budgetField',1200],['weekSpent',270]].forEach(([name,val])=>$('#'+name).value=val);model.income=1950;model.expenses=3818.10;model.refunds=349.90;model.weekly=270;model.budget=1200;document.querySelectorAll('[data-toggle]').forEach(x=>{x.setAttribute('aria-pressed','true')});$('#device').classList.remove('no-shader','no-optics','no-motion');document.querySelectorAll('[data-pigment]').forEach(x=>x.classList.toggle('active',x.dataset.pigment==='balanced'));$('#device').dataset.orbScheme='forest';document.querySelectorAll('[data-orb-scheme]').forEach(x=>x.classList.toggle('active',x.dataset.orbScheme==='forest'));document.querySelectorAll('[data-motion]').forEach(x=>x.classList.toggle('active',x.dataset.motion==='balanced'));updateNumber();showToast('Estilo restaurado')}
 
 // Chromatic Workbench: never derive a text ink that fails 4.5:1 on matte.
@@ -2318,6 +2357,7 @@ $('#resetAll')?.addEventListener('click',()=>{
  $('#device').classList.remove('flat-glass');
  if(lensCompare){lensCompare.setAttribute('aria-pressed','false');lensCompare.textContent='Desligar apenas o blur dos cards';}
 });
+$('#screen').addEventListener('scroll',queueOpticalEdge940,{passive:true});
 bindDelegated();render(true);f926Attach();
 })();
 </script>

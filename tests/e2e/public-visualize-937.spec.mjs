@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test('public home serves complete 9.38 mobile interface, not legacy 9.22 lab',async({page})=>{
  await page.setViewportSize({width:390,height:844});
  await page.goto('/');
- await expect(page).toHaveTitle(/Visualize 9\.38/);
+ await expect(page).toHaveTitle(/Visualize 9\.40/);
  await expect(page.locator('#device')).toBeVisible();
  await expect(page.locator('#screenContent')).toContainText('Seu dinheiro');
  await expect(page.locator('#device .orb-fluid-canvas')).toHaveCount(1);
