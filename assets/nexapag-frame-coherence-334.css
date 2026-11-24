@@ -102,3 +102,12 @@
  .phone[data-spacing-system="v322"] #homePage #heroRegion,.phone[data-spacing-system="v322"] #homePage .orb-inline-section .orb-story-content>*{transition:none!important}
  .phone[data-spacing-system="v322"] .topbar::after{opacity:0}
 }
+
+.phone[data-spacing-system="v322"] #homePage.orb-spending-closing #heroRegion{height:var(--orb-stage-height,286px)}
+/* The poster and film occupy an identical optical box; do not shift layout
+   or stretch the glyph when the animated asset hands back to its final frame. */
+.phone[data-spacing-system="v322"] .category-v29 .category-morph :is(.category-morph-film,.category-morph-final){
+ width:100%;height:100%;object-fit:contain;object-position:center;inset:0;
+}
+.phone[data-spacing-system="v322"] .category-v29 .category-morph.is-playing .category-morph-final{transform:none}
+.phone[data-spacing-system="v322"] .category-v29 .category-morph.has-fallback .category-morph-glyph svg{width:21px;height:21px;stroke-width:1.85;overflow:visible}
