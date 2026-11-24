@@ -60,8 +60,8 @@ const LIQUID_POSES=[
  {t:0.985,move:1.000,w:1.000,h:1.000,lift:0,super:4.20,ripple:0.000,jet:0,opacity:.08},
  {t:1.000,move:1.000,w:1.000,h:1.000,lift:0,super:4.20,ripple:0.000,jet:0,opacity:0}
 ];
-const OPEN_DURATION=740,CLOSE_DURATION=620;
-let flightAnimation=null,morphRevealTimer=null;
+const OPEN_DURATION=540,CLOSE_DURATION=440;
+let flightAnimation=null,morphRevealFrame=0;
 
 /* V3.17: 16 authored poses, continuously interpolated with shape-preserving cubic
    Hermite sampling. The browser receives 49 evenly spaced animation frames. */
@@ -257,7 +257,7 @@ function fluidFlight(start,end,kind,reverse=false,onReveal,onStart,fromKind=null
   const tint=document.createElement('span');tint.className='orb-fluid-color-mix';
   ghost.append(tint);
  }
- const duration=reverse?CLOSE_DURATION:(cardToCard?560:OPEN_DURATION);
+ const motion=window.NexaMotion336;const duration=reverse?(motion?.orbClose??CLOSE_DURATION):(cardToCard?(motion?.orbSwitch??420):(motion?.orbOpen??OPEN_DURATION));
  Object.assign(ghost.style,{
   left:start.x+'px',top:start.y+'px',width:start.w+'px',height:start.h+'px',
   transformOrigin:'0 0',transform:'translate3d(0,0,0)',
@@ -322,22 +322,26 @@ function fluidFlight(start,end,kind,reverse=false,onReveal,onStart,fromKind=null
   ],{duration,easing:'cubic-bezier(.22,.65,.29,1)',fill:'forwards'});
  }
  if(!reverse&&onReveal){
-  morphRevealTimer=setTimeout(()=>{
-   morphRevealTimer=null;
-   if(gen===flightGeneration)onReveal();
-  },Math.round(duration*(cardToCard?.70:.73)));
+  // Follow the actual animation clock, not a separate timeout. If the
+  // browser drops frames, the content still reveals at the correct pose.
+  const revealAt=duration*(motion?.reveal??.5);
+  const checkReveal=()=>{morphRevealFrame=0;if(gen!==flightGeneration)return;
+   if(Number(animation.currentTime)>=revealAt||animation.playState==='finished'){onReveal();return}
+   morphRevealFrame=requestAnimationFrame(checkReveal);
+  };morphRevealFrame=requestAnimationFrame(checkReveal);
  }
  return animation.finished.catch(()=>{}).then(()=>{
   if(gen===flightGeneration){
-   if(morphRevealTimer!==null)clearTimeout(morphRevealTimer);
-   morphRevealTimer=null;if(!reverse)onReveal?.();cleanupFlight();
+   cancelAnimationFrame(morphRevealFrame);morphRevealFrame=0;if(!reverse)onReveal?.();cleanupFlight();
   }
  }).finally(()=>{
   if(flightAnimation===animation)flightAnimation=null;
   animation.cancel();if(ghost.isConnected)ghost.remove();
  });
 }
-function stopFlight(){flightGeneration++;if(morphRevealTimer!==null)clearTimeout(morphRevealTimer);morphRevealTimer=null;flightAnimation?.cancel();flightAnimation=null;cleanupFlight();}
+function stopFlight(){flightGeneration++;cancelAnimationFrame(morphRevealFrame);morphRevealFrame=0;flightAnimation?.cancel();flightAnimation=null;cleanupFlight();}
+function settleFlight(){if(flightAnimation&&flightAnimation.playState!=='finished'){try{flightAnimation.finish()}catch{}}}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)settleFlight()});botReducedMedia.addEventListener?.('change',e=>{if(e.matches)settleFlight()});
 function restoreOrigin(){if(restoreFocus?.isConnected){restoreFocus.classList.remove('is-morph-origin');restoreFocus.setAttribute('aria-expanded','false');}}
 function showLayer(kind,button,sourceOverride=null,outgoingLayer=null,sourceKind=null){
  if(busy||active||!STORIES[kind])return;
@@ -383,7 +387,7 @@ function showLayer(kind,button,sourceOverride=null,outgoingLayer=null,sourceKind
 }
 function closeLayer(follow){
  if(!active)return;
- if(busy){if(transitionDirection==='opening')pendingClose={kind:'layer',follow};return;}
+ if(busy){if(transitionDirection==='opening'){pendingClose={kind:'layer',follow};settleFlight()}return;}
  busy=true;transitionDirection='closing';
  const {kind,layer,card,from}=active;
  const fromCard=rect(card);
@@ -433,7 +437,7 @@ async function openSpending(button,sourceOverride=null,outgoingLayer=null,source
 }
 async function closeSpending(){
  if(!bridge()?.state?.expanded)return;
- if(busy){if(transitionDirection==='opening')pendingClose={kind:'spending'};return;}
+ if(busy){if(transitionDirection==='opening'){pendingClose={kind:'spending'};settleFlight()}return;}
  busy=true;transitionDirection='closing';
  bridge()?.stopAutoplay?.();
  const card=document.querySelector('.carousel-slide.current');
@@ -467,7 +471,7 @@ function switchKind(kind){
  if(!KINDS.includes(kind)||bridge()?.state?.tab!=='home')return;
  const current=active?.kind||(bridge()?.state?.expanded?'spending':null);
  if(!current||current===kind)return;
- if(busy){pendingSwitch=kind;return;}
+ if(busy){pendingSwitch=kind;settleFlight();return;}
  const sourceEl=current==='spending'?document.querySelector('.carousel-slide.current'):active?.card;
  if(!sourceEl)return;
  const sourceRect=rect(sourceEl);
