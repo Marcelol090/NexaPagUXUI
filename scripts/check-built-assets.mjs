@@ -15,7 +15,7 @@ for (const selector of ['data-live-glass', 'data-ds-radius', 'live-glass-hero', 
 }
 const html = readFileSync('dist/lab.html', 'utf8');
 const newHome = readFileSync('dist/index.html', 'utf8');
-if(!newHome.includes('Visualize 9.38') || !newHome.includes('orb-fluid-canvas') || !newHome.includes('gradientStrengthRange')) throw new Error('Root website does not serve complete Visualize 9.38');
+if(!newHome.includes('Visualize 9.40') || !newHome.includes('orb-fluid-canvas') || !newHome.includes('gradientStrengthRange')) throw new Error('Root website does not serve complete Visualize 9.40');
 if (!html.includes('src="./assets/') && !html.includes('href="./assets/')) {
   throw new Error('Vite did not emit relative asset paths for GitHub Pages');
 }
@@ -41,4 +41,4 @@ for(const kind of ['income','spending','refund']){
 }
 console.log('Three animated orb assets verified in compiled Vite bundle');
 
-console.log('Compiled CSS contract OK: Visualize 9.37 root, legacy lab and relative assets.');
+console.log('Compiled CSS contract OK: Visualize 9.40 root, legacy lab and relative assets.');
